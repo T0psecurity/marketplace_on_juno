@@ -2,30 +2,41 @@ import styled from "styled-components";
 
 export const FooterWrapper = styled.div`
   color: white;
-  /* position: absolute;
-  bottom: 0; */
   background-color: #39c639;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 50px;
   padding: 30px 100px;
-  /* position: fixed; */
   background: #39c639;
   justify-content: space-between;
   height: 160px;
 `;
 
-export const FooterContent = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: max-content;
+export const FooterInfo = styled.div`
+  text-align: left;
 `;
 
-export const SocialLinkIcon = styled.div<{ imageUrl: string }>`
-  background: ${({ imageUrl }) => `url(${imageUrl})`};
-  background-size: cover;
-  background-position: center;
-  width: 20px;
-  height: 20px;
-  margin: 0 10px;
+export const FooterInfoTitle = styled.div`
+  font-size: 20px;
+  font-weight: 600;
+`;
+
+export const FooterInfoContent = styled.p``;
+
+export const FooterLinkItemContainer = styled.div`
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+`;
+
+export const FooterLinkItem = styled.div`
+  width: 54px;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2e7d32;
+  margin: 10px;
+  border-radius: 10px;
   cursor: pointer;
 `;

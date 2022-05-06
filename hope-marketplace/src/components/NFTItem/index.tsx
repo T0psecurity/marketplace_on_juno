@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "../../app/hooks";
+import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useContract, { contractAddresses } from "../../hook/useContract";
 import useFetch from "../../hook/useFetch";
 
@@ -35,6 +38,8 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const [nftPriceType, setNftPriceType] = useState("");
   const { runExecute } = useContract();
   const { fetchAllNFTs } = useFetch();
+  const dispatch = useAppDispatch();
+  const history = useHistory();
 
   const price = item?.list_price || {};
 
@@ -91,14 +96,33 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         toast.error("Fail!");
       }
     } else if (status === NFTItemStatus.BUY) {
-      const message = {
-        buy_nft: {
-          offering_id: item.id,
-        },
-      };
-      console.log("message", message);
+      const price = item?.list_price || {};
+      const message =
+        price.denom === NFTPriceType.HOPE
+          ? {
+              send: {
+                contract: contractAddresses.MARKET_CONTRACT,
+                amount: price.amount,
+                msg: btoa(
+                  JSON.stringify({
+                    offering_id: item.id,
+                  })
+                ),
+              },
+            }
+          : {
+              buy_nft: {
+                offering_id: item.id,
+              },
+            };
       try {
-        await runExecute(contractAddresses.MARKET_CONTRACT, message);
+        if (price.denom === NFTPriceType.HOPE) {
+          await runExecute(contractAddresses.TOKEN_CONTRACT, message);
+        } else {
+          await runExecute(contractAddresses.MARKET_CONTRACT, message, {
+            funds: "" + price.amount / 1e6,
+          });
+        }
         toast.success("Success!");
         fetchAllNFTs();
       } catch (err) {
@@ -119,9 +143,18 @@ export default function NFTItem({ item, status }: NFTItemProps) {
     setNftPriceType(value);
   };
 
+  const handleGotoDetail = () => {
+    dispatch(setSelectedNFT(item));
+    history.push("/detail");
+  };
+
   return (
     <NFTItemWrapper>
-      <NFTItemImage alt="" src="others/mint_pass.png" />
+      <NFTItemImage
+        onClick={handleGotoDetail}
+        alt=""
+        src="others/mint_pass.png"
+      />
       <NFTItemInfoContainer>
         <NFTItemInfo>{item.token_id}</NFTItemInfo>
         <NFTItemInfo>

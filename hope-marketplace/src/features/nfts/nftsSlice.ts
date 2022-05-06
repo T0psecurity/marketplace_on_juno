@@ -4,6 +4,14 @@ const initialState = {
   unlistedNFTs: [],
   listedNFTs: [],
   marketplaceNFTs: [],
+  selectedNFT: {
+    token_id: "",
+    seller: "",
+    list_price: {
+      denom: "",
+      amount: "",
+    },
+  },
 };
 
 export const nftSlice = createSlice({
@@ -19,10 +27,17 @@ export const nftSlice = createSlice({
     setMarketplaceNFTs: (state, action: PayloadAction<[]>) => {
       state.marketplaceNFTs = action.payload;
     },
+    setSelectedNFT: (state, action: PayloadAction<any>) => {
+      state.selectedNFT = action.payload;
+    },
   },
 });
 
-export const { setUnlistedNFTs, setListedNFTs, setMarketplaceNFTs } =
-  nftSlice.actions;
+export const {
+  setUnlistedNFTs,
+  setListedNFTs,
+  setMarketplaceNFTs,
+  setSelectedNFT,
+} = nftSlice.actions;
 
 export default nftSlice.reducer;
