@@ -1,4 +1,4 @@
-import { Router, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Header from "./Containers/Header";
 import Home from "./Containers/Home";
@@ -16,12 +16,8 @@ function App() {
         <Route path="/" exact>
           <Home />
         </Route>
-        <Route path="/resources">
-          <Resources />
-        </Route>
-        <Route path="/explore">
-          <MyPage />
-        </Route>
+        <Route path="/resources" exact component={ Resources}/>
+        <Route path="/explore" exact component={MyPage}/>
       </Switch>
       <Footer />
     </Router>

@@ -9,6 +9,7 @@ export default makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+    position:"fixed",
   },
   title: {
     fontSize: "20px",
