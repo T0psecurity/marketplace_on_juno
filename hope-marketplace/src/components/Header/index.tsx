@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setKeplrAccount } from "../../features/accounts/accountsSlice";
 import { useKeplr } from "../../features/accounts/useKeplr";
+import useFetch from "../../hook/useFetch";
 import {
   HeaderWrapper,
   LogoContainer,
@@ -19,6 +20,12 @@ const Header: React.FC = () => {
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const { connect } = useKeplr();
   const history = useHistory();
+  const { fetchAllNFTs } = useFetch();
+
+  useEffect(() => {
+    fetchAllNFTs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account]);
 
   const clickWalletButton = () => {
     if (!account) {
