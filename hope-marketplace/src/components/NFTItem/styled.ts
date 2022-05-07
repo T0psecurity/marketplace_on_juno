@@ -9,6 +9,7 @@ export const NFTItemWrapper = styled.div`
 
 export const NFTItemImage = styled.img`
   width: 288px;
+  height: 443px;
 `;
 
 export const NFTItemInfoContainer = styled.div`

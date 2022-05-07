@@ -41,6 +41,15 @@ export const HeaderLogo = styled.div`
   cursor: pointer;
 `;
 
+export const ProfileIcon = styled.div`
+  background: url("/others/user-hopers.jpg");
+  background-size: cover;
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+  cursor: pointer;
+`;
+
 export const ButtonContainer = styled.div`
   display: flex;
   align-items: center;

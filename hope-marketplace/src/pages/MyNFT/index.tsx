@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { Wrapper } from "./styled";
+import { Wrapper, ProfileImage, HorizontalDivider } from "./styled";
 
 import { useAppSelector } from "../../app/hooks";
 import useFetch from "../../hook/useFetch";
@@ -22,11 +22,24 @@ const MyNFT: React.FC = () => {
   }, [account]);
   return (
     <Wrapper>
-      <Title title="Hope Galaxy NFTs" />
-      <SubTitle subTitle="NFTs in My Wallet" />
-      <NFTContainer nfts={unlistedNFTs} status={NFTItemStatus.SELL} />
-      <SubTitle subTitle="My NFTs in Market Place" />
-      <NFTContainer nfts={listedNFTs} status={NFTItemStatus.WITHDRAW} />
+      <Title title="Profile" icon={<ProfileImage />} />
+      <HorizontalDivider />
+      <SubTitle subTitle="My NFTs" textAlign="left" />
+      <NFTContainer
+        nfts={unlistedNFTs}
+        status={NFTItemStatus.SELL}
+        emptyMsg="No NFTs in your wallet"
+      />
+      <HorizontalDivider />
+      <SubTitle subTitle="My NFTs on sale" textAlign="left" />
+      <NFTContainer
+        nfts={listedNFTs}
+        status={NFTItemStatus.WITHDRAW}
+        emptyMsg="No NFTs on sale"
+      />
+      <HorizontalDivider />
+      <SubTitle subTitle="My NFTs created" textAlign="left" />
+      <NFTContainer nfts={[]} status={""} emptyMsg="No NFTs created" />
     </Wrapper>
   );
 };

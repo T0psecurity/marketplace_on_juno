@@ -3,14 +3,25 @@ import NFTItem from "../NFTItem";
 
 import { Wrapper } from "./styled";
 
-const NFTContainer: React.FC<any> = ({ nfts, status }) => {
+interface NFTContainerProps {
+  nfts: any;
+  status: string;
+  emptyMsg?: string;
+}
+
+const NFTContainer: React.FC<NFTContainerProps> = ({
+  nfts,
+  status,
+  emptyMsg,
+}) => {
+  const hasNFTs = !!nfts && nfts.length > 0;
   return (
-    <Wrapper>
-      {!!nfts && nfts.length > 0
+    <Wrapper noGrid={!hasNFTs}>
+      {hasNFTs
         ? nfts.map((nft: any, index: any) => {
             return <NFTItem key={index} item={nft} status={status} />;
           })
-        : "No NFTs"}
+        : emptyMsg ?? "No NFTs"}
     </Wrapper>
   );
 };

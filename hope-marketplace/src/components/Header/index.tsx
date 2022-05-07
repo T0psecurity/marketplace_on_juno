@@ -13,7 +13,17 @@ import {
   DisconnectIcon,
   ButtonContainer,
   LinkButton,
+  ProfileIcon,
 } from "./styled";
+
+const HeaderLinks = [
+  {
+    title: "Explore",
+    url: "/collections/mintpass1",
+  },
+  { title: "Launchpad", url: "https://www.hopers.io/" },
+  { title: "Create", url: "" },
+];
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -35,6 +45,15 @@ const Header: React.FC = () => {
     }
   };
 
+  const handleClickLink = (url: string) => {
+    if (!url) return;
+    if (url.includes("https:")) {
+      window.open(url);
+    } else {
+      history.push(url);
+    }
+  };
+
   return (
     <HeaderWrapper>
       <LogoContainer>
@@ -42,12 +61,15 @@ const Header: React.FC = () => {
         Hopers.io
       </LogoContainer>
       <ButtonContainer>
-        <LinkButton onClick={() => history.push("/explore")}>
-          My Page
-        </LinkButton>
-        <LinkButton onClick={() => history.push("/resources")}>
-          MarketPlace
-        </LinkButton>
+        {HeaderLinks.map((linkItem, linkIndex) => (
+          <LinkButton
+            key={linkIndex}
+            onClick={() => handleClickLink(linkItem.url)}
+          >
+            {linkItem.title}
+          </LinkButton>
+        ))}
+        <ProfileIcon onClick={() => handleClickLink("/profile")} />
         <ConnectWalletButton onClick={clickWalletButton}>
           {account ? (
             <>
