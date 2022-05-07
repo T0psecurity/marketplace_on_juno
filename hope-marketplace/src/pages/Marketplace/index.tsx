@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import { discordIcon, twitterIcon } from "../../components/Icons";
+import { DiscordIcon, TwitterIcon } from "../../components/Icons";
 import NFTContainer from "../../components/NFTContainer";
 import { NFTItemStatus } from "../../components/NFTItem";
 import { Title } from "../../components/PageTitle";
@@ -17,12 +17,12 @@ import {
 
 const SocialLinkItems = [
   {
-    icon: discordIcon,
+    icon: DiscordIcon,
     url: "https://discord.com/invite/BfKPacc5jF",
     backgroundColor: "#7591ff",
   },
   {
-    icon: twitterIcon,
+    icon: TwitterIcon,
     url: "https://twitter.com/Hopers_io",
     backgroundColor: "#1da1f2",
   },

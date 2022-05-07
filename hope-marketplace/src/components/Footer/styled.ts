@@ -45,7 +45,7 @@ export const FooterLinkItem = styled.div`
 `;
 
 export const FooterImage = styled.img`
-  width: 40%;
+  width: min(100%, 300px);
 `;
 
 export const FooterDocIcon = styled.span`

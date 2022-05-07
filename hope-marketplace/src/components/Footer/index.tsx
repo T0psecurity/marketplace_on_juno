@@ -1,9 +1,9 @@
 import React from "react";
 import {
-  discordIcon,
+  DiscordIcon,
   // instagramIcon,
   // mailIcon,
-  twitterIcon,
+  TwitterIcon,
   // youtubeIcon,
 } from "../Icons";
 
@@ -22,11 +22,11 @@ const SocialIcons = [
   //   link: "https://www.hopegalaxy.io/",
   // },
   {
-    Icon: twitterIcon,
+    Icon: TwitterIcon,
     link: "https://twitter.com/Hopers_io",
   },
   {
-    Icon: discordIcon,
+    Icon: DiscordIcon,
     link: "https://discord.com/invite/BfKPacc5jF",
   },
   // {

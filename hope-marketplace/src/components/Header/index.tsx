@@ -1,9 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setKeplrAccount } from "../../features/accounts/accountsSlice";
 import { useKeplr } from "../../features/accounts/useKeplr";
 import useFetch from "../../hook/useFetch";
+import useOnClickOutside from "../../hook/useOnClickOutside";
+import useWindowSize from "../../hook/useWindowSize";
+import { ListIcon } from "../Icons";
 import {
   HeaderWrapper,
   LogoContainer,
@@ -14,6 +17,10 @@ import {
   ButtonContainer,
   LinkButton,
   ProfileIcon,
+  MenuIcon,
+  MenuIconContainer,
+  MenuContainer,
+  MenuItem,
 } from "./styled";
 
 const HeaderLinks = [
@@ -26,11 +33,15 @@ const HeaderLinks = [
 ];
 
 const Header: React.FC = () => {
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [ref, setRef] = useState<HTMLDivElement | null>(null); // TODO: must use useRef
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const { connect } = useKeplr();
   const history = useHistory();
   const { fetchAllNFTs } = useFetch();
+
+  const { isMobile } = useWindowSize(900);
 
   useEffect(() => {
     fetchAllNFTs();
@@ -54,33 +65,74 @@ const Header: React.FC = () => {
     }
   };
 
+  const handleOpenMenu = () => {
+    setIsOpenMenu(!isOpenMenu);
+  };
+
+  const handleClickOutsideMenuIcon = () => {
+    setIsOpenMenu(false);
+  };
+
+  useOnClickOutside(ref, handleClickOutsideMenuIcon);
+
   return (
     <HeaderWrapper>
       <LogoContainer>
         <HeaderLogo onClick={() => window.open("https://hopegalaxy.io")} />
         Hopers.io
       </LogoContainer>
-      <ButtonContainer>
-        {HeaderLinks.map((linkItem, linkIndex) => (
-          <LinkButton
-            key={linkIndex}
-            onClick={() => handleClickLink(linkItem.url)}
-          >
-            {linkItem.title}
-          </LinkButton>
-        ))}
-        <ProfileIcon onClick={() => handleClickLink("/profile")} />
-        <ConnectWalletButton onClick={clickWalletButton}>
-          {account ? (
-            <>
-              {account.label}
-              <DisconnectIcon alt="" src="/others/logout.png" />
-            </>
-          ) : (
-            "Connect"
+      {isMobile ? (
+        <MenuIconContainer ref={(node) => setRef(node)}>
+          <MenuIcon onClick={handleOpenMenu}>{ListIcon}</MenuIcon>
+          {isOpenMenu && (
+            <MenuContainer onClick={(e) => e.preventDefault()}>
+              {HeaderLinks.map((linkItem, linkIndex) => (
+                <MenuItem
+                  key={linkIndex}
+                  onClick={() => handleClickLink(linkItem.url)}
+                >
+                  {linkItem.title}
+                </MenuItem>
+              ))}
+              <MenuItem onClick={() => handleClickLink("/profile")}>
+                My Profile
+              </MenuItem>
+              <MenuItem onClick={clickWalletButton}>
+                {account ? (
+                  <>
+                    {account.label}
+                    <DisconnectIcon alt="" src="/others/logout.png" />
+                  </>
+                ) : (
+                  "Connect"
+                )}
+              </MenuItem>
+            </MenuContainer>
           )}
-        </ConnectWalletButton>
-      </ButtonContainer>
+        </MenuIconContainer>
+      ) : (
+        <ButtonContainer>
+          {HeaderLinks.map((linkItem, linkIndex) => (
+            <LinkButton
+              key={linkIndex}
+              onClick={() => handleClickLink(linkItem.url)}
+            >
+              {linkItem.title}
+            </LinkButton>
+          ))}
+          <ProfileIcon onClick={() => handleClickLink("/profile")} />
+          <ConnectWalletButton onClick={clickWalletButton}>
+            {account ? (
+              <>
+                {account.label}
+                <DisconnectIcon alt="" src="/others/logout.png" />
+              </>
+            ) : (
+              "Connect"
+            )}
+          </ConnectWalletButton>
+        </ButtonContainer>
+      )}
     </HeaderWrapper>
   );
 };

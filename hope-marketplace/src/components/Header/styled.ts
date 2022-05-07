@@ -103,3 +103,40 @@ export const DisconnectIcon = styled.img`
   width: 20px;
   height: 20px;
 `;
+
+export const MenuIconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  position: relative;
+`;
+
+export const MenuIcon = styled.div``;
+
+export const MenuContainer = styled.div`
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%),
+    0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+  padding-bottom: 8px;
+`;
+
+export const MenuItem = styled.div`
+  text-align: left;
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  line-height: 1.5;
+  width: max-content;
+  letter-spacing: 0.00938rem;
+`;
