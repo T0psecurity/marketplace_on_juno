@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import {
   DiscordIcon,
   MediumIcon,
@@ -25,7 +26,7 @@ const SocialIcons = [
   { Icon: MediumIcon, link: "https://hopegalaxy.medium.com/" },
   {
     Icon: TwitterIcon,
-    link: "https://twitter.com/Hopers_io",
+    link: "https://twitter.com/HopeGalaxyNFT",
   },
   {
     Icon: DiscordIcon,
@@ -42,13 +43,18 @@ const SocialIcons = [
 ];
 
 const Footer: React.FC = () => {
+  const history = useHistory();
   const openNewUrl = (url: string) => {
     window.open(url);
   };
   return (
     <FooterWrapper>
       <FooterInfo>
-        <FooterImage src="/others/logoHopers.png" alt="" />
+        <FooterImage
+          src="/others/logoHopers.png"
+          alt=""
+          onClick={() => history.push("/")}
+        />
       </FooterInfo>
       <FooterInfo>
         Hopers.io is the world’s first Interchain IBC NFT marketplace that is

@@ -178,26 +178,24 @@ export default function NFTItem({ item, status }: NFTItemProps) {
               onChange={handleChangeNFTPrice}
             />
             <NFTItemPriceType>
-              <form>
-                <input
-                  type="radio"
-                  id={`hope-${item.token_id}`}
-                  name="priceType"
-                  value={NFTPriceType.HOPE}
-                  onClick={handleChangePriceType}
-                />
-                <label htmlFor={`hope-${item.token_id}`}>HOPE</label>
-                <br />
-                <input
-                  type="radio"
-                  id={`juno-${item.token_id}`}
-                  name="priceType"
-                  value={NFTPriceType.JUNO}
-                  onClick={handleChangePriceType}
-                />
-                <label htmlFor={`juno-${item.token_id}`}>JUNO</label>
-                <br />
-              </form>
+              <input
+                type="radio"
+                id={`hope-${item.token_id}`}
+                name="priceType"
+                value={NFTPriceType.HOPE}
+                onClick={handleChangePriceType}
+              />
+              <label htmlFor={`hope-${item.token_id}`}>HOPE</label>
+              <br />
+              <input
+                type="radio"
+                id={`juno-${item.token_id}`}
+                name="priceType"
+                value={NFTPriceType.JUNO}
+                onClick={handleChangePriceType}
+              />
+              <label htmlFor={`juno-${item.token_id}`}>JUNO</label>
+              <br />
             </NFTItemPriceType>
           </>
         )}

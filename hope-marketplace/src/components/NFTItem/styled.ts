@@ -70,4 +70,4 @@ export const NFTItemPriceInputer = styled.input`
   margin: 0 10px;
 `;
 
-export const NFTItemPriceType = styled.div``;
+export const NFTItemPriceType = styled.form``;

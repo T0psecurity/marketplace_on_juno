@@ -28,7 +28,7 @@ const HeaderLinks = [
     title: "Explore",
     url: "/collections/mintpass1",
   },
-  { title: "Launchpad", url: "https://www.hopers.io/" },
+  { title: "Launchpad", url: "https://launchpad.hopers.io/" },
   { title: "Create", url: "" },
 ];
 

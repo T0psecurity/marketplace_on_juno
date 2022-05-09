@@ -6,10 +6,11 @@ export const Wrapper = styled.div`
 `;
 
 export const BackgroundWrapper = styled.div`
-  background: url("/others/cosmo.jpg");
-  background-size: 100% 300px;
-  background-color: white;
+  background: url("/others/banner.png");
+  background-size: 500px 227px;
+  background-color: #030404;
   background-repeat: no-repeat;
+  background-position: center;
   width: 100%;
   height: 400px;
   display: flex;

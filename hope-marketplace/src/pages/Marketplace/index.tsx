@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import { DiscordIcon, TwitterIcon } from "../../components/Icons";
+import { DiscordIcon, GlobeIcon, TwitterIcon } from "../../components/Icons";
 import NFTContainer from "../../components/NFTContainer";
 import { NFTItemStatus } from "../../components/NFTItem";
 import { Title } from "../../components/PageTitle";
@@ -10,15 +10,20 @@ import {
   Wrapper,
   HorizontalDivider,
   BackgroundWrapper,
-  HopeLogoIcon,
+  // HopeLogoIcon,
   SocialLinkContainer,
   SocialLinkItem,
 } from "./styled";
 
 const SocialLinkItems = [
   {
+    icon: GlobeIcon,
+    url: " https://www.hopegalaxy.io/",
+    backgroundColor: "#00ff00",
+  },
+  {
     icon: TwitterIcon,
-    url: "https://twitter.com/Hopers_io",
+    url: "https://twitter.com/HopeGalaxyNFT",
     backgroundColor: "#1da1f2",
   },
   {
@@ -42,12 +47,13 @@ const Marketplace: React.FC = () => {
   }, [account]);
   return (
     <Wrapper>
-      <BackgroundWrapper>
-        <HopeLogoIcon />
+      <BackgroundWrapper onClick={() => history.push("/")}>
+        {/* <HopeLogoIcon onClick={() => history.push("/")} /> */}
         <SocialLinkContainer>
           {SocialLinkItems.map((linkItem, linkIndex) => (
             <SocialLinkItem
-              onClick={() => history.push(linkItem.url)}
+              // onClick={() => history.push(linkItem.url)}
+              onClick={() => window.open(linkItem.url)}
               key={linkIndex}
               backgroundColor={linkItem.backgroundColor}
             >
