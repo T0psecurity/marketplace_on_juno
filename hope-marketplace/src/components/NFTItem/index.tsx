@@ -139,8 +139,8 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   };
 
   const handleChangePriceType = (e: any) => {
-    console.log("clicked", item.token_id);
     const { value } = e.target;
+    console.log("clicked", item.token_id, "-", value);
     setNftPriceType(value);
   };
 
@@ -178,24 +178,26 @@ export default function NFTItem({ item, status }: NFTItemProps) {
               onChange={handleChangeNFTPrice}
             />
             <NFTItemPriceType>
-              <input
-                type="radio"
-                id={`hope-${item.token_id}`}
-                name="priceType"
-                value={NFTPriceType.HOPE}
-                onClick={handleChangePriceType}
-              />
-              <label htmlFor={`hope-${item.token_id}`}>HOPE</label>
-              <br />
-              <input
-                type="radio"
-                id={`juno-${item.token_id}`}
-                name="priceType"
-                value={NFTPriceType.JUNO}
-                onClick={handleChangePriceType}
-              />
-              <label htmlFor={`juno-${item.token_id}`}>JUNO</label>
-              <br />
+              <form>
+                <input
+                  type="radio"
+                  id={`hope-${item.token_id}`}
+                  name="priceType"
+                  value={NFTPriceType.HOPE}
+                  onClick={handleChangePriceType}
+                />
+                <label htmlFor={`hope-${item.token_id}`}>HOPE</label>
+                <br />
+                <input
+                  type="radio"
+                  id={`juno-${item.token_id}`}
+                  name="priceType"
+                  value={NFTPriceType.JUNO}
+                  onClick={handleChangePriceType}
+                />
+                <label htmlFor={`juno-${item.token_id}`}>JUNO</label>
+                <br />
+              </form>
             </NFTItemPriceType>
           </>
         )}
