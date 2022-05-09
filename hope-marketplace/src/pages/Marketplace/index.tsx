@@ -17,14 +17,14 @@ import {
 
 const SocialLinkItems = [
   {
-    icon: DiscordIcon,
-    url: "https://discord.com/invite/BfKPacc5jF",
-    backgroundColor: "#7591ff",
-  },
-  {
     icon: TwitterIcon,
     url: "https://twitter.com/Hopers_io",
     backgroundColor: "#1da1f2",
+  },
+  {
+    icon: DiscordIcon,
+    url: "https://discord.com/invite/BfKPacc5jF",
+    backgroundColor: "#7591ff",
   },
 ];
 

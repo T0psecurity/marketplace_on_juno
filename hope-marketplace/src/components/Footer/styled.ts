@@ -4,7 +4,7 @@ export const FooterWrapper = styled.div`
   color: white;
   background-color: #39c639;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr;
   grid-gap: 50px;
   padding: 30px 100px;
   background: #39c639;
@@ -20,7 +20,9 @@ export const FooterWrapper = styled.div`
 `;
 
 export const FooterInfo = styled.div`
-  text-align: left;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,20 +40,27 @@ export const FooterLinkItem = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #2e7d32;
+  /* background-color: #2e7d32; */
+  background-color: green;
   margin: 10px;
   border-radius: 10px;
   cursor: pointer;
 `;
 
 export const FooterImage = styled.img`
-  width: min(100%, 300px);
+  width: min(80%, 200px);
 `;
 
 export const FooterDocIcon = styled.span`
-  background-color: #2e7d32;
+  /* background-color: #2e7d32; */
+  background-color: green;
+  height: 54px;
   color: white;
-  padding: 10px 20px;
+  padding: 0 20px;
   border-radius: 10px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
 `;

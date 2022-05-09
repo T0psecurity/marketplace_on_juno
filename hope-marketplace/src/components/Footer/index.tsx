@@ -1,6 +1,7 @@
 import React from "react";
 import {
   DiscordIcon,
+  MediumIcon,
   // instagramIcon,
   // mailIcon,
   TwitterIcon,
@@ -21,6 +22,7 @@ const SocialIcons = [
   //   Icon: mailIcon,
   //   link: "https://www.hopegalaxy.io/",
   // },
+  { Icon: MediumIcon, link: "" },
   {
     Icon: TwitterIcon,
     link: "https://twitter.com/Hopers_io",
@@ -46,16 +48,12 @@ const Footer: React.FC = () => {
   return (
     <FooterWrapper>
       <FooterInfo>
-        <FooterLinkItemContainer>
-          {SocialIcons.map((icon, index) => (
-            <FooterLinkItem key={index} onClick={() => openNewUrl(icon.link)}>
-              {icon.Icon}
-            </FooterLinkItem>
-          ))}
-        </FooterLinkItemContainer>
+        <FooterImage src="/others/logoHopers.png" alt="" />
       </FooterInfo>
       <FooterInfo>
-        <FooterImage src="/others/logoHopers.png" alt="" />
+        Hopers.io is the world’s first Interchain IBC NFT marketplace that is
+        completely community driven with a revshare model for the $HOPE
+        governance Dao token stakers.
       </FooterInfo>
       <FooterInfo>
         <FooterDocIcon
@@ -63,6 +61,13 @@ const Footer: React.FC = () => {
         >
           Docs
         </FooterDocIcon>
+        <FooterLinkItemContainer>
+          {SocialIcons.map((icon, index) => (
+            <FooterLinkItem key={index} onClick={() => openNewUrl(icon.link)}>
+              {icon.Icon}
+            </FooterLinkItem>
+          ))}
+        </FooterLinkItemContainer>
       </FooterInfo>
     </FooterWrapper>
   );

@@ -1,0 +1,21 @@
+[debug] [2022-05-09T00:30:43.977Z] ----------------------------------------------------------------------
+[debug] [2022-05-09T00:30:43.980Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-09T00:30:43.981Z] CLI Version:   10.8.0
+[debug] [2022-05-09T00:30:43.981Z] Platform:      win32
+[debug] [2022-05-09T00:30:43.981Z] Node Version:  v14.17.5
+[debug] [2022-05-09T00:30:43.982Z] Time:          Mon May 09 2022 08:30:43 GMT+0800 (China Standard Time)
+[debug] [2022-05-09T00:30:43.983Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-09T00:30:44.087Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-09T00:30:44.087Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-09T00:30:44.087Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-09T00:30:44.090Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions [none]
+[debug] [2022-05-09T00:30:44.091Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T00:31:05.243Z] [iam] error while checking permissions, command may fail: FirebaseError: Failed to make request to https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions
+[debug] [2022-05-09T00:31:05.246Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-09T00:31:35.262Z] Timeout reached making request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+[debug] [2022-05-09T00:33:19.380Z] FirebaseError: Timeout reached making request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+    at RetryOperation._fn (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:236:35)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+[error] 
+[error] Error: Failed to get Firebase project nft-marketplace-on-juno-chain. Please make sure the project exists and your account has permission to access it.

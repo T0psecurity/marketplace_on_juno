@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const NFTItemWrapper = styled.div`
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 10px;
   border-radius: 10px;
   box-shadow: 1px 4px 10px 1px rgba(0, 0, 0, 0.7);
