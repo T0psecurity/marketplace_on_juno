@@ -10,7 +10,7 @@ import {
   Wrapper,
   HorizontalDivider,
   BackgroundWrapper,
-  // HopeLogoIcon,
+  HopeLogoIcon,
   SocialLinkContainer,
   SocialLinkItem,
 } from "./styled";
@@ -48,7 +48,7 @@ const Marketplace: React.FC = () => {
   return (
     <Wrapper>
       <BackgroundWrapper onClick={() => history.push("/")}>
-        {/* <HopeLogoIcon onClick={() => history.push("/")} /> */}
+        <HopeLogoIcon onClick={() => history.push("/")} />
         <SocialLinkContainer>
           {SocialLinkItems.map((linkItem, linkIndex) => (
             <SocialLinkItem

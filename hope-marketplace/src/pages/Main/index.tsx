@@ -17,7 +17,7 @@ const Main: React.FC = () => {
           component={Marketplace}
         />
         <Route exact={false} path="/detail" component={NFTDetail} />
-        <Redirect to="/explore" />
+        <Redirect to="/profile" />
       </Switch>
     </Wrapper>
   );

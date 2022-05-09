@@ -6,13 +6,13 @@ export const Wrapper = styled.div`
 `;
 
 export const BackgroundWrapper = styled.div`
-  background: url("/others/banner.png");
-  background-size: 500px 227px;
-  background-color: #030404;
+  --image-height: 400px;
+  background: url("/others/background.png");
+  background-size: 100% var(--image-height);
+  background-color: white;
   background-repeat: no-repeat;
-  background-position: center;
   width: 100%;
-  height: 400px;
+  height: calc(var(--image-height) + 100px);
   display: flex;
   justify-content: center;
   align-items: end;
