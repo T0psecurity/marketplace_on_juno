@@ -13,6 +13,7 @@ import useContract from "./hook/useContract";
 
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
+import useFetch from "./hook/useFetch";
 
 const history = createBrowserHistory();
 
@@ -23,6 +24,7 @@ function App() {
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const { initContracts } = useContract();
+  const { fetchAllNFTs } = useFetch();
   useEffect(() => {
     // remove existing account
     if (account) {
@@ -30,6 +32,10 @@ function App() {
     }
     // import target contracts
     initContracts();
+    setInterval(() => {
+      fetchAllNFTs();
+    }, 5000);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
