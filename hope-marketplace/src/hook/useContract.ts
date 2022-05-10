@@ -42,7 +42,6 @@ const useContract = () => {
 
     // import target contracts
     Object.keys(contractAddresses).map((key: string) => {
-      console.log("contract address", contractAddresses[key]);
       dispatch(importContract(contractAddresses[key]));
       return null;
     });
