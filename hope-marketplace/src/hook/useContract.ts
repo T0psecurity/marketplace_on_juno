@@ -1,11 +1,14 @@
 import { coins } from "@cosmjs/proto-signing";
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import {
+  useAppDispatch,
+  // useAppSelector
+} from "../app/hooks";
 import {
   importContract,
-  contractAccounts,
-  deleteAccount,
+  // contractAccounts,
+  // deleteAccount,
 } from "../features/accounts/accountsSlice";
 import connectionManager from "../features/connection/connectionManager";
 import { toMicroAmount } from "../util/coins";
@@ -27,18 +30,18 @@ export const contractAddresses: any = {
 
 const useContract = () => {
   const dispatch = useAppDispatch();
-  const contracts = useAppSelector(contractAccounts);
+  // const contracts = useAppSelector(contractAccounts);
 
   const state = useSelector((state: any) => state);
 
   const initContracts = useCallback(() => {
     // remove existing contracts
-    if (contracts.length) {
-      for (let i = 0; i < contracts.length; i++) {
-        const contract = contracts[i];
-        dispatch(deleteAccount(contract.address));
-      }
-    }
+    // if (contracts.length) {
+    //   for (let i = 0; i < contracts.length; i++) {
+    //     const contract = contracts[i];
+    //     dispatch(deleteAccount(contract.address));
+    //   }
+    // }
 
     // import target contracts
     Object.keys(contractAddresses).map((key: string) => {
@@ -52,7 +55,9 @@ const useContract = () => {
   const runQuery = useCallback(
     async (contractAddress: string, queryMsg: any) => {
       const contract = state.accounts.accountList[contractAddress];
-      if (!contract) throw new Error("No contract selected");
+      if (!contract) {
+        throw new Error(`No contract selected - ${contractAddress}`);
+      }
       const client = await connectionManager.getQueryClient(
         state.connection.config
       );
@@ -77,7 +82,9 @@ const useContract = () => {
     ) => {
       const contract = state.accounts.accountList[contractAddress];
       const account = state.accounts.keplrAccount;
-      if (!contract) throw new Error("No contract selected");
+      if (!contract) {
+        throw new Error("No contract selected");
+      }
 
       const client = await connectionManager.getSigningClient(
         account,

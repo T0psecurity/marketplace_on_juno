@@ -19,6 +19,7 @@ const useFetch = () => {
   );
 
   const fetchUnlistedNFTs = useCallback(async () => {
+    if (!account || !nftContract) return;
     const result = await runQuery(contractAddresses.NFT_CONTRACT, {
       tokens: {
         owner: account?.address,
@@ -37,6 +38,7 @@ const useFetch = () => {
   }, [account, runQuery, dispatch, nftContract]);
 
   const fetchListedNFTs = useCallback(async () => {
+    if (!account || !marketContract) return;
     const result = await runQuery(contractAddresses.MARKET_CONTRACT, {
       get_offerings: {},
     });
@@ -60,7 +62,8 @@ const useFetch = () => {
   const fetchAllNFTs = useCallback(() => {
     fetchUnlistedNFTs();
     fetchListedNFTs();
-  }, [fetchUnlistedNFTs, fetchListedNFTs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, fetchUnlistedNFTs, fetchListedNFTs]);
 
   return {
     fetchUnlistedNFTs,

@@ -3,6 +3,11 @@ import { useHistory } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setKeplrAccount } from "../../features/accounts/accountsSlice";
 import { useKeplr } from "../../features/accounts/useKeplr";
+import {
+  setListedNFTs,
+  setMarketplaceNFTs,
+} from "../../features/nfts/nftsSlice";
+import useContract from "../../hook/useContract";
 import useFetch from "../../hook/useFetch";
 import useOnClickOutside from "../../hook/useOnClickOutside";
 import useWindowSize from "../../hook/useWindowSize";
@@ -34,17 +39,25 @@ const HeaderLinks = [
 
 const Header: React.FC = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [runningFetch, setRunningFetch] = useState(false);
   const [ref, setRef] = useState<HTMLDivElement | null>(null); // TODO: must use useRef
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const { connect } = useKeplr();
   const history = useHistory();
   const { fetchAllNFTs } = useFetch();
+  const { initContracts } = useContract();
 
   const { isMobile } = useWindowSize(900);
 
   useEffect(() => {
-    fetchAllNFTs();
+    if (account && !runningFetch) {
+      setRunningFetch(true);
+      initContracts();
+      setInterval(() => {
+        fetchAllNFTs();
+      }, 5000);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account]);
 
@@ -53,6 +66,8 @@ const Header: React.FC = () => {
       connect();
     } else {
       dispatch(setKeplrAccount());
+      dispatch(setListedNFTs([]));
+      dispatch(setMarketplaceNFTs([]));
     }
   };
 

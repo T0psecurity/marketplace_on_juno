@@ -124,7 +124,7 @@ export const query = (): AppThunk => (dispatch, getState) => {
   dispatch(
     run(async (queryObj) => {
       const contract = selectedContract(getState());
-      if (!contract) throw new Error("No contract selected");
+      if (!contract) throw new Error("No contract selected from console slice");
       const client = await connectionManager.getQueryClient(
         getState().connection.config
       );
@@ -148,7 +148,8 @@ export const execute =
         const contract = selectedContract(getState());
         // const account = selectedAccount(getState());
         const account = getState().accounts.keplrAccount;
-        if (!contract) throw new Error("No contract selected");
+        if (!contract)
+          throw new Error("No contract selected from console slice");
         if (!account) throw new Error("No account selected");
 
         const client = await connectionManager.getSigningClient(
