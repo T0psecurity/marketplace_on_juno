@@ -38,7 +38,6 @@ const Marketplace: React.FC = () => {
   const history = useHistory();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const marketplaceNFTs = useAppSelector((state) => state.nfts.marketplaceNFTs);
-  console.log("here", fetchListedNFTs);
 
   useEffect(() => {
     if (account && account.address) {

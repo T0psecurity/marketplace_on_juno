@@ -6,6 +6,7 @@ import { useKeplr } from "../../features/accounts/useKeplr";
 import {
   setListedNFTs,
   setMarketplaceNFTs,
+  setUnlistedNFTs,
 } from "../../features/nfts/nftsSlice";
 import useContract from "../../hook/useContract";
 import useFetch from "../../hook/useFetch";
@@ -67,6 +68,7 @@ const Header: React.FC = () => {
     } else {
       dispatch(setKeplrAccount());
       dispatch(setListedNFTs([]));
+      dispatch(setUnlistedNFTs([]));
       dispatch(setMarketplaceNFTs([]));
     }
   };

@@ -128,6 +128,7 @@ export const MenuContainer = styled.div`
   flex-direction: column;
   padding-top: 8px;
   padding-bottom: 8px;
+  z-index: 2;
 `;
 
 export const MenuItem = styled.div`

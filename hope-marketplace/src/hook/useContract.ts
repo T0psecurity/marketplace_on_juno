@@ -53,10 +53,12 @@ const useContract = () => {
   }, []);
 
   const runQuery = useCallback(
-    async (contractAddress: string, queryMsg: any) => {
-      const contract = state.accounts.accountList[contractAddress];
+    // async (contractAddress: string, queryMsg: any) => {
+    async (contract: any, queryMsg: any) => {
+      // const contract = state.accounts.accountList[contractAddress];
       if (!contract) {
-        throw new Error(`No contract selected - ${contractAddress}`);
+        // dispatch(importContract(contractAddress));
+        throw new Error("No contract selected");
       }
       const client = await connectionManager.getQueryClient(
         state.connection.config

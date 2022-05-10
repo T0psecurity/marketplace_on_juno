@@ -8,6 +8,8 @@ export const NFTItemWrapper = styled.div`
 `;
 
 export const NFTItemImage = styled.img`
+  /* background: url("others/mint_pass.png");
+  background-size: cover; */
   cursor: pointer;
   width: 288px;
   height: 443px;

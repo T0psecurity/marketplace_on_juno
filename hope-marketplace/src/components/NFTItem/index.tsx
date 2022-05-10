@@ -153,7 +153,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       <NFTItemImage
         onClick={handleGotoDetail}
         alt=""
-        src="others/mint_pass.png"
+        src="/others/mint_pass.png"
       />
       <NFTItemInfoContainer>
         <NFTItemInfo>{item.token_id}</NFTItemInfo>
