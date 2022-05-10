@@ -45,6 +45,7 @@ const useContract = () => {
       dispatch(importContract(contractAddresses[key]));
       return null;
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

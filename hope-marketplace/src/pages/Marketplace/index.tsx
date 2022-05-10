@@ -43,8 +43,7 @@ const Marketplace: React.FC = () => {
     if (account && account.address) {
       fetchListedNFTs();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
+  }, [account, fetchListedNFTs]);
   return (
     <Wrapper>
       <BackgroundWrapper onClick={() => history.push("/")}>

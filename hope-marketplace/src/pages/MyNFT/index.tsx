@@ -18,8 +18,7 @@ const MyNFT: React.FC = () => {
     if (account && account.address) {
       fetchAllNFTs();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
+  }, [account, fetchAllNFTs]);
   return (
     <Wrapper>
       <Title title="Profile" icon={<ProfileImage />} />

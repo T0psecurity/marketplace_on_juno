@@ -11,6 +11,12 @@ const useFetch = () => {
   const { runQuery } = useContract();
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
+  const nftContract = useAppSelector(
+    (state) => state.accounts.accountList[contractAddresses.NFT_CONTRACT]
+  );
+  const marketContract = useAppSelector(
+    (state) => state.accounts.accountList[contractAddresses.MARKET_CONTRACT]
+  );
 
   const fetchUnlistedNFTs = useCallback(async () => {
     const result = await runQuery(contractAddresses.NFT_CONTRACT, {
@@ -27,7 +33,8 @@ const useFetch = () => {
       }));
     }
     dispatch(setUnlistedNFTs(unlistedNFTs));
-  }, [account, runQuery, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, runQuery, dispatch, nftContract]);
 
   const fetchListedNFTs = useCallback(async () => {
     const result = await runQuery(contractAddresses.MARKET_CONTRACT, {
@@ -47,7 +54,8 @@ const useFetch = () => {
     }
     dispatch(setListedNFTs(listedNFTs));
     dispatch(setMarketplaceNFTs(marketplaceNFTs));
-  }, [runQuery, account, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [runQuery, account, dispatch, marketContract]);
 
   const fetchAllNFTs = useCallback(() => {
     fetchUnlistedNFTs();
