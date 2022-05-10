@@ -17,7 +17,7 @@ export const Donate: FC = () => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state) => state.accounts.donationOpen);
   const sender = useAppSelector((state) => state.accounts.currentAccount!);
-  const junoConfig = presets["juno-uni"];
+  const junoConfig = presets["juno-mainnet"];
   const [amount, setAmount] = useState("");
   const [memo, setMemo] = useState("");
 

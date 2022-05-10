@@ -1,0 +1,244 @@
+[debug] [2022-05-09T14:39:15.320Z] ----------------------------------------------------------------------
+[debug] [2022-05-09T14:39:15.322Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-09T14:39:15.323Z] CLI Version:   10.8.0
+[debug] [2022-05-09T14:39:15.323Z] Platform:      win32
+[debug] [2022-05-09T14:39:15.323Z] Node Version:  v14.17.5
+[debug] [2022-05-09T14:39:15.324Z] Time:          Mon May 09 2022 22:39:15 GMT+0800 (China Standard Time)
+[debug] [2022-05-09T14:39:15.325Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-09T14:39:15.465Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-09T14:39:15.466Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-09T14:39:15.466Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-09T14:39:15.469Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions [none]
+[debug] [2022-05-09T14:39:15.469Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:39:38.185Z] [iam] error while checking permissions, command may fail: FirebaseError: Failed to make request to https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions
+[debug] [2022-05-09T14:39:38.188Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-09T14:39:54.468Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+[debug] [2022-05-09T14:40:53.306Z] FirebaseError: Failed to make request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+    at RetryOperation._fn (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:240:31)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+[error] 
+[error] Error: Failed to get Firebase project nft-marketplace-on-juno-chain. Please make sure the project exists and your account has permission to access it.
+[debug] [2022-05-09T14:43:07.516Z] ----------------------------------------------------------------------
+[debug] [2022-05-09T14:43:07.519Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-09T14:43:07.519Z] CLI Version:   10.8.0
+[debug] [2022-05-09T14:43:07.520Z] Platform:      win32
+[debug] [2022-05-09T14:43:07.520Z] Node Version:  v14.17.5
+[debug] [2022-05-09T14:43:07.521Z] Time:          Mon May 09 2022 22:43:07 GMT+0800 (China Standard Time)
+[debug] [2022-05-09T14:43:07.521Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-09T14:43:07.625Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-09T14:43:07.626Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-09T14:43:07.626Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-09T14:43:07.629Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions [none]
+[debug] [2022-05-09T14:43:07.630Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:43:15.034Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions 200
+[debug] [2022-05-09T14:43:15.035Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:43:15.038Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-09T14:43:45.087Z] Timeout reached making request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+[debug] [2022-05-09T14:44:02.406Z] FirebaseError: Timeout reached making request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+    at RetryOperation._fn (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:236:35)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+[error] 
+[error] Error: Failed to get Firebase project nft-marketplace-on-juno-chain. Please make sure the project exists and your account has permission to access it.
+[debug] [2022-05-09T14:44:09.358Z] ----------------------------------------------------------------------
+[debug] [2022-05-09T14:44:09.362Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-09T14:44:09.362Z] CLI Version:   10.8.0
+[debug] [2022-05-09T14:44:09.363Z] Platform:      win32
+[debug] [2022-05-09T14:44:09.363Z] Node Version:  v14.17.5
+[debug] [2022-05-09T14:44:09.365Z] Time:          Mon May 09 2022 22:44:09 GMT+0800 (China Standard Time)
+[debug] [2022-05-09T14:44:09.365Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-09T14:44:09.488Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-09T14:44:09.489Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-09T14:44:09.489Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-09T14:44:09.492Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions [none]
+[debug] [2022-05-09T14:44:09.492Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:44:46.677Z] ----------------------------------------------------------------------
+[debug] [2022-05-09T14:44:46.681Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-09T14:44:46.681Z] CLI Version:   10.8.0
+[debug] [2022-05-09T14:44:46.682Z] Platform:      win32
+[debug] [2022-05-09T14:44:46.682Z] Node Version:  v14.17.5
+[debug] [2022-05-09T14:44:46.683Z] Time:          Mon May 09 2022 22:44:46 GMT+0800 (China Standard Time)
+[debug] [2022-05-09T14:44:46.683Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-09T14:44:46.866Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-09T14:44:46.866Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-09T14:44:46.866Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-09T14:44:46.871Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions [none]
+[debug] [2022-05-09T14:44:46.872Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:44:54.611Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions 200
+[debug] [2022-05-09T14:44:54.612Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:44:54.616Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-09T14:45:08.081Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain 200
+[debug] [2022-05-09T14:45:08.081Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain {"projectId":"nft-marketplace-on-juno-chain","projectNumber":"1023331270107","displayName":"NFT Marketplace on Juno Chain","name":"projects/nft-marketplace-on-juno-chain","resources":{"hostingSite":"nft-marketplace-on-juno-chain"},"state":"ACTIVE"}
+[info] 
+[info] === Deploying to 'nft-marketplace-on-juno-chain'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2022-05-09T14:45:08.088Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-09T14:45:24.146Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+[debug] [2022-05-09T14:45:28.384Z] FirebaseError: Failed to make request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+    at RetryOperation._fn (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:240:31)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+[error] 
+[error] Error: Failed to get Firebase project nft-marketplace-on-juno-chain. Please make sure the project exists and your account has permission to access it.
+[debug] [2022-05-09T14:45:40.056Z] ----------------------------------------------------------------------
+[debug] [2022-05-09T14:45:40.060Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-09T14:45:40.061Z] CLI Version:   10.8.0
+[debug] [2022-05-09T14:45:40.061Z] Platform:      win32
+[debug] [2022-05-09T14:45:40.061Z] Node Version:  v14.17.5
+[debug] [2022-05-09T14:45:40.062Z] Time:          Mon May 09 2022 22:45:40 GMT+0800 (China Standard Time)
+[debug] [2022-05-09T14:45:40.063Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-09T14:45:40.162Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-09T14:45:40.163Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-09T14:45:40.163Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-09T14:45:40.167Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions [none]
+[debug] [2022-05-09T14:45:40.167Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:46:01.277Z] [iam] error while checking permissions, command may fail: FirebaseError: Failed to make request to https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions
+[debug] [2022-05-09T14:46:01.281Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-09T14:46:22.330Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+[debug] [2022-05-09T14:46:43.874Z] FirebaseError: Failed to make request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+    at RetryOperation._fn (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:240:31)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+[error] 
+[error] Error: Failed to get Firebase project nft-marketplace-on-juno-chain. Please make sure the project exists and your account has permission to access it.
+[debug] [2022-05-09T14:46:50.315Z] ----------------------------------------------------------------------
+[debug] [2022-05-09T14:46:50.317Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-09T14:46:50.318Z] CLI Version:   10.8.0
+[debug] [2022-05-09T14:46:50.318Z] Platform:      win32
+[debug] [2022-05-09T14:46:50.318Z] Node Version:  v14.17.5
+[debug] [2022-05-09T14:46:50.319Z] Time:          Mon May 09 2022 22:46:50 GMT+0800 (China Standard Time)
+[debug] [2022-05-09T14:46:50.320Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-09T14:46:50.422Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-09T14:46:50.423Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-09T14:46:50.423Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-09T14:46:50.432Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions [none]
+[debug] [2022-05-09T14:46:50.433Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:47:08.434Z] [iam] error while checking permissions, command may fail: FirebaseError: Failed to make request to https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions
+[debug] [2022-05-09T14:47:08.436Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-09T14:47:26.151Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+[debug] [2022-05-09T14:47:50.907Z] FirebaseError: Failed to make request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+    at RetryOperation._fn (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:240:31)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+[error] 
+[error] Error: Failed to get Firebase project nft-marketplace-on-juno-chain. Please make sure the project exists and your account has permission to access it.
+[debug] [2022-05-09T14:47:57.229Z] ----------------------------------------------------------------------
+[debug] [2022-05-09T14:47:57.232Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-09T14:47:57.232Z] CLI Version:   10.8.0
+[debug] [2022-05-09T14:47:57.232Z] Platform:      win32
+[debug] [2022-05-09T14:47:57.233Z] Node Version:  v14.17.5
+[debug] [2022-05-09T14:47:57.234Z] Time:          Mon May 09 2022 22:47:57 GMT+0800 (China Standard Time)
+[debug] [2022-05-09T14:47:57.234Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-09T14:47:57.339Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-09T14:47:57.339Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-09T14:47:57.339Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-09T14:47:57.342Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions [none]
+[debug] [2022-05-09T14:47:57.343Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:48:05.978Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions 200
+[debug] [2022-05-09T14:48:05.979Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:48:05.984Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-09T14:48:35.986Z] Timeout reached making request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+[debug] [2022-05-09T14:49:13.577Z] FirebaseError: Timeout reached making request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+    at RetryOperation._fn (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:236:35)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+[error] 
+[error] Error: Failed to get Firebase project nft-marketplace-on-juno-chain. Please make sure the project exists and your account has permission to access it.
+[debug] [2022-05-09T14:49:44.097Z] ----------------------------------------------------------------------
+[debug] [2022-05-09T14:49:44.100Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-09T14:49:44.101Z] CLI Version:   10.8.0
+[debug] [2022-05-09T14:49:44.101Z] Platform:      win32
+[debug] [2022-05-09T14:49:44.101Z] Node Version:  v14.17.5
+[debug] [2022-05-09T14:49:44.103Z] Time:          Mon May 09 2022 22:49:44 GMT+0800 (China Standard Time)
+[debug] [2022-05-09T14:49:44.103Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-09T14:49:44.201Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-09T14:49:44.202Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-09T14:49:44.202Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-09T14:49:44.205Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions [none]
+[debug] [2022-05-09T14:49:44.205Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-09T14:49:58.664Z] [iam] error while checking permissions, command may fail: FirebaseError: Failed to make request to https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions
+[debug] [2022-05-09T14:49:58.668Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-09T14:50:17.772Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+[debug] [2022-05-09T14:50:38.821Z] FirebaseError: Failed to make request to https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain
+    at RetryOperation._fn (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:240:31)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+[error] 
+[error] Error: Failed to get Firebase project nft-marketplace-on-juno-chain. Please make sure the project exists and your account has permission to access it.
+[debug] [2022-05-10T09:42:28.658Z] ----------------------------------------------------------------------
+[debug] [2022-05-10T09:42:28.666Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-10T09:42:28.667Z] CLI Version:   10.8.0
+[debug] [2022-05-10T09:42:28.668Z] Platform:      win32
+[debug] [2022-05-10T09:42:28.668Z] Node Version:  v14.17.5
+[debug] [2022-05-10T09:42:28.671Z] Time:          Tue May 10 2022 17:42:28 GMT+0800 (China Standard Time)
+[debug] [2022-05-10T09:42:28.671Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-10T09:42:28.702Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2022-05-10T09:42:28.941Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-10T09:42:28.941Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-10T09:42:28.942Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-10T09:42:28.943Z] > refreshing access token with scopes: []
+[debug] [2022-05-10T09:42:28.944Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-05-10T09:42:30.480Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2022-05-10T09:42:30.481Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2022-05-10T09:42:30.618Z] <<< HTTP RESPONSE 200 {"date":"Tue, 10 May 2022 09:41:26 GMT","expires":"Mon, 01 Jan 1990 00:00:00 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","pragma":"no-cache","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2022-05-10T09:42:30.770Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions [none]
+[debug] [2022-05-10T09:42:30.771Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-10T09:42:34.187Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions 200
+[debug] [2022-05-10T09:42:34.188Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nft-marketplace-on-juno-chain:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-05-10T09:42:34.189Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-10T09:42:37.020Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain 200
+[debug] [2022-05-10T09:42:37.020Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain {"projectId":"nft-marketplace-on-juno-chain","projectNumber":"1023331270107","displayName":"NFT Marketplace on Juno Chain","name":"projects/nft-marketplace-on-juno-chain","resources":{"hostingSite":"nft-marketplace-on-juno-chain"},"state":"ACTIVE"}
+[info] 
+[info] === Deploying to 'nft-marketplace-on-juno-chain'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2022-05-10T09:42:37.026Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain [none]
+[debug] [2022-05-10T09:42:49.104Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain 200
+[debug] [2022-05-10T09:42:49.104Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/nft-marketplace-on-juno-chain {"projectId":"nft-marketplace-on-juno-chain","projectNumber":"1023331270107","displayName":"NFT Marketplace on Juno Chain","name":"projects/nft-marketplace-on-juno-chain","resources":{"hostingSite":"nft-marketplace-on-juno-chain"},"state":"ACTIVE"}
+[debug] [2022-05-10T09:42:49.107Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/1023331270107/sites/nft-marketplace-on-juno-chain/versions [none]
+[debug] [2022-05-10T09:42:49.108Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/1023331270107/sites/nft-marketplace-on-juno-chain/versions {"config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2022-05-10T09:42:54.444Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/1023331270107/sites/nft-marketplace-on-juno-chain/versions 200
+[debug] [2022-05-10T09:42:54.445Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/1023331270107/sites/nft-marketplace-on-juno-chain/versions {"name":"projects/1023331270107/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2","status":"CREATED","config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[nft-marketplace-on-juno-chain]: beginning deploy... 
+[info] i  hosting[nft-marketplace-on-juno-chain]: found 27 files in build 
+[debug] [2022-05-10T09:42:54.473Z] [hosting] uploading with 200 concurrency
+[debug] [2022-05-10T09:42:55.720Z] [hosting] hash cache [YnVpbGQ] stored for 27 files
+[debug] [2022-05-10T09:42:55.721Z] [hosting][hash queue][FINAL] {"max":1224,"min":0,"avg":61.666666666666664,"active":0,"complete":27,"success":27,"errored":0,"retried":0,"total":27,"elapsed":1235}
+[debug] [2022-05-10T09:42:55.722Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/1023331270107/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2:populateFiles [none]
+[debug] [2022-05-10T09:42:55.722Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/1023331270107/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2:populateFiles {"files":{"/favicon.ico":"d6868b46c0f65ca34dd2fb2995aaf9cf3dc69f6a246dc4846bf3837c3b55414d","/favicon.tmp.ico":"c73b258fae22ae416a544efeb59cff37a059043b1c51b1e188578e892b81bdd1\r","/logo.png":"da9f13fa9ae974657087e98b0631d344cbee19dac717cb8c17b47733f3ede93e\r","/logo192.png":"ebf380e341383bbf65d6a762603f630a9f7610c97f32bd297bc097635bc37ee3\r","/logo512.png":"c55d034d9cf7abfac7600919cbf4f4ce2f3ea3478df91d01177e8ff136f58918\r","/manifest.json":"aff3449bdc238776f5d6d967f19ec491b36aed5fb7f23ccff6500736fd58494a\r","/robots.txt":"bfe106a3fb878dc83461c86818bf74fc1bdc7f28538ba613cd3e775516ce8b49\r","/others/banner.png":"1f945e271b1592407cf0da2538ee68a6f7884fcc15a910dc4d8fa9efea5a00cc","/others/cosmo.jpg":"29f516a6fab04b0b048182a759c9a8c6e8038fc4e36843f70f09f43ccb68002e","/others/HOPE-image.png":"ca35283dc0f450af9fb96a4a1069ddb6fa872a5f26592eaf99b2451293568f39\r","/others/logoHopers.png":"f9af8a51995a0529672e708e5decd239330dd97320e43dc82edfe68a3f39250f","/others/logout.png":"6436d565c6bcabde9dfe7a9d74c3ff6dcac86bc277e1bfeb2000e6fc640b9a53","/others/mint_pass.png":"438027aed49cbf1059383495f043587ab0e5058e4f53716328362dd5514f65d5\r","/others/simboloHopers.png":"da9f13fa9ae974657087e98b0631d344cbee19dac717cb8c17b47733f3ede93e","/others/user-hopers.jpg":"0a22604f4af2b8ed78d43a3614873a9ca998df99c48dfe27c2fd7a348fd34b5e","/social-icons/discord.png":"1b5fd9bab0deec5587a117fc3e4a92e06835a3210a02617e218132bbbdfbc105\r","/social-icons/medium.png":"8294df8567f32cf40f2cfe8e855ae621a206970d2d6d19404ea22f07b9c623cb\r","/social-icons/twitter.png":"9f5588c6ad20370d80b9e1a6a4cd2dcfa76f10f6852f5e533709048179a61253\r","/Videos/video1.mp4":"514ecb329fe36e96a0f70706ea819d7400b207c169c85692ba5ed91a943bf678\r","/asset-manifest.json":"e5d660d229396268cc92f41299ce77a843e08121ec9ec22dec4df199133d15a7","/index.html":"e6c59a6b4164de5c7dc4b0f04ecf9002b889eeedf5760b43e659569e7a6a4844","/static/css/main.7a7ffe8c.css":"730e4c0376920cbd46e11535c42ff06df303aab211b4cff967288920431dbd8b","/static/js/main.28923407.js.LICENSE.txt":"dcc3acb562426cf3fd215b931cf9b798aa1ee99c8240f77cb064582c955e3b3a","/static/css/main.7a7ffe8c.css.map":"90119397fa41da3a60fb49643a9873cf86ea167a7440f48b921f3070795da80e","/others/background.png":"8881bd1a4c334bbed741b1d72789c0e4d9080d9ef31f05f0494ebe4326aabbd1","/static/js/main.28923407.js":"6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508","/static/js/main.28923407.js.map":"839b6abf3a7355d7dd88a687d1a1ab640147c38c805946d35fe2799a395b79d4"}}
+[debug] [2022-05-10T09:42:59.260Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/1023331270107/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2:populateFiles 200
+[debug] [2022-05-10T09:42:59.260Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/1023331270107/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2:populateFiles {"uploadRequiredHashes":["839b6abf3a7355d7dd88a687d1a1ab640147c38c805946d35fe2799a395b79d4","e5d660d229396268cc92f41299ce77a843e08121ec9ec22dec4df199133d15a7","e6c59a6b4164de5c7dc4b0f04ecf9002b889eeedf5760b43e659569e7a6a4844","6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files"}
+[debug] [2022-05-10T09:42:59.262Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/839b6abf3a7355d7dd88a687d1a1ab640147c38c805946d35fe2799a395b79d4 [none]
+[debug] [2022-05-10T09:42:59.262Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/839b6abf3a7355d7dd88a687d1a1ab640147c38c805946d35fe2799a395b79d4 [stream]
+[debug] [2022-05-10T09:42:59.264Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/e5d660d229396268cc92f41299ce77a843e08121ec9ec22dec4df199133d15a7 [none]
+[debug] [2022-05-10T09:42:59.265Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/e5d660d229396268cc92f41299ce77a843e08121ec9ec22dec4df199133d15a7 [stream]
+[debug] [2022-05-10T09:42:59.266Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/e6c59a6b4164de5c7dc4b0f04ecf9002b889eeedf5760b43e659569e7a6a4844 [none]
+[debug] [2022-05-10T09:42:59.266Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/e6c59a6b4164de5c7dc4b0f04ecf9002b889eeedf5760b43e659569e7a6a4844 [stream]
+[debug] [2022-05-10T09:42:59.269Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [none]
+[debug] [2022-05-10T09:42:59.269Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [stream]
+[debug] [2022-05-10T09:42:59.270Z] [hosting][populate queue][FINAL] {"max":3544,"min":3544,"avg":3544,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":3552}
+[debug] [2022-05-10T09:42:59.271Z] [hosting] uploads queued: 4
+[debug] [2022-05-10T09:43:05.191Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/e6c59a6b4164de5c7dc4b0f04ecf9002b889eeedf5760b43e659569e7a6a4844 200
+[debug] [2022-05-10T09:43:05.191Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/e6c59a6b4164de5c7dc4b0f04ecf9002b889eeedf5760b43e659569e7a6a4844 [stream]
+[debug] [2022-05-10T09:43:07.280Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/e5d660d229396268cc92f41299ce77a843e08121ec9ec22dec4df199133d15a7 200
+[debug] [2022-05-10T09:43:07.281Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/e5d660d229396268cc92f41299ce77a843e08121ec9ec22dec4df199133d15a7 [stream]
+[debug] [2022-05-10T09:44:00.743Z] [uploadQueue] Retrying task 6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508
+[debug] [2022-05-10T09:44:00.745Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [none]
+[debug] [2022-05-10T09:44:00.748Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [stream]
+[debug] [2022-05-10T09:45:02.624Z] [uploadQueue] Retrying task 6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508
+[debug] [2022-05-10T09:45:02.625Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [none]
+[debug] [2022-05-10T09:45:02.626Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [stream]
+[debug] [2022-05-10T09:45:13.403Z] [uploadQueue] Retrying task 839b6abf3a7355d7dd88a687d1a1ab640147c38c805946d35fe2799a395b79d4
+[debug] [2022-05-10T09:45:13.404Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/839b6abf3a7355d7dd88a687d1a1ab640147c38c805946d35fe2799a395b79d4 [none]
+[debug] [2022-05-10T09:45:13.404Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/839b6abf3a7355d7dd88a687d1a1ab640147c38c805946d35fe2799a395b79d4 [stream]
+[debug] [2022-05-10T09:46:05.303Z] [uploadQueue] Retrying task 6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508
+[debug] [2022-05-10T09:46:05.304Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [none]
+[debug] [2022-05-10T09:46:05.304Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [stream]
+[debug] [2022-05-10T09:46:20.669Z] [uploadQueue] Retrying task 6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508
+[debug] [2022-05-10T09:46:20.670Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [none]
+[debug] [2022-05-10T09:46:20.670Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [stream]

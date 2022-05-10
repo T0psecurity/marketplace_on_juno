@@ -8,6 +8,7 @@ export const NFTItemWrapper = styled.div`
 `;
 
 export const NFTItemImage = styled.img`
+  cursor: pointer;
   width: 288px;
   height: 443px;
 `;

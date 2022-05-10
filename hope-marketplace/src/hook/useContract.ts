@@ -12,13 +12,17 @@ import { toMicroAmount } from "../util/coins";
 
 export const contractAddresses: any = {
   MINT_CONTRACT:
-    "juno1u230upl8ut7vn8uyk7hd9ac2ygwrvk5jygsjzv838hkn2u4xj34slyg2qy",
+    // "juno1u230upl8ut7vn8uyk7hd9ac2ygwrvk5jygsjzv838hkn2u4xj34slyg2qy",
+    "juno17kr4uahqlz8hl8nucx82q4vmlj7lrzzlz0yr0ax9hejaevw6ewqsf8p5ux",
   TOKEN_CONTRACT:
-    "juno1ckulym5ufeu29kqcqn0pw7qfavdmup9a9kwt9uzgt4arkq84qetssd9ltl",
+    // "juno1ckulym5ufeu29kqcqn0pw7qfavdmup9a9kwt9uzgt4arkq84qetssd9ltl",
+    "juno1re3x67ppxap48ygndmrc7har2cnc7tcxtm9nplcas4v0gc3wnmvs3s807z",
   NFT_CONTRACT:
-    "juno145929ngssuymkmflf9wrpprvwsh98048lpmgpp32uhpyptcca4us6pmxap",
+    // "juno145929ngssuymkmflf9wrpprvwsh98048lpmgpp32uhpyptcca4us6pmxap",
+    "juno1ccl3kw74hl3ez4ljhx0qzwe7hl8egqcsc2mcjkgga3af86jjek0q9645r8",
   MARKET_CONTRACT:
-    "juno15wtyhh6nue4vuv0tqk3wclr2umn96sd3va73u0srpuc647ns0hgq4r5t36",
+    // "juno15wtyhh6nue4vuv0tqk3wclr2umn96sd3va73u0srpuc647ns0hgq4r5t36",
+    "juno1adn5atr89yp8pmurtem882u3rwk0ug7p7d3pwp7g83glqyhfua8sq56z80",
 };
 
 const useContract = () => {
@@ -38,6 +42,7 @@ const useContract = () => {
 
     // import target contracts
     Object.keys(contractAddresses).map((key: string) => {
+      console.log("contract address", contractAddresses[key]);
       dispatch(importContract(contractAddresses[key]));
       return null;
     });
