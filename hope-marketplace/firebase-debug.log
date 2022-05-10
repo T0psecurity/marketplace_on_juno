@@ -242,3 +242,42 @@
 [debug] [2022-05-10T09:46:20.669Z] [uploadQueue] Retrying task 6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508
 [debug] [2022-05-10T09:46:20.670Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [none]
 [debug] [2022-05-10T09:46:20.670Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/nft-marketplace-on-juno-chain/versions/d56bfc0b36bdebe2/files/6966b1a7b1752938637d8776fa56bff8e568148859a8956f1d875591a6559508 [stream]
+[debug] [2022-05-10T10:51:42.875Z] ----------------------------------------------------------------------
+[debug] [2022-05-10T10:51:42.878Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2022-05-10T10:51:42.879Z] CLI Version:   10.8.0
+[debug] [2022-05-10T10:51:42.879Z] Platform:      win32
+[debug] [2022-05-10T10:51:42.879Z] Node Version:  v14.17.5
+[debug] [2022-05-10T10:51:42.880Z] Time:          Tue May 10 2022 18:51:42 GMT+0800 (China Standard Time)
+[debug] [2022-05-10T10:51:42.880Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-10T10:51:42.981Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-10T10:51:42.982Z] > authorizing via signed-in user (sheriff0613@gmail.com)
+[debug] [2022-05-10T10:51:42.982Z] [iam] checking project nft-marketplace-on-juno-chain for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-05-10T10:51:42.984Z] > refreshing access token with scopes: []
+[debug] [2022-05-10T10:51:42.985Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-05-10T10:52:04.091Z] [iam] error while checking permissions, command may fail: FirebaseError: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2022-05-10T10:52:04.093Z] > refreshing access token with scopes: []
+[debug] [2022-05-10T10:52:04.093Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2022-05-10T10:52:25.150Z] Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+[debug] [2022-05-10T10:52:46.213Z] FirebaseError: Authentication Error: Your credentials are no longer valid. Please run firebase login --reauth
+
+For CI servers and headless environments, generate a new token with firebase login:ci
+    at invalidCredentialError (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\auth.js:145:12)
+    at refreshTokens (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\auth.js:485:15)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+    at async Client.getAccessToken (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:147:23)
+    at async Client.addAuthHeader (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:138:21)
+    at async Client.request (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:94:34)
+    at async getFirebaseProject (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:290:21)
+    at async getDefaultHostingSite (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\getDefaultHostingSite.js:8:21)
+    at async requireHostingSite (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\requireHostingSite.js:9:18)
+    at async Object.fn (C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\commands\deploy.js:73:9)
+    at async C:\Users\SHERIFF\AppData\Roaming\npm\node_modules\firebase-tools\lib\command.js:188:17
+[error] 
+[error] Error: Failed to get Firebase project nft-marketplace-on-juno-chain. Please make sure the project exists and your account has permission to access it.

@@ -78,7 +78,7 @@ const Header: React.FC = () => {
   return (
     <HeaderWrapper>
       <LogoContainer>
-        <HeaderLogo onClick={() => window.open("https://hopegalaxy.io")} />
+        <HeaderLogo onClick={() => window.open("https://hopers.io")} />
         Hopers.io
       </LogoContainer>
       {isMobile ? (
