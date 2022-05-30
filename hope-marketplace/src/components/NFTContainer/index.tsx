@@ -7,14 +7,30 @@ interface NFTContainerProps {
   nfts: any;
   status: string;
   emptyMsg?: string;
+  sort?: string;
 }
 
 const NFTContainer: React.FC<NFTContainerProps> = ({
   nfts,
   status,
   emptyMsg,
+  sort,
 }) => {
   const hasNFTs = !!nfts && nfts.length > 0;
+  if (sort === "as")
+    sort &&
+      nfts.sort(
+        (a: any, b: any) =>
+          Number(a.list_price?.amount) - Number(b.list_price?.amount)
+      );
+  else
+    sort &&
+      nfts
+        .sort(
+          (a: any, b: any) =>
+            Number(a.list_price?.amount) - Number(b.list_price?.amount)
+        )
+        .reverse();
   return (
     <Wrapper noGrid={!hasNFTs}>
       {hasNFTs

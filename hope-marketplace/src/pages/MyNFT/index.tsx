@@ -13,7 +13,6 @@ const MyNFT: React.FC = () => {
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const unlistedNFTs = useAppSelector((state) => state.nfts.unlistedNFTs);
   const listedNFTs = useAppSelector((state) => state.nfts.listedNFTs);
-
   useEffect(() => {
     if (account && account.address) {
       fetchAllNFTs();

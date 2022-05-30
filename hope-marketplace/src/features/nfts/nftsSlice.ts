@@ -11,6 +11,7 @@ const initialState = {
       denom: "",
       amount: "",
     },
+    id:""
   },
 };
 

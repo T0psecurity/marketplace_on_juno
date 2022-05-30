@@ -19,27 +19,15 @@ import {
 } from "./styled";
 
 const SocialIcons = [
-  // {
-  //   Icon: mailIcon,
-  //   link: "https://www.hopegalaxy.io/",
-  // },
   { Icon: MediumIcon, link: "https://hopegalaxy.medium.com/" },
   {
     Icon: TwitterIcon,
-    link: "https://twitter.com/HopeGalaxyNFT",
+    link: "https://twitter.com/Hopers_io",
   },
   {
     Icon: DiscordIcon,
     link: "https://discord.com/invite/BfKPacc5jF",
   },
-  // {
-  //   Icon: instagramIcon,
-  //   link: "",
-  // },
-  // {
-  //   Icon: youtubeIcon,
-  //   link: "",
-  // },
 ];
 
 const Footer: React.FC = () => {

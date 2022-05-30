@@ -15,7 +15,7 @@ export const FooterWrapper = styled.div`
     display: flex;
     flex-direction: column;
     padding: 30px 10px;
-    height: 300px;
+    height: 100%;
   }
 `;
 

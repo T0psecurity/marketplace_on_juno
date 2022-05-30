@@ -17,6 +17,12 @@ const useFetch = () => {
   const marketContract = useAppSelector(
     (state) => state.accounts.accountList[contractAddresses.MARKET_CONTRACT]
   );
+  const revealNftContract = useAppSelector(
+    (state) => state.accounts.accountList[contractAddresses.REVEAL_NFT_CONTRACT]
+  );
+  const revealMarketContract = useAppSelector(
+    (state) => state.accounts.accountList[contractAddresses.MARKET_REVEAL_CONTRACT]
+  );
 
   const fetchUnlistedNFTs = useCallback(async () => {
     if (!account || !nftContract) return;
@@ -34,10 +40,17 @@ const useFetch = () => {
         limit: undefined,
       },
     });
-    console.log("result", result);
+    const revealResult = await runQuery(revealNftContract, {
+      tokens: {
+        owner: account?.address,
+        start_after: undefined,
+        limit: undefined,
+      },
+    });
+    let totalResult:any = [...result.tokens, ...revealResult.tokens];
     let unlistedNFTs = [];
-    if (result?.tokens?.length > 0) {
-      unlistedNFTs = result.tokens.map((item: string) => ({
+    if (totalResult?.length > 0) {
+      unlistedNFTs = totalResult.map((item: string) => ({
         token_id: item,
       }));
     }
@@ -53,10 +66,23 @@ const useFetch = () => {
     const result = await runQuery(marketContract, {
       get_offerings: {},
     });
+    const revealResult = await runQuery(revealMarketContract, {
+      get_offerings: {},
+    });
     let listedNFTs: any = [],
       marketplaceNFTs: any = [];
     if (result?.offerings?.length > 0) {
       result.offerings.map((item: any) => {
+        if (item.seller === account?.address) {
+          listedNFTs.push(item);
+        } else {
+          marketplaceNFTs.push(item);
+        }
+        return null;
+      });
+    }
+    if (revealResult?.offerings?.length > 0) {
+      revealResult.offerings.map((item: any) => {
         if (item.seller === account?.address) {
           listedNFTs.push(item);
         } else {

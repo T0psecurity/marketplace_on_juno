@@ -32,9 +32,9 @@ import {
 const HeaderLinks = [
   {
     title: "Explore",
-    url: "/collections/mintpass1",
+    url: "/collections/explore",
   },
-  { title: "Launchpad", url: "https://launchpad.hopers.io/" },
+  { title: "Launchpad", url: "http://launchpad.hopers.io/" },
   { title: "Create", url: "" },
 ];
 
@@ -75,7 +75,7 @@ const Header: React.FC = () => {
 
   const handleClickLink = (url: string) => {
     if (!url) return;
-    if (url.includes("https:")) {
+    if (url.includes("http:")) {
       window.open(url);
     } else {
       history.push(url);
@@ -95,7 +95,7 @@ const Header: React.FC = () => {
   return (
     <HeaderWrapper>
       <LogoContainer>
-        <HeaderLogo onClick={() => window.open("https://hopers.io")} />
+        <HeaderLogo onClick={() => handleClickLink("/")} />
         Hopers.io
       </LogoContainer>
       {isMobile ? (

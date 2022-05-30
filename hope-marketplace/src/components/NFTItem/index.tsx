@@ -40,9 +40,13 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const { fetchAllNFTs } = useFetch();
   const dispatch = useAppDispatch();
   const history = useHistory();
-
   const price = item?.list_price || {};
-
+  const url = item.token_id.includes("Reveal")
+    ? `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${item.token_id.replace(
+        "Reveal.",
+        ""
+      )}.png`
+    : "/others/mint_pass.png";
   const handleNFTItem = async () => {
     if (status === NFTItemStatus.SELL) {
       const regExp = /^(\d+(\.\d+)?)$/;
@@ -61,7 +65,9 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       }
       const message = {
         send_nft: {
-          contract: contractAddresses.MARKET_CONTRACT,
+          contract: item.token_id.includes("Hope")
+            ? contractAddresses.MARKET_CONTRACT
+            : contractAddresses.MARKET_REVEAL_CONTRACT,
           token_id: item.token_id,
           msg: btoa(
             JSON.stringify({
@@ -74,7 +80,12 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         },
       };
       try {
-        await runExecute(contractAddresses.NFT_CONTRACT, message);
+        await runExecute(
+          item.token_id.includes("Hope")
+            ? contractAddresses.NFT_CONTRACT
+            : contractAddresses.REVEAL_NFT_CONTRACT,
+          message
+        );
         toast.success("Success!");
         fetchAllNFTs();
       } catch (err) {
@@ -88,7 +99,12 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         },
       };
       try {
-        await runExecute(contractAddresses.MARKET_CONTRACT, message);
+        await runExecute(
+          item.token_id.includes("Hope")
+            ? contractAddresses.MARKET_CONTRACT
+            : contractAddresses.MARKET_REVEAL_CONTRACT,
+          message
+        );
         toast.success("Success!");
         fetchAllNFTs();
       } catch (err) {
@@ -101,7 +117,9 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         price.denom === NFTPriceType.HOPE
           ? {
               send: {
-                contract: contractAddresses.MARKET_CONTRACT,
+                contract: item.token_id.includes("Hope")
+                  ? contractAddresses.MARKET_CONTRACT
+                  : contractAddresses.MARKET_REVEAL_CONTRACT,
                 amount: price.amount,
                 msg: btoa(
                   JSON.stringify({
@@ -119,9 +137,15 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         if (price.denom === NFTPriceType.HOPE) {
           await runExecute(contractAddresses.TOKEN_CONTRACT, message);
         } else {
-          await runExecute(contractAddresses.MARKET_CONTRACT, message, {
-            funds: "" + price.amount / 1e6,
-          });
+          await runExecute(
+            item.token_id.includes("Hope")
+              ? contractAddresses.MARKET_CONTRACT
+              : contractAddresses.MARKET_REVEAL_CONTRACT,
+            message,
+            {
+              funds: "" + price.amount / 1e6,
+            }
+          );
         }
         toast.success("Success!");
         fetchAllNFTs();
@@ -150,13 +174,12 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   return (
     <NFTItemWrapper>
-      <NFTItemImage
-        onClick={handleGotoDetail}
-        alt=""
-        src="/others/mint_pass.png"
-      />
+      <NFTItemImage onClick={handleGotoDetail} alt="" src={url} />
       <NFTItemInfoContainer>
-        <NFTItemInfo>{item.token_id}</NFTItemInfo>
+        <div>
+          <NFTItemInfo>Hope Galaxy 1 </NFTItemInfo>
+          <NFTItemInfo>{item.token_id}</NFTItemInfo>
+        </div>
         <NFTItemInfo>
           {!!price.amount && +price.amount > 0
             ? `${price.amount / 1e6} ${
@@ -167,7 +190,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       </NFTItemInfoContainer>
       <NFTItemOperationContainer>
         <NFTItemOperationButton onClick={handleNFTItem}>
-          {status}
+          {status} Now
         </NFTItemOperationButton>
         {status === NFTItemStatus.SELL && (
           <>
