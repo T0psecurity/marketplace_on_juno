@@ -13,23 +13,31 @@ const Main: React.FC = () => {
   return (
     <Wrapper>
       <Switch>
-        <Route exact={false} path="/profile" component={MyNFT} />
         <Route
-          exact={false}
+          // exact={false}
+          path="/profile"
+          component={MyNFT}
+        />
+        <Route
+          // exact={false}
           path="/collections/mintpass1"
           component={Marketplace}
         />
         <Route
-          exact={false}
+          // exact={false}
           path="/collections/hopegalaxy1"
           component={HopeMarketplace}
         />
         <Route
-          exact={false}
+          // exact={false}
           path="/collections/explore"
           component={ExploreMarketplace}
         />
-        <Route exact={false} path="/detail" component={NFTDetail} />
+        <Route
+          // exact={false}
+          path="/detail"
+          component={NFTDetail}
+        />
         <Route exact path="/" component={Home} />
         <Redirect to="/profile" />
       </Switch>
