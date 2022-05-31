@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Router } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path";
@@ -46,7 +46,9 @@ function App() {
 
   return (
     <div className="main">
-      <Router history={history}>
+      <HashRouter
+      // history={history}
+      >
         <Header />
         <Main />
         <Footer />
@@ -62,7 +64,7 @@ function App() {
           closeOnClick
           theme="colored"
         />
-      </Router>
+      </HashRouter>
     </div>
   );
 }
