@@ -2,6 +2,7 @@
   "name": "cccp",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://hopers.io",
   "dependencies": {
     "@cosmjs/cosmwasm-stargate": "^0.27.1",
     "@cosmjs/faucet-client": "^0.27.1",
