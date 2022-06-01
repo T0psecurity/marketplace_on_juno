@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAppDispatch } from "../../app/hooks";
-import { setSelectedNFT } from "../../features/nfts/nftsSlice";
+// import { useAppDispatch } from "../../app/hooks";
+// import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useContract, { contractAddresses } from "../../hook/useContract";
 import useFetch from "../../hook/useFetch";
 
@@ -38,7 +38,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const [nftPriceType, setNftPriceType] = useState("");
   const { runExecute } = useContract();
   const { fetchAllNFTs } = useFetch();
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const history = useHistory();
   const price = item?.list_price || {};
   const url = item.token_id.includes("Reveal")
@@ -168,8 +168,8 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   };
 
   const handleGotoDetail = () => {
-    dispatch(setSelectedNFT(item));
-    history.push("/detail");
+    // dispatch(setSelectedNFT(item));
+    history.push(`/detail?token_id=${item.token_id}`);
   };
 
   return (

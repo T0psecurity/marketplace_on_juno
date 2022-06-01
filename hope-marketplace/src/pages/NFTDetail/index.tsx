@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { Title } from "../../components/PageTitle";
 import NFTItemDetail from "../../components/NFTItemDetail";
@@ -19,13 +19,17 @@ const NFTPriceType = {
   JUNO: "juno",
 };
 const NFTDetail: React.FC = () => {
-  const selectedNFT = useAppSelector((state) => state.nfts.selectedNFT);
+  // const selectedNFT = useAppSelector((state) => state.nfts.selectedNFT);
   const history = useHistory();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const [nftPrice, setNftPrice] = useState("");
   const [transferAdd, setTransferAdd] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
+  const { search } = useLocation();
+  const token_id = new URLSearchParams(search).get("token_id");
   const { pickNFTByTokenId } = usePickNFT();
+  const selectedNFT: any = pickNFTByTokenId(token_id || "");
+
   const { runExecute } = useContract();
   const status = selectedNFT.seller
     ? selectedNFT.seller === account?.address
