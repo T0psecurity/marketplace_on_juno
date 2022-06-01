@@ -13,7 +13,8 @@ import {
   HopeLogoIcon,
   SocialLinkContainer,
   SocialLinkItem,
-  StyledButton,
+  SortButtonContainer,
+  SortButton,
 } from "./styled";
 
 const SocialLinkItems = [
@@ -71,17 +72,11 @@ const Marketplace: React.FC = () => {
       </BackgroundWrapper>
       <Title title="Mint Pass Hope Galaxy NFT - Collection 1" />
       <HorizontalDivider />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          margin: "0 200px",
-        }}
-      >
-        <StyledButton onClick={handleSort}>
+      <SortButtonContainer>
+        <SortButton onClick={handleSort}>
           Sort By Price {!isAscending ? "Ascending" : "Descending"}
-        </StyledButton>
-      </div>
+        </SortButton>
+      </SortButtonContainer>
       <NFTContainer
         nfts={hopeMarketplaceNFTs}
         status={NFTItemStatus.BUY}

@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
-import { HashRouter } from "react-router-dom";
-// import { createBrowserHistory } from "history";
+import {
+  // HashRouter,
+  Router,
+} from "react-router-dom";
+import { createBrowserHistory } from "history";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path";
 import { ToastContainer } from "react-toastify";
@@ -18,7 +21,7 @@ import useContract from "./hook/useContract";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 
-// const history = createBrowserHistory();
+const history = createBrowserHistory();
 
 setBasePath(
   "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.64/dist/"
@@ -46,9 +49,7 @@ function App() {
 
   return (
     <div className="main">
-      <HashRouter
-      // history={history}
-      >
+      <Router history={history}>
         <Header />
         <Main />
         <Footer />
@@ -64,7 +65,7 @@ function App() {
           closeOnClick
           theme="colored"
         />
-      </HashRouter>
+      </Router>
     </div>
   );
 }

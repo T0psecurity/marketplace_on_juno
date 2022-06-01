@@ -21,7 +21,8 @@ const useFetch = () => {
     (state) => state.accounts.accountList[contractAddresses.REVEAL_NFT_CONTRACT]
   );
   const revealMarketContract = useAppSelector(
-    (state) => state.accounts.accountList[contractAddresses.MARKET_REVEAL_CONTRACT]
+    (state) =>
+      state.accounts.accountList[contractAddresses.MARKET_REVEAL_CONTRACT]
   );
 
   const fetchUnlistedNFTs = useCallback(async () => {
@@ -47,7 +48,7 @@ const useFetch = () => {
         limit: undefined,
       },
     });
-    let totalResult:any = [...result.tokens, ...revealResult.tokens];
+    let totalResult: any = [...result.tokens, ...revealResult.tokens];
     let unlistedNFTs = [];
     if (totalResult?.length > 0) {
       unlistedNFTs = totalResult.map((item: string) => ({

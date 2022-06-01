@@ -145,6 +145,7 @@ export const importContract = createAsyncThunk(
         exists: true,
       };
     } catch (e) {
+      console.log("error", e);
       dispatch(
         pushMessage({
           status: "danger",

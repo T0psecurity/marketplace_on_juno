@@ -5,6 +5,7 @@ import { useAppSelector } from "../../app/hooks";
 import { Title } from "../../components/PageTitle";
 import NFTItemDetail from "../../components/NFTItemDetail";
 import useContract, { contractAddresses } from "../../hook/useContract";
+import usePickNFT from "../../hook/usePickNFT";
 import {
   Wrapper,
   NFTItemOperationButton,
@@ -24,6 +25,7 @@ const NFTDetail: React.FC = () => {
   const [nftPrice, setNftPrice] = useState("");
   const [transferAdd, setTransferAdd] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
+  const { pickNFTByTokenId } = usePickNFT();
   const { runExecute } = useContract();
   const status = selectedNFT.seller
     ? selectedNFT.seller === account?.address
