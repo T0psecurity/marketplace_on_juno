@@ -182,7 +182,7 @@ const NFTDetail: React.FC = () => {
   return (
     <Wrapper>
       <Title title="HOPE GALAXY NFT - collection 1" />
-      <NFTItemDetail />
+      <NFTItemDetail item={selectedNFT} />
       <NFTItemOperationContainer>
         <NFTItemOperationButton onClick={handleNFTItem}>
           {status} Now

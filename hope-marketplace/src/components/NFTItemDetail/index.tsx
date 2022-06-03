@@ -10,13 +10,16 @@ import {
   NFTItemImage,
 } from "./styled";
 
-const NFTItemDetail: React.FC = () => {
-  const selectedNFT = useAppSelector((state) => state.nfts.selectedNFT);
+interface NFTItemDetailProps {
+  item?: any;
+}
+
+const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const account = useAppSelector((state) => state.accounts.keplrAccount);
-  const owner = selectedNFT.seller || account?.address || "";
-  const price = selectedNFT.list_price || {};
-  const url = selectedNFT.token_id.includes("Reveal")
-    ? `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${selectedNFT.token_id.replace(
+  const owner = item.seller || account?.address || "";
+  const price = item.list_price || {};
+  const url = item.token_id.includes("Reveal")
+    ? `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${item.token_id.replace(
         "Reveal.",
         ""
       )}.png`
@@ -29,7 +32,7 @@ const NFTItemDetail: React.FC = () => {
       </MintVideoContainer>
       <NFTDetailContainer>
         <DetailTitle>NFT ID</DetailTitle>
-        <DetailContent>{selectedNFT.token_id || ""}</DetailContent>
+        <DetailContent>{item.token_id || ""}</DetailContent>
         <DetailTitle>Owner</DetailTitle>
         <DetailContent>{`${owner}${
           account?.address === owner ? " (YOU)" : ""
