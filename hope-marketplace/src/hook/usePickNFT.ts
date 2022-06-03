@@ -21,7 +21,6 @@ const usePickNFT = () => {
           break;
         }
       }
-      console.log("targetNFT", targetNFT);
       return targetNFT;
     },
     [totalNFTs]
