@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAppSelector } from "../../app/hooks";
 import NFTContainer from "../../components/NFTContainer";
-import NFTIntroduction from "../../components/NFTIntroduction/indext";
+import NFTIntroduction from "../../components/NFTIntroduction";
 import { NFTItemStatus } from "../../components/NFTItem";
 import { Title } from "../../components/PageTitle";
 import useFetch from "../../hook/useFetch";

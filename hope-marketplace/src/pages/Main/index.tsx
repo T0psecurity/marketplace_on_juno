@@ -7,6 +7,7 @@ import HopeMarketplace from "../HopeMarketplace";
 import ExploreMarketplace from "../ExploreMarketplace";
 import NFTDetail from "../NFTDetail";
 import Home from "../Home";
+import Mint from "../Mint";
 import { Wrapper } from "./styled";
 
 const Main: React.FC = () => {
@@ -29,6 +30,7 @@ const Main: React.FC = () => {
           path="/collections/explore"
           component={ExploreMarketplace}
         />
+        <Route exact={false} path="/collections/mint" component={Mint} />
         <Route exact={false} path="/detail" component={NFTDetail} />
         <Route exact path="/" component={Home} />
         <Redirect to="/profile" />

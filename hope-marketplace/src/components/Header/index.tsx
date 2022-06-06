@@ -35,7 +35,7 @@ const HeaderLinks = [
     url: "/collections/explore",
   },
   { title: "Launchpad", url: "http://launchpad.hopers.io/" },
-  { title: "Mint", url: "" },
+  { title: "Mint", url: "/collections/mint" },
 ];
 
 const Header: React.FC = () => {

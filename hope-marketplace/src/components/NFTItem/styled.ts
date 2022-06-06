@@ -10,7 +10,7 @@ export const NFTItemWrapper = styled.div`
 export const NFTItemImage = styled.img`
   cursor: pointer;
   width: 370px;
-  height: 400px;
+  /* height: 400px; */
   border-radius: 30px;
 `;
 
@@ -57,7 +57,7 @@ export const NFTItemOperationButton = styled.div`
   color: #fff;
   font-size: 20px;
   font-weight: bold;
-  background-color: #39C639;
+  background-color: #39c639;
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
