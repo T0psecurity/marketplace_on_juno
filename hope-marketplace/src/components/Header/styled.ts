@@ -33,10 +33,11 @@ export const LogoContainer = styled.div`
 `;
 
 export const HeaderLogo = styled.div`
-  background: url("/logo.png");
+  /* background: url("/logo.png"); */
+  background: url("/others/hopeHeaderLogo.png");
   background-size: cover;
   background-position: center;
-  width: 60px;
+  width: 248px;
   height: 60px;
   cursor: pointer;
 `;

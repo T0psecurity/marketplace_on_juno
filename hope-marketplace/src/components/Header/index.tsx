@@ -35,7 +35,7 @@ const HeaderLinks = [
     url: "/collections/explore",
   },
   { title: "Launchpad", url: "http://launchpad.hopers.io/" },
-  { title: "Create", url: "" },
+  { title: "Mint", url: "" },
 ];
 
 const Header: React.FC = () => {
@@ -96,7 +96,7 @@ const Header: React.FC = () => {
     <HeaderWrapper>
       <LogoContainer>
         <HeaderLogo onClick={() => handleClickLink("/")} />
-        Hopers.io
+        {/* Hopers.io */}
       </LogoContainer>
       {isMobile ? (
         <MenuIconContainer ref={(node) => setRef(node)}>
