@@ -64,3 +64,16 @@ export const FooterDocIcon = styled.span`
   align-items: center;
   margin: 10px;
 `;
+
+export const MainContent = styled.div`
+  font-size: 20px;
+  font-weight: 400;
+`;
+
+export const SubContent = styled.div`
+  text-align: center;
+  margin-top: 20px;
+  font-size: 15px;
+  font-weight: 700;
+  font-weight: 400;
+`;

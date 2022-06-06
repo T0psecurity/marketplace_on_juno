@@ -16,6 +16,8 @@ import {
   FooterWrapper,
   FooterImage,
   FooterDocIcon,
+  MainContent,
+  SubContent,
 } from "./styled";
 
 const SocialIcons = [
@@ -45,9 +47,12 @@ const Footer: React.FC = () => {
         />
       </FooterInfo>
       <FooterInfo>
-        Hopers.io is the world’s first Interchain IBC NFT marketplace that is
-        completely community driven with a revshare model for the $HOPE
-        governance Dao token stakers.
+        <MainContent>
+          Hopers.io is the first rev-share IBC NFT Marketplace. <br /> Hopers.io
+          is fully community -driven powered by the governance token DAO $HOPE a
+          CW20 Token (JUNO Blockchain) part of the Cosmos Network.
+          <SubContent>Actually Desktop Only 🖥️</SubContent>
+        </MainContent>
       </FooterInfo>
       <FooterInfo>
         <FooterDocIcon
