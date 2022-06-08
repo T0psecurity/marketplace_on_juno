@@ -84,7 +84,7 @@ const Mint: React.FC = () => {
             <MintButton>Mint Now</MintButton>
           </OperationContainer>
         </MintDetailInfo>
-        <MintImage alt="mint image" src="/others/tmp.png" />
+        <MintImage alt="mint image" src="/others/JunoPunks.gif" />
       </MintDetailContainer>
     </Wrapper>
   );

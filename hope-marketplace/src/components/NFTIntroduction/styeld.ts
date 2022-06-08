@@ -15,11 +15,12 @@ export const Wrapper = styled.div<{ backgroundImage: string }>`
   position: relative;
 `;
 
-export const HopeLogoIcon = styled.div`
-  background: url("/others/HOPE-image.png");
+export const HopeLogoIcon = styled.div<{ logoUrl?: string | null | undefined }>`
+  background: url(${({ logoUrl }) => logoUrl ?? "/others/HOPE-image.png"});
   background-size: cover;
   width: 200px;
   height: 200px;
+  border-radius: 100px;
 `;
 
 export const SocialLinkContainer = styled.div`

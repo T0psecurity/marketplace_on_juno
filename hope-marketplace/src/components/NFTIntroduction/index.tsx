@@ -12,6 +12,7 @@ import {
 
 interface NFTIntroductionProps {
   backgroundImage: string;
+  logo?: string | null | undefined;
 }
 
 const SocialLinkItems = [
@@ -34,6 +35,7 @@ const SocialLinkItems = [
 
 const NFTIntroduction: React.FC<NFTIntroductionProps> = ({
   backgroundImage,
+  logo,
 }) => {
   const history = useHistory();
   return (
@@ -41,7 +43,7 @@ const NFTIntroduction: React.FC<NFTIntroductionProps> = ({
       backgroundImage={backgroundImage}
       onClick={() => history.push("/")}
     >
-      <HopeLogoIcon onClick={() => history.push("/")} />
+      <HopeLogoIcon logoUrl={logo} onClick={() => history.push("/")} />
       <SocialLinkContainer>
         {SocialLinkItems.map((linkItem, linkIndex) => (
           <SocialLinkItem

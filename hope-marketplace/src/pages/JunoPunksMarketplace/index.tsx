@@ -12,7 +12,7 @@ import {
   SortButtonContainer,
 } from "./styled";
 
-const HopeMarketplace: React.FC = () => {
+const JunoPunksMarketplace: React.FC = () => {
   const { fetchListedNFTs } = useFetch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const [isAscending, setIsAscending] = React.useState(true);
@@ -31,8 +31,11 @@ const HopeMarketplace: React.FC = () => {
   }, [account, fetchListedNFTs]);
   return (
     <Wrapper>
-      <NFTIntroduction backgroundImage="/others/hopeBackground.png" />
-      <Title title="Hope Galaxy NFT - Collection 1" />
+      <NFTIntroduction
+        backgroundImage="/others/junoPunksBackground.png"
+        logo="/others/JunoPunks.gif"
+      />
+      <Title title="JUNO PUNKS" />
       <HorizontalDivider />
       <SortButtonContainer>
         <StyledButton onClick={handleSort}>
@@ -40,7 +43,7 @@ const HopeMarketplace: React.FC = () => {
         </StyledButton>
       </SortButtonContainer>
       <NFTContainer
-        nfts={revealMarketplaceNFTs}
+        nfts={[]}
         status={NFTItemStatus.BUY}
         sort={isAscending ? "as" : "des"}
       />
@@ -48,4 +51,4 @@ const HopeMarketplace: React.FC = () => {
   );
 };
 
-export default HopeMarketplace;
+export default JunoPunksMarketplace;

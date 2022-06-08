@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import MyNFT from "../MyNFT";
 import Marketplace from "../Marketplace";
 import HopeMarketplace from "../HopeMarketplace";
+import JunoPunksMarketplace from "../JunoPunksMarketplace";
 import ExploreMarketplace from "../ExploreMarketplace";
 import NFTDetail from "../NFTDetail";
 import Home from "../Home";
@@ -15,6 +16,11 @@ const Main: React.FC = () => {
     <Wrapper>
       <Switch>
         <Route exact={false} path="/profile" component={MyNFT} />
+        <Route
+          exact={false}
+          path="/collections/junopunks"
+          component={JunoPunksMarketplace}
+        />
         <Route
           exact={false}
           path="/collections/mintpass1"
