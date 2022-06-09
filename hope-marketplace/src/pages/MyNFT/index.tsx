@@ -1,23 +1,26 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { Wrapper, ProfileImage, HorizontalDivider } from "./styled";
 
 import { useAppSelector } from "../../app/hooks";
-import useFetch from "../../hook/useFetch";
 import { SubTitle, Title } from "../../components/PageTitle";
 import NFTContainer from "../../components/NFTContainer";
 import { NFTItemStatus } from "../../components/NFTItem";
+import Collections, { MarketplaceInfo } from "../../constants/Collections";
 
 const MyNFT: React.FC = () => {
-  const { fetchAllNFTs } = useFetch();
-  const account = useAppSelector((state) => state.accounts.keplrAccount);
-  const unlistedNFTs = useAppSelector((state) => state.nfts.unlistedNFTs);
-  const listedNFTs = useAppSelector((state) => state.nfts.listedNFTs);
-  useEffect(() => {
-    if (account && account.address) {
-      fetchAllNFTs();
-    }
-  }, [account, fetchAllNFTs]);
+  const nfts = useAppSelector((state) => state.nfts);
+  let unlistedNFTs: any = [],
+    listedNFTs: any = [];
+  Collections.forEach((collection: MarketplaceInfo) => {
+    const collectionId = collection.collectionId;
+    const listedKey = `${collectionId}_listed`;
+    if (nfts[collectionId] && nfts[collectionId].length)
+      unlistedNFTs = unlistedNFTs.concat(nfts[collectionId]);
+    if (nfts[listedKey] && nfts[listedKey].length)
+      listedNFTs = listedNFTs.concat(nfts[listedKey]);
+  });
+
   return (
     <Wrapper>
       <Title title="Profile" icon={<ProfileImage />} />

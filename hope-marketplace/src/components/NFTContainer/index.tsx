@@ -19,13 +19,16 @@ const NFTContainer: React.FC<NFTContainerProps> = ({
   const hasNFTs = !!nfts && nfts.length > 0;
   if (sort === "as")
     sort &&
-      nfts.sort(
-        (a: any, b: any) =>
-          Number(a.list_price?.amount) - Number(b.list_price?.amount)
-      );
+      nfts
+        .slice()
+        .sort(
+          (a: any, b: any) =>
+            Number(a.list_price?.amount) - Number(b.list_price?.amount)
+        );
   else
     sort &&
       nfts
+        .slice()
         .sort(
           (a: any, b: any) =>
             Number(a.list_price?.amount) - Number(b.list_price?.amount)

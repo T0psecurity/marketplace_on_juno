@@ -7,7 +7,7 @@ import { Card, StyledImg, Text } from "./styled";
 const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
   imageUrl,
   title,
-  linkUrl,
+  collectionId,
   description,
 }) => {
   const history = useHistory();
@@ -22,7 +22,7 @@ const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
       </Text>
       <Button
         onClick={() => {
-          history.push(linkUrl);
+          history.push(`/collections/marketplace?id=${collectionId}`);
         }}
       >
         View Collection

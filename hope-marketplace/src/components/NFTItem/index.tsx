@@ -7,6 +7,7 @@ import useContract, { contractAddresses } from "../../hook/useContract";
 import useFetch from "../../hook/useFetch";
 
 import {
+  NFTItemImageWrapper,
   NFTItemImage,
   NFTItemInfoContainer,
   NFTItemWrapper,
@@ -36,6 +37,12 @@ export const NFTPriceType = {
 export default function NFTItem({ item, status }: NFTItemProps) {
   const [nftPrice, setNftPrice] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
+  const [logoSize, setLogoSize] = useState<{
+    width?: number;
+    height?: number;
+  }>({});
+  const [imageVisible, setImageVisible] = useState<boolean>(false);
+
   const { runExecute } = useContract();
   const { fetchAllNFTs } = useFetch();
   // const dispatch = useAppDispatch();
@@ -47,6 +54,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         ""
       )}.png`
     : "/others/mint_pass.png";
+
   const handleNFTItem = async () => {
     if (status === NFTItemStatus.SELL) {
       const regExp = /^(\d+(\.\d+)?)$/;
@@ -172,9 +180,36 @@ export default function NFTItem({ item, status }: NFTItemProps) {
     history.push(`/detail?token_id=${item.token_id}`);
   };
 
+  const handleOnLoadImage = (e: any) => {
+    // console.log("e", e);
+    const {
+      target: { offsetHeight, offsetWidth },
+    } = e;
+    if (offsetHeight > offsetWidth) {
+      setLogoSize({
+        height: 400,
+      });
+    } else {
+      setLogoSize({
+        width: 370,
+      });
+    }
+    setImageVisible(true);
+  };
+
   return (
     <NFTItemWrapper>
-      <NFTItemImage onClick={handleGotoDetail} alt="" src={url} />
+      <NFTItemImageWrapper>
+        <NFTItemImage
+          onClick={handleGotoDetail}
+          alt=""
+          src={url}
+          onLoad={handleOnLoadImage}
+          width={logoSize.width}
+          height={logoSize.height}
+          imageVisible={imageVisible}
+        />
+      </NFTItemImageWrapper>
       <NFTItemInfoContainer>
         <div>
           <NFTItemInfo>Hope Galaxy 1 </NFTItemInfo>

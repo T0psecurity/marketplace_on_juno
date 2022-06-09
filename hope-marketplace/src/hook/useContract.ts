@@ -5,6 +5,7 @@ import {
   useAppDispatch,
   // useAppSelector
 } from "../app/hooks";
+import Collections, { MarketplaceInfo } from "../constants/Collections";
 import {
   importContract,
   // contractAccounts,
@@ -20,16 +21,6 @@ export const contractAddresses: any = {
   TOKEN_CONTRACT:
     // "juno1ckulym5ufeu29kqcqn0pw7qfavdmup9a9kwt9uzgt4arkq84qetssd9ltl",
     "juno1re3x67ppxap48ygndmrc7har2cnc7tcxtm9nplcas4v0gc3wnmvs3s807z",
-  NFT_CONTRACT:
-    // "juno145929ngssuymkmflf9wrpprvwsh98048lpmgpp32uhpyptcca4us6pmxap",
-    "juno1ccl3kw74hl3ez4ljhx0qzwe7hl8egqcsc2mcjkgga3af86jjek0q9645r8",
-  MARKET_CONTRACT:
-    // "juno15wtyhh6nue4vuv0tqk3wclr2umn96sd3va73u0srpuc647ns0hgq4r5t36",
-    "juno1adn5atr89yp8pmurtem882u3rwk0ug7p7d3pwp7g83glqyhfua8sq56z80",
-  MARKET_REVEAL_CONTRACT:
-    "juno1m9rrvcdjatkvvdmly6pxq3yvxkp8ufaf23qkqvjcgzjgaxsef3ns6xe994",
-  REVEAL_NFT_CONTRACT: 
-    "juno1lqtavuw24dnnu56w79k7mefn8fhuz2w247dks2fes6hwd4rhpu2sumhhap"
 };
 
 const useContract = () => {
@@ -48,9 +39,16 @@ const useContract = () => {
     // }
 
     // import target contracts
-    Object.keys(contractAddresses).map((key: string) => {
+    Object.keys(contractAddresses).forEach((key: string) => {
       dispatch(importContract(contractAddresses[key]));
-      return null;
+    });
+    Collections.forEach((collection: MarketplaceInfo) => {
+      if (collection.nftContract)
+        dispatch(importContract(collection.nftContract));
+      if (collection.marketplaceContract.length)
+        collection.marketplaceContract.forEach((contract: string) => {
+          if (contract) dispatch(importContract(contract));
+        });
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

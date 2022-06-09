@@ -1,14 +1,25 @@
 import { useCallback, useMemo } from "react";
 import { useAppSelector } from "../app/hooks";
+import Collections, { MarketplaceInfo } from "../constants/Collections";
 
 const usePickNFT = () => {
-  const unlistedNFTs = useAppSelector((state) => state.nfts.unlistedNFTs);
-  const listedNFTs = useAppSelector((state) => state.nfts.listedNFTs);
-  const marketplaceNFTs = useAppSelector((state) => state.nfts.marketplaceNFTs);
+  const nfts = useAppSelector((state) => state.nfts);
 
   const totalNFTs = useMemo(() => {
-    return [...unlistedNFTs, ...listedNFTs, ...marketplaceNFTs];
-  }, [listedNFTs, unlistedNFTs, marketplaceNFTs]);
+    let total: any = [];
+    Collections.forEach((collection: MarketplaceInfo) => {
+      const collectionId = collection.collectionId;
+      const listedKey = `${collectionId}_listed`;
+      const marketplaceKey = `${collectionId}_marketplace`;
+      if (nfts[collectionId] && nfts[collectionId].length)
+        total = total.concat(nfts[collectionId]);
+      if (nfts[listedKey] && nfts[listedKey].length)
+        total = total.concat(nfts[listedKey]);
+      if (nfts[marketplaceKey] && nfts[marketplaceKey].length)
+        total = total.concat(nfts[marketplaceKey]);
+    });
+    return total;
+  }, [nfts]);
 
   const pickNFTByTokenId = useCallback(
     (id: string) => {

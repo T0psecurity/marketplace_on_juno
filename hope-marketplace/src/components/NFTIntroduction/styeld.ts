@@ -4,7 +4,8 @@ export const Wrapper = styled.div<{ backgroundImage: string }>`
   --image-height: 400px;
   background: ${({ backgroundImage }) => `url(${backgroundImage})`};
   /* background: url("/others/hopeBackground.png"); */
-  background-size: 100% var(--image-height);
+  background-size: auto var(--image-height);
+  background-position-x: center;
   background-color: white;
   background-repeat: no-repeat;
   width: 100%;
@@ -16,7 +17,7 @@ export const Wrapper = styled.div<{ backgroundImage: string }>`
 `;
 
 export const HopeLogoIcon = styled.div<{ logoUrl?: string | null | undefined }>`
-  background: url(${({ logoUrl }) => logoUrl ?? "/others/HOPE-image.png"});
+  background: url(${({ logoUrl }) => logoUrl ?? "/logos/HOPE-image.png"});
   background-size: cover;
   width: 200px;
   height: 200px;

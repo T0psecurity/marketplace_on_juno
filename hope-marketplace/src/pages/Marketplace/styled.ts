@@ -17,7 +17,7 @@ export const SortButtonContainer = styled.div`
   margin: 0 200px;
 `;
 
-export const SortButton = styled.button`
+export const StyledButton = styled.button`
   display: inline-flex;
   align-items: center;
   margin: 40px 0;

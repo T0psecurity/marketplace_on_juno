@@ -1,46 +1,58 @@
-import React, { useEffect } from "react";
+import React, { useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import NFTContainer from "../../components/NFTContainer";
 import NFTIntroduction from "../../components/NFTIntroduction";
 import { NFTItemStatus } from "../../components/NFTItem";
 import { Title } from "../../components/PageTitle";
-import useFetch from "../../hook/useFetch";
+import Collections, { MarketplaceInfo } from "../../constants/Collections";
 import {
   Wrapper,
   HorizontalDivider,
+  StyledButton,
   SortButtonContainer,
-  SortButton,
 } from "./styled";
 
 const Marketplace: React.FC = () => {
-  const { fetchListedNFTs } = useFetch();
+  const { search } = useLocation();
+  const collectionId = new URLSearchParams(search).get("id");
+
+  const targetCollection = useMemo(
+    () =>
+      Collections.filter(
+        (collection: MarketplaceInfo) =>
+          collection.collectionId === collectionId
+      )[0],
+    [collectionId]
+  );
+
+  // console.log("targetCollection", targetCollection);
+
   const [isAscending, setIsAscending] = React.useState(true);
-  const account = useAppSelector((state) => state.accounts.keplrAccount);
-  const marketplaceNFTs = useAppSelector((state) => state.nfts.marketplaceNFTs);
-  const hopeMarketplaceNFTs: any = [];
-  marketplaceNFTs.forEach((item: any) => {
-    if (item.token_id.includes("Hope")) hopeMarketplaceNFTs.push(item);
+  const marketplaceNFTs = useAppSelector((state) => {
+    // console.log("nfts", state.nfts);
+    return state.nfts[`${targetCollection.collectionId}_marketplace`];
   });
+
   const handleSort = () => {
     setIsAscending(!isAscending);
   };
-  useEffect(() => {
-    if (account && account.address) {
-      fetchListedNFTs();
-    }
-  }, [account, fetchListedNFTs]);
+
   return (
     <Wrapper>
-      <NFTIntroduction backgroundImage="/others/background.png" />
-      <Title title="Mint Pass Hope Galaxy NFT - Collection 1" />
+      <NFTIntroduction
+        backgroundImage={targetCollection.backgroundUrl}
+        logo={targetCollection.logoUrl}
+      />
+      <Title title={targetCollection.title} />
       <HorizontalDivider />
       <SortButtonContainer>
-        <SortButton onClick={handleSort}>
+        <StyledButton onClick={handleSort}>
           Sort By Price {!isAscending ? "Ascending" : "Descending"}
-        </SortButton>
+        </StyledButton>
       </SortButtonContainer>
       <NFTContainer
-        nfts={hopeMarketplaceNFTs}
+        nfts={marketplaceNFTs}
         status={NFTItemStatus.BUY}
         sort={isAscending ? "as" : "des"}
       />

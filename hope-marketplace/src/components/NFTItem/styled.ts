@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const NFTItemWrapper = styled.div`
   /* border: 1px solid black; */
@@ -6,11 +6,33 @@ export const NFTItemWrapper = styled.div`
   border-radius: 10px;
   box-shadow: 1px 4px 10px 1px rgba(0, 0, 0, 0.7);
 `;
-
-export const NFTItemImage = styled.img`
-  cursor: pointer;
+export const NFTItemImageWrapper = styled.div`
   width: 370px;
-  /* height: 400px; */
+  height: 400px;
+  margin-bottom: 10px;
+`;
+
+export const NFTItemImage = styled.img<{
+  width?: number;
+  height?: number;
+  imageVisible?: boolean;
+}>`
+  cursor: pointer;
+  ${({ width }) =>
+    width &&
+    width > 0 &&
+    css`
+      width: ${width}px;
+    `}
+  ${({ height }) =>
+    height &&
+    height > 0 &&
+    css`
+      height: ${height}px;
+    `}
+  opacity: ${({ imageVisible }) => (imageVisible ? 1 : 0)};
+  /* width: 370px;
+  height: 400px; */
   border-radius: 30px;
 `;
 
