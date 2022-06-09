@@ -105,19 +105,20 @@ export default function NFTItem({ item, status }: NFTItemProps) {
           imageVisible={imageVisible}
         />
       </NFTItemImageWrapper>
-      <NFTItemInfoContainer>
-        <div>
-          <NFTItemInfo>{targetCollection.title}</NFTItemInfo>
+      <div>
+        <NFTItemInfo>{targetCollection.title}</NFTItemInfo>
+        <NFTItemInfoContainer>
           <NFTItemInfo>{item.token_id}</NFTItemInfo>
-        </div>
-        <NFTItemInfo>
-          {!!price.amount && +price.amount > 0
-            ? `${price.amount / 1e6} ${
-                price.denom === NFTPriceType.HOPE ? "HOPE" : "JUNO"
-              }`
-            : ""}
-        </NFTItemInfo>
-      </NFTItemInfoContainer>
+          <NFTItemInfo>
+            {!!price.amount && +price.amount > 0
+              ? `${price.amount / 1e6} ${
+                  price.denom === NFTPriceType.HOPE ? "HOPE" : "JUNO"
+                }`
+              : ""}
+          </NFTItemInfo>
+        </NFTItemInfoContainer>
+      </div>
+
       <NFTItemOperationContainer>
         <NFTItemOperationButton onClick={handleNFTItem}>
           {status} Now
