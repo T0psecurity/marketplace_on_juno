@@ -1,8 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import Button from "../../components/Button";
 
 export const Wrapper = styled.div`
   height: 100%;
-  padding: 0 100px;
+  padding: 0 5%;
 `;
 
 export const ButtonContainer = styled.div`
@@ -10,48 +11,50 @@ export const ButtonContainer = styled.div`
   justify-content: left;
 `;
 
-export const StyledButton = styled.button<{ backgroundColor?: string }>`
-  width: 132px;
-  height: 45px;
-  background-color: ${({ backgroundColor }) => backgroundColor || "#39C639"};
-  border: 1px solid #000;
-  border-radius: 4px;
-  margin-right: 30px;
-  font-size: 25px;
-  font-weight: 700;
-`;
-
-export const MintDetailContainer = styled.div`
+export const MintDetailContainer = styled.div<{ isMobile?: boolean }>`
   display: grid;
-  grid-template-columns: auto 640px;
+  grid-template-columns: ${({ isMobile }) => (isMobile ? "auto" : "auto 30%")};
   padding: 30px;
-  margin-top: 110px;
+  margin-top: ${({ isMobile }) => (isMobile ? "50px" : "110px")};
   margin-bottom: 90px;
   border: 1px solid #d6d6d6;
+  border-radius: 10px;
 `;
 
 export const MintDetailInfo = styled.div`
   text-align: left;
 `;
 
-export const DetailTitle = styled.div<{ bold?: boolean }>`
+export const DetailTitle = styled.div<{ bold?: boolean; isMobile?: boolean }>`
   font-size: 25px;
   font-weight: ${({ bold }) => (bold ? "700" : "500")};
   margin-bottom: 25px;
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      text-align: center;
+    `}
 `;
 
-export const DetailInfo = styled.div`
-  font-size: 25px;
+export const DetailInfo = styled.div<{ isMobile?: boolean }>`
+  font-size: 22px;
   font-weight: 400;
   color: #797979;
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      text-align: center;
+    `}
 `;
 
-export const DetailBlockContainer = styled.div`
+export const DetailBlockContainer = styled.div<{ flexDirection?: string }>`
   width: 100%;
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: ${({ flexDirection }) => flexDirection ?? "row"};
+  /* justify-content: space-evenly; */
+  justify-content: space-between;
   align-items: center;
-  margin: 95px 0 65px 0;
+  margin: 50px 0 35px 0;
 `;
 
 export const DetailBlock = styled.div<{ width?: string }>`
@@ -59,20 +62,31 @@ export const DetailBlock = styled.div<{ width?: string }>`
   flex-direction: column;
   justify: center;
   align-items: center;
-  font-size: 25px;
+  font-size: 22px;
   padding: 10px;
   width: ${({ width }) => width ?? "275px"};
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
 `;
 
-export const DetailBlockTitle = styled.div`
+export const DetailBlockTitle = styled.div<{ fontSize?: string }>`
   text-align: center;
   color: #797979;
+  ${({ fontSize }) =>
+    fontSize &&
+    css`
+      font-size: ${fontSize};
+    `}
 `;
 
-export const DetailBlockContent = styled.div`
+export const DetailBlockContent = styled.div<{ fontSize?: string }>`
   text-align: center;
   margin-top: 15px;
+  ${({ fontSize }) =>
+    fontSize &&
+    css`
+      font-size: ${fontSize};
+    `}
 `;
 
 export const OperationContainer = styled.div`
@@ -82,24 +96,58 @@ export const OperationContainer = styled.div`
   margin-top: 30px;
 `;
 
-export const FlexColumn = styled.div`
+export const FlexColumn = styled.div<{ width?: string }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  ${({ width }) =>
+    width &&
+    css`
+      width: ${width};
+    `};
 `;
 
-export const MintButton = styled.button`
+export const MintButton = styled(Button)<{ width?: string }>`
   background-color: #39c639;
   border: 1px solid black;
   border-radius: 4px;
-  font-size: 25px;
   font-weight: 700;
-  width: 325px;
+  width: ${({ width }) => width ?? "325px"};
   height: 53px;
+  color: black;
 `;
 
-export const MintImage = styled.img`
-  width: 600px;
-  margin-left: 20px;
+export const MintImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+`;
+
+export const MintImage = styled.img<{ isMobile?: boolean }>`
+  width: 100%;
+  margin-left: ${({ isMobile }) => !isMobile && "20px"};
+  max-width: 500px;
+`;
+
+export const StyledButton = styled(Button)<{
+  backgroundColor?: string;
+  color?: string;
+}>`
+  width: 132px;
+  height: 45px;
+  ${({ backgroundColor }) =>
+    backgroundColor &&
+    css`
+      background-color: ${backgroundColor};
+    `};
+  ${({ color }) =>
+    color &&
+    css`
+      color: ${color};
+    `};
+  border: 1px solid #000;
+  border-radius: 4px;
+  margin-right: 30px;
 `;

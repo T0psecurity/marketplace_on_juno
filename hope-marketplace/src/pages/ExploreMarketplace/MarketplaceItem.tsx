@@ -1,15 +1,10 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Card, StyledImg, Text, StyledButton } from "./styled";
+import Button from "../../components/Button";
+import { MarketplaceBasicInfo } from "../../constants/Collections";
+import { Card, StyledImg, Text } from "./styled";
 
-export interface MarketplaceItemProps {
-  imageUrl: string;
-  title: string;
-  linkUrl: string;
-  description: string;
-}
-
-const MarketplaceItem: React.FC<MarketplaceItemProps> = ({
+const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
   imageUrl,
   title,
   linkUrl,
@@ -25,13 +20,13 @@ const MarketplaceItem: React.FC<MarketplaceItemProps> = ({
       <Text marginTop="10px" fontSize="16px" height="100px">
         {description}
       </Text>
-      <StyledButton
-        onClick={(e) => {
+      <Button
+        onClick={() => {
           history.push(linkUrl);
         }}
       >
         View Collection
-      </StyledButton>
+      </Button>
     </Card>
   );
 };

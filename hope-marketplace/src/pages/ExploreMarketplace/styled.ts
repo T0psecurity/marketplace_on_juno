@@ -29,6 +29,8 @@ export const Flex = styled.div`
   grid-gap: 20px;
   justify-content: space-around;
 
+  margin-bottom: 50px;
+
   /* display: flex;
   justify-content: space-around;
   @media (max-width: 650px) {
