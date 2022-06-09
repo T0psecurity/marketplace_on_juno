@@ -6,18 +6,25 @@ export interface MarketplaceItemProps {
   imageUrl: string;
   title: string;
   linkUrl: string;
+  description: string;
 }
 
 const MarketplaceItem: React.FC<MarketplaceItemProps> = ({
   imageUrl,
   title,
   linkUrl,
+  description,
 }) => {
   const history = useHistory();
   return (
     <Card>
-      <StyledImg src={imageUrl} alt="collection" />
-      <Text>{title}</Text>
+      <StyledImg imageUrl={imageUrl} />
+      <Text marginTop="20px" fontWeight="bold">
+        {title}
+      </Text>
+      <Text marginTop="10px" fontSize="16px" height="100px">
+        {description}
+      </Text>
       <StyledButton
         onClick={(e) => {
           history.push(linkUrl);
