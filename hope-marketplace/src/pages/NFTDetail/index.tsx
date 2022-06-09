@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { Title } from "../../components/PageTitle";
 import NFTItemDetail from "../../components/NFTItemDetail";
-import useContract, { contractAddresses } from "../../hook/useContract";
 import usePickNFT from "../../hook/usePickNFT";
+import useHandleNftItem from "../../hook/useHandleNftItem";
 import {
   Wrapper,
   NFTItemOperationButton,
@@ -20,7 +19,6 @@ const NFTPriceType = {
 };
 const NFTDetail: React.FC = () => {
   // const selectedNFT = useAppSelector((state) => state.nfts.selectedNFT);
-  const history = useHistory();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const [nftPrice, setNftPrice] = useState("");
   const [transferAdd, setTransferAdd] = useState("");
@@ -29,8 +27,8 @@ const NFTDetail: React.FC = () => {
   const token_id = new URLSearchParams(search).get("token_id");
   const { pickNFTByTokenId } = usePickNFT();
   const selectedNFT: any = pickNFTByTokenId(token_id || "");
+  const { sellNft, withdrawNft, buyNft, transferNft } = useHandleNftItem();
 
-  const { runExecute } = useContract();
   const status = selectedNFT.seller
     ? selectedNFT.seller === account?.address
       ? "Withdraw"
@@ -38,110 +36,11 @@ const NFTDetail: React.FC = () => {
     : "Sell";
   const handleNFTItem = async () => {
     if (status === "Sell") {
-      const regExp = /^(\d+(\.\d+)?)$/;
-      const price = +nftPrice;
-      if (!(price > 0 && regExp.test(nftPrice))) {
-        toast.error("Invalid Price!");
-        return;
-      }
-      if (!nftPriceType) {
-        toast.error("Select Price Type!");
-        return;
-      }
-      if (nftPriceType === NFTPriceType.HOPE && price < 1) {
-        toast.error("Insufficient Price!");
-        return;
-      }
-      const message = {
-        send_nft: {
-          contract: selectedNFT.token_id.includes("Hope")
-            ? contractAddresses.MARKET_CONTRACT
-            : contractAddresses.MARKET_REVEAL_CONTRACT,
-          token_id: selectedNFT.token_id,
-          msg: btoa(
-            JSON.stringify({
-              list_price: {
-                denom: nftPriceType === NFTPriceType.HOPE ? "hope" : "ujuno",
-                amount: `${price * 1e6}`,
-              },
-            })
-          ),
-        },
-      };
-      try {
-        await runExecute(
-          selectedNFT.token_id.includes("Hope")
-            ? contractAddresses.NFT_CONTRACT
-            : contractAddresses.REVEAL_NFT_CONTRACT,
-          message
-        );
-        toast.success("Success!");
-        history.push("/profile");
-      } catch (err) {
-        console.error(err);
-        toast.error("Fail!");
-      }
+      await sellNft(selectedNFT, nftPrice, nftPriceType);
     } else if (status === "Withdraw") {
-      const message = {
-        withdraw_nft: {
-          offering_id: selectedNFT.id,
-        },
-      };
-      try {
-        await runExecute(
-          selectedNFT.token_id.includes("Hope")
-            ? contractAddresses.MARKET_CONTRACT
-            : contractAddresses.MARKET_REVEAL_CONTRACT,
-          message
-        );
-        toast.success("Success!");
-        history.push("/profile");
-      } catch (err) {
-        console.error(err);
-        toast.error("Fail!");
-      }
+      await withdrawNft(selectedNFT);
     } else if (status === "Buy") {
-      const price = selectedNFT?.list_price || {};
-      const message =
-        price.denom === NFTPriceType.HOPE
-          ? {
-              send: {
-                contract: selectedNFT.token_id.includes("Hope")
-                  ? contractAddresses.MARKET_CONTRACT
-                  : contractAddresses.MARKET_REVEAL_CONTRACT,
-                amount: price.amount,
-                msg: btoa(
-                  JSON.stringify({
-                    offering_id: selectedNFT.id,
-                  })
-                ),
-              },
-            }
-          : {
-              buy_nft: {
-                offering_id: selectedNFT.id,
-              },
-            };
-      try {
-        if (price.denom === NFTPriceType.HOPE) {
-          await runExecute(contractAddresses.TOKEN_CONTRACT, message);
-        } else {
-          await runExecute(
-            selectedNFT.token_id.includes("Hope")
-              ? contractAddresses.MARKET_CONTRACT
-              : contractAddresses.MARKET_REVEAL_CONTRACT,
-            message,
-            {
-              funds: "" + Number(price.amount) / 1e6,
-            }
-          );
-        }
-        toast.success("Success!");
-        history.push("/profile");
-      } catch (err) {
-        console.error(err);
-        toast.error("Fail!");
-      }
+      await buyNft(selectedNFT);
     }
   };
   const handleChangeNFTPrice = (e: any) => {
@@ -159,25 +58,7 @@ const NFTDetail: React.FC = () => {
     setTransferAdd(value);
   };
   const handleTransferNFT = async () => {
-    const message = {
-      transfer_nft: {
-        recipient: transferAdd,
-        token_id: selectedNFT.token_id,
-      },
-    };
-    try {
-      await runExecute(
-        selectedNFT.token_id.includes("Hope")
-          ? contractAddresses.NFT_CONTRACT
-          : contractAddresses.REVEAL_NFT_CONTRACT,
-        message
-      );
-      toast.success("Success!");
-      history.push("/profile");
-    } catch (err) {
-      console.log("err: ", err);
-      toast.error("Fail!");
-    }
+    await transferNft(transferAdd, selectedNFT, "/profile");
   };
   return (
     <Wrapper>

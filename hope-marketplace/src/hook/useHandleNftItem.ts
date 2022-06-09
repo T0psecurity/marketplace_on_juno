@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getCollectionById } from "../constants/Collections";
 import useContract from "./useContract";
@@ -13,6 +14,8 @@ export const NFTPriceType = {
 const useHandleNftItem = () => {
   const { runExecute } = useContract();
   const { fetchAllNFTs } = useFetch();
+  const history = useHistory();
+
   const sellNft = useCallback(
     async (item: any, nftPrice: any, nftPriceType: any) => {
       const targetCollection = getCollectionById(item.collectionId);
@@ -143,11 +146,36 @@ const useHandleNftItem = () => {
     },
     [runExecute, fetchAllNFTs]
   );
+  const transferNft = useCallback(
+    async (recipient: any, item: any, callbackLink?: string) => {
+      const message = {
+        transfer_nft: {
+          recipient: recipient,
+          token_id: item.token_id,
+        },
+      };
+      try {
+        await runExecute(
+          item.token_id.includes("Hope")
+            ? contractAddresses.NFT_CONTRACT
+            : contractAddresses.REVEAL_NFT_CONTRACT,
+          message
+        );
+        toast.success("Success!");
+        if (callbackLink) history.push(callbackLink);
+      } catch (err) {
+        console.log("err: ", err);
+        toast.error("Fail!");
+      }
+    },
+    [history, runExecute]
+  );
 
   return {
     sellNft,
     withdrawNft,
     buyNft,
+    transferNft,
   };
 };
 
