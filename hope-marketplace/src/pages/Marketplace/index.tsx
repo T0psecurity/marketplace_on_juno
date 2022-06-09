@@ -5,7 +5,7 @@ import NFTContainer from "../../components/NFTContainer";
 import NFTIntroduction from "../../components/NFTIntroduction";
 import { NFTItemStatus } from "../../components/NFTItem";
 import { Title } from "../../components/PageTitle";
-import Collections, { MarketplaceInfo } from "../../constants/Collections";
+import { getCollectionById } from "../../constants/Collections";
 import {
   Wrapper,
   HorizontalDivider,
@@ -18,11 +18,7 @@ const Marketplace: React.FC = () => {
   const collectionId = new URLSearchParams(search).get("id");
 
   const targetCollection = useMemo(
-    () =>
-      Collections.filter(
-        (collection: MarketplaceInfo) =>
-          collection.collectionId === collectionId
-      )[0],
+    () => getCollectionById(collectionId || ""),
     [collectionId]
   );
 

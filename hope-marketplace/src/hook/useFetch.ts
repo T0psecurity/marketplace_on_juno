@@ -26,6 +26,7 @@ const useFetch = () => {
         const nftList = queryResult?.tokens?.length
           ? queryResult.tokens.map((item: string) => ({
               token_id: item,
+              collectionId: collection.collectionId,
             }))
           : [];
         dispatch(setNFTs([collection.collectionId, nftList]));
@@ -57,6 +58,7 @@ const useFetch = () => {
               const crrItem = {
                 ...item,
                 contractAddress: contractAddresses[index],
+                collectionId: collection.collectionId,
               };
               if (item.seller === account?.address) {
                 listedNFTs = [...listedNFTs, crrItem];

@@ -45,6 +45,7 @@ export const NFTItemInfoContainer = styled.div`
 export const NFTItemInfo = styled.div`
   font-size: 20px;
   font-weight: bold;
+  text-align: left;
 `;
 
 export const NFTItemOperationContainer = styled.div`

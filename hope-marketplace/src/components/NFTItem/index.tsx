@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getCollectionById } from "../../constants/Collections";
 // import { useAppDispatch } from "../../app/hooks";
 // import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useContract, { contractAddresses } from "../../hook/useContract";
@@ -35,7 +36,6 @@ export const NFTPriceType = {
 };
 
 export default function NFTItem({ item, status }: NFTItemProps) {
-  // console.log("nft detail", item);
   const [nftPrice, setNftPrice] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
   const [logoSize, setLogoSize] = useState<{
@@ -43,6 +43,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
     height?: number;
   }>({});
   const [imageVisible, setImageVisible] = useState<boolean>(false);
+  const targetCollection = getCollectionById(item.collectionId);
 
   const { runExecute } = useContract();
   const { fetchAllNFTs } = useFetch();
@@ -60,6 +61,10 @@ export default function NFTItem({ item, status }: NFTItemProps) {
     if (status === NFTItemStatus.SELL) {
       const regExp = /^(\d+(\.\d+)?)$/;
       const price = +nftPrice;
+      if (!item.collectionId || !targetCollection) {
+        toast.error("Collection not found!");
+        return;
+      }
       if (!(price > 0 && regExp.test(nftPrice))) {
         toast.error("Invalid Price!");
         return;
@@ -72,11 +77,14 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         toast.error("Insufficient Price!");
         return;
       }
+      const marketplaceContract = targetCollection.marketplaceContract[0];
+      const nftContract = targetCollection.nftContract;
       const message = {
         send_nft: {
-          contract: item.token_id.includes("Hope")
-            ? contractAddresses.MARKET_CONTRACT
-            : contractAddresses.MARKET_REVEAL_CONTRACT,
+          // contract: item.token_id.includes("Hope")
+          //   ? contractAddresses.MARKET_CONTRACT
+          //   : contractAddresses.MARKET_REVEAL_CONTRACT,
+          contract: marketplaceContract,
           token_id: item.token_id,
           msg: btoa(
             JSON.stringify({
@@ -90,9 +98,10 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       };
       try {
         await runExecute(
-          item.token_id.includes("Hope")
-            ? contractAddresses.NFT_CONTRACT
-            : contractAddresses.REVEAL_NFT_CONTRACT,
+          // item.token_id.includes("Hope")
+          //   ? contractAddresses.NFT_CONTRACT
+          //   : contractAddresses.REVEAL_NFT_CONTRACT,
+          nftContract,
           message
         );
         toast.success("Success!");
@@ -109,9 +118,10 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       };
       try {
         await runExecute(
-          item.token_id.includes("Hope")
-            ? contractAddresses.MARKET_CONTRACT
-            : contractAddresses.MARKET_REVEAL_CONTRACT,
+          // item.token_id.includes("Hope")
+          //   ? contractAddresses.MARKET_CONTRACT
+          //   : contractAddresses.MARKET_REVEAL_CONTRACT,
+          item.contractAddress,
           message
         );
         toast.success("Success!");
@@ -216,7 +226,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       </NFTItemImageWrapper>
       <NFTItemInfoContainer>
         <div>
-          <NFTItemInfo>Hope Galaxy 1 </NFTItemInfo>
+          <NFTItemInfo>{targetCollection.title}</NFTItemInfo>
           <NFTItemInfo>{item.token_id}</NFTItemInfo>
         </div>
         <NFTItemInfo>
