@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppSelector } from "../../app/hooks";
-import { NFTPriceType } from "../NFTItem";
+import { NFTPriceType } from "../../hook/useHandleNftItem";
 import {
   DetailContent,
   DetailTitle,
