@@ -35,6 +35,7 @@ export const NFTPriceType = {
 };
 
 export default function NFTItem({ item, status }: NFTItemProps) {
+  // console.log("nft detail", item);
   const [nftPrice, setNftPrice] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
   const [logoSize, setLogoSize] = useState<{
@@ -120,14 +121,16 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         toast.error("Fail!");
       }
     } else if (status === NFTItemStatus.BUY) {
+      if (!item.contractAddress) return;
       const price = item?.list_price || {};
       const message =
         price.denom === NFTPriceType.HOPE
           ? {
               send: {
-                contract: item.token_id.includes("Hope")
-                  ? contractAddresses.MARKET_CONTRACT
-                  : contractAddresses.MARKET_REVEAL_CONTRACT,
+                // contract: item.token_id.includes("Hope")
+                //   ? contractAddresses.MARKET_CONTRACT
+                //   : contractAddresses.MARKET_REVEAL_CONTRACT,
+                contract: item.contractAddress,
                 amount: price.amount,
                 msg: btoa(
                   JSON.stringify({
@@ -146,9 +149,10 @@ export default function NFTItem({ item, status }: NFTItemProps) {
           await runExecute(contractAddresses.TOKEN_CONTRACT, message);
         } else {
           await runExecute(
-            item.token_id.includes("Hope")
-              ? contractAddresses.MARKET_CONTRACT
-              : contractAddresses.MARKET_REVEAL_CONTRACT,
+            // item.token_id.includes("Hope")
+            //   ? contractAddresses.MARKET_CONTRACT
+            //   : contractAddresses.MARKET_REVEAL_CONTRACT,
+            item.contractAddress,
             message,
             {
               funds: "" + price.amount / 1e6,
