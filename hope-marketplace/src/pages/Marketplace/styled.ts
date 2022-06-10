@@ -137,6 +137,10 @@ export const StatisticName = styled.div`
   text-align: center;
 `;
 
+export const SortByPriceButton = styled(Button)`
+  width: 100%;
+`;
+
 const MIN_FILTER_CONTAINER_WIDTH = "50px";
 const MAX_FILTER_CONTAINER_WIDTH = "25%";
 

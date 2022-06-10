@@ -20,23 +20,7 @@ const NFTContainer: React.FC<NFTContainerProps> = ({
   const { isXs, isSm } = useMatchBreakpoints();
   const isMobile = isXs || isSm;
   const hasNFTs = !!nfts && nfts.length > 0;
-  if (sort === "as")
-    sort &&
-      nfts
-        .slice()
-        .sort(
-          (a: any, b: any) =>
-            Number(a.list_price?.amount) - Number(b.list_price?.amount)
-        );
-  else
-    sort &&
-      nfts
-        .slice()
-        .sort(
-          (a: any, b: any) =>
-            Number(a.list_price?.amount) - Number(b.list_price?.amount)
-        )
-        .reverse();
+
   return (
     <Wrapper noGrid={!hasNFTs} isMobile={isMobile}>
       {hasNFTs

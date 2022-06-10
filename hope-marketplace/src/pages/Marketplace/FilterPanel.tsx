@@ -5,10 +5,12 @@ import {
   FilterPanelProps,
   StatusFilterButtonType,
   StatusFilterType,
+  PriceSortDirectionType,
 } from "./types";
 
 import {
   StyledButton as Button,
+  SortByPriceButton,
   FilterContainer,
   FilterContainerTitle,
   StatusFilterPanel,
@@ -47,6 +49,7 @@ const STATUS_FILTER_BUTTONS: StatusFilterButtonType[] = [
 const FilterPanel: React.FC<FilterPanelProps> = ({
   expanded,
   onChangeExpanded,
+  priceFilterOption,
 }) => {
   const [statusFilter, setStatusFilter] = useState<StatusFilterType>(
     DEFAULT_STATUS_FILTER
@@ -80,7 +83,15 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           )}
         </StatusFilterPanel>
       </CollapseCard>
-      <CollapseCard title="Price" />
+      <CollapseCard title="Price">
+        <SortByPriceButton
+          onClick={priceFilterOption.onChangePriceSortDirection}
+        >{`Sort By ${
+          priceFilterOption.priceSortDirection === PriceSortDirectionType.asc
+            ? "Descending"
+            : "Ascending"
+        }`}</SortByPriceButton>
+      </CollapseCard>
       <CollapseCard title="Chains" />
       <CollapseCard title="On Sale In" />
     </FilterContainer>

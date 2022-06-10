@@ -9,6 +9,7 @@ import { Title } from "../../components/PageTitle";
 import { getCollectionById } from "../../constants/Collections";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import FilterPanel from "./FilterPanel";
+import useFilter from "./hook/useFilter";
 import Statistic from "./Statistic";
 import {
   Wrapper,
@@ -20,6 +21,7 @@ import {
   MainContentContainer,
   NftList,
 } from "./styled";
+import { PriceSortDirectionType } from "./types";
 
 const Marketplace: React.FC = () => {
   const { isXl } = useMatchBreakpoints();
@@ -38,15 +40,21 @@ const Marketplace: React.FC = () => {
 
   // console.log("targetCollection", targetCollection);
 
-  // const [isAscending, setIsAscending] = React.useState(true);
+  const [isAscending, setIsAscending] = React.useState(true);
   const marketplaceNFTs = useAppSelector((state) => {
     // console.log("nfts", state.nfts);
     return state.nfts[`${targetCollection.collectionId}_marketplace`];
   });
 
-  // const handleSort = () => {
-  //   setIsAscending(!isAscending);
-  // };
+  const filteredNfts = useFilter(marketplaceNFTs, {
+    price: isAscending
+      ? PriceSortDirectionType.asc
+      : PriceSortDirectionType.desc,
+  });
+
+  const handleSortByPrice = () => {
+    setIsAscending(!isAscending);
+  };
 
   return (
     <Wrapper>
@@ -65,13 +73,19 @@ const Marketplace: React.FC = () => {
       <HorizontalDivider />
       <MainContentContainer isMobile={!isXl} expanded={expandedFilter}>
         <FilterPanel
+          priceFilterOption={{
+            onChangePriceSortDirection: handleSortByPrice,
+            priceSortDirection: isAscending
+              ? PriceSortDirectionType.asc
+              : PriceSortDirectionType.desc,
+          }}
           onChangeExpanded={setExpandedFilter}
           expanded={expandedFilter}
         />
         <NftList>
           Items
           <NFTContainer
-            nfts={marketplaceNFTs}
+            nfts={filteredNfts}
             status={NFTItemStatus.BUY}
             // sort={isAscending ? "as" : "des"}
             sort={"as"}

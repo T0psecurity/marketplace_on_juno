@@ -62,9 +62,9 @@ const Collections: MarketplaceInfo[] = [
     logoUrl: "/logos/JunoPunks.gif",
     collectionId: "junopunks",
     nftContract:
-      "juno1nvrmqa0w07px2yp4h2yx5sqsq3ltcmnes3jwt9zmxgjsse7u855sxgvj2s",
+      "juno1e229el8t4lu4rx7xeekc77zspxa2gz732ld0e6a5q0sr0l3gm78stuvc5g",
     mintContract:
-      "juno1hr5gydg99lsvnjwra7xdgx88fkkvdpfqr8aw4x0td373k03nzl6skhvuk8",
+      "juno10rjm83ng8v667hn3cpn7ga46u50qqnuyh9j2h9tm6famwj96scmszqgt24",
     marketplaceContract: [""],
     socialLinks: {
       discord: "https://discord.gg/BfKPacc5jF",
