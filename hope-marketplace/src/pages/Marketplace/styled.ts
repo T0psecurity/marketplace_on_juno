@@ -104,27 +104,24 @@ export const StatisticItem = styled.div<{ isMobile?: boolean }>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
-  border-collapse: collapse;
   width: 100px;
   height: 90px;
-  &:first-child {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-  }
-  &:last-child {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-  }
-  &:not(:last-child) {
-    border-right: none;
-  }
 `;
 
 export const StatisticValue = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 37px;
   font-size: 1.5em;
   font-weight: bold;
   text-align: center;
+`;
+
+export const StatisticIcon = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 5px;
 `;
 
 export const StatisticName = styled.div`

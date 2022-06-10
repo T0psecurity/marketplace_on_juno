@@ -16,6 +16,7 @@ import {
   NFTItemOperationContainer,
   NFTItemPriceInputer,
   NFTItemPriceType,
+  CoinIcon,
 } from "./styled";
 
 export interface NFTItemProps {
@@ -87,11 +88,19 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         <NFTItemInfoContainer>
           <NFTItemInfo>{item.token_id}</NFTItemInfo>
           <NFTItemInfo>
-            {!!price.amount && +price.amount > 0
-              ? `${price.amount / 1e6} ${
-                  price.denom === NFTPriceType.HOPE ? "HOPE" : "JUNO"
-                }`
-              : ""}
+            {!!price.amount && +price.amount > 0 ? (
+              <>
+                <CoinIcon
+                  alt=""
+                  src={
+                    price.denom === NFTPriceType.HOPE
+                      ? "/coin-images/hope.png"
+                      : "/coin-images/juno.png"
+                  }
+                />
+                {price.amount / 1e6}
+              </>
+            ) : null}
           </NFTItemInfo>
         </NFTItemInfoContainer>
       </div>

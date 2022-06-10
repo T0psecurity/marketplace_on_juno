@@ -7,13 +7,18 @@ import {
   StatisticItem,
   StatisticValue,
   StatisticName,
+  StatisticIcon,
 } from "./styled";
 
 interface StatisticProps {
   items: any[];
 }
 
-type StatisticItemType = { name: string; key: string };
+type StatisticItemType = {
+  name: string;
+  key: string;
+  icon?: string;
+};
 
 const STATISTIC_PARAMS: StatisticItemType[] = [
   {
@@ -26,11 +31,23 @@ const STATISTIC_PARAMS: StatisticItemType[] = [
   },
   {
     name: "Floor Price",
-    key: "floorPrice",
+    key: "hopeFloorPrice",
+    icon: "/coin-images/hope.png",
   },
   {
-    name: "Volume Trade",
-    key: "volumeTrade",
+    name: "Volume",
+    key: "hopeVolume",
+    icon: "/coin-images/hope.png",
+  },
+  {
+    name: "Floor Price",
+    key: "junoFloorPrice",
+    icon: "/coin-images/juno.png",
+  },
+  {
+    name: "Volume",
+    key: "junoVolume",
+    icon: "/coin-images/juno.png",
   },
 ];
 
@@ -46,6 +63,9 @@ const Statistic: React.FC<StatisticProps> = ({ items }) => {
         (statisticItem: StatisticItemType, index: number) => (
           <StatisticItem key={index} isMobile={isMobile}>
             <StatisticValue>
+              {statisticItem.icon && (
+                <StatisticIcon alt="" src={statisticItem.icon} />
+              )}
               {statistics[statisticItem.key] || "X"}
             </StatisticValue>
             <StatisticName>{statisticItem.name}</StatisticName>

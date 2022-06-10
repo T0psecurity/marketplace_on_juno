@@ -24,6 +24,8 @@ export const NFTItemInfo = styled.div`
   font-weight: bold;
   text-align: left;
   margin: 10px;
+  display: flex;
+  align-items: center;
 `;
 
 export const NFTItemOperationButton = styled.div`
@@ -88,3 +90,9 @@ export const NFTItemPriceInputer = styled.input`
 `;
 
 export const NFTItemPriceType = styled.form``;
+
+export const CoinIcon = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 5px;
+`;

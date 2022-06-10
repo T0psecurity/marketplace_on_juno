@@ -1,1 +1,1 @@
-cls && yarn build &7 firebase deploy
+cls && yarn build && firebase deploy
