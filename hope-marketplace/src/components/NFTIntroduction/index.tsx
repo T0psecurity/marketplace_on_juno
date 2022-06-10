@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 
 import { DiscordIcon, GlobeIcon, TwitterIcon } from "../Icons";
 
@@ -38,13 +39,21 @@ const NFTIntroduction: React.FC<NFTIntroductionProps> = ({
   logo,
 }) => {
   const history = useHistory();
+  const { isXs, isSm } = useMatchBreakpoints();
+  const isMobile = isXs || isSm;
+
   return (
     <Wrapper
+      isMobile={isMobile}
       backgroundImage={backgroundImage}
       onClick={() => history.push("/")}
     >
-      <HopeLogoIcon logoUrl={logo} onClick={() => history.push("/")} />
-      <SocialLinkContainer>
+      <HopeLogoIcon
+        isMobile={isMobile}
+        logoUrl={logo}
+        onClick={() => history.push("/")}
+      />
+      <SocialLinkContainer isMobile={isMobile}>
         {SocialLinkItems.map((linkItem, linkIndex) => (
           <SocialLinkItem
             onClick={() => window.open(linkItem.url)}

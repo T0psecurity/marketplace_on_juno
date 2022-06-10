@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 // import CollapseCard from "../../components/CollapseCard";
@@ -7,6 +7,7 @@ import NFTIntroduction from "../../components/NFTIntroduction";
 import { NFTItemStatus } from "../../components/NFTItem";
 import { Title } from "../../components/PageTitle";
 import { getCollectionById } from "../../constants/Collections";
+import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import Statistic from "./Statistic";
 import {
   Wrapper,
@@ -46,9 +47,14 @@ const ArrowIcon = ({
 );
 
 const Marketplace: React.FC = () => {
-  const [expandedFilter, setExpandedFilter] = useState<boolean>(true);
+  const { isXl } = useMatchBreakpoints();
+  const [expandedFilter, setExpandedFilter] = useState<boolean>(isXl);
   const { search } = useLocation();
   const collectionId = new URLSearchParams(search).get("id");
+
+  useEffect(() => {
+    setExpandedFilter(isXl);
+  }, [isXl]);
 
   const targetCollection = useMemo(
     () => getCollectionById(collectionId || ""),
@@ -78,7 +84,7 @@ const Marketplace: React.FC = () => {
       <Statistic items={marketplaceNFTs} />
       <CollectionDetail>{targetCollection.description}</CollectionDetail>
       <HorizontalDivider />
-      <MainContentContainer expanded={expandedFilter}>
+      <MainContentContainer isMobile={!isXl} expanded={expandedFilter}>
         <FilterContainer>
           <FilterContainerTitle>
             Filter

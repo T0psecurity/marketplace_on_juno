@@ -1,4 +1,5 @@
 import React from "react";
+import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import useStatistic from "./hook/useStatistic";
 
 import {
@@ -34,14 +35,16 @@ const STATISTIC_PARAMS: StatisticItemType[] = [
 ];
 
 const Statistic: React.FC<StatisticProps> = ({ items }) => {
+  const { isXs, isSm } = useMatchBreakpoints();
+  const isMobile = isXs || isSm;
+
   const statistics: any = useStatistic(items);
-  console.log("statistics", statistics);
 
   return (
     <Wrapper>
       {STATISTIC_PARAMS.map(
         (statisticItem: StatisticItemType, index: number) => (
-          <StatisticItem key={index}>
+          <StatisticItem key={index} isMobile={isMobile}>
             <StatisticValue>
               {statistics[statisticItem.key] || "X"}
             </StatisticValue>

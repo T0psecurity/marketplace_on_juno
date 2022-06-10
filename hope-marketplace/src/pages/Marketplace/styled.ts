@@ -32,47 +32,6 @@ export const SortButtonContainer = styled.div`
   margin: 0 5vw;
 `;
 
-const MIN_FILTER_CONTAINER_WIDTH = "50px";
-const MAX_FILTER_CONTAINER_WIDTH = "25%";
-
-const filterAnimation = {
-  expand: keyframes`
-    from {
-      width: ${MIN_FILTER_CONTAINER_WIDTH};
-    }
-    to {
-      width: ${MAX_FILTER_CONTAINER_WIDTH};
-    }
-  `,
-  collapse: keyframes`
-    from {
-      width: ${MAX_FILTER_CONTAINER_WIDTH};
-    }
-    to {
-      width: ${MIN_FILTER_CONTAINER_WIDTH};
-    }
-  `,
-};
-
-const nftListAnimation = {
-  expand: keyframes`
-    from {
-      width: calc(100% - ${MAX_FILTER_CONTAINER_WIDTH});
-    }
-    to {
-      width: calc(100% - ${MIN_FILTER_CONTAINER_WIDTH});
-    }
-  `,
-  collapse: keyframes`
-    from {
-      width: calc(100% - ${MIN_FILTER_CONTAINER_WIDTH});
-    }
-    to {
-      width: calc(100% - ${MAX_FILTER_CONTAINER_WIDTH});
-    }
-  `,
-};
-
 export const FilterContainer = styled.div`
   & > div {
     padding: 10px;
@@ -94,68 +53,24 @@ export const StyledSvg = styled.svg`
 
 export const FilterContainerTitle = styled.div`
   position: relative;
-  width: 100%;
+  width: calc(100% - 20px);
   text-align: left;
   font-weight: bold;
   transition: opacity 0.5s;
+  user-select: none;
 `;
 
 export const NftList = styled.div`
   padding-top: 20px;
   font-size: 1em;
   font-weight: bold;
+  height: calc(100vh - 250px);
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 export const StyledCollapseCard = styled(CollapseCard)`
   transition: opacity 0.5s;
-`;
-
-export const MainContentContainer = styled.div<{ expanded?: boolean }>`
-  display: flex;
-  width: 100%;
-  ${FilterContainer} {
-    animation: ${({ expanded }) =>
-      expanded
-        ? css`
-            ${filterAnimation.expand} 500ms linear forwards;
-          `
-        : css`
-            ${filterAnimation.collapse} 500ms linear forwards;
-          `};
-  }
-  ${NftList} {
-    animation: ${({ expanded }) =>
-      !expanded
-        ? css`
-            ${nftListAnimation.expand} 500ms linear forwards;
-          `
-        : css`
-            ${nftListAnimation.collapse} 500ms linear forwards
-          `};
-  }
-  ${StyledSvg} {
-    transform: rotate(${({ expanded }) => (expanded ? "0deg" : "180deg")});
-  }
-  ${FilterContainerTitle} {
-    ${({ expanded }) =>
-      expanded
-        ? css`
-            color: black;
-          `
-        : css`
-            color: transparent;
-          `};
-  }
-  ${StyledCollapseCard} {
-    ${({ expanded }) =>
-      expanded
-        ? css`
-            opacity: 1;
-          `
-        : css`
-            opacity: 0;
-          `};
-  }
 `;
 
 export const StatusFilterPanel = styled.div`
@@ -184,15 +99,15 @@ export const StatisticWrapper = styled.div`
   margin: 10px 0;
 `;
 
-export const StatisticItem = styled.div`
+export const StatisticItem = styled.div<{ isMobile?: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
   border: 1px solid black;
   border-collapse: collapse;
   width: 100px;
+  height: 90px;
   &:first-child {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -215,4 +130,94 @@ export const StatisticValue = styled.div`
 export const StatisticName = styled.div`
   font-size: 1em;
   text-align: center;
+`;
+
+const MIN_FILTER_CONTAINER_WIDTH = "50px";
+const MAX_FILTER_CONTAINER_WIDTH = "25%";
+
+export const MainContentContainer = styled.div<{
+  expanded?: boolean;
+  isMobile?: boolean;
+}>`
+  display: flex;
+  width: 100%;
+  ${FilterContainer} {
+    animation: ${({ expanded, isMobile }) =>
+      expanded
+        ? css`
+            ${keyframes`
+              from {
+                width: ${MIN_FILTER_CONTAINER_WIDTH};
+              }
+              to {
+                width: ${isMobile ? "100%" : MAX_FILTER_CONTAINER_WIDTH};
+              }
+            `} 500ms linear forwards;
+          `
+        : css`
+            ${keyframes`
+              from {
+                width: ${isMobile ? "100%" : MAX_FILTER_CONTAINER_WIDTH};
+              }
+              to {
+                width: ${MIN_FILTER_CONTAINER_WIDTH};
+              }
+            `} 500ms linear forwards;
+          `};
+  }
+  ${NftList} {
+    animation: ${({ expanded, isMobile }) =>
+      !expanded
+        ? css`
+            ${keyframes`
+              from {
+                width: ${
+                  isMobile
+                    ? "0px"
+                    : `calc(100% - ${MAX_FILTER_CONTAINER_WIDTH})`
+                };
+              }
+              to {
+                width: calc(100% - ${MIN_FILTER_CONTAINER_WIDTH});
+              }
+            `} 500ms linear forwards;
+          `
+        : css`
+            ${keyframes`
+              from {
+                width: calc(100% - ${MIN_FILTER_CONTAINER_WIDTH});
+              }
+              to {
+                width: ${
+                  isMobile
+                    ? "0px"
+                    : `calc(100% - ${MAX_FILTER_CONTAINER_WIDTH})`
+                };
+              }
+            `} 500ms linear forwards
+          `};
+  }
+  ${StyledSvg} {
+    transform: rotate(${({ expanded }) => (expanded ? "0deg" : "180deg")});
+  }
+  ${FilterContainerTitle} {
+    ${({ expanded }) =>
+      expanded
+        ? css`
+            display: black;
+          `
+        : css`
+            color: transparent;
+          `};
+  }
+  ${StyledCollapseCard} {
+    ${({ expanded }) =>
+      expanded
+        ? css`
+            opacity: 1;
+          `
+        : css`
+            opacity: 0;
+          `};
+  }
 `;
