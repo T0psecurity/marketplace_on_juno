@@ -2,38 +2,14 @@ import styled, { css } from "styled-components";
 
 export const NFTItemWrapper = styled.div`
   /* border: 1px solid black; */
-  padding: 10px;
+  /* padding: 10px; */
   border-radius: 10px;
   box-shadow: 1px 4px 10px 1px rgba(0, 0, 0, 0.7);
 `;
 export const NFTItemImageWrapper = styled.div`
   width: 370px;
   height: 400px;
-  margin-bottom: 10px;
-`;
-
-export const NFTItemImage = styled.img<{
-  width?: number;
-  height?: number;
-  imageVisible?: boolean;
-}>`
-  cursor: pointer;
-  ${({ width }) =>
-    width &&
-    width > 0 &&
-    css`
-      width: ${width}px;
-    `}
-  ${({ height }) =>
-    height &&
-    height > 0 &&
-    css`
-      height: ${height}px;
-    `}
-  opacity: ${({ imageVisible }) => (imageVisible ? 1 : 0)};
-  /* width: 370px;
-  height: 400px; */
-  border-radius: 30px;
+  margin: 10px;
 `;
 
 export const NFTItemInfoContainer = styled.div`
@@ -47,6 +23,7 @@ export const NFTItemInfo = styled.div`
   font-size: 20px;
   font-weight: bold;
   text-align: left;
+  margin: 10px;
 `;
 
 export const NFTItemOperationContainer = styled.div`
@@ -64,6 +41,8 @@ export const NFTItemOperationButton = styled.div`
   box-sizing: border-box;
   outline: 0;
   border: 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   cursor: pointer;
   user-select: none;
   vertical-align: middle;
@@ -76,7 +55,6 @@ export const NFTItemOperationButton = styled.div`
   min-width: 64px;
   height: 50px;
   width: 100%;
-  margin: 10px 0;
   padding: 6px 16px;
   color: #fff;
   font-size: 20px;
@@ -102,3 +80,27 @@ export const NFTItemPriceInputer = styled.input`
 `;
 
 export const NFTItemPriceType = styled.form``;
+
+export const NFTItemImage = styled.img<{
+  width?: number;
+  height?: number;
+  imageVisible?: boolean;
+}>`
+  cursor: pointer;
+  ${({ width }) =>
+    width &&
+    width > 0 &&
+    css`
+      width: ${width}px;
+    `}
+  ${({ height }) =>
+    height &&
+    height > 0 &&
+    css`
+      height: ${height}px;
+    `}
+  opacity: ${({ imageVisible }) => (imageVisible ? 1 : 0)};
+  /* width: 370px;
+  height: 400px; */
+  border-radius: 30px;
+`;
