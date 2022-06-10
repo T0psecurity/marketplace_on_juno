@@ -1,5 +1,8 @@
 import React from "react";
 
+import home from "../../assets/images/home.png";
+import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
+
 import {
   Wrapper,
   SubWrapper,
@@ -8,21 +11,23 @@ import {
   SubContent,
 } from "./styled";
 
-import home from "../../assets/images/home.png";
-
 const Home: React.FC = () => {
+  const { isXs, isSm, isMd } = useMatchBreakpoints();
+  const isMobile = isXs || isSm || isMd;
+
   return (
-    <Wrapper>
+    <Wrapper isMobile={isMobile}>
+      {isMobile && <ImgWrapper src={home} alt="home" isMobile={isMobile} />}
       <SubWrapper>
-        <MainContent>
+        <MainContent isMobile={isMobile}>
           Hopers.io is the first rev-share IBC NFT Marketplace.
         </MainContent>
-        <SubContent>
+        <SubContent isMobile={isMobile}>
           The DAO governs the marketplace and earns rewards through the staking
           system of the token $HOPE.
         </SubContent>
       </SubWrapper>
-      <ImgWrapper src={home} alt="home" />
+      {!isMobile && <ImgWrapper src={home} alt="home" isMobile={isMobile} />}
     </Wrapper>
   );
 };

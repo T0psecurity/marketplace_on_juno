@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ isMobile?: boolean }>`
   padding: 10px 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: ${({ isMobile }) => (isMobile ? "1fr" : "1fr 1fr")};
   width: 80%;
   justify-content: center;
   margin: 0 auto;
@@ -20,22 +20,35 @@ export const SubWrapper = styled.div`
   align-self: center;
 `;
 
-export const ImgWrapper = styled.img`
-  height: 550px;
+export const ImgWrapper = styled.img<{ isMobile?: boolean }>`
+  ${({ isMobile }) =>
+    isMobile
+      ? css`
+          width: 100vw;
+        `
+      : css`
+          height: 550px;
+          max-height: 60vh;
+        `};
   /* width: 550px; */
-  @media (max-width: 650px) {
-    /* width: 100%; */
-    height: 100%;
-  }
 `;
 
 export const StyledButton = styled.button``;
 
-export const MainContent = styled.h1`
+export const MainContent = styled.h1<{ isMobile?: boolean }>`
   text-align: center;
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      font-size: 5vmin;
+    `}
 `;
 
-export const SubContent = styled.span`
+export const SubContent = styled.span<{ isMobile?: boolean }>`
   font-size: 24px;
-  text-align: center;
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      font-size: 4vmin;
+    `}
 `;
