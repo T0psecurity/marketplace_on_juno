@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { SocialLinks } from "../../constants/Collections";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 
 import { DiscordIcon, GlobeIcon, TwitterIcon } from "../Icons";
@@ -14,22 +15,27 @@ import {
 interface NFTIntroductionProps {
   backgroundImage: string;
   logo?: string | null | undefined;
+  socialLinks: SocialLinks;
 }
 
-const SocialLinkItems = [
+const SocialLinkItems: {
+  icon: React.ReactElement;
+  socialKey: keyof SocialLinks;
+  backgroundColor: string;
+}[] = [
   {
     icon: GlobeIcon,
-    url: " https://www.hopegalaxy.io/",
+    socialKey: "website",
     backgroundColor: "#00ff00",
   },
   {
     icon: TwitterIcon,
-    url: "https://twitter.com/HopeGalaxyNFT",
+    socialKey: "twitter",
     backgroundColor: "#1da1f2",
   },
   {
     icon: DiscordIcon,
-    url: "https://discord.com/invite/BfKPacc5jF",
+    socialKey: "discord",
     backgroundColor: "#7591ff",
   },
 ];
@@ -37,6 +43,7 @@ const SocialLinkItems = [
 const NFTIntroduction: React.FC<NFTIntroductionProps> = ({
   backgroundImage,
   logo,
+  socialLinks,
 }) => {
   const history = useHistory();
   const { isXs, isSm } = useMatchBreakpoints();
@@ -56,7 +63,7 @@ const NFTIntroduction: React.FC<NFTIntroductionProps> = ({
       <SocialLinkContainer isMobile={isMobile}>
         {SocialLinkItems.map((linkItem, linkIndex) => (
           <SocialLinkItem
-            onClick={() => window.open(linkItem.url)}
+            onClick={() => window.open(socialLinks[linkItem.socialKey])}
             key={linkIndex}
             backgroundColor={linkItem.backgroundColor}
           >

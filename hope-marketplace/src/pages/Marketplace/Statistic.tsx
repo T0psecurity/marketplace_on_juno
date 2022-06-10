@@ -12,6 +12,7 @@ import {
 
 interface StatisticProps {
   items: any[];
+  collectionId: string;
 }
 
 type StatisticItemType = {
@@ -24,6 +25,10 @@ const STATISTIC_PARAMS: StatisticItemType[] = [
   {
     name: "Items",
     key: "total",
+  },
+  {
+    name: "Items On Sale",
+    key: "itemsOnSale",
   },
   {
     name: "Owners",
@@ -51,11 +56,11 @@ const STATISTIC_PARAMS: StatisticItemType[] = [
   },
 ];
 
-const Statistic: React.FC<StatisticProps> = ({ items }) => {
+const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
   const { isXs, isSm } = useMatchBreakpoints();
   const isMobile = isXs || isSm;
 
-  const statistics: any = useStatistic(items);
+  const statistics: any = useStatistic(collectionId, items);
 
   return (
     <Wrapper>

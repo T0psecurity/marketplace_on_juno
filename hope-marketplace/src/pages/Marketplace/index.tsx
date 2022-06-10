@@ -79,13 +79,14 @@ const Marketplace: React.FC = () => {
       <NFTIntroduction
         backgroundImage={targetCollection.backgroundUrl}
         logo={targetCollection.logoUrl}
+        socialLinks={targetCollection.socialLinks}
       />
       <Title title={targetCollection.title} />
       <CreatorContainer>
         created by
         <Creator>{` ${targetCollection.creator || ""} •`}</Creator>
       </CreatorContainer>
-      <Statistic items={marketplaceNFTs} />
+      <Statistic items={marketplaceNFTs} collectionId={collectionId || ""} />
       <CollectionDetail>{targetCollection.description}</CollectionDetail>
       <HorizontalDivider />
       <MainContentContainer isMobile={!isXl} expanded={expandedFilter}>

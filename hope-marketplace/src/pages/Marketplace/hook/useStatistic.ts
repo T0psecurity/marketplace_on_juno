@@ -1,4 +1,8 @@
 import { useMemo } from "react";
+import {
+  getCollectionById,
+  MarketplaceInfo,
+} from "../../../constants/Collections";
 import { NFTPriceType } from "../../../hook/useHandleNftItem";
 
 const convertNumberToString = (number: number): string => {
@@ -7,8 +11,16 @@ const convertNumberToString = (number: number): string => {
   });
 };
 
-const useStatistic = (items: any) => {
+const useStatistic = (collectionId: string, items: any) => {
   const total: string = useMemo(() => {
+    const targetCollection: MarketplaceInfo = getCollectionById(
+      collectionId || ""
+    );
+    if (!targetCollection) return "";
+    return convertNumberToString(targetCollection.mintInfo?.totalNfts || 0);
+  }, [collectionId]);
+
+  const itemsOnSale: string = useMemo(() => {
     const length: number = items?.length || 0;
     if (length >= 1e6) return `${convertNumberToString(length / 1e6)}M`;
     if (length >= 1e3) return `${convertNumberToString(length / 1e3)}K`;
@@ -37,6 +49,7 @@ const useStatistic = (items: any) => {
 
   return {
     total,
+    itemsOnSale,
     owners,
     hopeFloorPrice: floorPrices.hope === 1e9 ? null : floorPrices.hope,
     junoFloorPrice: floorPrices.juno === 1e9 ? null : floorPrices.juno,
