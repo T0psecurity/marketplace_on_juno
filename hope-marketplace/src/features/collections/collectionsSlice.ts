@@ -9,6 +9,7 @@ export type CollectionStateType = {
   maxNfts: number;
   imageUrl: string;
   myMintedNfts: number | null;
+  price: number;
 };
 
 const DEFAULT_COLLECTION_STATE = {
@@ -18,6 +19,7 @@ const DEFAULT_COLLECTION_STATE = {
   maxNfts: 0,
   imageUrl: "",
   myMintedNfts: null,
+  price: 0,
 };
 
 let initialState: { [key: string]: CollectionStateType } = {};

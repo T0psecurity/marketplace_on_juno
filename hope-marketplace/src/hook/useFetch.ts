@@ -27,8 +27,9 @@ const useFetch = () => {
           mintCheck: queryResult.check_mint,
           mintedNfts: +(queryResult.count || "0"),
           totalNfts: +(queryResult.total_nft || "0"),
-          maxNfts: +(queryResult.max_nft || "0"),
+          maxNfts: +(queryResult.max_nft || queryResult.total_nft || "0"),
           imageUrl: queryResult.image_url,
+          price: +(queryResult.price || "0") / 1e6,
           myMintedNfts: null,
         };
         if (account && account.address) {

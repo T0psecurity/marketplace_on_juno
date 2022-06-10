@@ -99,9 +99,11 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const handleMintNft = async () => {
     if (!mintItem.mintContract) {
       toast.error("Mint contract not found!");
+      return;
     }
     if (collectionState.totalNfts <= collectionState.mintedNfts) {
       toast.error("All nfts are minted!");
+      return;
     }
     let mintIndexArray: number[] = [];
     collectionState.mintCheck.forEach((item: boolean, index: number) => {
@@ -111,9 +113,10 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     const message = {
       mint: { rand: `${selectedIndex || 0 + 1}` },
     };
-    console.log("message", message);
     try {
-      await runExecute(mintItem.mintContract, message);
+      await runExecute(mintItem.mintContract, message, {
+        funds: `${collectionState.price > 0 ? collectionState.price : ""}`,
+      });
       toast.success("Success!");
       fetchAllNFTs();
     } catch (err) {
