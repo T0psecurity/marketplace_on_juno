@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { toast } from "react-toastify";
 import { useAppSelector } from "../../app/hooks";
 import {
   MarketplaceInfo,
   MarketplaceMintInfo,
 } from "../../constants/Collections";
+import { CollectionStateType } from "../../features/collections/collectionsSlice";
 import useContract from "../../hook/useContract";
+import useFetch from "../../hook/useFetch";
 
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import useResponsiveSize from "../../hook/useResponsiveSize";
@@ -80,12 +83,11 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     mintImage: "",
   };
   const { isXl } = useMatchBreakpoints();
-  const { runQuery } = useContract();
-  const account = useAppSelector((state) => state.accounts.keplrAccount);
-  const collectionsState = useAppSelector(
+  const { runExecute } = useContract();
+  const { fetchAllNFTs } = useFetch();
+  const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[mintItem.collectionId]
   );
-  // console.log("collection state", collectionsState);
 
   const fontSize = useResponsiveSize(
     ELEMENT_SIZE.DETAIL_BLOCK_TITLE
@@ -93,6 +95,32 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const operationItemSize = useResponsiveSize(
     ELEMENT_SIZE.OPERATION_ITEM_WIDTH
   ).toString();
+
+  const handleMintNft = async () => {
+    if (!mintItem.mintContract) {
+      toast.error("Mint contract not found!");
+    }
+    if (collectionState.totalNfts <= collectionState.mintedNfts) {
+      toast.error("All nfts are minted!");
+    }
+    let mintIndexArray: number[] = [];
+    collectionState.mintCheck.forEach((item: boolean, index: number) => {
+      if (item) mintIndexArray.push(index);
+    });
+    const selectedIndex = mintIndexArray.sort(() => 0.5 - Math.random()).pop();
+    const message = {
+      mint: { rand: `${selectedIndex || 0 + 1}` },
+    };
+    console.log("message", message);
+    try {
+      await runExecute(mintItem.mintContract, message);
+      toast.success("Success!");
+      fetchAllNFTs();
+    } catch (err) {
+      console.error(err);
+      toast.error("Fail!");
+    }
+  };
 
   const renderDetailBlocks = (items: NFT_DETAIL_KEY[], width?: string) => {
     return items.map((item: NFT_DETAIL_KEY, index: any) => (
@@ -134,9 +162,16 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
             <DetailInfo># to mint</DetailInfo>
             {renderDetailBlocks([MINT_DETAIL_OPERATION])}
           </FlexColumn>
-          <MintButton width={operationItemSize}>{`Mint ${
-            mintInfo.mintDate || "Now"
-          }`}</MintButton>
+          <MintButton
+            disabled={
+              collectionState.myMintedNfts === null ||
+              collectionState.myMintedNfts >= collectionState.maxNfts
+            }
+            width={operationItemSize}
+            onClick={handleMintNft}
+          >
+            {`Mint ${mintInfo.mintDate || "Now"}`}
+          </MintButton>
         </OperationContainer>
       </MintDetailInfo>
       {isXl && renderMintImage()}

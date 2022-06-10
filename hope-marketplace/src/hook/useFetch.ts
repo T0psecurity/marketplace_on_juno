@@ -1,7 +1,10 @@
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Collections, { MarketplaceInfo } from "../constants/Collections";
-import { setCollectionState } from "../features/collections/collectionsSlice";
+import {
+  CollectionStateType,
+  setCollectionState,
+} from "../features/collections/collectionsSlice";
 import { setNFTs } from "../features/nfts/nftsSlice";
 import useContract from "./useContract";
 
@@ -19,13 +22,21 @@ const useFetch = () => {
         const queryResult = await runQuery(collection.mintContract, {
           get_state_info: {},
         });
-        const storeObject = {
+
+        let storeObject: CollectionStateType = {
           mintCheck: queryResult.check_mint,
           mintedNfts: +(queryResult.count || "0"),
           totalNfts: +(queryResult.total_nft || "0"),
           maxNfts: +(queryResult.max_nft || "0"),
           imageUrl: queryResult.image_url,
+          myMintedNfts: null,
         };
+        if (account && account.address) {
+          const userInfo = await runQuery(collection.mintContract, {
+            get_user_info: { address: account.address },
+          });
+          storeObject.myMintedNfts = +(userInfo || "0");
+        }
         dispatch(setCollectionState([collection.collectionId, storeObject]));
       }
       if (collection.nftContract) {

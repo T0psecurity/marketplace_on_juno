@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useAppSelector } from "../../app/hooks";
 import { getCollectionById } from "../../constants/Collections";
+import { CollectionStateType } from "../../features/collections/collectionsSlice";
 // import { useAppDispatch } from "../../app/hooks";
 // import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useHandleNftItem, { NFTPriceType } from "../../hook/useHandleNftItem";
@@ -30,6 +32,11 @@ export const NFTItemStatus = {
   WITHDRAW: "withdraw",
 };
 
+const getTokenIdNumber = (id: string): string => {
+  if (!id) return "";
+  return id.split(".").pop() || "";
+};
+
 export default function NFTItem({ item, status }: NFTItemProps) {
   const [nftPrice, setNftPrice] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
@@ -38,17 +45,24 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const isMobile = isXs || isSm;
 
   const targetCollection = getCollectionById(item.collectionId);
+  const collectionState: CollectionStateType = useAppSelector(
+    (state: any) => state.collectionStates[item.collectionId]
+  );
 
   const { sellNft, withdrawNft, buyNft } = useHandleNftItem();
   // const dispatch = useAppDispatch();
   const history = useHistory();
   const price = item?.list_price || {};
-  const url = item.token_id.includes("Reveal")
-    ? `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${item.token_id.replace(
-        "Reveal.",
-        ""
-      )}.png`
-    : "/others/mint_pass.png";
+  let url = "";
+  if (item.collectionId === "mintpass1") {
+    url = "/others/mint_pass.png";
+  } else if (item.collectionId === "hopegalaxy1") {
+    url = `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${getTokenIdNumber(
+      item.token_id
+    )}.png`;
+  } else if (collectionState.imageUrl) {
+    url = `${collectionState.imageUrl}${getTokenIdNumber(item.token_id)}.png`;
+  }
 
   const handleNFTItem = async () => {
     if (status === NFTItemStatus.SELL) {

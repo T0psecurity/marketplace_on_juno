@@ -37,8 +37,10 @@ const Collections: MarketplaceInfo[] = [
     backgroundUrl: "/marketplace-backgrounds/Sunnyside.png",
     logoUrl: "/logos/SunnysideNightlife.gif",
     collectionId: "sunnyside",
-    nftContract: "",
-    mintContract: "",
+    nftContract:
+      "juno18uypkaxzmkwzs0tf8f3p9e3g94k0j496ll92g7u6swctgy29jr7sm3skel",
+    mintContract:
+      "juno1xtc0r420wqdypq8urv90ghuchm23tq5nv6rn8pkwwpf67uglhs0sylygn6",
     marketplaceContract: [""],
     socialLinks: {
       discord: "https://discord.gg/GFYrJEsYpm",
