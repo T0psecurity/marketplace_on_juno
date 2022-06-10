@@ -11,20 +11,24 @@ const convertNumberToString = (number: number): string => {
   });
 };
 
+const addSuffix = (number: number): string => {
+  if (number >= 1e6) return `${convertNumberToString(number / 1e6)}M`;
+  if (number >= 1e3) return `${convertNumberToString(number / 1e3)}K`;
+  return convertNumberToString(number);
+};
+
 const useStatistic = (collectionId: string, items: any) => {
   const total: string = useMemo(() => {
     const targetCollection: MarketplaceInfo = getCollectionById(
       collectionId || ""
     );
     if (!targetCollection) return "";
-    return convertNumberToString(targetCollection.mintInfo?.totalNfts || 0);
+    return addSuffix(targetCollection.mintInfo?.totalNfts || 0);
   }, [collectionId]);
 
   const itemsOnSale: string = useMemo(() => {
     const length: number = items?.length || 0;
-    if (length >= 1e6) return `${convertNumberToString(length / 1e6)}M`;
-    if (length >= 1e3) return `${convertNumberToString(length / 1e3)}K`;
-    return convertNumberToString(length);
+    return addSuffix(length);
   }, [items]);
 
   const owners: string = useMemo(() => {
