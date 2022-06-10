@@ -11,6 +11,7 @@ import connectionReducer from "../features/connection/connectionSlice";
 import messagesReducer from "../features/messages/messagesSlice";
 import consoleReducer from "../features/console/consoleSlice";
 import nftsReducer from "../features/nfts/nftsSlice";
+import collectionsReducer from "../features/collections/collectionsSlice";
 
 const persistConfig = {
   key: "root",
@@ -25,6 +26,7 @@ const reducer = persistReducer(
     messages: messagesReducer,
     console: consoleReducer,
     nfts: nftsReducer,
+    collectionStates: collectionsReducer,
   })
 );
 

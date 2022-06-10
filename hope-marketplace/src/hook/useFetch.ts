@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Collections, { MarketplaceInfo } from "../constants/Collections";
+import { setCollectionState } from "../features/collections/collectionsSlice";
 import { setNFTs } from "../features/nfts/nftsSlice";
 import useContract from "./useContract";
 
@@ -14,9 +15,21 @@ const useFetch = () => {
   const fetchAllNFTs = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
       // console.log("collection", collection.collectionId);
-      if (collection.nftContract && contracts[collection.nftContract]) {
-        const targetNftContract = contracts[collection.nftContract];
-        const queryResult: any = await runQuery(targetNftContract, {
+      if (collection.mintContract) {
+        const queryResult = await runQuery(collection.mintContract, {
+          get_state_info: {},
+        });
+        const storeObject = {
+          mintCheck: queryResult.check_mint,
+          mintedNfts: +(queryResult.count || "0"),
+          totalNfts: +(queryResult.total_nft || "0"),
+          maxNfts: +(queryResult.max_nft || "0"),
+          imageUrl: queryResult.image_url,
+        };
+        dispatch(setCollectionState([collection.collectionId, storeObject]));
+      }
+      if (collection.nftContract) {
+        const queryResult: any = await runQuery(collection.nftContract, {
           tokens: {
             owner: account?.address,
             start_after: undefined,
@@ -40,9 +53,8 @@ const useFetch = () => {
         collection.marketplaceContract.forEach(
           (contract: string, index: number) => {
             if (contracts[contract]) {
-              const targetMarketplaceContract = contracts[contract];
               queries.push(
-                runQuery(targetMarketplaceContract, {
+                runQuery(contract, {
                   get_offerings: {},
                 })
               );

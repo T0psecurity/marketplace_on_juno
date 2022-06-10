@@ -13,6 +13,7 @@ export interface MarketplaceBasicInfo {
   collectionId: string;
   description: string;
   nftContract: string;
+  mintContract: string;
   marketplaceContract: [string];
   socialLinks: SocialLinks;
 }
@@ -37,6 +38,7 @@ const Collections: MarketplaceInfo[] = [
     logoUrl: "/logos/SunnysideNightlife.gif",
     collectionId: "sunnyside",
     nftContract: "",
+    mintContract: "",
     marketplaceContract: [""],
     socialLinks: {
       discord: "https://discord.gg/GFYrJEsYpm",
@@ -59,7 +61,10 @@ const Collections: MarketplaceInfo[] = [
     backgroundUrl: "/marketplace-backgrounds/JunoPunks.png",
     logoUrl: "/logos/JunoPunks.gif",
     collectionId: "junopunks",
-    nftContract: "",
+    nftContract:
+      "juno1nvrmqa0w07px2yp4h2yx5sqsq3ltcmnes3jwt9zmxgjsse7u855sxgvj2s",
+    mintContract:
+      "juno1hr5gydg99lsvnjwra7xdgx88fkkvdpfqr8aw4x0td373k03nzl6skhvuk8",
     marketplaceContract: [""],
     socialLinks: {
       discord: "https://discord.gg/BfKPacc5jF",
@@ -83,6 +88,7 @@ const Collections: MarketplaceInfo[] = [
     logoUrl: "/logos/JunoFarming.png",
     collectionId: "junofarming",
     nftContract: "",
+    mintContract: "",
     marketplaceContract: [""],
     socialLinks: {
       discord: "https://discord.gg/BfKPacc5jF",
@@ -106,6 +112,7 @@ const Collections: MarketplaceInfo[] = [
     logoUrl: "/logos/nots.jpg",
     collectionId: "netanots",
     nftContract: "",
+    mintContract: "",
     marketplaceContract: [""],
     socialLinks: {
       discord: "https://t.co/6sfjxZD6U6",
@@ -129,6 +136,7 @@ const Collections: MarketplaceInfo[] = [
     collectionId: "hopegalaxy1",
     nftContract:
       "juno1lqtavuw24dnnu56w79k7mefn8fhuz2w247dks2fes6hwd4rhpu2sumhhap",
+    mintContract: "",
     marketplaceContract: [
       "juno1m9rrvcdjatkvvdmly6pxq3yvxkp8ufaf23qkqvjcgzjgaxsef3ns6xe994",
     ],
@@ -148,6 +156,7 @@ const Collections: MarketplaceInfo[] = [
     collectionId: "mintpass1",
     nftContract:
       "juno1ccl3kw74hl3ez4ljhx0qzwe7hl8egqcsc2mcjkgga3af86jjek0q9645r8",
+    mintContract: "",
     marketplaceContract: [
       "juno1adn5atr89yp8pmurtem882u3rwk0ug7p7d3pwp7g83glqyhfua8sq56z80",
     ],

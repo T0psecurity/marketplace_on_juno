@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAppSelector } from "../../app/hooks";
 import {
   MarketplaceInfo,
   MarketplaceMintInfo,
 } from "../../constants/Collections";
+import useContract from "../../hook/useContract";
 
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import useResponsiveSize from "../../hook/useResponsiveSize";
@@ -78,6 +80,12 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     mintImage: "",
   };
   const { isXl } = useMatchBreakpoints();
+  const { runQuery } = useContract();
+  const account = useAppSelector((state) => state.accounts.keplrAccount);
+  const collectionsState = useAppSelector(
+    (state: any) => state.collectionStates[mintItem.collectionId]
+  );
+  // console.log("collection state", collectionsState);
 
   const fontSize = useResponsiveSize(
     ELEMENT_SIZE.DETAIL_BLOCK_TITLE

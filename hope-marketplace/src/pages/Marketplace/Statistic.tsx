@@ -30,10 +30,10 @@ const STATISTIC_PARAMS: StatisticItemType[] = [
     name: "Items On Sale",
     key: "itemsOnSale",
   },
-  {
-    name: "Owners",
-    key: "owners",
-  },
+  // {
+  //   name: "Owners",
+  //   key: "owners",
+  // },
   {
     name: "Floor Price",
     key: "hopeFloorPrice",

@@ -45,6 +45,8 @@ const useContract = () => {
     Collections.forEach((collection: MarketplaceInfo) => {
       if (collection.nftContract)
         dispatch(importContract(collection.nftContract));
+      if (collection.mintContract)
+        dispatch(importContract(collection.mintContract));
       if (collection.marketplaceContract.length)
         collection.marketplaceContract.forEach((contract: string) => {
           if (contract) dispatch(importContract(contract));
@@ -56,8 +58,9 @@ const useContract = () => {
 
   const runQuery = useCallback(
     // async (contractAddress: string, queryMsg: any) => {
-    async (contract: any, queryMsg: any) => {
+    async (contractAddress: string, queryMsg: any) => {
       // const contract = state.accounts.accountList[contractAddress];
+      const contract = state.accounts.accountList[contractAddress];
       if (!contract) {
         // dispatch(importContract(contractAddress));
         throw new Error("No contract selected");
