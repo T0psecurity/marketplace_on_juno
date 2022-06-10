@@ -49,9 +49,9 @@ const NFT_DETAIL_KEYS: NFT_DETAIL_KEY[] = [
     key: "royalties",
   },
   {
-    title: "Percent minted",
-    getFunc: () => {
-      return 0;
+    title: "Number of Minted NFTs",
+    getFunc: (state: CollectionStateType): number => {
+      return state.mintedNfts;
     },
   },
 ];
@@ -113,6 +113,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     const message = {
       mint: { rand: `${selectedIndex || 0 + 1}` },
     };
+    // console.log(mintItem.mintContract, "message", message);
     try {
       await runExecute(mintItem.mintContract, message, {
         funds: `${collectionState.price > 0 ? collectionState.price : ""}`,
@@ -136,7 +137,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
         )}
         {item.getFunc && typeof item.getFunc === "function" && (
           <DetailBlockContent fontSize={fontSize}>
-            {item.getFunc()}
+            {item.getFunc(collectionState)}
           </DetailBlockContent>
         )}
       </DetailBlock>

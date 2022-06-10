@@ -72,7 +72,7 @@ export const NftList = styled.div`
   padding-top: 20px;
   font-size: 1em;
   font-weight: bold;
-  height: calc(100vh - 150px);
+  height: calc(100vh - 50px);
   overflow-x: hidden;
   overflow-y: auto;
 `;

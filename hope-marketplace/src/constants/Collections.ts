@@ -14,7 +14,7 @@ export interface MarketplaceBasicInfo {
   description: string;
   nftContract: string;
   mintContract: string;
-  marketplaceContract: [string];
+  marketplaceContract: string[];
   socialLinks: SocialLinks;
 }
 export interface MarketplaceMintInfo {
@@ -49,7 +49,7 @@ const Collections: MarketplaceInfo[] = [
     },
     mintInfo: {
       totalNfts: 66,
-      royalties: "",
+      royalties: "6% +3%",
       price: "4.2 JUNO",
       mintImage: "/mint-images/SunnysideNightlife.gif",
       mintDate: "",
@@ -140,6 +140,7 @@ const Collections: MarketplaceInfo[] = [
       "juno1lqtavuw24dnnu56w79k7mefn8fhuz2w247dks2fes6hwd4rhpu2sumhhap",
     mintContract: "",
     marketplaceContract: [
+      "juno1y0phl9303vjfdlsgnqpyl2vxwt3h2gxekn276ls36qvrwd9faxjqvezgmh",
       "juno1m9rrvcdjatkvvdmly6pxq3yvxkp8ufaf23qkqvjcgzjgaxsef3ns6xe994",
     ],
     socialLinks: {

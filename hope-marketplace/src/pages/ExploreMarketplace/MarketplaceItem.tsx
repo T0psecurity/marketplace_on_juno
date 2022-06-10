@@ -1,7 +1,10 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import Button from "../../components/Button";
-import { MarketplaceBasicInfo } from "../../constants/Collections";
+import {
+  getCollectionById,
+  MarketplaceBasicInfo,
+} from "../../constants/Collections";
 import { Card, StyledImg, Text } from "./styled";
 
 const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
@@ -11,6 +14,9 @@ const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
   description,
 }) => {
   const history = useHistory();
+
+  const targetCollection = getCollectionById(collectionId);
+
   return (
     <Card>
       <StyledImg imageUrl={imageUrl} />
@@ -21,11 +27,12 @@ const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
         {description}
       </Text>
       <Button
+        disabled={!!targetCollection.mintInfo?.mintDate}
         onClick={() => {
           history.push(`/collections/marketplace?id=${collectionId}`);
         }}
       >
-        View Collection
+        {targetCollection.mintInfo?.mintDate || "View Collection"}
       </Button>
     </Card>
   );
