@@ -12,10 +12,6 @@ export const Wrapper = styled.div`
 export const MintVideoContainer = styled.div`
   width: 40%;
   margin-right: 30px;
-  @media (max-width: 650px) {
-  width: 80%;
-  margin: 30px;
-  }
 `;
 
 export const MintVideo = styled.video`
@@ -25,9 +21,7 @@ export const MintVideo = styled.video`
 export const NFTDetailContainer = styled.div`
   text-align: left;
   font-size: 20px;
-  @media (max-width: 650px) {
-    margin: 30px;
-  }
+  margin-left: 20px;
 `;
 
 export const DetailTitle = styled.div`

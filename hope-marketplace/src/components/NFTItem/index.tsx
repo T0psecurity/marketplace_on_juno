@@ -5,10 +5,10 @@ import { getCollectionById } from "../../constants/Collections";
 // import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useHandleNftItem, { NFTPriceType } from "../../hook/useHandleNftItem";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
+import Image from "../Image";
 
 import {
   NFTItemImageWrapper,
-  NFTItemImage,
   NFTItemInfoContainer,
   NFTItemWrapper,
   NFTItemInfo,
@@ -32,11 +32,6 @@ export const NFTItemStatus = {
 export default function NFTItem({ item, status }: NFTItemProps) {
   const [nftPrice, setNftPrice] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
-  const [logoSize, setLogoSize] = useState<{
-    width?: string;
-    height?: string;
-  }>({});
-  const [imageVisible, setImageVisible] = useState<boolean>(false);
 
   const { isXs, isSm } = useMatchBreakpoints();
   const isMobile = isXs || isSm;
@@ -80,39 +75,12 @@ export default function NFTItem({ item, status }: NFTItemProps) {
     history.push(`/detail?token_id=${item.token_id}`);
   };
 
-  const handleOnLoadImage = (e: any) => {
-    // console.log("e", e);
-    const {
-      target: { offsetHeight, offsetWidth },
-    } = e;
-    if (offsetHeight > offsetWidth) {
-      setLogoSize({
-        // height: "400px",
-        height: "100%",
-      });
-    } else {
-      setLogoSize({
-        // width: "370px",
-        width: "100%",
-      });
-    }
-    setImageVisible(true);
-  };
-
   const isSellItem = status === NFTItemStatus.SELL;
 
   return (
     <NFTItemWrapper>
       <NFTItemImageWrapper isMobile={isMobile}>
-        <NFTItemImage
-          onClick={handleGotoDetail}
-          alt=""
-          src={url}
-          onLoad={handleOnLoadImage}
-          width={logoSize.width}
-          height={logoSize.height}
-          imageVisible={imageVisible}
-        />
+        <Image onClick={handleGotoDetail} alt="" src={url} />
       </NFTItemImageWrapper>
       <div>
         <NFTItemInfo>{targetCollection.title}</NFTItemInfo>

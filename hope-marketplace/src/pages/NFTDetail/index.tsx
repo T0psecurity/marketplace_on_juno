@@ -34,6 +34,7 @@ const NFTDetail: React.FC = () => {
       ? "Withdraw"
       : "Buy"
     : "Sell";
+
   const handleNFTItem = async () => {
     if (status === "Sell") {
       await sellNft(selectedNFT, nftPrice, nftPriceType);
