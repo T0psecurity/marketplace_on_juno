@@ -3,6 +3,7 @@ export interface MarketplaceBasicInfo {
   backgroundUrl: string;
   logoUrl?: string;
   title: string;
+  creator: string;
   collectionId: string;
   description: string;
   nftContract: string;
@@ -23,6 +24,7 @@ export interface MarketplaceInfo extends MarketplaceBasicInfo {
 const Collections: MarketplaceInfo[] = [
   {
     title: "Juno Punks NFT",
+    creator: "",
     imageUrl: "/backgrounds/juno_punks.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
     logoUrl: "/logos/JunoPunks.gif",
@@ -40,6 +42,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Juno Farming",
+    creator: "",
     imageUrl: "/backgrounds/juno_farming.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
     collectionId: "junofarming",
@@ -56,6 +59,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Neta NOTs",
+    creator: "",
     imageUrl: "/backgrounds/neta_nots.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
     collectionId: "netanots",
@@ -72,6 +76,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Hope Galaxy NFT - Collection 1",
+    creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/Mintpass.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
     collectionId: "hopegalaxy1",
@@ -85,6 +90,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Hope Galaxy Mint Pass 1",
+    creator: "",
     imageUrl: "/backgrounds/Collection.png",
     backgroundUrl: "/marketplace-backgrounds/background.png",
     collectionId: "mintpass1",
