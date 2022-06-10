@@ -11,6 +11,7 @@ import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import Statistic from "./Statistic";
 import {
   Wrapper,
+  CreatorContainer,
   Creator,
   CollectionDetail,
   HorizontalDivider,
@@ -80,7 +81,10 @@ const Marketplace: React.FC = () => {
         logo={targetCollection.logoUrl}
       />
       <Title title={targetCollection.title} />
-      <Creator>{`created by ${targetCollection.creator || "      "}`}</Creator>
+      <CreatorContainer>
+        created by
+        <Creator>{` ${targetCollection.creator || ""} •`}</Creator>
+      </CreatorContainer>
       <Statistic items={marketplaceNFTs} />
       <CollectionDetail>{targetCollection.description}</CollectionDetail>
       <HorizontalDivider />

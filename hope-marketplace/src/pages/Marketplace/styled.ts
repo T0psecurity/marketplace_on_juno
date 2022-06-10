@@ -7,10 +7,18 @@ export const Wrapper = styled.div`
   height: 100%;
 `;
 
-export const Creator = styled.div`
+export const CreatorContainer = styled.div`
   font-size: 1.5em;
   font-weight: bold;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Creator = styled.div`
+  margin-left: 5px;
+  color: #0057ff;
 `;
 
 export const CollectionDetail = styled.div`
@@ -104,7 +112,7 @@ export const StatisticItem = styled.div<{ isMobile?: boolean }>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100px;
+  min-width: 100px;
   height: 90px;
 `;
 

@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { NFTPriceType } from "../../../hook/useHandleNftItem";
 
 const convertNumberToString = (number: number): string => {
   return number.toLocaleString(undefined, {
@@ -25,9 +26,9 @@ const useStatistic = (items: any) => {
       const crrListedPrice = item.list_price || {};
       let crrPrice = Number(crrListedPrice.amount || "0");
       crrPrice = Number.isNaN(crrPrice) ? 0 : crrPrice / 1e6;
-      if (crrListedPrice.denom === "hope") {
+      if (crrListedPrice.denom === NFTPriceType.HOPE) {
         if (result.hope > crrPrice) result.hope = crrPrice;
-      } else if (crrListedPrice.denom === "ujuno") {
+      } else if (crrListedPrice.denom === NFTPriceType.JUNO) {
         if (result.juno > crrPrice) result.juno = crrPrice;
       }
     });
@@ -37,8 +38,8 @@ const useStatistic = (items: any) => {
   return {
     total,
     owners,
-    hopeFloorPrice: floorPrices.hope,
-    junoFloorPrice: floorPrices.juno,
+    hopeFloorPrice: floorPrices.hope === 1e9 ? null : floorPrices.hope,
+    junoFloorPrice: floorPrices.juno === 1e9 ? null : floorPrices.juno,
   };
 };
 

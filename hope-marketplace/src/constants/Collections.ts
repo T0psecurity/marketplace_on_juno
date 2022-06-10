@@ -24,7 +24,7 @@ export interface MarketplaceInfo extends MarketplaceBasicInfo {
 const Collections: MarketplaceInfo[] = [
   {
     title: "Juno Punks NFT",
-    creator: "",
+    creator: "Juno Punks",
     imageUrl: "/backgrounds/juno_punks.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
     logoUrl: "/logos/JunoPunks.gif",
@@ -42,7 +42,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Juno Farming",
-    creator: "",
+    creator: "Juno Farming",
     imageUrl: "/backgrounds/juno_farming.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
     collectionId: "junofarming",
@@ -59,7 +59,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Neta NOTs",
-    creator: "",
+    creator: "NOTs",
     imageUrl: "/backgrounds/neta_nots.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
     collectionId: "netanots",
@@ -90,7 +90,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Hope Galaxy Mint Pass 1",
-    creator: "",
+    creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/Collection.png",
     backgroundUrl: "/marketplace-backgrounds/background.png",
     collectionId: "mintpass1",
