@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import {
   DiscordIcon,
   MediumIcon,
@@ -34,11 +35,14 @@ const SocialIcons = [
 
 const Footer: React.FC = () => {
   const history = useHistory();
+  const { isXs, isSm, isMd } = useMatchBreakpoints();
+  const isMobile = isXs || isSm || isMd;
+
   const openNewUrl = (url: string) => {
     window.open(url);
   };
   return (
-    <FooterWrapper>
+    <FooterWrapper isMobile={isMobile}>
       <FooterInfo>
         <FooterImage
           src="/others/logoHopers.png"

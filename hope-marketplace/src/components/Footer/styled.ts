@@ -1,23 +1,4 @@
-import styled from "styled-components";
-
-export const FooterWrapper = styled.div`
-  color: white;
-  background-color: #39c639;
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-gap: 50px;
-  padding: 30px 100px;
-  background: #39c639;
-  justify-content: space-between;
-  align-items: center;
-  height: 160px;
-  @media only screen and (max-width: 550px) {
-    display: flex;
-    flex-direction: column;
-    padding: 30px 10px;
-    height: 100%;
-  }
-`;
+import styled, { css } from "styled-components";
 
 export const FooterInfo = styled.div`
   font-size: 20px;
@@ -35,8 +16,8 @@ export const FooterLinkItemContainer = styled.div`
 `;
 
 export const FooterLinkItem = styled.div`
-  width: 54px;
-  height: 54px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,7 +35,7 @@ export const FooterImage = styled.img`
 export const FooterDocIcon = styled.span`
   /* background-color: #2e7d32; */
   background-color: green;
-  height: 54px;
+  height: 40px;
   color: white;
   padding: 0 20px;
   border-radius: 10px;
@@ -76,4 +57,47 @@ export const SubContent = styled.div`
   font-size: 15px;
   font-weight: 700;
   font-weight: 400;
+`;
+
+export const FooterWrapper = styled.div<{ isMobile?: boolean }>`
+  color: white;
+  background-color: #39c639;
+  display: grid;
+  grid-template-columns: ${({ isMobile }) =>
+    isMobile ? "1fr" : "1fr 2fr auto"};
+  grid-gap: ${({ isMobile }) => (isMobile ? "10px" : "50px")};
+  padding: 30px 0;
+  background: #39c639;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 160px;
+  /* @media only screen and (max-width: 550px) {
+    display: flex;
+    flex-direction: column;
+    padding: 30px 10px;
+    height: 100%;
+  } */
+
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      padding: 0;
+      ${MainContent} {
+        font-size: 3vmin;
+      }
+      ${FooterDocIcon} {
+        font-size: 3vmin;
+        padding: 0 2vmin;
+        height: 30px;
+        margin: 0 5px;
+      }
+      ${FooterLinkItem} {
+        width: 30px;
+        height: 30px;
+        margin: 0 5px;
+        & > svg {
+          transform: scale(0.8);
+        }
+      }
+    `}
 `;
