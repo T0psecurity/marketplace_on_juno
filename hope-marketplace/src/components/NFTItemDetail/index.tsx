@@ -1,13 +1,15 @@
 import React from "react";
 import { useAppSelector } from "../../app/hooks";
 import { NFTPriceType } from "../../hook/useHandleNftItem";
+import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
+import Image from "../Image";
 import {
   DetailContent,
   DetailTitle,
   MintVideoContainer,
   NFTDetailContainer,
   Wrapper,
-  NFTItemImage,
+  // NFTItemImage,
 } from "./styled";
 
 interface NFTItemDetailProps {
@@ -15,6 +17,8 @@ interface NFTItemDetailProps {
 }
 
 const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
+  const { isXs, isSm, isMd } = useMatchBreakpoints();
+  const isMobile = isXs || isSm || isMd;
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const owner = item.seller || account?.address || "";
   const price = item.list_price || {};
@@ -26,9 +30,9 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
     : "/others/mint_pass.png";
 
   return (
-    <Wrapper>
+    <Wrapper isMobile={isMobile}>
       <MintVideoContainer>
-        <NFTItemImage alt="" src={url} />
+        <Image alt="" src={url} />
       </MintVideoContainer>
       <NFTDetailContainer>
         <DetailTitle>NFT ID</DetailTitle>

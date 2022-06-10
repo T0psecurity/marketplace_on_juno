@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  margin: 0 300px;
-  @media (max-width: 650px) {
-    margin: 10px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
+
 export const NFTItemOperationContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -53,8 +53,8 @@ export const NFTItemOperationButton = styled.div`
   }
 `;
 
-export const NFTItemPriceInputer = styled.input<{width: string}>`
-  width: ${({width})=>width};
+export const NFTItemPriceInputer = styled.input<{ width: string }>`
+  width: ${({ width }) => width};
   height: 40px;
   margin: 0 10px;
 `;
