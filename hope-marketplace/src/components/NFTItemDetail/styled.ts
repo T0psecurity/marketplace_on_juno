@@ -4,6 +4,7 @@ export const MintVideoContainer = styled.div`
   width: 200px;
   height: 300px;
   margin-right: 30px;
+  position: relative;
 `;
 
 export const MintVideo = styled.video`
@@ -47,4 +48,11 @@ export const Wrapper = styled.div<{ isMobile: boolean }>`
         margin: 10px;
       }
     `}
+`;
+
+export const NFTItemImageDownloadIcon = styled.svg`
+  position: absolute;
+  right: 7px;
+  top: 10px;
+  cursor: pointer;
 `;

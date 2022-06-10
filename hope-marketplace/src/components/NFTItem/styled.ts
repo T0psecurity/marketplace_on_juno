@@ -10,6 +10,7 @@ export const NFTItemImageWrapper = styled.div<{ isMobile?: boolean }>`
   width: calc(100% - 20px);
   height: ${({ isMobile }) => (isMobile ? 300 : 400)}px;
   margin: 10px;
+  position: relative;
 `;
 
 export const NFTItemInfoContainer = styled.div`

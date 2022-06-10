@@ -34,6 +34,7 @@
     "redux-persist": "^6.0.0",
     "stream-browserify": "^3.0.0",
     "styled-components": "^5.3.3",
+    "file-saver": "^2.0.5",
     "typescript": "~4.1.5"
   },
   "scripts": {
@@ -62,6 +63,7 @@
     "@types/styled-components": "^5.1.24",
     "craco": "^0.0.3",
     "jest-styled-components": "^7.0.8",
+    "@types/file-saver": "^2.0.5",
     "webpack": "^5.68.0"
   }
 }

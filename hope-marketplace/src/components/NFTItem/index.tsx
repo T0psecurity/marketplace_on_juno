@@ -24,6 +24,7 @@ import {
 export interface NFTItemProps {
   item: any;
   status: string;
+  enableDownloadImage?: boolean;
 }
 
 export const NFTItemStatus = {
@@ -94,8 +95,8 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   return (
     <NFTItemWrapper>
-      <NFTItemImageWrapper isMobile={isMobile}>
-        <Image onClick={handleGotoDetail} alt="" src={url} />
+      <NFTItemImageWrapper onClick={handleGotoDetail} isMobile={isMobile}>
+        <Image alt="" src={url} />
       </NFTItemImageWrapper>
       <div>
         <NFTItemInfo>{targetCollection.title}</NFTItemInfo>
