@@ -51,7 +51,7 @@ const NFT_DETAIL_KEYS: NFT_DETAIL_KEY[] = [
   {
     title: "Number of Minted NFTs",
     getFunc: (state: CollectionStateType): number => {
-      return state.mintedNfts;
+      return state?.mintedNfts;
     },
   },
 ];
@@ -109,9 +109,10 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     collectionState.mintCheck.forEach((item: boolean, index: number) => {
       if (item) mintIndexArray.push(index);
     });
+    console.log("here 2", collectionState.mintCheck, mintIndexArray);
     const selectedIndex = mintIndexArray.sort(() => 0.5 - Math.random()).pop();
     const message = {
-      mint: { rand: `${selectedIndex || 0 + 1}` },
+      mint: { rand: `${(selectedIndex || 0) + 1}` },
     };
     // console.log(mintItem.mintContract, "message", message);
     try {

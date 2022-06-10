@@ -38,9 +38,9 @@ const Collections: MarketplaceInfo[] = [
     logoUrl: "/logos/SunnysideNightlife.gif",
     collectionId: "sunnyside",
     nftContract:
-      "juno1gn7mg9wjpmjj2g7d8ffatr5c276ue23uv7jcqcmsk30drq8953dsu2a48d",
+      "juno199k5526srh0l845tt5dsyk8up22q729hc8n6w9njnqvyfwp7sjrskvvm3e",
     mintContract:
-      "juno1h0evzq4cglszkdyfw5f769vvpag37f0lzrspfz6jxcnrxe3rygrsg3ct4r",
+      "juno1ynhl64ejsgc83v74tmsqrxzt398f4jhew9kw9pawmv5cqr5sd6ssy5qluw",
     marketplaceContract: [""],
     socialLinks: {
       discord: "https://discord.gg/GFYrJEsYpm",
@@ -67,7 +67,9 @@ const Collections: MarketplaceInfo[] = [
       "juno1e229el8t4lu4rx7xeekc77zspxa2gz732ld0e6a5q0sr0l3gm78stuvc5g",
     mintContract:
       "juno10rjm83ng8v667hn3cpn7ga46u50qqnuyh9j2h9tm6famwj96scmszqgt24",
-    marketplaceContract: [""],
+    marketplaceContract: [
+      "juno1smf3u3qd4dc20cgsu7hsh95awxea0usw0q0jj2f3vmrykpk3ua4qn738hz",
+    ],
     socialLinks: {
       discord: "https://discord.gg/BfKPacc5jF",
       website: "https://hopers.io/",
