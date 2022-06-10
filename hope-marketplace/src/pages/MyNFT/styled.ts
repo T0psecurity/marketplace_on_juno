@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{ isMobile?: boolean }>`
   height: 100%;
-  padding: 0 100px;
+  padding: 0 ${({ isMobile }) => (isMobile ? 10 : 100)}px;
 `;
 
 export const ProfileImage = styled.div`

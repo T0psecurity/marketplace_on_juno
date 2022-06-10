@@ -1,4 +1,5 @@
 import React from "react";
+import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import NFTItem from "../NFTItem";
 
 import { Wrapper } from "./styled";
@@ -16,6 +17,8 @@ const NFTContainer: React.FC<NFTContainerProps> = ({
   emptyMsg,
   sort,
 }) => {
+  const { isXs, isSm } = useMatchBreakpoints();
+  const isMobile = isXs || isSm;
   const hasNFTs = !!nfts && nfts.length > 0;
   if (sort === "as")
     sort &&
@@ -35,7 +38,7 @@ const NFTContainer: React.FC<NFTContainerProps> = ({
         )
         .reverse();
   return (
-    <Wrapper noGrid={!hasNFTs}>
+    <Wrapper noGrid={!hasNFTs} isMobile={isMobile}>
       {hasNFTs
         ? nfts.map((nft: any, index: any) => {
             return <NFTItem key={index} item={nft} status={status} />;

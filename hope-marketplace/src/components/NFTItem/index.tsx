@@ -4,6 +4,7 @@ import { getCollectionById } from "../../constants/Collections";
 // import { useAppDispatch } from "../../app/hooks";
 // import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useHandleNftItem, { NFTPriceType } from "../../hook/useHandleNftItem";
+import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 
 import {
   NFTItemImageWrapper,
@@ -32,10 +33,14 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const [nftPrice, setNftPrice] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
   const [logoSize, setLogoSize] = useState<{
-    width?: number;
-    height?: number;
+    width?: string;
+    height?: string;
   }>({});
   const [imageVisible, setImageVisible] = useState<boolean>(false);
+
+  const { isXs, isSm } = useMatchBreakpoints();
+  const isMobile = isXs || isSm;
+
   const targetCollection = getCollectionById(item.collectionId);
 
   const { sellNft, withdrawNft, buyNft } = useHandleNftItem();
@@ -82,19 +87,23 @@ export default function NFTItem({ item, status }: NFTItemProps) {
     } = e;
     if (offsetHeight > offsetWidth) {
       setLogoSize({
-        height: 400,
+        // height: "400px",
+        height: "100%",
       });
     } else {
       setLogoSize({
-        width: 370,
+        // width: "370px",
+        width: "100%",
       });
     }
     setImageVisible(true);
   };
 
+  const isSellItem = status === NFTItemStatus.SELL;
+
   return (
     <NFTItemWrapper>
-      <NFTItemImageWrapper>
+      <NFTItemImageWrapper isMobile={isMobile}>
         <NFTItemImage
           onClick={handleGotoDetail}
           alt=""
@@ -119,11 +128,11 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         </NFTItemInfoContainer>
       </div>
 
-      <NFTItemOperationContainer>
+      <NFTItemOperationContainer isSellItem={isSellItem}>
         <NFTItemOperationButton onClick={handleNFTItem}>
           {status} Now
         </NFTItemOperationButton>
-        {status === NFTItemStatus.SELL && (
+        {isSellItem && (
           <>
             <NFTItemPriceInputer
               key={item.token_id}

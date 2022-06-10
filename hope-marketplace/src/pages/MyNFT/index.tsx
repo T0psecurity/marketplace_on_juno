@@ -7,8 +7,11 @@ import { SubTitle, Title } from "../../components/PageTitle";
 import NFTContainer from "../../components/NFTContainer";
 import { NFTItemStatus } from "../../components/NFTItem";
 import Collections, { MarketplaceInfo } from "../../constants/Collections";
+import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 
 const MyNFT: React.FC = () => {
+  const { isXs, isSm, isMd } = useMatchBreakpoints();
+  const isMobile = isXs || isSm || isMd;
   const nfts = useAppSelector((state) => state.nfts);
   let unlistedNFTs: any = [],
     listedNFTs: any = [];
@@ -22,7 +25,7 @@ const MyNFT: React.FC = () => {
   });
 
   return (
-    <Wrapper>
+    <Wrapper isMobile={isMobile}>
       <Title title="Profile" icon={<ProfileImage />} />
       <HorizontalDivider />
       <SubTitle subTitle="My NFTs" textAlign="left" />

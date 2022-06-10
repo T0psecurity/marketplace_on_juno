@@ -1,14 +1,21 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-export const Wrapper = styled.div<{ noGrid?: boolean }>`
+export const Wrapper = styled.div<{ noGrid?: boolean; isMobile?: boolean }>`
   text-align: center;
   ${({ noGrid }) =>
     !noGrid &&
-    `
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 390px);
-    grid-gap: 30px;
-    justify-content: center;
-  `}
-  padding: 50px;
+    css`
+      display: grid;
+      grid-template-columns: repeat(auto-fill, 390px);
+      grid-gap: 30px;
+      justify-content: center;
+    `}
+  ${({ isMobile }) =>
+    !isMobile
+      ? css`
+          padding: 50px;
+        `
+      : css`
+          grid-template-columns: 1fr;
+        `}
 `;

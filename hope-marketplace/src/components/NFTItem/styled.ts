@@ -6,9 +6,9 @@ export const NFTItemWrapper = styled.div`
   border-radius: 10px;
   box-shadow: 1px 4px 10px 1px rgba(0, 0, 0, 0.7);
 `;
-export const NFTItemImageWrapper = styled.div`
-  width: 370px;
-  height: 400px;
+export const NFTItemImageWrapper = styled.div<{ isMobile?: boolean }>`
+  width: calc(100% - 20px);
+  height: ${({ isMobile }) => (isMobile ? 300 : 400)}px;
   margin: 10px;
 `;
 
@@ -24,12 +24,6 @@ export const NFTItemInfo = styled.div`
   font-weight: bold;
   text-align: left;
   margin: 10px;
-`;
-
-export const NFTItemOperationContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 export const NFTItemOperationButton = styled.div`
@@ -74,6 +68,20 @@ export const NFTItemOperationButton = styled.div`
   }
 `;
 
+export const NFTItemOperationContainer = styled.div<{ isSellItem?: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${({ isSellItem }) =>
+    isSellItem &&
+    css`
+      margin: 10px;
+      ${NFTItemOperationButton} {
+        border-radius: 0;
+      }
+    `}
+`;
+
 export const NFTItemPriceInputer = styled.input`
   width: 50px;
   margin: 0 10px;
@@ -82,22 +90,20 @@ export const NFTItemPriceInputer = styled.input`
 export const NFTItemPriceType = styled.form``;
 
 export const NFTItemImage = styled.img<{
-  width?: number;
-  height?: number;
+  width?: string;
+  height?: string;
   imageVisible?: boolean;
 }>`
   cursor: pointer;
   ${({ width }) =>
     width &&
-    width > 0 &&
     css`
-      width: ${width}px;
+      width: ${width};
     `}
   ${({ height }) =>
     height &&
-    height > 0 &&
     css`
-      height: ${height}px;
+      height: ${height};
     `}
   opacity: ${({ imageVisible }) => (imageVisible ? 1 : 0)};
   /* width: 370px;
