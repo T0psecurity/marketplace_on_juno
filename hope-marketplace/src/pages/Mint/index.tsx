@@ -18,7 +18,7 @@ const Mint: React.FC = () => {
       </ButtonContainer>
       {Collections.map((collection: MarketplaceInfo, index: number) =>
         collection.mintInfo ? (
-          <MintItem index={index} mintItem={collection} />
+          <MintItem key={index} mintItem={collection} />
         ) : null
       )}
     </Wrapper>

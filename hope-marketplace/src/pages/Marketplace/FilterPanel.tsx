@@ -1,4 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
+
+import {
+  DEFAULT_STATUS_FILTER,
+  FilterPanelProps,
+  StatusFilterButtonType,
+  StatusFilterType,
+} from "./types";
+
 import {
   StyledButton as Button,
   FilterContainer,
@@ -7,11 +15,6 @@ import {
   StyledCollapseCard as CollapseCard,
   StyledSvg,
 } from "./styled";
-
-interface FilterPanelProps {
-  onChangeExpanded: any;
-  expanded: boolean;
-}
 
 const ArrowIcon = ({
   className,
@@ -34,10 +37,28 @@ const ArrowIcon = ({
   </StyledSvg>
 );
 
+const STATUS_FILTER_BUTTONS: StatusFilterButtonType[] = [
+  { title: "Buy Now", key: "buyNow" },
+  { title: "On Auction", key: "onAuction" },
+  { title: "New", key: "new" },
+  { title: "Has Offers", key: "hasOffers" },
+];
+
 const FilterPanel: React.FC<FilterPanelProps> = ({
   expanded,
   onChangeExpanded,
 }) => {
+  const [statusFilter, setStatusFilter] = useState<StatusFilterType>(
+    DEFAULT_STATUS_FILTER
+  );
+
+  const handleChangeStatusFilter = (buttonItem: StatusFilterButtonType) => {
+    setStatusFilter({
+      ...statusFilter,
+      [buttonItem.key]: !statusFilter[buttonItem.key],
+    });
+  };
+
   return (
     <FilterContainer>
       <FilterContainerTitle>
@@ -46,10 +67,17 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       </FilterContainerTitle>
       <CollapseCard title="Status">
         <StatusFilterPanel>
-          <Button>Buy Now</Button>
-          <Button>On Auction</Button>
-          <Button>New</Button>
-          <Button>Has Offers</Button>
+          {STATUS_FILTER_BUTTONS.map(
+            (buttonItem: StatusFilterButtonType, index: number) => (
+              <Button
+                key={index}
+                onClick={() => handleChangeStatusFilter(buttonItem)}
+                selected={statusFilter[buttonItem.key]}
+              >
+                {buttonItem.title}
+              </Button>
+            )
+          )}
         </StatusFilterPanel>
       </CollapseCard>
       <CollapseCard title="Price" />

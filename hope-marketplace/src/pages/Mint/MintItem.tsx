@@ -25,7 +25,6 @@ import {
 
 interface Props {
   mintItem: MarketplaceInfo;
-  index: number;
 }
 
 type NFT_DETAIL_KEY = {
@@ -71,7 +70,7 @@ const ELEMENT_SIZE = {
   },
 };
 
-const MintItem: React.FC<Props> = ({ mintItem, index }) => {
+const MintItem: React.FC<Props> = ({ mintItem }) => {
   const mintInfo: MarketplaceMintInfo = mintItem.mintInfo || {
     totalNfts: 0,
     royalties: "",
@@ -110,7 +109,7 @@ const MintItem: React.FC<Props> = ({ mintItem, index }) => {
   );
 
   return (
-    <MintDetailContainer key={index} isMobile={!isXl}>
+    <MintDetailContainer isMobile={!isXl}>
       <MintDetailInfo>
         <DetailTitle bold isMobile={!isXl}>
           {mintItem.title}
