@@ -54,7 +54,7 @@ const useContract = () => {
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [Collections]);
 
   const runQuery = useCallback(
     // async (contractAddress: string, queryMsg: any) => {
@@ -90,6 +90,7 @@ const useContract = () => {
       const contract = state.accounts.accountList[contractAddress];
       const account = state.accounts.keplrAccount;
       if (!contract) {
+        initContracts();
         throw new Error("No contract selected");
       }
 
@@ -120,7 +121,7 @@ const useContract = () => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [state]
   );
 
   return {

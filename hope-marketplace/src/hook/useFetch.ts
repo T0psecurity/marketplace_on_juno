@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import Collections, { MarketplaceInfo } from "../constants/Collections";
 import {
   CollectionStateType,
+  DEFAULT_COLLECTION_STATE,
   setCollectionState,
 } from "../features/collections/collectionsSlice";
 import { setNFTs } from "../features/nfts/nftsSlice";
@@ -16,6 +17,7 @@ const useFetch = () => {
   const contracts = useAppSelector((state) => state.accounts.accountList);
 
   const fetchAllNFTs = useCallback(() => {
+    if (!account) return;
     Collections.forEach(async (collection: MarketplaceInfo) => {
       // console.log("collection", collection.collectionId);
       if (collection.mintContract) {
@@ -101,8 +103,21 @@ const useFetch = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, contracts]);
 
+  const clearAllNFTs = useCallback(() => {
+    Collections.forEach(async (collection: MarketplaceInfo) => {
+      dispatch(
+        setCollectionState([collection.collectionId, DEFAULT_COLLECTION_STATE])
+      );
+      dispatch(setNFTs([collection.collectionId, []]));
+      dispatch(setNFTs([`${collection.collectionId}_listed`, []]));
+      dispatch(setNFTs([`${collection.collectionId}_marketplace`, []]));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return {
     fetchAllNFTs,
+    clearAllNFTs,
   };
 };
 

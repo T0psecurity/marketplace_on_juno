@@ -12,7 +12,7 @@ export type CollectionStateType = {
   price: number;
 };
 
-const DEFAULT_COLLECTION_STATE = {
+export const DEFAULT_COLLECTION_STATE = {
   mintCheck: [],
   mintedNfts: 0,
   totalNfts: 0,

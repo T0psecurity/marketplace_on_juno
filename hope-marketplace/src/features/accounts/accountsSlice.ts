@@ -415,14 +415,17 @@ export const accountsSlice = createSlice({
         state.accountList[account.address] = account;
         state.currentAccount = account.address;
       } else {
-        if (
-          state.currentAccount &&
-          state.accountList[state.currentAccount]?.type === AccountType.Keplr
-        ) {
-          state.currentAccount = undefined;
-        }
-        delete state.accountList[state.keplrAccount!.address];
+        // if (
+        //   state.currentAccount &&
+        //   state.accountList[state.currentAccount]?.type === AccountType.Keplr
+        // ) {
+        //   state.currentAccount = undefined;
+        // }
+        // delete state.accountList[state.keplrAccount!.address];
+        state.currentAccount = undefined;
+        state.accountList = {};
       }
+      console.log("set account", account);
 
       state.keplrAccount = account;
     },

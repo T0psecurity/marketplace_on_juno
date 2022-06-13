@@ -41,7 +41,9 @@ const Collections: MarketplaceInfo[] = [
       "juno199k5526srh0l845tt5dsyk8up22q729hc8n6w9njnqvyfwp7sjrskvvm3e",
     mintContract:
       "juno1ynhl64ejsgc83v74tmsqrxzt398f4jhew9kw9pawmv5cqr5sd6ssy5qluw",
-    marketplaceContract: [""],
+    marketplaceContract: [
+      "juno1kzakykpp7n852mfgcl4sl5ey5hy4uk207gadwppx0yatq274lntqmtvlmj",
+    ],
     socialLinks: {
       discord: "https://discord.gg/GFYrJEsYpm",
       website: "https://ssr.rip/",

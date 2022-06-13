@@ -1,9 +1,12 @@
 import React, { FC } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+  // useAppDispatch,
+  useAppSelector,
+} from "../../app/hooks";
 import {
   Account,
-  deleteAccount,
-  selectAccount,
+  // deleteAccount,
+  // selectAccount,
   basicAccounts,
 } from "./accountsSlice";
 import styles from "./AccountList.module.css";
@@ -17,7 +20,7 @@ interface AccountProps {
 }
 
 export const AccountInfo: FC<AccountProps> = ({ account }) => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const selected = useAppSelector(
     (state) => state.accounts.currentAccount === account.address
   );
@@ -27,8 +30,10 @@ export const AccountInfo: FC<AccountProps> = ({ account }) => {
       label={account?.label ?? account?.address}
       account={account}
       selected={selected}
-      onClick={() => dispatch(selectAccount(account.address))}
-      onClickX={() => dispatch(deleteAccount(account.address))}
+      // onClick={() => dispatch(selectAccount(account.address))}
+      // onClickX={() => dispatch(deleteAccount(account.address))}
+      onClick={() => {}}
+      onClickX={() => {}}
     />
   );
 };

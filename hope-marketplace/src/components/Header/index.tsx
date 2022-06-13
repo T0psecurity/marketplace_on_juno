@@ -44,7 +44,7 @@ const Header: React.FC = () => {
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const { connect } = useKeplr();
   const history = useHistory();
-  const { fetchAllNFTs } = useFetch();
+  const { fetchAllNFTs, clearAllNFTs } = useFetch();
   const { initContracts } = useContract();
 
   const { isMobile } = useWindowSize(900);
@@ -56,6 +56,8 @@ const Header: React.FC = () => {
       setInterval(() => {
         fetchAllNFTs();
       }, 5000);
+    } else {
+      clearAllNFTs();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account]);

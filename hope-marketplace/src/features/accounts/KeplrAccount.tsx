@@ -2,7 +2,10 @@ import { SlIcon } from "@shoelace-style/shoelace/dist/react";
 import React, { FC, useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { AccountCard } from "./AccountCard";
-import { selectAccount, setKeplrAccount } from "./accountsSlice";
+import {
+  // selectAccount,
+  setKeplrAccount,
+} from "./accountsSlice";
 import styles from "./KeplrAccount.module.css";
 import { useKeplr } from "./useKeplr";
 
@@ -25,8 +28,8 @@ export const KeplrAccount: FC = () => {
       label={account?.label ?? "Connect wallet"}
       account={account}
       selected={selected}
-      onClick={() =>
-        !account ? connect() : dispatch(selectAccount(account.address))
+      onClick={
+        () => (!account ? connect() : () => {}) // dispatch(selectAccount(account.address))
       }
       onClickX={() => dispatch(setKeplrAccount())}
     />
