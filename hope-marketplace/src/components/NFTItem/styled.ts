@@ -45,16 +45,14 @@ export const NFTItemOperationButton = styled.div`
   vertical-align: middle;
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.875rem;
   line-height: 1.75;
-  letter-spacing: 0.02857em;
   text-transform: capitalize;
   min-width: 64px;
   height: 50px;
   width: 100%;
   padding: 6px 16px;
   color: #fff;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   background-color: #39c639;
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
