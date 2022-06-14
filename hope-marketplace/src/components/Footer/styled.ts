@@ -70,7 +70,7 @@ export const FooterWrapper = styled.div<{ isMobile?: boolean }>`
   background: #39c639;
   justify-content: space-between;
   align-items: center;
-  min-height: 160px;
+  min-height: 100px;
   /* @media only screen and (max-width: 550px) {
     display: flex;
     flex-direction: column;

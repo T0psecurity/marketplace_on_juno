@@ -8,7 +8,7 @@ export const NFTItemWrapper = styled.div`
 `;
 export const NFTItemImageWrapper = styled.div<{ isMobile?: boolean }>`
   width: calc(100% - 20px);
-  height: ${({ isMobile }) => (isMobile ? 300 : 400)}px;
+  height: ${({ isMobile }) => (isMobile ? 200 : 250)}px;
   margin: 10px;
   position: relative;
 `;
@@ -21,7 +21,7 @@ export const NFTItemInfoContainer = styled.div`
 `;
 
 export const NFTItemInfo = styled.div`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   text-align: left;
   margin: 10px;

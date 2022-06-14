@@ -52,9 +52,9 @@ const Footer: React.FC = () => {
       </FooterInfo>
       <FooterInfo>
         <MainContent>
-          Hopers.io is the first rev-share IBC NFT Marketplace. <br /> Hopers.io
-          is fully community -driven powered by the governance token DAO $HOPE a
-          CW20 Token (JUNO Blockchain) part of the Cosmos Network.
+          Hopers.io an Interchain IBC NFT marketplace that is fully community
+          driven with a revshare model for the $HOPE governance Token stakers on
+          our Dao.
           <SubContent>Actually Desktop Only 🖥️</SubContent>
         </MainContent>
       </FooterInfo>

@@ -31,113 +31,9 @@ export interface MarketplaceInfo extends MarketplaceBasicInfo {
 
 const Collections: MarketplaceInfo[] = [
   {
-    title: "Sunnyside Nightlife",
-    creator: "Sunnyside Reapers",
-    imageUrl: "/backgrounds/Sunnyside.png",
-    backgroundUrl: "/marketplace-backgrounds/Sunnyside.png",
-    logoUrl: "/logos/SunnysideNightlife.gif",
-    collectionId: "sunnyside",
-    nftContract:
-      "juno199k5526srh0l845tt5dsyk8up22q729hc8n6w9njnqvyfwp7sjrskvvm3e",
-    mintContract:
-      "juno1ynhl64ejsgc83v74tmsqrxzt398f4jhew9kw9pawmv5cqr5sd6ssy5qluw",
-    marketplaceContract: [
-      "juno1kzakykpp7n852mfgcl4sl5ey5hy4uk207gadwppx0yatq274lntqmtvlmj",
-    ],
-    socialLinks: {
-      discord: "https://discord.gg/GFYrJEsYpm",
-      website: "https://ssr.rip/",
-      twitter: "https://twitter.com/SunnysideReaper",
-    },
-    mintInfo: {
-      totalNfts: 66,
-      royalties: "6% +3%",
-      price: "4.2 JUNO",
-      mintImage: "/mint-images/SunnysideNightlife.gif",
-      mintDate: "",
-    },
-    description: "Part of the Sunnyside Reaper NFT Collection.",
-  },
-  {
-    title: "Juno Punks NFT",
-    creator: "Juno Punks",
-    imageUrl: "/backgrounds/juno_punks.png",
-    backgroundUrl: "/marketplace-backgrounds/JunoPunks.png",
-    logoUrl: "/logos/JunoPunks.gif",
-    collectionId: "junopunks",
-    nftContract:
-      "juno1e229el8t4lu4rx7xeekc77zspxa2gz732ld0e6a5q0sr0l3gm78stuvc5g",
-    mintContract:
-      "juno10rjm83ng8v667hn3cpn7ga46u50qqnuyh9j2h9tm6famwj96scmszqgt24",
-    marketplaceContract: [
-      "juno1smf3u3qd4dc20cgsu7hsh95awxea0usw0q0jj2f3vmrykpk3ua4qn738hz",
-    ],
-    socialLinks: {
-      discord: "https://discord.gg/BfKPacc5jF",
-      website: "https://hopers.io/",
-      twitter: "https://twitter.com/JunoPunksNFT",
-    },
-    description:
-      "Unique collectible PFP characters exclusively for the $JUNO community living on the #Cosmos | Free mint!",
-    mintInfo: {
-      totalNfts: 500,
-      royalties: "7% + 3%",
-      price: "FREE MINT • Max 1 x wallet",
-      mintImage: "/mint-images/JunoPunks.gif",
-    },
-  },
-  {
-    title: "Juno Farming",
-    creator: "Juno Farming",
-    imageUrl: "/backgrounds/juno_farming.png",
-    backgroundUrl: "/marketplace-backgrounds/JunoFarming.png",
-    logoUrl: "/logos/JunoFarming.png",
-    collectionId: "junofarming",
-    nftContract: "",
-    mintContract: "",
-    marketplaceContract: [""],
-    socialLinks: {
-      discord: "https://discord.gg/BfKPacc5jF",
-      website: "https://hopers.io/",
-      twitter: "https://twitter.com/JunoFarming",
-    },
-    description:
-      "The first NFT collection on JUNO blockchain, who rewards the NFT stakers. This project will rewards 50% you on every MINT and ALL TRANSACTION from every SINGLE NFT.",
-    mintInfo: {
-      totalNfts: 2500,
-      royalties: "50% + 3%",
-      price: "8 JUNO",
-      mintImage: "/mint-images/JunoFarming.png",
-    },
-  },
-  {
-    title: "Neta NOTs",
-    creator: "NOTs",
-    imageUrl: "/backgrounds/neta_nots.png",
-    backgroundUrl: "/marketplace-backgrounds/nots.png",
-    logoUrl: "/logos/nots.jpg",
-    collectionId: "netanots",
-    nftContract: "",
-    mintContract: "",
-    marketplaceContract: [""],
-    socialLinks: {
-      discord: "https://t.co/6sfjxZD6U6",
-      website: "https://t.co/eohk7QllPb",
-      twitter: "https://twitter.com/NotsNfts",
-    },
-    description: "NetaNOTs are Space Warriors in the NOTs Universe",
-    mintInfo: {
-      totalNfts: 1950,
-      royalties: "~% + 3%",
-      price: "5 JUNO",
-      mintImage: "/mint-images/NetaNOTs.png",
-      mintDate: "20 June 2022",
-    },
-  },
-  {
-    title: "Hope Galaxy NFT - Collection 1",
+    title: "Hopers.io Marketplace",
     creator: "Hope Galaxy NFT",
-    imageUrl: "/backgrounds/Mintpass.png",
+    imageUrl: "/backgrounds/HopeGalaxy.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
     collectionId: "hopegalaxy1",
     nftContract:
@@ -174,6 +70,110 @@ const Collections: MarketplaceInfo[] = [
     },
     description:
       "This mint pass is the ticket for the minting of the Hope Galaxy NFT collection once it is launched",
+  },
+  {
+    title: "Juno Punks NFT",
+    creator: "Juno Punks",
+    imageUrl: "/backgrounds/juno_punks.png",
+    backgroundUrl: "/marketplace-backgrounds/JunoPunks.png",
+    logoUrl: "/logos/JunoPunks.gif",
+    collectionId: "junopunks",
+    nftContract:
+      "juno1e229el8t4lu4rx7xeekc77zspxa2gz732ld0e6a5q0sr0l3gm78stuvc5g",
+    mintContract:
+      "juno10rjm83ng8v667hn3cpn7ga46u50qqnuyh9j2h9tm6famwj96scmszqgt24",
+    marketplaceContract: [
+      "juno1smf3u3qd4dc20cgsu7hsh95awxea0usw0q0jj2f3vmrykpk3ua4qn738hz",
+    ],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://hopers.io/",
+      twitter: "https://twitter.com/JunoPunksNFT",
+    },
+    description:
+      "Unique collectible PFP characters exclusively for the $JUNO community living on the #Cosmos | Free mint!",
+    mintInfo: {
+      totalNfts: 500,
+      royalties: "7% + 3%",
+      price: "FREE MINT • Max 1 x wallet",
+      mintImage: "/mint-images/JunoPunks.gif",
+    },
+  },
+  {
+    title: "Sunnyside Nightlife",
+    creator: "Sunnyside Reapers",
+    imageUrl: "/backgrounds/Sunnyside.png",
+    backgroundUrl: "/marketplace-backgrounds/Sunnyside.png",
+    logoUrl: "/logos/SunnysideNightlife.gif",
+    collectionId: "sunnyside",
+    nftContract:
+      "juno199k5526srh0l845tt5dsyk8up22q729hc8n6w9njnqvyfwp7sjrskvvm3e",
+    mintContract:
+      "juno1ynhl64ejsgc83v74tmsqrxzt398f4jhew9kw9pawmv5cqr5sd6ssy5qluw",
+    marketplaceContract: [
+      "juno1kzakykpp7n852mfgcl4sl5ey5hy4uk207gadwppx0yatq274lntqmtvlmj",
+    ],
+    socialLinks: {
+      discord: "https://discord.gg/GFYrJEsYpm",
+      website: "https://ssr.rip/",
+      twitter: "https://twitter.com/SunnysideReaper",
+    },
+    mintInfo: {
+      totalNfts: 66,
+      royalties: "6% +3%",
+      price: "4.2 JUNO",
+      mintImage: "/mint-images/SunnysideNightlife.gif",
+      mintDate: "",
+    },
+    description: "Part of the Sunnyside Reaper NFT Collection.",
+  },
+  {
+    title: "Juno Farming",
+    creator: "Juno Farming",
+    imageUrl: "/backgrounds/juno_farming.png",
+    backgroundUrl: "/marketplace-backgrounds/JunoFarming.png",
+    logoUrl: "/logos/JunoFarming.png",
+    collectionId: "junofarming",
+    nftContract: "",
+    mintContract: "",
+    marketplaceContract: [""],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://hopers.io/",
+      twitter: "https://twitter.com/JunoFarming",
+    },
+    description:
+      "JUNO Farming is the first NFT collection on JUNO that rewards its stakers with 50% from the value of all the transaction done within its ecosystem including the MINT and trades",
+    mintInfo: {
+      totalNfts: 2500,
+      royalties: "50% + 3%",
+      price: "8 JUNO",
+      mintImage: "/mint-images/JunoFarming.png",
+    },
+  },
+  {
+    title: "Neta NOTs",
+    creator: "NOTs",
+    imageUrl: "/backgrounds/neta_nots.png",
+    backgroundUrl: "/marketplace-backgrounds/nots.png",
+    logoUrl: "/logos/nots.jpg",
+    collectionId: "netanots",
+    nftContract: "",
+    mintContract: "",
+    marketplaceContract: [""],
+    socialLinks: {
+      discord: "https://t.co/6sfjxZD6U6",
+      website: "https://t.co/eohk7QllPb",
+      twitter: "https://twitter.com/NotsNfts",
+    },
+    description: "NetaNOTs are Space Warriors in the NOTs Universe",
+    mintInfo: {
+      totalNfts: 1950,
+      royalties: "~% + 3%",
+      price: "5 JUNO",
+      mintImage: "/mint-images/NetaNOTs.png",
+      mintDate: "20 June 2022",
+    },
   },
 ];
 

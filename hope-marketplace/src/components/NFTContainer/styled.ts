@@ -6,7 +6,7 @@ export const Wrapper = styled.div<{ noGrid?: boolean; isMobile?: boolean }>`
     !noGrid &&
     css`
       display: grid;
-      grid-template-columns: repeat(auto-fill, 390px);
+      grid-template-columns: repeat(auto-fill, 250px);
       grid-gap: 30px;
       justify-content: center;
     `}

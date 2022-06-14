@@ -174,7 +174,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
             width={operationItemSize}
             onClick={handleMintNft}
           >
-            {`Mint ${mintInfo.mintDate || "Now"}`}
+            {`Mint ${mintInfo.mintDate ? "Soon" : "Now"}`}
           </MintButton>
         </OperationContainer>
       </MintDetailInfo>
