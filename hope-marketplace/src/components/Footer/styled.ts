@@ -1,12 +1,13 @@
 import styled, { css } from "styled-components";
 
-export const FooterInfo = styled.div`
+export const FooterInfo = styled.div<{ flexDirection?: string }>`
   font-size: 20px;
   font-weight: bold;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: ${({ flexDirection }) => flexDirection ?? "row"};
 `;
 
 export const FooterLinkItemContainer = styled.div`

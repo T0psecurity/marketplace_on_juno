@@ -43,19 +43,19 @@ const Footer: React.FC = () => {
   };
   return (
     <FooterWrapper isMobile={isMobile}>
-      <FooterInfo>
+      <FooterInfo flexDirection="column">
         <FooterImage
           src="/others/logoHopers.png"
           alt=""
           onClick={() => history.push("/")}
         />
+        <SubContent>Actually Desktop Only 🖥️</SubContent>
       </FooterInfo>
       <FooterInfo>
         <MainContent>
           Hopers.io an Interchain IBC NFT marketplace that is fully community
           driven with a revshare model for the $HOPE governance Token stakers on
           our Dao.
-          <SubContent>Actually Desktop Only 🖥️</SubContent>
         </MainContent>
       </FooterInfo>
       <FooterInfo>
