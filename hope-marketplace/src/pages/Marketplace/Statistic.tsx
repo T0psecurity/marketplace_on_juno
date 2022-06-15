@@ -1,4 +1,9 @@
 import React from "react";
+import {
+  getCollectionById,
+  MarketplaceInfo,
+  StatisticKeys,
+} from "../../constants/Collections";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import useStatistic from "./hook/useStatistic";
 
@@ -17,15 +22,15 @@ interface StatisticProps {
 
 type StatisticItemType = {
   name: string;
-  key: string;
+  key: `${StatisticKeys}`;
   icon?: string;
 };
 
 const STATISTIC_PARAMS: StatisticItemType[] = [
-  // {
-  //   name: "Items",
-  //   key: "total",
-  // },
+  {
+    name: "Items",
+    key: "total",
+  },
   {
     name: "Items On Sale",
     key: "itemsOnSale",
@@ -61,21 +66,32 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
   const isMobile = isXs || isSm;
 
   const statistics: any = useStatistic(collectionId, items);
+  const targetCollection: MarketplaceInfo = getCollectionById(
+    collectionId || ""
+  );
 
   return (
     <Wrapper>
       {STATISTIC_PARAMS.map(
-        (statisticItem: StatisticItemType, index: number) => (
-          <StatisticItem key={index} isMobile={isMobile}>
-            <StatisticValue>
-              {statisticItem.icon && (
-                <StatisticIcon alt="" src={statisticItem.icon} />
-              )}
-              {statistics[statisticItem.key] || "X"}
-            </StatisticValue>
-            <StatisticName>{statisticItem.name}</StatisticName>
-          </StatisticItem>
-        )
+        (statisticItem: StatisticItemType, index: number) => {
+          if (
+            targetCollection.statisticOption &&
+            targetCollection.statisticOption[statisticItem.key]
+          ) {
+            return null;
+          }
+          return (
+            <StatisticItem key={index} isMobile={isMobile}>
+              <StatisticValue>
+                {statisticItem.icon && (
+                  <StatisticIcon alt="" src={statisticItem.icon} />
+                )}
+                {statistics[statisticItem.key] || "X"}
+              </StatisticValue>
+              <StatisticName>{statisticItem.name}</StatisticName>
+            </StatisticItem>
+          );
+        }
       )}
     </Wrapper>
   );

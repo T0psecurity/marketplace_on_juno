@@ -423,7 +423,7 @@ export const accountsSlice = createSlice({
         // }
         // delete state.accountList[state.keplrAccount!.address];
         state.currentAccount = undefined;
-        state.accountList = {};
+        // state.accountList = {};
       }
 
       state.keplrAccount = account || undefined;

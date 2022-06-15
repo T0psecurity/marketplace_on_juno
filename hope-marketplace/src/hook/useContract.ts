@@ -64,6 +64,7 @@ const useContract = () => {
       if (!contract) {
         initContracts();
         // dispatch(importContract(contractAddress));
+        console.error("contract selection error", contractAddress);
         throw new Error("No contract selected");
       }
       const client = await connectionManager.getQueryClient(
@@ -75,8 +76,7 @@ const useContract = () => {
       );
       return result;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [state]
+    [state, initContracts]
   );
 
   const runExecute = useCallback(
@@ -92,6 +92,7 @@ const useContract = () => {
       const account = state.accounts.keplrAccount;
       if (!contract) {
         initContracts();
+        console.error("contract selection error");
         throw new Error("No contract selected");
       }
 
@@ -121,8 +122,7 @@ const useContract = () => {
           : undefined
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [state]
+    [state, initContracts]
   );
 
   return {

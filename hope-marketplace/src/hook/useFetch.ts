@@ -17,7 +17,6 @@ const useFetch = () => {
   const contracts = useAppSelector((state) => state.accounts.accountList);
 
   const fetchCollectionInfo = useCallback(() => {
-    if (!account) return;
     Collections.forEach(async (collection: MarketplaceInfo) => {
       // console.log("collection", collection.collectionId);
       if (collection.mintContract) {
@@ -114,11 +113,11 @@ const useFetch = () => {
   }, [account, dispatch, runQuery]);
 
   const fetchAllNFTs = useCallback(() => {
-    // fetchMarketplaceNFTs();
-    if (!account) return;
+    fetchMarketplaceNFTs();
     fetchCollectionInfo();
+    if (!account) return;
     fetchMyNFTs();
-  }, [account, fetchCollectionInfo, fetchMyNFTs]);
+  }, [account, fetchCollectionInfo, fetchMarketplaceNFTs, fetchMyNFTs]);
 
   const clearAllNFTs = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {

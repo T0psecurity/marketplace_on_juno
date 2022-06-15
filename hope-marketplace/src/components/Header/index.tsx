@@ -46,7 +46,12 @@ const Header: React.FC = () => {
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const { connect } = useKeplr();
   const history = useHistory();
-  const { fetchAllNFTs, fetchMarketplaceNFTs, clearAllNFTs } = useFetch();
+  const {
+    fetchCollectionInfo,
+    fetchMyNFTs,
+    fetchMarketplaceNFTs,
+    clearAllNFTs,
+  } = useFetch();
   const { initContracts } = useContract();
 
   const { isMobile } = useWindowSize(900);
@@ -55,6 +60,7 @@ const Header: React.FC = () => {
     initContracts();
     setInterval(() => {
       fetchMarketplaceNFTs();
+      fetchCollectionInfo();
     }, 5000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -62,8 +68,9 @@ const Header: React.FC = () => {
   useEffect(() => {
     if (account) {
       // setRunningFetch(true);
+      // initContracts();
       const intervalId: NodeJS.Timeout | null = setInterval(() => {
-        fetchAllNFTs();
+        fetchMyNFTs();
       }, 5000);
       setFetchingIntervalId(intervalId);
     } else {
