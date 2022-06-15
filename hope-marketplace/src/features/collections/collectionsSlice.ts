@@ -10,6 +10,14 @@ export type CollectionStateType = {
   imageUrl: string;
   myMintedNfts: number | null;
   price: number;
+  tradingInfo?: {
+    junoMax: number;
+    junoMin: number;
+    junoTotal: number;
+    hopeMax: number;
+    hopeMin: number;
+    hopeTotal: number;
+  };
 };
 
 export const DEFAULT_COLLECTION_STATE = {
@@ -28,7 +36,7 @@ Collections.forEach((collection: MarketplaceInfo) => {
   initialState[collection.collectionId] = DEFAULT_COLLECTION_STATE;
 });
 
-export const nftSlice = createSlice({
+export const collectionSlice = createSlice({
   name: "collectionStates",
   initialState,
   reducers: {
@@ -39,6 +47,6 @@ export const nftSlice = createSlice({
   },
 });
 
-export const { setCollectionState } = nftSlice.actions;
+export const { setCollectionState } = collectionSlice.actions;
 
-export default nftSlice.reducer;
+export default collectionSlice.reducer;

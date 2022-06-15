@@ -9,6 +9,11 @@ import {
 import { setNFTs } from "../features/nfts/nftsSlice";
 import useContract from "./useContract";
 
+const getMin = (number: number, max?: number): number => {
+  const maxNumber = max || 1e5;
+  return maxNumber === number ? 0 : number;
+};
+
 const useFetch = () => {
   const { runQuery } = useContract();
   const dispatch = useAppDispatch();
@@ -19,12 +24,21 @@ const useFetch = () => {
   const fetchCollectionInfo = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
       // console.log("collection", collection.collectionId);
+      let storeObject: CollectionStateType = {
+        mintCheck: [],
+        mintedNfts: 0,
+        totalNfts: 0,
+        maxNfts: 0,
+        imageUrl: "",
+        price: 0,
+        myMintedNfts: null,
+      };
       if (collection.mintContract) {
         const queryResult = await runQuery(collection.mintContract, {
           get_state_info: {},
         });
 
-        let storeObject: CollectionStateType = {
+        storeObject = {
           mintCheck: queryResult.check_mint,
           mintedNfts: +(queryResult.count || "0"),
           totalNfts: +(queryResult.total_nft || "0"),
@@ -39,8 +53,28 @@ const useFetch = () => {
           });
           storeObject.myMintedNfts = +(userInfo || "0");
         }
-        dispatch(setCollectionState([collection.collectionId, storeObject]));
       }
+      if (
+        collection.marketplaceContract &&
+        collection.marketplaceContract.length > 1
+      ) {
+        const tradingInfoResult = await runQuery(
+          collection.marketplaceContract[0],
+          {
+            get_trading_info: {},
+          }
+        );
+        storeObject.tradingInfo = {
+          junoMax: +(tradingInfoResult.max_juno || "0") / 1e6,
+          junoMin: getMin(+(tradingInfoResult.min_juno || "0") / 1e6),
+          junoTotal: +(tradingInfoResult.total_juno || "0") / 1e6,
+          hopeMax: +(tradingInfoResult.max_hope || "0") / 1e6,
+          hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
+          hopeTotal: +(tradingInfoResult.total_hope || "0") / 1e6,
+        };
+        console.log(collection.collectionId, storeObject);
+      }
+      dispatch(setCollectionState([collection.collectionId, storeObject]));
     });
   }, [account, dispatch, runQuery]);
 

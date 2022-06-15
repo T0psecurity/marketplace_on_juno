@@ -1,9 +1,11 @@
 import { useMemo } from "react";
+import { useAppSelector } from "../../../app/hooks";
 import {
   getCollectionById,
   MarketplaceInfo,
 } from "../../../constants/Collections";
-import { NFTPriceType } from "../../../hook/useHandleNftItem";
+import { CollectionStateType } from "../../../features/collections/collectionsSlice";
+// import { NFTPriceType } from "../../../hook/useHandleNftItem";
 
 const convertNumberToString = (number: number): string => {
   return number.toLocaleString(undefined, {
@@ -18,13 +20,19 @@ const addSuffix = (number: number): string => {
 };
 
 const useStatistic = (collectionId: string, items: any) => {
+  const targetCollection: MarketplaceInfo = useMemo(
+    () => getCollectionById(collectionId || ""),
+    [collectionId]
+  );
+  const collectionState: CollectionStateType = useAppSelector(
+    (state: any) => state.collectionStates[collectionId]
+  );
+  // console.log("collectionState", collectionState);
+
   const total: string = useMemo(() => {
-    const targetCollection: MarketplaceInfo = getCollectionById(
-      collectionId || ""
-    );
     if (!targetCollection) return "";
     return addSuffix(targetCollection.mintInfo?.totalNfts || 0);
-  }, [collectionId]);
+  }, [targetCollection]);
 
   const itemsOnSale: string = useMemo(() => {
     const length: number = items?.length || 0;
@@ -36,27 +44,30 @@ const useStatistic = (collectionId: string, items: any) => {
     return convertNumberToString([...new Set(sellers)].length);
   }, [items]);
 
-  const floorPrices: { hope: number; juno: number } = useMemo(() => {
-    let result = { hope: 1e9, juno: 1e9 };
-    items.forEach((item: any) => {
-      const crrListedPrice = item.list_price || {};
-      let crrPrice = Number(crrListedPrice.amount || "0");
-      crrPrice = Number.isNaN(crrPrice) ? 0 : crrPrice / 1e6;
-      if (crrListedPrice.denom === NFTPriceType.HOPE) {
-        if (result.hope > crrPrice) result.hope = crrPrice;
-      } else if (crrListedPrice.denom === NFTPriceType.JUNO) {
-        if (result.juno > crrPrice) result.juno = crrPrice;
-      }
-    });
-    return result;
-  }, [items]);
+  const floorPrices: { hope: number; juno: number } = useMemo(
+    () => ({
+      hope: collectionState.tradingInfo?.hopeMin || 0,
+      juno: collectionState.tradingInfo?.junoMin || 0,
+    }),
+    [collectionState]
+  );
+
+  const volumePrices: { hope: number; juno: number } = useMemo(
+    () => ({
+      hope: collectionState.tradingInfo?.hopeTotal || 0,
+      juno: collectionState.tradingInfo?.junoTotal || 0,
+    }),
+    [collectionState]
+  );
 
   return {
     total,
     itemsOnSale,
     owners,
-    hopeFloorPrice: floorPrices.hope === 1e9 ? null : floorPrices.hope,
-    junoFloorPrice: floorPrices.juno === 1e9 ? null : floorPrices.juno,
+    hopeFloorPrice: floorPrices.hope,
+    junoFloorPrice: floorPrices.juno,
+    hopeVolume: volumePrices.hope,
+    junoVolume: volumePrices.juno,
   };
 };
 

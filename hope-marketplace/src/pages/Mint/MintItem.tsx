@@ -88,6 +88,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[mintItem.collectionId]
   );
+  console.log("mint page", mintItem.collectionId, collectionState);
 
   const fontSize = useResponsiveSize(
     ELEMENT_SIZE.DETAIL_BLOCK_TITLE
