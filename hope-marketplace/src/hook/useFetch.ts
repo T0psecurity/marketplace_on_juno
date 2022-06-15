@@ -72,7 +72,6 @@ const useFetch = () => {
           hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
           hopeTotal: +(tradingInfoResult.total_hope || "0") / 1e6,
         };
-        console.log(collection.collectionId, storeObject);
       }
       dispatch(setCollectionState([collection.collectionId, storeObject]));
     });
