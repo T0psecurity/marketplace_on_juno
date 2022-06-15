@@ -16,7 +16,7 @@ const useFetch = () => {
 
   const contracts = useAppSelector((state) => state.accounts.accountList);
 
-  const fetchAllNFTs = useCallback(() => {
+  const fetchCollectionInfo = useCallback(() => {
     if (!account) return;
     Collections.forEach(async (collection: MarketplaceInfo) => {
       // console.log("collection", collection.collectionId);
@@ -42,22 +42,11 @@ const useFetch = () => {
         }
         dispatch(setCollectionState([collection.collectionId, storeObject]));
       }
-      if (collection.nftContract) {
-        const queryResult: any = await runQuery(collection.nftContract, {
-          tokens: {
-            owner: account?.address,
-            start_after: undefined,
-            limit: undefined,
-          },
-        });
-        const nftList = queryResult?.tokens?.length
-          ? queryResult.tokens.map((item: string) => ({
-              token_id: item,
-              collectionId: collection.collectionId,
-            }))
-          : [];
-        dispatch(setNFTs([collection.collectionId, nftList]));
-      }
+    });
+  }, [account, dispatch, runQuery]);
+
+  const fetchMarketplaceNFTs = useCallback(() => {
+    Collections.forEach(async (collection: MarketplaceInfo) => {
       if (
         collection.marketplaceContract &&
         collection.marketplaceContract.length
@@ -100,8 +89,36 @@ const useFetch = () => {
         });
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
+  }, [account, contracts, dispatch, runQuery]);
+
+  const fetchMyNFTs = useCallback(() => {
+    if (!account) return;
+    Collections.forEach(async (collection: MarketplaceInfo) => {
+      if (collection.nftContract) {
+        const queryResult: any = await runQuery(collection.nftContract, {
+          tokens: {
+            owner: account?.address,
+            start_after: undefined,
+            limit: undefined,
+          },
+        });
+        const nftList = queryResult?.tokens?.length
+          ? queryResult.tokens.map((item: string) => ({
+              token_id: item,
+              collectionId: collection.collectionId,
+            }))
+          : [];
+        dispatch(setNFTs([collection.collectionId, nftList]));
+      }
+    });
+  }, [account, dispatch, runQuery]);
+
+  const fetchAllNFTs = useCallback(() => {
+    // fetchMarketplaceNFTs();
+    if (!account) return;
+    fetchCollectionInfo();
+    fetchMyNFTs();
+  }, [account, fetchCollectionInfo, fetchMyNFTs]);
 
   const clearAllNFTs = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
@@ -110,13 +127,16 @@ const useFetch = () => {
       );
       dispatch(setNFTs([collection.collectionId, []]));
       dispatch(setNFTs([`${collection.collectionId}_listed`, []]));
-      dispatch(setNFTs([`${collection.collectionId}_marketplace`, []]));
+      // dispatch(setNFTs([`${collection.collectionId}_marketplace`, []]));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
     fetchAllNFTs,
+    fetchCollectionInfo,
+    fetchMarketplaceNFTs,
+    fetchMyNFTs,
     clearAllNFTs,
   };
 };
