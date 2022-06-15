@@ -17,9 +17,9 @@ const getMin = (number: number, max?: number): number => {
 const useFetch = () => {
   const { runQuery } = useContract();
   const dispatch = useAppDispatch();
-  const account = useAppSelector((state) => state.accounts.keplrAccount);
+  const account = useAppSelector((state) => state?.accounts.keplrAccount);
 
-  const contracts = useAppSelector((state) => state.accounts.accountList);
+  const contracts = useAppSelector((state) => state?.accounts.accountList);
 
   const fetchCollectionInfo = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
