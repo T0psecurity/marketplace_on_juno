@@ -101,7 +101,7 @@ const useFetch = () => {
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, contracts]);
+  }, [account]);
 
   const clearAllNFTs = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {

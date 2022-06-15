@@ -425,9 +425,8 @@ export const accountsSlice = createSlice({
         state.currentAccount = undefined;
         state.accountList = {};
       }
-      console.log("set account", account);
 
-      state.keplrAccount = account;
+      state.keplrAccount = account || undefined;
     },
     setAccountBalance: (
       state,

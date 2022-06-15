@@ -22,10 +22,10 @@ type StatisticItemType = {
 };
 
 const STATISTIC_PARAMS: StatisticItemType[] = [
-  {
-    name: "Items",
-    key: "total",
-  },
+  // {
+  //   name: "Items",
+  //   key: "total",
+  // },
   {
     name: "Items On Sale",
     key: "itemsOnSale",

@@ -62,6 +62,7 @@ const useContract = () => {
       // const contract = state.accounts.accountList[contractAddress];
       const contract = state.accounts.accountList[contractAddress];
       if (!contract) {
+        initContracts();
         // dispatch(importContract(contractAddress));
         throw new Error("No contract selected");
       }
@@ -75,7 +76,7 @@ const useContract = () => {
       return result;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [state]
   );
 
   const runExecute = useCallback(

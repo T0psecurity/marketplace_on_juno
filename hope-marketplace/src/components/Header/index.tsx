@@ -40,6 +40,8 @@ const Header: React.FC = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   // const [runningFetch, setRunningFetch] = useState(false);
   const [ref, setRef] = useState<HTMLDivElement | null>(null); // TODO: must use useRef
+  const [fetchingIntervalId, setFetchingIntervalId] =
+    useState<NodeJS.Timeout | null>(null);
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const { connect } = useKeplr();
@@ -50,14 +52,20 @@ const Header: React.FC = () => {
   const { isMobile } = useWindowSize(900);
 
   useEffect(() => {
+    initContracts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (account) {
       // setRunningFetch(true);
-      initContracts();
-      setInterval(() => {
+      const intervalId: NodeJS.Timeout | null = setInterval(() => {
         fetchAllNFTs();
       }, 5000);
+      setFetchingIntervalId(intervalId);
     } else {
       clearAllNFTs();
+      if (fetchingIntervalId) clearInterval(fetchingIntervalId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account]);
