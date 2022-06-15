@@ -56,7 +56,7 @@ const useFetch = () => {
       }
       if (
         collection.marketplaceContract &&
-        collection.marketplaceContract.length > 1
+        collection.marketplaceContract.length
       ) {
         const tradingInfoResult = await runQuery(
           collection.marketplaceContract[0],

@@ -8,7 +8,7 @@ import { contractAddresses } from "./useContract";
 
 export const NFTPriceType = {
   HOPE: "hope",
-  JUNO: "juno",
+  JUNO: "ujuno",
 };
 
 const useHandleNftItem = () => {
