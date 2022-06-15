@@ -5,6 +5,9 @@ export const NFTItemWrapper = styled.div`
   /* padding: 10px; */
   border-radius: 10px;
   box-shadow: 1px 4px 10px 1px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 export const NFTItemImageWrapper = styled.div<{ isMobile?: boolean }>`
   width: calc(100% - 20px);
