@@ -148,6 +148,8 @@ const useHandleNftItem = () => {
   );
   const transferNft = useCallback(
     async (recipient: any, item: any, callbackLink?: string) => {
+      console.log("item", item);
+      const targetCollection = getCollectionById(item.collectionId);
       const message = {
         transfer_nft: {
           recipient: recipient,
@@ -155,12 +157,7 @@ const useHandleNftItem = () => {
         },
       };
       try {
-        await runExecute(
-          item.token_id.includes("Hope")
-            ? contractAddresses.NFT_CONTRACT
-            : contractAddresses.REVEAL_NFT_CONTRACT,
-          message
-        );
+        await runExecute(targetCollection.nftContract, message);
         toast.success("Success!");
         if (callbackLink) history.push(callbackLink);
       } catch (err) {

@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../app/hooks";
 import {
@@ -11,6 +12,7 @@ import useFetch from "../../hook/useFetch";
 
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import useResponsiveSize from "../../hook/useResponsiveSize";
+import { compareDate, convertDateToString } from "../../util/date";
 
 import {
   MintDetailContainer,
@@ -85,10 +87,13 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const { isXl } = useMatchBreakpoints();
   const { runExecute } = useContract();
   const { fetchAllNFTs } = useFetch();
+  const history = useHistory();
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[mintItem.collectionId]
   );
-  console.log("mint page", mintItem.collectionId, collectionState);
+  const mintDate = mintInfo.mintDate ? new Date(mintInfo.mintDate) : new Date();
+  const now = new Date();
+  const isLive = compareDate(now, mintDate) !== -1;
 
   const fontSize = useResponsiveSize(
     ELEMENT_SIZE.DETAIL_BLOCK_TITLE
@@ -149,10 +154,22 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     <MintImage isMobile={!isXl} alt="mint image" src={mintInfo.mintImage} />
   );
 
+  const isSoldOut: boolean =
+    !!collectionState.mintedNfts &&
+    collectionState.mintedNfts >= collectionState.maxNfts;
+
   return (
     <MintDetailContainer isMobile={!isXl}>
       <MintDetailInfo>
-        <DetailTitle bold isMobile={!isXl}>
+        <DetailTitle
+          bold
+          isMobile={!isXl}
+          onClick={() => {
+            history.push(
+              `/collections/marketplace?id=${mintItem.collectionId}`
+            );
+          }}
+        >
           {mintItem.title}
         </DetailTitle>
         <DetailInfo isMobile={!isXl}>{mintItem.description}</DetailInfo>
@@ -168,14 +185,16 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
             {renderDetailBlocks([MINT_DETAIL_OPERATION])}
           </FlexColumn>
           <MintButton
-            disabled={
-              collectionState.myMintedNfts === null ||
-              collectionState.myMintedNfts >= collectionState.maxNfts
-            }
+            soldOut={isSoldOut}
+            disabled={collectionState.myMintedNfts === null || isSoldOut}
             width={operationItemSize}
             onClick={handleMintNft}
           >
-            {`Mint ${mintInfo.mintDate ? "Soon" : "Now"}`}
+            {isSoldOut
+              ? "Mint Sold Out"
+              : isLive
+              ? "Mint Now"
+              : `Mint ${convertDateToString(mintInfo.mintDate || "")}`}
           </MintButton>
         </OperationContainer>
       </MintDetailInfo>

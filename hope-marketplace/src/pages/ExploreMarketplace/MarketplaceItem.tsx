@@ -6,6 +6,7 @@ import {
   MarketplaceBasicInfo,
 } from "../../constants/Collections";
 import { Card, StyledImg, Text } from "./styled";
+import { convertDateToString } from "../../util/date";
 
 const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
   imageUrl,
@@ -32,7 +33,9 @@ const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
           history.push(`/collections/marketplace?id=${collectionId}`);
         }}
       >
-        {targetCollection.mintInfo?.mintDate || "View Collection"}
+        {targetCollection.mintInfo?.mintDate
+          ? convertDateToString(targetCollection.mintInfo.mintDate)
+          : "View Collection"}
       </Button>
     </Card>
   );

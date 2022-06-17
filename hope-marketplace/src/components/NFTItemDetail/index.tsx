@@ -40,7 +40,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
     url = `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${getTokenIdNumber(
       item.token_id
     )}.png`;
-  } else if (collectionState.imageUrl) {
+  } else if (collectionState?.imageUrl) {
     url = `${collectionState.imageUrl}${getTokenIdNumber(item.token_id)}.png`;
   }
 

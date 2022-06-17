@@ -167,7 +167,7 @@ const Collections: MarketplaceInfo[] = [
       royalties: "50% + 3%",
       price: "8 JUNO",
       mintImage: "/mint-images/JunoFarming.png",
-      mintDate: "10 June",
+      mintDate: "2022-06-20",
     },
   },
   {
@@ -191,7 +191,7 @@ const Collections: MarketplaceInfo[] = [
       royalties: "~% + 3%",
       price: "5 JUNO",
       mintImage: "/mint-images/NetaNOTs.png",
-      mintDate: "20 June 2022",
+      mintDate: "2022-06-27",
     },
   },
 ];

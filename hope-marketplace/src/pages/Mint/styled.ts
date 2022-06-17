@@ -34,6 +34,11 @@ export const DetailTitle = styled.div<{ bold?: boolean; isMobile?: boolean }>`
     css`
       text-align: center;
     `}
+
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export const DetailInfo = styled.div<{ isMobile?: boolean }>`
@@ -108,14 +113,19 @@ export const FlexColumn = styled.div<{ width?: string }>`
     `};
 `;
 
-export const MintButton = styled(Button)<{ width?: string }>`
-  background-color: #39c639;
+export const MintButton = styled(Button)<{ width?: string; soldOut: boolean }>`
+  background-color: ${({ soldOut }) => (soldOut ? "#C63939" : "#39c639")};
   border: 1px solid black;
   border-radius: 4px;
   font-weight: 700;
   width: ${({ width }) => width ?? "325px"};
   height: 53px;
-  color: black;
+  color: ${({ soldOut }) => (soldOut ? "white" : "black")};
+  transition: opacity 0.5s;
+  &:hover {
+    opacity: 0.8;
+    background-color: ${({ soldOut }) => (soldOut ? "#C63939" : "#39c639")};
+  }
 `;
 
 export const MintImageWrapper = styled.div`
@@ -134,9 +144,11 @@ export const MintImage = styled.img<{ isMobile?: boolean }>`
 export const StyledButton = styled(Button)<{
   backgroundColor?: string;
   color?: string;
+  checked?: boolean;
 }>`
   width: 132px;
   height: 45px;
+  color: black;
   ${({ backgroundColor }) =>
     backgroundColor &&
     css`
@@ -150,4 +162,9 @@ export const StyledButton = styled(Button)<{
   border: 1px solid #000;
   border-radius: 4px;
   margin-right: 30px;
+  ${({ checked }) =>
+    checked &&
+    css`
+      border-width: 3px;
+    `}
 `;

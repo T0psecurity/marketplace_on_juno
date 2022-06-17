@@ -53,9 +53,8 @@ const Footer: React.FC = () => {
       </FooterInfo>
       <FooterInfo>
         <MainContent>
-          Hopers.io an Interchain IBC NFT marketplace that is fully community
-          driven with a revshare model for the $HOPE governance Token stakers on
-          our Dao.
+          Hopers.io a JUNO NFT marketplace that is fully community driven with a
+          revshare model for the $HOPE governance Token Stakers on our Dao.
         </MainContent>
       </FooterInfo>
       <FooterInfo>
