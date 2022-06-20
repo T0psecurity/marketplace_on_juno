@@ -1,23 +1,12 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
-export const StyledImage = styled.img<{
-  width?: string;
-  height?: string;
-  imageVisible?: boolean;
-}>`
+export const StyledImage = styled.img`
   cursor: pointer;
-  ${({ width }) =>
-    width &&
-    css`
-      width: ${width};
-    `}
-  ${({ height }) =>
-    height &&
-    css`
-      height: ${height};
-    `}
-  opacity: ${({ imageVisible }) => (imageVisible ? 1 : 0)};
   /* width: 370px;
   height: 400px; */
   border-radius: 30px;
+  max-width: 100%;
+  max-height: 100%;
+  width: max-content;
+  height: max-content;
 `;
