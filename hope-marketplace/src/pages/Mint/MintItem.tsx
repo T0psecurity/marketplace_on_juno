@@ -192,7 +192,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
           >
             {isSoldOut
               ? "Mint Sold Out"
-              : isLive
+              : isLive && mintItem.mintContract
               ? "Mint Now"
               : `Mint ${convertDateToString(mintInfo.mintDate || "")}`}
           </MintButton>

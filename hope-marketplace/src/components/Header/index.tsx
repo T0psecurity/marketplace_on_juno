@@ -26,6 +26,7 @@ import {
   MenuContainer,
   MenuItem,
 } from "./styled";
+import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
   {
@@ -45,6 +46,7 @@ const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const { connect } = useKeplr();
+  const { connect: connectWithCosmodal } = useCosmodal();
   const history = useHistory();
   const {
     fetchCollectionInfo,
@@ -82,7 +84,8 @@ const Header: React.FC = () => {
 
   const clickWalletButton = () => {
     if (!account) {
-      connect();
+      // connect();
+      connectWithCosmodal();
     } else {
       dispatch(setKeplrAccount());
       Collections.forEach((collection: MarketplaceInfo) =>

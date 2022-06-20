@@ -2,13 +2,72 @@ import { coin } from "@cosmjs/proto-signing";
 import { useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { AccountType, setKeplrAccount } from "../accounts/accountsSlice";
-import { Keplr } from "@keplr-wallet/types";
+import { ChainInfo, Keplr } from "@keplr-wallet/types";
 import { pushMessage } from "../messages/messagesSlice";
 import { fromMicroDenom } from "../../util/coins";
 
-const CosmosCoinType = 118;
+export const CosmosCoinType = 118;
 
 let savedKeplr: Keplr;
+
+export const getChainConfig = (config: any): ChainInfo => {
+  const coinMinimalDenom: string = config["microDenom"];
+  const coinDecimals = Number.parseInt(config["coinDecimals"]);
+  const coinGeckoId: string = config["coinGeckoId"];
+  const chainId: string = config["chainId"];
+  const chainName: string = config["chainName"];
+  const rpcEndpoint: string = config["rpcEndpoint"];
+  const restEndpoint: string = config["restEndpoint"];
+  const addrPrefix: string = config["addressPrefix"];
+  const gasPrice = Number.parseFloat(config["gasPrice"]);
+  const coin = fromMicroDenom(coinMinimalDenom);
+  const coinDenom = coin.toUpperCase();
+
+  return {
+    chainId,
+    chainName,
+    rpc: rpcEndpoint,
+    rest: restEndpoint,
+    bip44: {
+      coinType: CosmosCoinType,
+    },
+    bech32Config: {
+      bech32PrefixAccAddr: addrPrefix,
+      bech32PrefixAccPub: `${addrPrefix}pub`,
+      bech32PrefixValAddr: `${addrPrefix}valoper`,
+      bech32PrefixValPub: `${addrPrefix}valoperpub`,
+      bech32PrefixConsAddr: `${addrPrefix}valcons`,
+      bech32PrefixConsPub: `${addrPrefix}valconspub`,
+    },
+    currencies: [
+      {
+        coinDenom,
+        coinMinimalDenom,
+        coinDecimals,
+      },
+    ],
+    feeCurrencies: [
+      {
+        coinDenom,
+        coinMinimalDenom,
+        coinDecimals,
+        coinGeckoId,
+      },
+    ],
+    stakeCurrency: {
+      coinDenom,
+      coinMinimalDenom,
+      coinDecimals,
+      coinGeckoId,
+    },
+    coinType: CosmosCoinType,
+    gasPriceStep: {
+      low: gasPrice / 2,
+      average: gasPrice,
+      high: gasPrice * 2,
+    },
+  };
+};
 
 export async function getKeplr(): Promise<Keplr> {
   let keplr: Keplr | undefined;
@@ -80,61 +139,7 @@ export function useKeplr(): {
   const suggestChain = useCallback(async (): Promise<void> => {
     const keplr = await getKeplr();
 
-    const coinMinimalDenom: string = config["microDenom"];
-    const coinDecimals = Number.parseInt(config["coinDecimals"]);
-    const coinGeckoId: string = config["coinGeckoId"];
-    const chainId: string = config["chainId"];
-    const chainName: string = config["chainName"];
-    const rpcEndpoint: string = config["rpcEndpoint"];
-    const restEndpoint: string = config["restEndpoint"];
-    const addrPrefix: string = config["addressPrefix"];
-    const gasPrice = Number.parseFloat(config["gasPrice"]);
-    const coin = fromMicroDenom(coinMinimalDenom);
-    const coinDenom = coin.toUpperCase();
-    await keplr.experimentalSuggestChain({
-      chainId,
-      chainName,
-      rpc: rpcEndpoint,
-      rest: restEndpoint,
-      bip44: {
-        coinType: CosmosCoinType,
-      },
-      bech32Config: {
-        bech32PrefixAccAddr: addrPrefix,
-        bech32PrefixAccPub: `${addrPrefix}pub`,
-        bech32PrefixValAddr: `${addrPrefix}valoper`,
-        bech32PrefixValPub: `${addrPrefix}valoperpub`,
-        bech32PrefixConsAddr: `${addrPrefix}valcons`,
-        bech32PrefixConsPub: `${addrPrefix}valconspub`,
-      },
-      currencies: [
-        {
-          coinDenom,
-          coinMinimalDenom,
-          coinDecimals,
-        },
-      ],
-      feeCurrencies: [
-        {
-          coinDenom,
-          coinMinimalDenom,
-          coinDecimals,
-          coinGeckoId,
-        },
-      ],
-      stakeCurrency: {
-        coinDenom,
-        coinMinimalDenom,
-        coinDecimals,
-        coinGeckoId,
-      },
-      coinType: CosmosCoinType,
-      gasPriceStep: {
-        low: gasPrice / 2,
-        average: gasPrice,
-        high: gasPrice * 2,
-      },
-    });
+    await keplr.experimentalSuggestChain(getChainConfig(config));
   }, [config]);
 
   const connect = useCallback(async (): Promise<void> => {
