@@ -131,7 +131,7 @@ const useFetch = () => {
           tokens: {
             owner: account?.address,
             start_after: undefined,
-            limit: undefined,
+            limit: 100,
           },
         });
         const nftList = queryResult?.tokens?.length
