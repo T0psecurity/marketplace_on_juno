@@ -71,7 +71,7 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
   );
 
   return (
-    <Wrapper>
+    <Wrapper isMobile={isMobile}>
       {STATISTIC_PARAMS.map(
         (statisticItem: StatisticItemType, index: number) => {
           if (

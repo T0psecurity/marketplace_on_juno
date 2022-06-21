@@ -99,14 +99,6 @@ export const StyledButton = styled(Button)<{ selected?: boolean }>`
     `}
 `;
 
-export const StatisticWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-collapse: collapse;
-  margin: 10px 0;
-`;
-
 export const StatisticItem = styled.div<{ isMobile?: boolean }>`
   display: flex;
   flex-direction: column;
@@ -114,6 +106,34 @@ export const StatisticItem = styled.div<{ isMobile?: boolean }>`
   align-items: center;
   min-width: 100px;
   height: 90px;
+`;
+
+export const StatisticWrapper = styled.div<{ isMobile?: boolean }>`
+  display: grid;
+  grid-gap: 20px;
+  justify-content: center;
+  align-items: center;
+  border-collapse: collapse;
+  margin: 10px 0;
+  ${({ isMobile }) =>
+    isMobile
+      ? css`
+          grid-template-columns: repeat(12, auto);
+          ${StatisticItem}:nth-child(-1n + 3) {
+            grid-column: span 4;
+          }
+          ${StatisticItem}:nth-last-child(2) {
+            grid-row-start: 2;
+            grid-column: 3 / span 4;
+          }
+          ${StatisticItem}:nth-last-child(1) {
+            grid-row-start: 2;
+            grid-column: 7 / span 4;
+          }
+        `
+      : css`
+          grid-template-columns: repeat(5, auto);
+        `}
 `;
 
 export const StatisticValue = styled.div`

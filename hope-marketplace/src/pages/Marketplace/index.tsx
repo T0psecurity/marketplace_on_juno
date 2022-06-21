@@ -68,8 +68,8 @@ const Marketplace: React.FC = () => {
         created by
         <Creator>{` ${targetCollection.creator || ""} •`}</Creator>
       </CreatorContainer>
-      <Statistic items={marketplaceNFTs} collectionId={collectionId || ""} />
       <CollectionDetail>{targetCollection.description}</CollectionDetail>
+      <Statistic items={marketplaceNFTs} collectionId={collectionId || ""} />
       <HorizontalDivider />
       <MainContentContainer isMobile={!isXl} expanded={expandedFilter}>
         <FilterPanel
