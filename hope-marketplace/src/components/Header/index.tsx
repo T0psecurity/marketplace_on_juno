@@ -48,7 +48,7 @@ const Header: React.FC = () => {
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   // const { connect } = useKeplr();
   // const { connect: connectWithCosmodal } = useCosmodal();
-  const { connect } = useWalletManager();
+  const { connect, disconnect } = useWalletManager();
   const history = useHistory();
   const {
     fetchCollectionInfo,
@@ -93,6 +93,7 @@ const Header: React.FC = () => {
       Collections.forEach((collection: MarketplaceInfo) =>
         setNFTs([collection.collectionId, []])
       );
+      disconnect();
     }
   };
 
