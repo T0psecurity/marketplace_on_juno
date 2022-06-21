@@ -1,5 +1,5 @@
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { GasPrice } from "@cosmjs/launchpad";
+import { GasPrice } from "@cosmjs/stargate";
 import { coins } from "@cosmjs/proto-signing";
 import { KeplrWalletConnectV1, useWalletManager } from "@noahsaso/cosmodal";
 import { useCallback } from "react";

@@ -217,11 +217,11 @@ const Collections: MarketplaceInfo[] = [
     },
     description: "NetaNOTs are Space Warriors in the NOTs Universe",
     mintInfo: {
-      totalNfts: 1950,
+      totalNfts: 200,
       royalties: "~% + 3%",
       price: "5 JUNO",
       mintImage: "/mint-images/NetaNOTs.png",
-      mintDate: "2022-06-27",
+      mintDate: "2022-06-28",
     },
   },
 ];
