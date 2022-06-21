@@ -58,22 +58,26 @@ const useFetch = () => {
         collection.marketplaceContract &&
         collection.marketplaceContract.length
       ) {
-        const tradingInfoResult = await runQuery(
-          collection.marketplaceContract[0],
-          {
-            get_trading_info: {},
-          }
-        );
-        storeObject.tradingInfo = {
-          junoMax: +(tradingInfoResult.max_juno || "0") / 1e6,
-          junoMin: getMin(+(tradingInfoResult.min_juno || "0") / 1e6),
-          junoTotal: +(tradingInfoResult.total_juno || "0") / 1e6,
-          hopeMax: +(tradingInfoResult.max_hope || "0") / 1e6,
-          hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
-          hopeTotal: +(tradingInfoResult.total_hope || "0") / 1e6,
-        };
+        try {
+          const tradingInfoResult = await runQuery(
+            collection.marketplaceContract[0],
+            {
+              get_trading_info: {},
+            }
+          );
+          storeObject.tradingInfo = {
+            junoMax: +(tradingInfoResult.max_juno || "0") / 1e6,
+            junoMin: getMin(+(tradingInfoResult.min_juno || "0") / 1e6),
+            junoTotal: +(tradingInfoResult.total_juno || "0") / 1e6,
+            hopeMax: +(tradingInfoResult.max_hope || "0") / 1e6,
+            hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
+            hopeTotal: +(tradingInfoResult.total_hope || "0") / 1e6,
+          };
+        } catch (e) {
+        } finally {
+          dispatch(setCollectionState([collection.collectionId, storeObject]));
+        }
       }
-      dispatch(setCollectionState([collection.collectionId, storeObject]));
     });
   }, [account, dispatch, runQuery]);
 

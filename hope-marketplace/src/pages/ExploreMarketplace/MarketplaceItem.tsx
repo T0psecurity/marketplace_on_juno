@@ -6,7 +6,7 @@ import {
   MarketplaceBasicInfo,
 } from "../../constants/Collections";
 import { Card, StyledImg, Text } from "./styled";
-import { convertDateToString } from "../../util/date";
+import { compareDate, convertDateToString } from "../../util/date";
 
 const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
   imageUrl,
@@ -17,6 +17,11 @@ const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
   const history = useHistory();
 
   const targetCollection = getCollectionById(collectionId);
+  const mintDate = targetCollection.mintInfo?.mintDate
+    ? new Date(targetCollection.mintInfo.mintDate)
+    : new Date();
+  const now = new Date();
+  const isLive = compareDate(now, mintDate) !== -1;
 
   return (
     <Card>
@@ -28,14 +33,14 @@ const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
         {description}
       </Text>
       <Button
-        disabled={!!targetCollection.mintInfo?.mintDate}
+        disabled={!!targetCollection.mintInfo?.mintDate && !isLive}
         onClick={() => {
           history.push(`/collections/marketplace?id=${collectionId}`);
         }}
       >
-        {targetCollection.mintInfo?.mintDate
-          ? convertDateToString(targetCollection.mintInfo.mintDate)
-          : "View Collection"}
+        {!targetCollection.mintInfo?.mintDate || isLive
+          ? "View Collection"
+          : convertDateToString(targetCollection.mintInfo.mintDate)}
       </Button>
     </Card>
   );
