@@ -48,7 +48,7 @@ const Header: React.FC = () => {
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   // const { connect } = useKeplr();
   // const { connect: connectWithCosmodal } = useCosmodal();
-  const { connect, disconnect } = useWalletManager();
+  const { connect, disconnect, connectedWallet } = useWalletManager();
   const history = useHistory();
   const {
     fetchCollectionInfo,
@@ -83,6 +83,15 @@ const Header: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account]);
+
+  useEffect(() => {
+    if (!connectedWallet) {
+      dispatch(setKeplrAccount());
+      Collections.forEach((collection: MarketplaceInfo) =>
+        setNFTs([collection.collectionId, []])
+      );
+    }
+  }, [connectedWallet, dispatch]);
 
   const clickWalletButton = () => {
     if (!account) {

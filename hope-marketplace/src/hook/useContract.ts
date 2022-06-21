@@ -29,7 +29,7 @@ export const contractAddresses: any = {
 const useContract = () => {
   const dispatch = useAppDispatch();
   // const contracts = useAppSelector(contractAccounts);
-  const { connectedWallet } = useWalletManager();
+  const { connectedWallet, connect } = useWalletManager();
 
   const state = useSelector((state: any) => state);
 
@@ -92,8 +92,10 @@ const useContract = () => {
         funds?: string;
       }
     ) => {
-      console.log("connected wallet", connectedWallet);
-      if (!connectedWallet) return;
+      if (!connectedWallet) {
+        connect();
+        throw new Error("No account selected");
+      }
       const contract = state.accounts.accountList[contractAddress];
       const account = state.accounts.keplrAccount;
       if (!contract) {
@@ -162,7 +164,7 @@ const useContract = () => {
           : undefined
       );
     },
-    [state, initContracts, connectedWallet]
+    [state, initContracts, connectedWallet, connect]
   );
 
   return {
