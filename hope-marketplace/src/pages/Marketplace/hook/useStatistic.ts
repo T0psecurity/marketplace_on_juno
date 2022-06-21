@@ -82,8 +82,8 @@ const useStatistic = (collectionId: string, items: any) => {
     // junoFloorPrice: floorPrices.juno,
     hopeFloorPrice: floorPrices.hope === 1e9 ? null : floorPrices.hope,
     junoFloorPrice: floorPrices.juno === 1e9 ? null : floorPrices.juno,
-    hopeVolume: volumePrices.hope,
-    junoVolume: volumePrices.juno,
+    hopeVolume: addSuffix(volumePrices.hope),
+    junoVolume: addSuffix(volumePrices.juno),
   };
 };
 
