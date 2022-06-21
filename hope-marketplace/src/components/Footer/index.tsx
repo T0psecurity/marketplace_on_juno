@@ -49,7 +49,7 @@ const Footer: React.FC = () => {
           alt=""
           onClick={() => history.push("/")}
         />
-        <SubContent>Actually Desktop Only 🖥️</SubContent>
+        {/* <SubContent>Actually Desktop Only 🖥️</SubContent> */}
       </FooterInfo>
       <FooterInfo>
         <MainContent>
