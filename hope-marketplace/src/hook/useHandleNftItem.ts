@@ -148,7 +148,6 @@ const useHandleNftItem = () => {
   );
   const transferNft = useCallback(
     async (recipient: any, item: any, callbackLink?: string) => {
-      console.log("item", item);
       const targetCollection = getCollectionById(item.collectionId);
       const message = {
         transfer_nft: {
