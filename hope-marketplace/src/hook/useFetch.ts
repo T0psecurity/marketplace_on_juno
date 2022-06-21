@@ -113,9 +113,8 @@ const useFetch = () => {
               };
               if (item.seller === account?.address) {
                 listedNFTs = [...listedNFTs, crrItem];
-              } else {
-                marketplaceNFTs = [...marketplaceNFTs, crrItem];
               }
+              marketplaceNFTs = [...marketplaceNFTs, crrItem];
             });
           });
           dispatch(setNFTs([`${collection.collectionId}_listed`, listedNFTs]));

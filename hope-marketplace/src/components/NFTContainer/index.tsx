@@ -1,6 +1,7 @@
 import React from "react";
+import { useAppSelector } from "../../app/hooks";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import NFTItem from "../NFTItem";
+import NFTItem, { NFTItemStatus } from "../NFTItem";
 
 import { Wrapper } from "./styled";
 
@@ -20,12 +21,23 @@ const NFTContainer: React.FC<NFTContainerProps> = ({
   const { isXs, isSm } = useMatchBreakpoints();
   const isMobile = isXs || isSm;
   const hasNFTs = !!nfts && nfts.length > 0;
+  const account = useAppSelector((state) => state?.accounts.keplrAccount);
 
   return (
     <Wrapper noGrid={!hasNFTs} isMobile={isMobile}>
       {hasNFTs
         ? nfts.map((nft: any, index: any) => {
-            return <NFTItem key={index} item={nft} status={status} />;
+            return (
+              <NFTItem
+                key={index}
+                item={nft}
+                status={
+                  nft?.seller === account?.address
+                    ? NFTItemStatus.WITHDRAW
+                    : status
+                }
+              />
+            );
           })
         : emptyMsg ?? "No NFTs"}
     </Wrapper>

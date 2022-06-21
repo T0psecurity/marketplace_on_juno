@@ -91,6 +91,30 @@ const Collections: MarketplaceInfo[] = [
       "This mint pass is the ticket for the minting of the Hope Galaxy NFT collection once it is launched",
   },
   {
+    title: "Hope Galaxy Mint Pass 2",
+    creator: "Hope Galaxy NFT",
+    imageUrl: "/backgrounds/MintPass2.png",
+    backgroundUrl: "/marketplace-backgrounds/MintPass2.png",
+    logoUrl: "/logos/mintPass2.png",
+    collectionId: "mintpass2",
+    nftContract:
+      "juno1x5kqvep2fq5sgvwwjn9uctzn0ts8vxnrtalxjucs5juu07hxxsvqgseuhr",
+    mintContract: "",
+    marketplaceContract: [
+      "juno14jvup0unhnn9377t49vqducyvrv0ader2ekc9z4teq6wepyt9mls3lw0wq",
+    ],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://hopegalaxy.io",
+      twitter: "https://twitter.com/HopeGalaxyNFT",
+    },
+    statisticOption: {
+      total: true,
+    },
+    description:
+      "This is mint pass is the ticket for the minting of the Hope Galaxy NFT collection once it is launched",
+  },
+  {
     title: "Juno Punks NFT",
     creator: "Juno Punks",
     imageUrl: "/backgrounds/juno_punks.png",
