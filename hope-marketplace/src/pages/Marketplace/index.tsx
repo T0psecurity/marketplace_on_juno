@@ -88,6 +88,7 @@ const Marketplace: React.FC = () => {
             nfts={filteredNfts}
             status={NFTItemStatus.BUY}
             // sort={isAscending ? "as" : "des"}
+            emptyMsg="No NFTs on Sale"
             sort={"as"}
           />
         </NftList>

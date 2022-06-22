@@ -14,6 +14,9 @@ const getMin = (number: number, max?: number): number => {
   return maxNumber === number ? 0 : number;
 };
 
+const getCustomTokenId = (origin: string, target: string): string =>
+  `${target}.${origin.split(".").pop()}`;
+
 const useFetch = () => {
   const { runQuery } = useContract();
   const dispatch = useAppDispatch();
@@ -89,6 +92,7 @@ const useFetch = () => {
       ) {
         let queries: any = [];
         let contractAddresses: string[] = [];
+        const customTokenId = collection.customTokenId;
         collection.marketplaceContract.forEach(
           (contract: string, index: number) => {
             if (contracts[contract]) {
@@ -108,6 +112,9 @@ const useFetch = () => {
             queryResult?.offerings?.forEach((item: any) => {
               const crrItem = {
                 ...item,
+                ...(customTokenId && {
+                  token_id: getCustomTokenId(item.token_id, customTokenId),
+                }),
                 contractAddress: contractAddresses[index],
                 collectionId: collection.collectionId,
               };
@@ -137,9 +144,12 @@ const useFetch = () => {
             limit: 100,
           },
         });
+        const customTokenId = collection.customTokenId;
         const nftList = queryResult?.tokens?.length
           ? queryResult.tokens.map((item: string) => ({
-              token_id: item,
+              token_id: customTokenId
+                ? getCustomTokenId(item, customTokenId)
+                : item,
               collectionId: collection.collectionId,
             }))
           : [];

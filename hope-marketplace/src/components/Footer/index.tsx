@@ -18,7 +18,7 @@ import {
   FooterImage,
   FooterDocIcon,
   MainContent,
-  SubContent,
+  // SubContent,
 } from "./styled";
 
 const SocialIcons = [

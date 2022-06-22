@@ -28,6 +28,7 @@ export interface MarketplaceBasicInfo {
   marketplaceContract: string[];
   socialLinks: SocialLinks;
   statisticOption?: StatisticOption; // invisible status for statistic items. if true, invisible
+  customTokenId?: string; // if this value exists token_id will be replaced. e.g. Hoper.1916 -> MintPass I.1916 when this value is "MintPass I"
 }
 export interface MarketplaceMintInfo {
   totalNfts: number;
@@ -45,6 +46,7 @@ export interface MarketplaceInfo extends MarketplaceBasicInfo {
 const Collections: MarketplaceInfo[] = [
   {
     title: "Hope Galaxy NFT - Collection 1",
+    customTokenId: "HopeGalaxyI",
     creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/HopeGalaxy.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
@@ -69,6 +71,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Hope Galaxy Mint Pass 1",
+    customTokenId: "MintPassI",
     creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/Collection.png",
     backgroundUrl: "/marketplace-backgrounds/background.png",
@@ -92,6 +95,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Hope Galaxy Mint Pass 2",
+    customTokenId: "MintPassII",
     creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/MintPass2.png",
     backgroundUrl: "/marketplace-backgrounds/MintPass2.png",

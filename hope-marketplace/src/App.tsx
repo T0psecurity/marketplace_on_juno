@@ -66,7 +66,7 @@ function App() {
     );
   };
 
-  const walletInfoList: Wallet[] = [
+  const walletInfoList: any[] = [
     {
       id: "keplr-wallet-extension",
       name: "Keplr Wallet",
