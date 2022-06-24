@@ -113,7 +113,10 @@ const useFetch = () => {
               const crrItem = {
                 ...item,
                 ...(customTokenId && {
-                  token_id: getCustomTokenId(item.token_id, customTokenId),
+                  token_id_display: getCustomTokenId(
+                    item.token_id,
+                    customTokenId
+                  ),
                 }),
                 contractAddress: contractAddresses[index],
                 collectionId: collection.collectionId,
@@ -147,7 +150,8 @@ const useFetch = () => {
         const customTokenId = collection.customTokenId;
         const nftList = queryResult?.tokens?.length
           ? queryResult.tokens.map((item: string) => ({
-              token_id: customTokenId
+              token_id: item,
+              token_id_display: customTokenId
                 ? getCustomTokenId(item, customTokenId)
                 : item,
               collectionId: collection.collectionId,
