@@ -176,6 +176,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Juno Farming",
+    customTokenId: "JunoFarming",
     creator: "Juno Farming",
     imageUrl: "/backgrounds/juno_farming.png",
     backgroundUrl: "/marketplace-backgrounds/JunoFarming.png",
