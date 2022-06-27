@@ -1,6 +1,9 @@
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import Collections, { MarketplaceInfo } from "../constants/Collections";
+import Collections, {
+  MarketplaceContracts,
+  MarketplaceInfo,
+} from "../constants/Collections";
 import {
   CollectionStateType,
   DEFAULT_COLLECTION_STATE,
@@ -63,6 +66,17 @@ const useFetch = () => {
           storeObject.myMintedNfts = +(userInfo || "0");
         }
       }
+      if (collection.isLaunched) {
+        const tradingInfoResult = await runQuery(MarketplaceContracts[0], {
+          get_trading_info: {
+            address: collection.nftContract,
+          },
+        });
+        storeObject.tradingInfo = {
+          junoTotal: +(tradingInfoResult.total_juno || 0),
+          hopeTotal: +(tradingInfoResult.total_hope || 0),
+        };
+      }
       if (
         collection.marketplaceContract &&
         collection.marketplaceContract.length
@@ -74,13 +88,19 @@ const useFetch = () => {
               get_trading_info: {},
             }
           );
+          const newJunoTotal =
+            (storeObject.tradingInfo?.junoTotal || 0) +
+            +(tradingInfoResult.total_juno || "0") / 1e6;
+          const newHopeTotal =
+            (storeObject.tradingInfo?.hopeTotal || 0) +
+            +(tradingInfoResult.total_hope || "0") / 1e6;
           storeObject.tradingInfo = {
             junoMax: +(tradingInfoResult.max_juno || "0") / 1e6,
             junoMin: getMin(+(tradingInfoResult.min_juno || "0") / 1e6),
-            junoTotal: +(tradingInfoResult.total_juno || "0") / 1e6,
+            junoTotal: newJunoTotal,
             hopeMax: +(tradingInfoResult.max_hope || "0") / 1e6,
             hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
-            hopeTotal: +(tradingInfoResult.total_hope || "0") / 1e6,
+            hopeTotal: newHopeTotal,
           };
         } catch (e) {
         } finally {

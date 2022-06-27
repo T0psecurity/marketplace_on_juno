@@ -60,10 +60,11 @@ export const FilterMainContent = styled.div`
 `;
 
 export const SearchSortPanel = styled.div`
+  padding: 0 10px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-items: center;
-  align-items: center;
+  justify-items: start;
+  /* align-items: center; */
 `;
 
 export const SortContainer = styled.div`

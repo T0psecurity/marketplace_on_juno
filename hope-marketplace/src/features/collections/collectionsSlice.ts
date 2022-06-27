@@ -11,11 +11,11 @@ export type CollectionStateType = {
   myMintedNfts: number | null;
   price: number;
   tradingInfo?: {
-    junoMax: number;
-    junoMin: number;
+    junoMax?: number;
+    junoMin?: number;
     junoTotal: number;
-    hopeMax: number;
-    hopeMin: number;
+    hopeMax?: number;
+    hopeMin?: number;
     hopeTotal: number;
   };
 };

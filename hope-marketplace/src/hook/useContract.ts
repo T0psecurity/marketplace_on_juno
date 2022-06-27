@@ -8,7 +8,10 @@ import {
   useAppDispatch,
   // useAppSelector
 } from "../app/hooks";
-import Collections, { MarketplaceInfo } from "../constants/Collections";
+import Collections, {
+  MarketplaceContracts,
+  MarketplaceInfo,
+} from "../constants/Collections";
 import {
   importContract,
   // contractAccounts,
@@ -57,6 +60,9 @@ const useContract = () => {
           if (contract) dispatch(importContract(contract));
         });
     });
+    MarketplaceContracts.forEach((contract: string) =>
+      dispatch(importContract(contract))
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Collections]);

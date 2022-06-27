@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import {
   // DEFAULT_STATUS_FILTER,
@@ -96,6 +96,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   const [searchWord, setSearchWord] = useState<string>("");
   const [priceType, setPriceType] = useState<string>("");
 
+  const filterContainer = useRef(null);
+
+  console.log("filterContainer", filterContainer);
+
   useEffect(() => {
     onChangeFilterOption({
       price: isAscending
@@ -149,7 +153,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   return (
     <FilterWrapper>
-      <FilterContainer>
+      <FilterContainer ref={filterContainer}>
         <FilterContainerTitle>
           <FilterIcon /> Filter
           <ArrowIcon onClick={() => onChangeExpanded(!expanded)} />
