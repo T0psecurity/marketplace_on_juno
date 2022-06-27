@@ -7,7 +7,9 @@ const useFilter = (nfts: any[], filterOption: FilterOptions | undefined) => {
     let resultNfts = nfts.slice();
     if (filterOption.searchWord) {
       resultNfts = resultNfts.filter((nft: any) =>
-        nft.token_id_display.includes(filterOption.searchWord)
+        (nft.token_id_display || nft.token_id || "").includes(
+          filterOption.searchWord
+        )
       );
     }
     if (filterOption.priceType) {

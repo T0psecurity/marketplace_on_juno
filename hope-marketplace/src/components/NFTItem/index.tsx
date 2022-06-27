@@ -103,7 +103,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       <div>
         <NFTItemInfo>{targetCollection.title}</NFTItemInfo>
         <NFTItemInfoContainer>
-          <NFTItemInfo>{item.token_id_display}</NFTItemInfo>
+          <NFTItemInfo>{item.token_id_display || item.token_id}</NFTItemInfo>
           <NFTItemInfo>
             {!!price.amount && +price.amount > 0 ? (
               <>
