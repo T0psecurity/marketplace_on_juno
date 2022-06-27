@@ -8,6 +8,8 @@ import * as serviceWorker from "./serviceWorker";
 import { persistor, store } from "./app/store";
 import { PersistGate } from "redux-persist/es/integration/react";
 
+import "font-awesome/css/font-awesome.css";
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

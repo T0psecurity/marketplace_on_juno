@@ -6,6 +6,7 @@ export const StyledImage = styled.img<{
   imageVisible?: boolean;
 }>`
   cursor: pointer;
+  opacity: 0;
   ${({ width }) =>
     width &&
     css`
@@ -16,7 +17,22 @@ export const StyledImage = styled.img<{
     css`
       height: ${height};
     `}
-  opacity: ${({ imageVisible }) => (imageVisible ? 1 : 0)};
+  ${({ imageVisible }) =>
+    imageVisible &&
+    css`
+      opacity: 1;
+    `};
+
+  ${({ width, height }) =>
+    !width &&
+    !height &&
+    css`
+      max-width: 100%;
+      max-height: 100%;
+      width: max-content;
+      height: max-content;
+    `}
+  cursor: pointer;
   /* width: 370px;
   height: 400px; */
   border-radius: 30px;

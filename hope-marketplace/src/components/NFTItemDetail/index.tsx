@@ -72,7 +72,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
       </MintVideoContainer>
       <NFTDetailContainer>
         <DetailTitle>NFT ID</DetailTitle>
-        <DetailContent>{item.token_id || ""}</DetailContent>
+        <DetailContent>{item.token_id_display || ""}</DetailContent>
         <DetailTitle>Owner</DetailTitle>
         <DetailContent>{`${owner}${
           account?.address === owner ? " (YOU)" : ""

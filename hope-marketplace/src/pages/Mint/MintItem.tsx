@@ -103,8 +103,12 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   ).toString();
 
   const handleMintNft = async () => {
-    if (!mintItem.mintContract) {
+    if (!mintItem.mintContract && !mintItem.mintInfo?.mintUrl) {
       toast.error("Mint contract not found!");
+      return;
+    }
+    if (mintItem.mintInfo?.mintUrl) {
+      window.open(mintItem.mintInfo.mintUrl);
       return;
     }
     if (collectionState.totalNfts <= collectionState.mintedNfts) {
@@ -186,7 +190,11 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
           </FlexColumn>
           <MintButton
             soldOut={isSoldOut}
-            disabled={collectionState.myMintedNfts === null || isSoldOut}
+            disabled={
+              (mintItem.mintContract &&
+                collectionState.myMintedNfts === null) ||
+              isSoldOut
+            }
             width={operationItemSize}
             onClick={handleMintNft}
           >

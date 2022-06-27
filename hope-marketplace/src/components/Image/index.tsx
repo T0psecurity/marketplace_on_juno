@@ -9,7 +9,7 @@ export interface ImageProps {
 }
 
 const Image: React.FC<ImageProps> = ({ onClick, alt, src }) => {
-  const [logoSize, setLogoSize] = useState<{
+  const [imageSize, setImageSize] = useState<{
     width?: string;
     height?: string;
   }>({});
@@ -18,21 +18,26 @@ const Image: React.FC<ImageProps> = ({ onClick, alt, src }) => {
     if (onClick && typeof onClick === "function") onClick(e);
   };
 
-  const handleOnLoadImage = (e: any) => {
-    // console.log("e", e);
+  const handleOnLoadImage: React.ReactEventHandler<HTMLImageElement> = (
+    e: any
+  ) => {
     const {
-      target: { offsetHeight, offsetWidth },
+      target: { naturalWidth, naturalHeight },
     } = e;
-    if (offsetHeight > offsetWidth) {
-      setLogoSize({
-        // height: "400px",
-        height: "100%",
-      });
-    } else {
-      setLogoSize({
-        // width: "370px",
-        width: "100%",
-      });
+    const parent = e.target.parentElement || {};
+    const { offsetHeight, offsetWidth } = parent;
+    if (offsetHeight && offsetWidth) {
+      const ratioParent = offsetHeight / offsetWidth;
+      const ratioImage = naturalHeight / naturalWidth;
+      if (ratioParent < ratioImage) {
+        setImageSize({
+          height: "100%",
+        });
+      } else {
+        setImageSize({
+          width: "100%",
+        });
+      }
     }
     setImageVisible(true);
   };
@@ -40,11 +45,11 @@ const Image: React.FC<ImageProps> = ({ onClick, alt, src }) => {
   return (
     <StyledImage
       onClick={handleOnClick}
+      onLoad={handleOnLoadImage}
       alt={alt}
       src={src}
-      onLoad={handleOnLoadImage}
-      width={logoSize.width}
-      height={logoSize.height}
+      width={imageSize.width}
+      height={imageSize.height}
       imageVisible={imageVisible}
     />
   );

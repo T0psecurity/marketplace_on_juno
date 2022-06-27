@@ -1,4 +1,7 @@
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { GasPrice } from "@cosmjs/stargate";
 import { coins } from "@cosmjs/proto-signing";
+import { useWallet, useWalletManager } from "@noahsaso/cosmodal";
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -26,8 +29,10 @@ export const contractAddresses: any = {
 const useContract = () => {
   const dispatch = useAppDispatch();
   // const contracts = useAppSelector(contractAccounts);
+  const { connect } = useWalletManager();
 
   const state = useSelector((state: any) => state);
+  const { offlineSigner } = useWallet(state.connection.config.chainId);
 
   const initContracts = useCallback(() => {
     // remove existing contracts
@@ -88,6 +93,10 @@ const useContract = () => {
         funds?: string;
       }
     ) => {
+      if (!offlineSigner) {
+        connect();
+        throw new Error("No account selected");
+      }
       const contract = state.accounts.accountList[contractAddress];
       const account = state.accounts.keplrAccount;
       if (!contract) {
@@ -96,16 +105,50 @@ const useContract = () => {
         throw new Error("No contract selected");
       }
 
-      const client = await connectionManager.getSigningClient(
-        account,
-        state.connection.config
-      );
+      // const client = await connectionManager.getSigningClient(
+      //   account,
+      //   state.connection.config
+      // );
 
       const executeOptions = state.console.executeOptions;
       const executeMemo = option?.memo ?? executeOptions?.memo;
       const executeFunds = option?.funds ?? executeOptions?.funds;
 
-      return client.execute(
+      // --mobile connection
+      // const { client } = connectedWallet;
+      // const offlineSigner =
+      //   client instanceof KeplrWalletConnectV1
+      //     ? await client.getOfflineSignerOnlyAmino(config.chainId)
+      //     : await client.getOfflineSignerAuto(config.chainId);
+      const config = state.connection.config;
+
+      const cwClient = await SigningCosmWasmClient.connectWithSigner(
+        config["rpcEndpoint"],
+        offlineSigner,
+        {
+          gasPrice: GasPrice.fromString(
+            `${config["gasPrice"]}${config["microDenom"]}`
+          ),
+        }
+      );
+
+      // return client.execute(
+      //   account.address,
+      //   contract.address,
+      //   executeMsg,
+      //   "auto",
+      //   executeMemo,
+      //   executeFunds
+      //     ? coins(
+      //         toMicroAmount(
+      //           executeFunds,
+      //           state.connection.config["coinDecimals"]
+      //         ),
+      //         state.connection.config["microDenom"]
+      //       )
+      //     : undefined
+      // );
+      return cwClient.execute(
         account.address,
         contract.address,
         executeMsg,
@@ -122,7 +165,7 @@ const useContract = () => {
           : undefined
       );
     },
-    [state, initContracts]
+    [state, initContracts, connect, offlineSigner]
   );
 
   return {

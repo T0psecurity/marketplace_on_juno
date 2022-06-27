@@ -28,6 +28,7 @@ export interface MarketplaceBasicInfo {
   marketplaceContract: string[];
   socialLinks: SocialLinks;
   statisticOption?: StatisticOption; // invisible status for statistic items. if true, invisible
+  customTokenId?: string; // if this value exists token_id will be replaced. e.g. Hoper.1916 -> MintPass I.1916 when this value is "MintPass I"
 }
 export interface MarketplaceMintInfo {
   totalNfts: number;
@@ -35,6 +36,7 @@ export interface MarketplaceMintInfo {
   price: string;
   mintImage: string;
   mintDate?: string;
+  mintUrl?: string;
 }
 
 export interface MarketplaceInfo extends MarketplaceBasicInfo {
@@ -44,6 +46,7 @@ export interface MarketplaceInfo extends MarketplaceBasicInfo {
 const Collections: MarketplaceInfo[] = [
   {
     title: "Hope Galaxy NFT - Collection 1",
+    customTokenId: "HopeGalaxyI",
     creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/HopeGalaxy.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
@@ -68,6 +71,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Hope Galaxy Mint Pass 1",
+    customTokenId: "MintPassI",
     creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/Collection.png",
     backgroundUrl: "/marketplace-backgrounds/background.png",
@@ -88,6 +92,31 @@ const Collections: MarketplaceInfo[] = [
     },
     description:
       "This mint pass is the ticket for the minting of the Hope Galaxy NFT collection once it is launched",
+  },
+  {
+    title: "Hope Galaxy Mint Pass 2",
+    customTokenId: "MintPassII",
+    creator: "Hope Galaxy NFT",
+    imageUrl: "/backgrounds/MintPass2.png",
+    backgroundUrl: "/marketplace-backgrounds/MintPass2.png",
+    logoUrl: "/logos/mintPass2.png",
+    collectionId: "mintpass2",
+    nftContract:
+      "juno1x5kqvep2fq5sgvwwjn9uctzn0ts8vxnrtalxjucs5juu07hxxsvqgseuhr",
+    mintContract: "",
+    marketplaceContract: [
+      "juno14jvup0unhnn9377t49vqducyvrv0ader2ekc9z4teq6wepyt9mls3lw0wq",
+    ],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://hopegalaxy.io",
+      twitter: "https://twitter.com/HopeGalaxyNFT",
+    },
+    statisticOption: {
+      total: true,
+    },
+    description:
+      "This is mint pass is the ticket for the minting of the Hope Galaxy NFT collection once it is launched",
   },
   {
     title: "Juno Punks NFT",
@@ -147,14 +176,19 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Juno Farming",
+    customTokenId: "JunoFarming",
     creator: "Juno Farming",
     imageUrl: "/backgrounds/juno_farming.png",
     backgroundUrl: "/marketplace-backgrounds/JunoFarming.png",
     logoUrl: "/logos/JunoFarming.png",
     collectionId: "junofarming",
-    nftContract: "",
-    mintContract: "",
-    marketplaceContract: [""],
+    nftContract:
+      "juno1smtyfg7036ds982x94l543gwj7f0fky73hjtvxdpf83m0t0f86sstr3pal",
+    mintContract:
+      "juno1724gaheqp34h25ul8n7vl7rur8krdd02hyn5p4hlt065x7yuuwnsxjqqe5",
+    marketplaceContract: [
+      "juno17vess7spu37zqc86flweg5jkpwmvcc6g5ltkytst5tzlrrxr3j0qccalzx",
+    ],
     socialLinks: {
       discord: "https://discord.gg/BfKPacc5jF",
       website: "https://hopers.io/",
@@ -168,6 +202,7 @@ const Collections: MarketplaceInfo[] = [
       price: "8 JUNO",
       mintImage: "/mint-images/JunoFarming.png",
       mintDate: "2022-06-20",
+      mintUrl: "https://junofarming.web.app",
     },
   },
   {
@@ -187,11 +222,11 @@ const Collections: MarketplaceInfo[] = [
     },
     description: "NetaNOTs are Space Warriors in the NOTs Universe",
     mintInfo: {
-      totalNfts: 1950,
+      totalNfts: 200,
       royalties: "~% + 3%",
       price: "5 JUNO",
       mintImage: "/mint-images/NetaNOTs.png",
-      mintDate: "2022-06-27",
+      mintDate: "2022-06-28",
     },
   },
 ];

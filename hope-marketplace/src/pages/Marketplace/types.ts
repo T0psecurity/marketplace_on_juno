@@ -5,10 +5,7 @@ export enum PriceSortDirectionType {
 export interface FilterPanelProps {
   onChangeExpanded: any;
   expanded: boolean;
-  priceFilterOption: {
-    priceSortDirection: PriceSortDirectionType;
-    onChangePriceSortDirection: any;
-  };
+  onChangeFilterOption: any;
 }
 
 export type StatusFilterType = {
@@ -32,4 +29,6 @@ export type StatusFilterButtonType = {
 
 export type FilterOptions = {
   price: PriceSortDirectionType;
+  searchWord?: string;
+  priceType?: string;
 };

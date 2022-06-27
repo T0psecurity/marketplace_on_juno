@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { useWalletManager } from "@noahsaso/cosmodal";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import Collections from "../../constants/Collections";
-import { setKeplrAccount } from "../../features/accounts/accountsSlice";
-import { useKeplr } from "../../features/accounts/useKeplr";
+// import { useKeplr } from "../../features/accounts/useKeplr";
 import { setNFTs } from "../../features/nfts/nftsSlice";
+import {
+  AccountType,
+  setKeplrAccount,
+} from "../../features/accounts/accountsSlice";
 import useContract from "../../hook/useContract";
 import useFetch from "../../hook/useFetch";
 import useOnClickOutside from "../../hook/useOnClickOutside";
@@ -26,7 +30,8 @@ import {
   MenuContainer,
   MenuItem,
 } from "./styled";
-import { useCosmodal } from "../../features/accounts/useCosmodal";
+import { coin } from "@cosmjs/proto-signing";
+// import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
   {
@@ -45,8 +50,10 @@ const Header: React.FC = () => {
     useState<NodeJS.Timeout | null>(null);
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
-  const { connect } = useKeplr();
-  const { connect: connectWithCosmodal } = useCosmodal();
+  const config = useAppSelector((state) => state.connection.config);
+  // const { connect } = useKeplr();
+  // const { connect: connectWithCosmodal } = useCosmodal();
+  const { connect, disconnect, connectedWallet } = useWalletManager();
   const history = useHistory();
   const {
     fetchCollectionInfo,
@@ -82,15 +89,35 @@ const Header: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account]);
 
+  useEffect(() => {
+    if (!connectedWallet) {
+      dispatch(setKeplrAccount());
+      Collections.forEach((collection: MarketplaceInfo) =>
+        setNFTs([collection.collectionId, []])
+      );
+    } else {
+      const { name: label, address } = connectedWallet;
+      dispatch(
+        setKeplrAccount({
+          label,
+          address,
+          type: AccountType.Keplr,
+          balance: coin(0, config["microDenom"]),
+        })
+      );
+    }
+  }, [connectedWallet, dispatch, config]);
+
   const clickWalletButton = () => {
     if (!account) {
-      // connect();
-      connectWithCosmodal();
+      connect();
+      // connectWithCosmodal();
     } else {
       dispatch(setKeplrAccount());
       Collections.forEach((collection: MarketplaceInfo) =>
         setNFTs([collection.collectionId, []])
       );
+      disconnect();
     }
   };
 

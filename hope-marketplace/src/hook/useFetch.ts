@@ -14,6 +14,9 @@ const getMin = (number: number, max?: number): number => {
   return maxNumber === number ? 0 : number;
 };
 
+const getCustomTokenId = (origin: string, target: string): string =>
+  `${target}.${origin.split(".").pop()}`;
+
 const useFetch = () => {
   const { runQuery } = useContract();
   const dispatch = useAppDispatch();
@@ -58,22 +61,26 @@ const useFetch = () => {
         collection.marketplaceContract &&
         collection.marketplaceContract.length
       ) {
-        const tradingInfoResult = await runQuery(
-          collection.marketplaceContract[0],
-          {
-            get_trading_info: {},
-          }
-        );
-        storeObject.tradingInfo = {
-          junoMax: +(tradingInfoResult.max_juno || "0") / 1e6,
-          junoMin: getMin(+(tradingInfoResult.min_juno || "0") / 1e6),
-          junoTotal: +(tradingInfoResult.total_juno || "0") / 1e6,
-          hopeMax: +(tradingInfoResult.max_hope || "0") / 1e6,
-          hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
-          hopeTotal: +(tradingInfoResult.total_hope || "0") / 1e6,
-        };
+        try {
+          const tradingInfoResult = await runQuery(
+            collection.marketplaceContract[0],
+            {
+              get_trading_info: {},
+            }
+          );
+          storeObject.tradingInfo = {
+            junoMax: +(tradingInfoResult.max_juno || "0") / 1e6,
+            junoMin: getMin(+(tradingInfoResult.min_juno || "0") / 1e6),
+            junoTotal: +(tradingInfoResult.total_juno || "0") / 1e6,
+            hopeMax: +(tradingInfoResult.max_hope || "0") / 1e6,
+            hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
+            hopeTotal: +(tradingInfoResult.total_hope || "0") / 1e6,
+          };
+        } catch (e) {
+        } finally {
+          dispatch(setCollectionState([collection.collectionId, storeObject]));
+        }
       }
-      dispatch(setCollectionState([collection.collectionId, storeObject]));
     });
   }, [account, dispatch, runQuery]);
 
@@ -85,6 +92,7 @@ const useFetch = () => {
       ) {
         let queries: any = [];
         let contractAddresses: string[] = [];
+        const customTokenId = collection.customTokenId;
         collection.marketplaceContract.forEach(
           (contract: string, index: number) => {
             if (contracts[contract]) {
@@ -104,14 +112,19 @@ const useFetch = () => {
             queryResult?.offerings?.forEach((item: any) => {
               const crrItem = {
                 ...item,
+                ...(customTokenId && {
+                  token_id_display: getCustomTokenId(
+                    item.token_id,
+                    customTokenId
+                  ),
+                }),
                 contractAddress: contractAddresses[index],
                 collectionId: collection.collectionId,
               };
               if (item.seller === account?.address) {
                 listedNFTs = [...listedNFTs, crrItem];
-              } else {
-                marketplaceNFTs = [...marketplaceNFTs, crrItem];
               }
+              marketplaceNFTs = [...marketplaceNFTs, crrItem];
             });
           });
           dispatch(setNFTs([`${collection.collectionId}_listed`, listedNFTs]));
@@ -131,12 +144,16 @@ const useFetch = () => {
           tokens: {
             owner: account?.address,
             start_after: undefined,
-            limit: undefined,
+            limit: 100,
           },
         });
+        const customTokenId = collection.customTokenId;
         const nftList = queryResult?.tokens?.length
           ? queryResult.tokens.map((item: string) => ({
               token_id: item,
+              token_id_display: customTokenId
+                ? getCustomTokenId(item, customTokenId)
+                : item,
               collectionId: collection.collectionId,
             }))
           : [];

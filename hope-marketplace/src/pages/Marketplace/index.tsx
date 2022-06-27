@@ -21,11 +21,12 @@ import {
   MainContentContainer,
   NftList,
 } from "./styled";
-import { PriceSortDirectionType } from "./types";
+import { FilterOptions } from "./types";
 
 const Marketplace: React.FC = () => {
   const { isXl } = useMatchBreakpoints();
   const [expandedFilter, setExpandedFilter] = useState<boolean>(isXl);
+  const [filterOption, setFilterOption] = useState<FilterOptions>();
   const { search } = useLocation();
   const collectionId = new URLSearchParams(search).get("id");
 
@@ -40,21 +41,12 @@ const Marketplace: React.FC = () => {
 
   // console.log("targetCollection", targetCollection);
 
-  const [isAscending, setIsAscending] = React.useState(true);
   const marketplaceNFTs = useAppSelector((state) => {
     // console.log("nfts", state.nfts);
     return state.nfts[`${targetCollection.collectionId}_marketplace`];
   });
 
-  const filteredNfts = useFilter(marketplaceNFTs, {
-    price: isAscending
-      ? PriceSortDirectionType.asc
-      : PriceSortDirectionType.desc,
-  });
-
-  const handleSortByPrice = () => {
-    setIsAscending(!isAscending);
-  };
+  const filteredNfts = useFilter(marketplaceNFTs, filterOption);
 
   return (
     <Wrapper>
@@ -68,29 +60,26 @@ const Marketplace: React.FC = () => {
         created by
         <Creator>{` ${targetCollection.creator || ""} •`}</Creator>
       </CreatorContainer>
-      <Statistic items={marketplaceNFTs} collectionId={collectionId || ""} />
       <CollectionDetail>{targetCollection.description}</CollectionDetail>
+      <Statistic items={marketplaceNFTs} collectionId={collectionId || ""} />
       <HorizontalDivider />
       <MainContentContainer isMobile={!isXl} expanded={expandedFilter}>
         <FilterPanel
-          priceFilterOption={{
-            onChangePriceSortDirection: handleSortByPrice,
-            priceSortDirection: isAscending
-              ? PriceSortDirectionType.asc
-              : PriceSortDirectionType.desc,
-          }}
           onChangeExpanded={setExpandedFilter}
           expanded={expandedFilter}
-        />
-        <NftList>
-          Items
-          <NFTContainer
-            nfts={filteredNfts}
-            status={NFTItemStatus.BUY}
-            // sort={isAscending ? "as" : "des"}
-            sort={"as"}
-          />
-        </NftList>
+          onChangeFilterOption={setFilterOption}
+        >
+          <NftList>
+            Items
+            <NFTContainer
+              nfts={filteredNfts}
+              status={NFTItemStatus.BUY}
+              // sort={isAscending ? "as" : "des"}
+              emptyMsg="No NFTs on Sale"
+              sort={"as"}
+            />
+          </NftList>
+        </FilterPanel>
       </MainContentContainer>
     </Wrapper>
   );
