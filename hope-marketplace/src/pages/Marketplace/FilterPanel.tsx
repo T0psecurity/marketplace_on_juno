@@ -145,7 +145,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             )}
           </StatusFilterPanel>
         </CollapseCard> */}
-        <CollapseCard title="On Sail in">
+        <CollapseCard title="On Sale in">
           <CoinImageWrapper>
             <CoinImage
               coinType="hope"
