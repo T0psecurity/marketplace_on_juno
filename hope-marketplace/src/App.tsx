@@ -105,7 +105,7 @@ function App() {
         description:
           "The DAO governs the marketplace and earns rewards through the staking system of the token $HOPE.",
         url: "https://hopers.io",
-        icons: ["https://hopers.io/others/hopeHeaderLogo.png"],
+        icons: ["https://hopers.io/logo.png"],
       }}
     >
       <div className="main">
