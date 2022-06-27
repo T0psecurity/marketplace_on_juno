@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Wrapper, CartTitle, Icon, ContentContainer } from "./styled";
 
@@ -18,11 +18,7 @@ const CollapseCard: React.FC<CollapseCardProps> = ({
   maxHeight,
   className,
 }) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
-
-  useEffect(() => {
-    setIsExpanded(expanded || isExpanded);
-  }, [isExpanded, expanded]);
+  const [isExpanded, setIsExpanded] = useState<boolean>(expanded || false);
 
   const handleClickHeader = (e: any) => {
     if (onClick && typeof onClick === "function") {

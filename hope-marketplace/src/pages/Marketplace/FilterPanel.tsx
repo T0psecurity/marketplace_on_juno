@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   // DEFAULT_STATUS_FILTER,
   FilterPanelProps,
+  MetaDataFilterOption,
   PriceSortDirectionType,
   // StatusFilterButtonType,
   // StatusFilterType,
@@ -11,7 +12,7 @@ import {
 import {
   FilterWrapper,
   FilterMainContent,
-  // StyledButton as Button,
+  StyledButton as Button,
   SortByPriceButton,
   FilterContainer,
   FilterContainerTitle,
@@ -82,11 +83,15 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   expanded,
   onChangeExpanded,
   onChangeFilterOption,
+  metaDataOptions,
   children,
 }) => {
   // const [statusFilter, setStatusFilter] = useState<StatusFilterType>(
   //   DEFAULT_STATUS_FILTER
   // );
+  const [metaDataFilter, setMetaDataFilter] = useState<MetaDataFilterOption>(
+    {}
+  );
   const [isAscending, setIsAscending] = useState(true);
   const [searchWord, setSearchWord] = useState<string>("");
   const [priceType, setPriceType] = useState<string>("");
@@ -98,8 +103,15 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         : PriceSortDirectionType.desc,
       searchWord,
       priceType,
+      metaDataFilterOption: metaDataFilter,
     });
-  }, [isAscending, searchWord, onChangeFilterOption, priceType]);
+  }, [
+    isAscending,
+    searchWord,
+    onChangeFilterOption,
+    priceType,
+    metaDataFilter,
+  ]);
 
   const handleSortByPrice = () => {
     setIsAscending(!isAscending);
@@ -122,6 +134,18 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   //     [buttonItem.key]: !statusFilter[buttonItem.key],
   //   });
   // };
+
+  const handleChangeMetaDataFilter = (field: string, value: string) => {
+    const currentValue =
+      !!metaDataFilter[field] && metaDataFilter[field][value];
+    setMetaDataFilter({
+      ...metaDataFilter,
+      [field]: {
+        ...metaDataFilter[field],
+        [value]: !currentValue,
+      },
+    });
+  };
 
   return (
     <FilterWrapper>
@@ -157,12 +181,40 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             />
           </CoinImageWrapper>
         </CollapseCard>
-        <CollapseCard title="Attribute" />
-        <CollapseCard title="Background" />
-        <CollapseCard title="Body" />
-        <CollapseCard title="Hair" />
-        <CollapseCard title="Another ecc" />
-        <CollapseCard title="Another ecc" />
+        {!!metaDataOptions &&
+          Object.keys(metaDataOptions)
+            .sort((metaDataOption1: string, metaDataOption2: string) =>
+              metaDataOption1 > metaDataOption2 ? 1 : -1
+            )
+            .map((optionKey: string, keyIndex: number) => {
+              const options = metaDataOptions[optionKey];
+              if (!options || !options.length) return null;
+              const sortedOptions = options.sort(
+                (option1: string, option2: string) =>
+                  option1 > option2 ? 1 : -1
+              );
+              return (
+                <CollapseCard
+                  title={optionKey}
+                  key={`${optionKey}-${keyIndex}`}
+                >
+                  {sortedOptions.map((option: string, index: number) => (
+                    <Button
+                      key={index}
+                      onClick={() =>
+                        handleChangeMetaDataFilter(optionKey, option)
+                      }
+                      selected={
+                        !!metaDataFilter[optionKey] &&
+                        metaDataFilter[optionKey][option]
+                      }
+                    >
+                      {option.replace(/ /g, "")}
+                    </Button>
+                  ))}
+                </CollapseCard>
+              );
+            })}
       </FilterContainer>
       <FilterMainContent>
         <SearchSortPanel>

@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import { getCollectionById } from "../../constants/Collections";
 import { CollectionStateType } from "../../features/collections/collectionsSlice";
+import { getTokenIdNumber } from "../../hook/useFetch";
 // import { useAppDispatch } from "../../app/hooks";
 // import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useHandleNftItem, { NFTPriceType } from "../../hook/useHandleNftItem";
@@ -31,11 +32,6 @@ export const NFTItemStatus = {
   BUY: "buy",
   SELL: "sell",
   WITHDRAW: "withdraw",
-};
-
-const getTokenIdNumber = (id: string): string => {
-  if (!id) return "";
-  return id.split(".").pop() || "";
 };
 
 export default function NFTItem({ item, status }: NFTItemProps) {
@@ -98,7 +94,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   return (
     <NFTItemWrapper>
       <NFTItemImageWrapper onClick={handleGotoDetail} isMobile={isMobile}>
-        <Image alt="" src={url} />
+        <Image alt="" src={url} key={url} />
       </NFTItemImageWrapper>
       <div>
         <NFTItemInfo>{targetCollection.title}</NFTItemInfo>

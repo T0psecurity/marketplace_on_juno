@@ -46,6 +46,28 @@ const Marketplace: React.FC = () => {
     return state.nfts[`${targetCollection.collectionId}_marketplace`];
   });
 
+  const metaDataOptions = useMemo(() => {
+    let result: { [key: string]: string[] } = {};
+    marketplaceNFTs.forEach((nft: any) => {
+      if (
+        nft.metaData &&
+        nft.metaData.attributes &&
+        nft.metaData.attributes.length
+      ) {
+        nft.metaData.attributes.forEach(
+          (attribute: { trait_type: string; value: string }) => {
+            result[attribute.trait_type] = [
+              ...new Set(
+                (result[attribute.trait_type] || []).concat(attribute.value)
+              ),
+            ];
+          }
+        );
+      }
+    });
+    return result;
+  }, [marketplaceNFTs]);
+
   const filteredNfts = useFilter(marketplaceNFTs, filterOption);
 
   return (
@@ -68,6 +90,7 @@ const Marketplace: React.FC = () => {
           onChangeExpanded={setExpandedFilter}
           expanded={expandedFilter}
           onChangeFilterOption={setFilterOption}
+          metaDataOptions={metaDataOptions}
         >
           <NftList>
             Items

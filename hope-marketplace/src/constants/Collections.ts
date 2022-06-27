@@ -29,6 +29,7 @@ export interface MarketplaceBasicInfo {
   socialLinks: SocialLinks;
   statisticOption?: StatisticOption; // invisible status for statistic items. if true, invisible
   customTokenId?: string; // if this value exists token_id will be replaced. e.g. Hoper.1916 -> MintPass I.1916 when this value is "MintPass I"
+  metaDataUrl?: string;
 }
 export interface MarketplaceMintInfo {
   totalNfts: number;
@@ -51,6 +52,8 @@ const Collections: MarketplaceInfo[] = [
     imageUrl: "/backgrounds/HopeGalaxy.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
     collectionId: "hopegalaxy1",
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmRnRFS19fbs8Bo9VxSKxR3DAJfBqmYNiXPapQKhDTDku6/_metadata.json",
     nftContract:
       "juno1lqtavuw24dnnu56w79k7mefn8fhuz2w247dks2fes6hwd4rhpu2sumhhap",
     mintContract: "",
@@ -125,6 +128,8 @@ const Collections: MarketplaceInfo[] = [
     backgroundUrl: "/marketplace-backgrounds/JunoPunks.png",
     logoUrl: "/logos/JunoPunks.gif",
     collectionId: "junopunks",
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmTxetzZAqvhFrVVf1wQBx8hFrE8AnN85G5WvB489d81wV/_metadata.json",
     nftContract:
       "juno1e229el8t4lu4rx7xeekc77zspxa2gz732ld0e6a5q0sr0l3gm78stuvc5g",
     mintContract:
@@ -182,6 +187,8 @@ const Collections: MarketplaceInfo[] = [
     backgroundUrl: "/marketplace-backgrounds/JunoFarming.png",
     logoUrl: "/logos/JunoFarming.png",
     collectionId: "junofarming",
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmW9347NYmMus1GWyw8jCRYmfw8nzV4ntPJ5WShkRvhyao/_metadata.json",
     nftContract:
       "juno1smtyfg7036ds982x94l543gwj7f0fky73hjtvxdpf83m0t0f86sstr3pal",
     mintContract:

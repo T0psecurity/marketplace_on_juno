@@ -6,6 +6,7 @@ export interface FilterPanelProps {
   onChangeExpanded: any;
   expanded: boolean;
   onChangeFilterOption: any;
+  metaDataOptions?: { [key: string]: string[] };
 }
 
 export type StatusFilterType = {
@@ -27,8 +28,13 @@ export type StatusFilterButtonType = {
   key: keyof StatusFilterType;
 };
 
+export type MetaDataFilterOption = {
+  [key: string]: { [key: string]: boolean };
+};
+
 export type FilterOptions = {
   price: PriceSortDirectionType;
   searchWord?: string;
   priceType?: string;
+  metaDataFilterOption?: MetaDataFilterOption;
 };

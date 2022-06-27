@@ -7,6 +7,7 @@ import {
   setCollectionState,
 } from "../features/collections/collectionsSlice";
 import { setNFTs } from "../features/nfts/nftsSlice";
+import getQuery from "../util/useAxios";
 import useContract from "./useContract";
 
 const getMin = (number: number, max?: number): number => {
@@ -16,6 +17,11 @@ const getMin = (number: number, max?: number): number => {
 
 const getCustomTokenId = (origin: string, target: string): string =>
   `${target}.${origin.split(".").pop()}`;
+
+export const getTokenIdNumber = (id: string): string => {
+  if (!id) return "";
+  return id.split(".").pop() || "";
+};
 
 const useFetch = () => {
   const { runQuery } = useContract();
@@ -105,11 +111,20 @@ const useFetch = () => {
             }
           }
         );
+
+        const metaData = collection.metaDataUrl
+          ? await getQuery(collection.metaDataUrl)
+          : null;
+
         await Promise.all(queries).then((queryResults: any) => {
           let listedNFTs: any = [],
             marketplaceNFTs: any = [];
           queryResults.forEach((queryResult: any, index: number) => {
-            queryResult?.offerings?.forEach((item: any) => {
+            queryResult?.offerings?.forEach((item: any, itemIndex: number) => {
+              const tokenNumberStr = Number(getTokenIdNumber(item.token_id));
+              const tokenNumber: number = isNaN(tokenNumberStr)
+                ? 0
+                : tokenNumberStr;
               const crrItem = {
                 ...item,
                 ...(customTokenId && {
@@ -120,6 +135,10 @@ const useFetch = () => {
                 }),
                 contractAddress: contractAddresses[index],
                 collectionId: collection.collectionId,
+                ...(metaData &&
+                  metaData[tokenNumber - 1] && {
+                    metaData: metaData[tokenNumber - 1],
+                  }),
               };
               if (item.seller === account?.address) {
                 listedNFTs = [...listedNFTs, crrItem];

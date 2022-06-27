@@ -23,7 +23,12 @@ export const ContentContainer = styled.div<{
   expanded: boolean;
   maxHeight?: string;
 }>`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
   transition: height 1s;
+  overflow-y: auto;
   animation: ${({ expanded, maxHeight }) =>
     expanded
       ? css`

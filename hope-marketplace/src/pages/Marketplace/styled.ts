@@ -47,6 +47,8 @@ export const FilterWrapper = styled.div`
 `;
 
 export const FilterContainer = styled.div`
+  max-height: calc(100vh - 50px);
+  overflow-y: auto;
   & > div {
     padding: 10px;
   }
@@ -199,9 +201,12 @@ export const CoinImage = styled.div<{ coinType: string }>`
 `;
 
 export const StyledButton = styled(Button)<{ selected?: boolean }>`
-  width: 150px;
+  /* width: 150px; */
+  width: max-content;
+  height: max-content;
   font-size: 1em;
-  height: 30px;
+  min-height: 30px;
+  padding: 6px 5px;
   ${({ selected }) =>
     !selected &&
     css`
