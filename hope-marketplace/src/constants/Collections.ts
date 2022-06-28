@@ -238,7 +238,7 @@ const Collections: MarketplaceInfo[] = [
     description: "NetaNOTs are Space Warriors in the NOTs Universe",
     mintInfo: {
       totalNfts: 200,
-      royalties: "~% + 3%",
+      royalties: "5% + 3%",
       price: "4 JUNO",
       mintImage: "/mint-images/NetaNOTs.png",
       mintDate: "2022-06-28",

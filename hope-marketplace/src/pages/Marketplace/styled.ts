@@ -63,8 +63,8 @@ export const SearchSortPanel = styled.div`
   padding: 0 10px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-items: start;
-  /* align-items: center; */
+  justify-items: center;
+  align-items: center;
 `;
 
 export const FilterResultPanel = styled.div<{ siblingHeight: number }>`
@@ -72,7 +72,8 @@ export const FilterResultPanel = styled.div<{ siblingHeight: number }>`
 `;
 
 export const SortContainer = styled.div`
-  width: 50%;
+  margin-top: 10px;
+  width: 100%;
 `;
 
 export const SearchContainer = styled.div`
@@ -82,7 +83,12 @@ export const SearchContainer = styled.div`
 `;
 
 export const SearchWrapper = styled.div`
-  width: 50%;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
 export const SearchInput = styled.input`
@@ -260,6 +266,7 @@ export const StatisticName = styled.div`
 
 export const SortByPriceButton = styled(Button)`
   width: 300px;
+  max-width: 100%;
   margin: auto;
 `;
 
