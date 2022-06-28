@@ -13,6 +13,8 @@ import { setNFTs } from "../features/nfts/nftsSlice";
 import getQuery from "../util/useAxios";
 import useContract from "./useContract";
 
+const MAX_ITEMS = 300;
+
 const getMin = (number: number, max?: number): number => {
   const maxNumber = max || 1e5;
   return maxNumber === number ? 0 : number;
@@ -20,6 +22,31 @@ const getMin = (number: number, max?: number): number => {
 
 const getCustomTokenId = (origin: string, target: string): string =>
   `${target}.${origin.split(".").pop()}`;
+
+const buildNFTItem = (
+  item: any,
+  contractAddress: string,
+  collection: MarketplaceInfo,
+  metaData: any
+) => {
+  const customTokenId = collection.customTokenId;
+
+  const tokenNumberStr = Number(getTokenIdNumber(item.token_id));
+  const tokenNumber: number = isNaN(tokenNumberStr) ? 0 : tokenNumberStr;
+  const crrItem = {
+    ...item,
+    ...(customTokenId && {
+      token_id_display: getCustomTokenId(item.token_id, customTokenId),
+    }),
+    contractAddress,
+    collectionId: collection.collectionId,
+    ...(metaData &&
+      metaData[tokenNumber - 1] && {
+        metaData: metaData[tokenNumber - 1],
+      }),
+  };
+  return crrItem;
+};
 
 export const getTokenIdNumber = (id: string): string => {
   if (!id) return "";
@@ -73,8 +100,8 @@ const useFetch = () => {
           },
         });
         storeObject.tradingInfo = {
-          junoTotal: +(tradingInfoResult.total_juno || 0),
-          hopeTotal: +(tradingInfoResult.total_hope || 0),
+          junoTotal: +(tradingInfoResult.total_juno || 0) / 1e6,
+          hopeTotal: +(tradingInfoResult.total_hope || 0) / 1e6,
         };
       }
       if (
@@ -113,12 +140,33 @@ const useFetch = () => {
   const fetchMarketplaceNFTs = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
       if (
+        collection.isLaunched &&
         collection.marketplaceContract &&
         collection.marketplaceContract.length
       ) {
         let queries: any = [];
         let contractAddresses: string[] = [];
-        const customTokenId = collection.customTokenId;
+
+        const tokenIds = await runQuery(MarketplaceContracts[0], {
+          get_offering_id: {
+            address: collection.nftContract,
+          },
+        });
+        for (let i = 0; i < Math.ceil(tokenIds.length / MAX_ITEMS); i++) {
+          queries.push(
+            runQuery(MarketplaceContracts[0], {
+              get_offering_page: {
+                id: tokenIds.slice(
+                  i * MAX_ITEMS,
+                  Math.min(MAX_ITEMS * (i + 1), tokenIds.length)
+                ),
+                address: collection.nftContract,
+              },
+            })
+          );
+          contractAddresses.push(MarketplaceContracts[0]);
+        }
+
         collection.marketplaceContract.forEach(
           (contract: string, index: number) => {
             if (contracts[contract]) {
@@ -140,26 +188,17 @@ const useFetch = () => {
           let listedNFTs: any = [],
             marketplaceNFTs: any = [];
           queryResults.forEach((queryResult: any, index: number) => {
-            queryResult?.offerings?.forEach((item: any, itemIndex: number) => {
-              const tokenNumberStr = Number(getTokenIdNumber(item.token_id));
-              const tokenNumber: number = isNaN(tokenNumberStr)
-                ? 0
-                : tokenNumberStr;
-              const crrItem = {
-                ...item,
-                ...(customTokenId && {
-                  token_id_display: getCustomTokenId(
-                    item.token_id,
-                    customTokenId
-                  ),
-                }),
-                contractAddress: contractAddresses[index],
-                collectionId: collection.collectionId,
-                ...(metaData &&
-                  metaData[tokenNumber - 1] && {
-                    metaData: metaData[tokenNumber - 1],
-                  }),
-              };
+            const fetchedResult =
+              queryResult?.offerings ||
+              (!!queryResult.length && queryResult) ||
+              [];
+            fetchedResult.forEach((item: any, itemIndex: number) => {
+              const crrItem = buildNFTItem(
+                item,
+                contractAddresses[index],
+                collection,
+                metaData
+              );
               if (item.seller === account?.address) {
                 listedNFTs = [...listedNFTs, crrItem];
               }

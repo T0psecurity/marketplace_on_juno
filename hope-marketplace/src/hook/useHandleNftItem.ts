@@ -1,7 +1,10 @@
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getCollectionById } from "../constants/Collections";
+import {
+  getCollectionById,
+  MarketplaceContracts,
+} from "../constants/Collections";
 import useContract from "./useContract";
 import useFetch from "./useFetch";
 import { contractAddresses } from "./useContract";
@@ -37,7 +40,8 @@ const useHandleNftItem = () => {
         toast.error("Insufficient Price!");
         return;
       }
-      const marketplaceContract = targetCollection.marketplaceContract[0];
+      // const marketplaceContract = targetCollection.marketplaceContract[0];
+      const marketplaceContract = MarketplaceContracts[0];
       const nftContract = targetCollection.nftContract;
       const message = {
         send_nft: {
@@ -75,9 +79,14 @@ const useHandleNftItem = () => {
   );
   const withdrawNft = useCallback(
     async (item: any) => {
+      console.log("withdraw item", item);
+      const targetCollection = getCollectionById(item.collectionId);
       const message = {
         withdraw_nft: {
           offering_id: item.id,
+          ...(MarketplaceContracts.includes(item.contractAddress) && {
+            nft_address: targetCollection.nftContract,
+          }),
         },
       };
       try {
@@ -100,6 +109,7 @@ const useHandleNftItem = () => {
   const buyNft = useCallback(
     async (item: any) => {
       if (!item.contractAddress) return;
+      const targetCollection = getCollectionById(item.collectionId);
       const price = item?.list_price || {};
       const message =
         price.denom === NFTPriceType.HOPE
@@ -113,6 +123,9 @@ const useHandleNftItem = () => {
                 msg: btoa(
                   JSON.stringify({
                     offering_id: item.id,
+                    ...(!MarketplaceContracts.includes(
+                      item.contractAddress
+                    ) && { nft_address: targetCollection.nftContract }),
                   })
                 ),
               },
@@ -120,6 +133,9 @@ const useHandleNftItem = () => {
           : {
               buy_nft: {
                 offering_id: item.id,
+                ...(MarketplaceContracts.includes(item.contractAddress) && {
+                  nft_address: targetCollection.nftContract,
+                }),
               },
             };
       try {

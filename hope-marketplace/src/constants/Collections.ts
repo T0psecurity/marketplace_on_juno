@@ -253,7 +253,7 @@ export const getCollectionById = (id: string): MarketplaceInfo => {
 };
 
 export const MarketplaceContracts: string[] = [
-  "juno1xrr9e0lxfjelqf98m0lkwcv389gwppeer97yks6gze8jalyg7teq6mqa8l",
+  "juno1r0panlafacxwvuffvvf6lpkc4wx7kcupuuvq6ve9jd7hlheklpgsdumamt",
 ];
 
 export default Collections;

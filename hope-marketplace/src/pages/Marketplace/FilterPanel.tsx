@@ -98,7 +98,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   const filterContainer = useRef(null);
 
-  console.log("filterContainer", filterContainer);
+  // console.log("filterContainer", filterContainer);
 
   useEffect(() => {
     onChangeFilterOption({
