@@ -5,6 +5,7 @@ import { Title } from "../../components/PageTitle";
 import NFTItemDetail from "../../components/NFTItemDetail";
 import usePickNFT from "../../hook/usePickNFT";
 import useHandleNftItem from "../../hook/useHandleNftItem";
+import { getCollectionById } from "../../constants/Collections";
 import {
   Wrapper,
   NFTItemOperationButton,
@@ -28,6 +29,8 @@ const NFTDetail: React.FC = () => {
   const { pickNFTByTokenId } = usePickNFT();
   const selectedNFT: any = pickNFTByTokenId(token_id || "");
   const { sellNft, withdrawNft, buyNft, transferNft } = useHandleNftItem();
+
+  const targetCollection = getCollectionById(selectedNFT.collectionId);
 
   const status = selectedNFT.seller
     ? selectedNFT.seller === account?.address
@@ -63,7 +66,7 @@ const NFTDetail: React.FC = () => {
   };
   return (
     <Wrapper>
-      <Title title="HOPE GALAXY NFT - collection 1" />
+      <Title title={targetCollection.title} />
       <NFTItemDetail item={selectedNFT} />
       <NFTItemOperationContainer>
         <NFTItemOperationButton onClick={handleNFTItem}>
