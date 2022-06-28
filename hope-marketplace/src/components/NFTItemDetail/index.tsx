@@ -36,6 +36,8 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   let url = "";
   if (item.collectionId === "mintpass1") {
     url = "/others/mint_pass.png";
+  } else if (item.collectionId === "mintpass2") {
+    url = "/others/mint_pass2.png";
   } else if (item.collectionId === "hopegalaxy1") {
     url = `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${getTokenIdNumber(
       item.token_id
