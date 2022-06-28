@@ -12,7 +12,10 @@ import {
   NFTItemOperationContainer,
   NFTItemPriceInputer,
   NFTItemPriceType,
+  NFTItemAttributesContainer,
+  NFTItemAttributeItem,
 } from "./styled";
+import { CollectionTraitsStateType } from "../../features/collectionTraits/collectionTraitsSlice";
 
 const NFTPriceType = {
   HOPE: "hope",
@@ -31,6 +34,10 @@ const NFTDetail: React.FC = () => {
   const { sellNft, withdrawNft, buyNft, transferNft } = useHandleNftItem();
 
   const targetCollection = getCollectionById(selectedNFT.collectionId);
+
+  const collectionTraitsState: CollectionTraitsStateType = useAppSelector(
+    (state: any) => state.collectionTraitsStates[selectedNFT.collectionId]
+  );
 
   const status = selectedNFT.seller
     ? selectedNFT.seller === account?.address
@@ -64,6 +71,7 @@ const NFTDetail: React.FC = () => {
   const handleTransferNFT = async () => {
     await transferNft(transferAdd, selectedNFT, "/profile");
   };
+
   return (
     <Wrapper>
       <Title title={targetCollection.title} />
@@ -118,6 +126,24 @@ const NFTDetail: React.FC = () => {
             onChange={handleChangeTransferAdd}
           />
         </NFTItemOperationContainer>
+      )}
+      {selectedNFT.metaData?.attributes?.length && (
+        <NFTItemAttributesContainer>
+          {selectedNFT.metaData?.attributes.map(
+            (
+              attribute: { traits_type: string; value: string },
+              index: number
+            ) =>
+              collectionTraitsState[attribute.value] && (
+                <NFTItemAttributeItem key={index}>
+                  <span>{attribute.value}</span>
+                  <span>{`${collectionTraitsState[attribute.value]} / ${
+                    collectionTraitsState.total
+                  } `}</span>
+                </NFTItemAttributeItem>
+              )
+          )}
+        </NFTItemAttributesContainer>
       )}
     </Wrapper>
   );

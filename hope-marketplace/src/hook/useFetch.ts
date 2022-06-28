@@ -13,6 +13,17 @@ import { setNFTs } from "../features/nfts/nftsSlice";
 import getQuery from "../util/useAxios";
 import useContract from "./useContract";
 import { MintContracts } from "../constants/Collections";
+import { setCollectionTraitStates } from "../features/collectionTraits/collectionTraitsSlice";
+
+type AttributeType = {
+  trait_type: string;
+  value: string;
+};
+
+type MetaDataItemType = {
+  attributes: AttributeType[];
+  [key: string]: any;
+};
 
 const MAX_ITEMS = 300;
 
@@ -47,6 +58,20 @@ const buildNFTItem = (
       }),
   };
   return crrItem;
+};
+
+const getTraitsStatus = (
+  metaData: MetaDataItemType[]
+): { total: number; [key: string]: number } => {
+  let result: { total: number; [key: string]: number } = { total: 0 };
+  metaData.forEach((metaDataItem: MetaDataItemType) => {
+    result.total += 1;
+    const attributes: AttributeType[] = metaDataItem.attributes;
+    attributes.forEach((attribute: AttributeType) => {
+      result[attribute.value] = (result[attribute.value] || 0) + 1;
+    });
+  });
+  return result;
 };
 
 export const getTokenIdNumber = (id: string): string => {
@@ -202,6 +227,14 @@ const useFetch = () => {
         const metaData = collection.metaDataUrl
           ? await getQuery(collection.metaDataUrl)
           : null;
+        if (metaData) {
+          dispatch(
+            setCollectionTraitStates([
+              collection.collectionId,
+              getTraitsStatus(metaData),
+            ])
+          );
+        }
 
         await Promise.all(queries).then((queryResults: any) => {
           let listedNFTs: any = [],

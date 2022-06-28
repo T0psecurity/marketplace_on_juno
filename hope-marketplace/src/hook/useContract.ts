@@ -77,8 +77,7 @@ const useContract = () => {
       // const contract = state.accounts.accountList[contractAddress];
       const contract = state.accounts.accountList[contractAddress];
       if (!contract) {
-        initContracts();
-        // dispatch(importContract(contractAddress));
+        if (contractAddress) dispatch(importContract(contractAddress));
         console.error("contract selection error", contractAddress);
         throw new Error("No contract selected");
       }
@@ -91,7 +90,7 @@ const useContract = () => {
       );
       return result;
     },
-    [state, initContracts]
+    [state, dispatch]
   );
 
   const runExecute = useCallback(
@@ -110,7 +109,7 @@ const useContract = () => {
       const contract = state.accounts.accountList[contractAddress];
       const account = state.accounts.keplrAccount;
       if (!contract) {
-        initContracts();
+        if (contractAddress) dispatch(importContract(contractAddress));
         console.error("contract selection error");
         throw new Error("No contract selected");
       }
@@ -175,7 +174,7 @@ const useContract = () => {
           : undefined
       );
     },
-    [state, initContracts, connect, offlineSigner]
+    [state, dispatch, connect, offlineSigner]
   );
 
   return {
