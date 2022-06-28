@@ -226,7 +226,8 @@ const Collections: MarketplaceInfo[] = [
     backgroundUrl: "/marketplace-backgrounds/nots.png",
     logoUrl: "/logos/nots.jpg",
     collectionId: "netanots",
-    nftContract: "",
+    nftContract:
+      "juno1pu5k9965hcxx670gzxmlxqsy90pvfd8muef3lttux95gal5vsecqlf9x7h",
     mintContract: "",
     marketplaceContract: [""],
     socialLinks: {
@@ -238,11 +239,11 @@ const Collections: MarketplaceInfo[] = [
     mintInfo: {
       totalNfts: 200,
       royalties: "~% + 3%",
-      price: "5 JUNO",
+      price: "4 JUNO",
       mintImage: "/mint-images/NetaNOTs.png",
       mintDate: "2022-06-28",
     },
-    isLaunched: false,
+    isLaunched: true,
   },
 ];
 
@@ -254,6 +255,10 @@ export const getCollectionById = (id: string): MarketplaceInfo => {
 
 export const MarketplaceContracts: string[] = [
   "juno1r0panlafacxwvuffvvf6lpkc4wx7kcupuuvq6ve9jd7hlheklpgsdumamt",
+];
+
+export const MintContracts: string[] = [
+  "juno1c9dr05cryh2fn5hwr4aa9rhzfy5vxdmq3uc3xfrku9e5cs8sqcrq5r5g6d",
 ];
 
 export default Collections;

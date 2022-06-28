@@ -27,6 +27,7 @@ import {
   SearchWrapper,
   CoinImage,
   CoinImageWrapper,
+  FilterResultPanel,
 } from "./styled";
 
 const ArrowIcon = ({
@@ -96,9 +97,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   const [searchWord, setSearchWord] = useState<string>("");
   const [priceType, setPriceType] = useState<string>("");
 
-  const filterContainer = useRef(null);
+  const searchSortContainer = useRef(null);
 
-  // console.log("filterContainer", filterContainer);
+  const searchSortHeight =
+    (searchSortContainer?.current as any)?.offsetHeight || 0;
 
   useEffect(() => {
     onChangeFilterOption({
@@ -153,7 +155,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   return (
     <FilterWrapper>
-      <FilterContainer ref={filterContainer}>
+      <FilterContainer>
         <FilterContainerTitle>
           <FilterIcon /> Filter
           <ArrowIcon onClick={() => onChangeExpanded(!expanded)} />
@@ -221,7 +223,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             })}
       </FilterContainer>
       <FilterMainContent>
-        <SearchSortPanel>
+        <SearchSortPanel ref={searchSortContainer}>
           <SortContainer>
             <SortByPriceButton onClick={handleSortByPrice}>{`Sort By ${
               isAscending ? "Descending" : "Ascending"
@@ -239,7 +241,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             </SearchContainer>
           </SearchWrapper>
         </SearchSortPanel>
-        {children}
+        <FilterResultPanel siblingHeight={searchSortHeight}>
+          {children}
+        </FilterResultPanel>
       </FilterMainContent>
     </FilterWrapper>
   );

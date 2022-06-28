@@ -39,8 +39,6 @@ const Marketplace: React.FC = () => {
     [collectionId]
   );
 
-  // console.log("targetCollection", targetCollection);
-
   const marketplaceNFTs = useAppSelector((state) => {
     // console.log("nfts", state.nfts);
     return state.nfts[`${targetCollection.collectionId}_marketplace`];

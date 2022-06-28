@@ -12,6 +12,7 @@ import {
 import { setNFTs } from "../features/nfts/nftsSlice";
 import getQuery from "../util/useAxios";
 import useContract from "./useContract";
+import { MintContracts } from "../constants/Collections";
 
 const MAX_ITEMS = 300;
 
@@ -92,7 +93,25 @@ const useFetch = () => {
           });
           storeObject.myMintedNfts = +(userInfo || "0");
         }
+      } else if (collection.isLaunched) {
+        try {
+          const queryResult = await runQuery(MintContracts[0], {
+            get_collection_info: {
+              nft_address: collection.nftContract,
+            },
+          });
+          storeObject = {
+            mintCheck: queryResult.check_mint,
+            mintedNfts: +(queryResult.mint_count || "0"),
+            totalNfts: +(queryResult.total_nft || "0"),
+            maxNfts: +(queryResult.max_nft || queryResult.total_nft || "0"),
+            imageUrl: queryResult.image_url,
+            price: +(queryResult.price || "0") / 1e6,
+            myMintedNfts: null,
+          };
+        } catch (e) {}
       }
+
       if (collection.isLaunched) {
         const tradingInfoResult = await runQuery(MarketplaceContracts[0], {
           get_trading_info: {

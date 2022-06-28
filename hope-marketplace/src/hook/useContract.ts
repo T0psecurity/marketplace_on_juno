@@ -11,6 +11,7 @@ import {
 import Collections, {
   MarketplaceContracts,
   MarketplaceInfo,
+  MintContracts,
 } from "../constants/Collections";
 import {
   importContract,
@@ -61,6 +62,9 @@ const useContract = () => {
         });
     });
     MarketplaceContracts.forEach((contract: string) =>
+      dispatch(importContract(contract))
+    );
+    MintContracts.forEach((contract: string) =>
       dispatch(importContract(contract))
     );
 
