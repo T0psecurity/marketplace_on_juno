@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { saveAs } from "file-saver";
 import { useAppSelector } from "../../app/hooks";
 import { CollectionStateType } from "../../features/collections/collectionsSlice";
-import { NFTPriceType } from "../../hook/useHandleNftItem";
+import useHandleNftItem, { NFTPriceType } from "../../hook/useHandleNftItem";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import Image from "../Image";
 import {
@@ -13,6 +13,11 @@ import {
   Wrapper,
   NFTItemImageDownloadIcon,
   // NFTItemImage,
+  NFTItemOperationButton,
+  NFTItemOperationContainer,
+  NFTItemPriceInputer,
+  NFTItemPriceType,
+  CoinIcon,
 } from "./styled";
 
 interface NFTItemDetailProps {
@@ -25,12 +30,17 @@ const getTokenIdNumber = (id: string): string => {
 };
 
 const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
+  const { sellNft, withdrawNft, buyNft, transferNft } = useHandleNftItem();
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const isMobile = isXs || isSm || isMd;
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[item.collectionId]
   );
+  const [nftPrice, setNftPrice] = useState("");
+  const [transferAdd, setTransferAdd] = useState("");
+  const [nftPriceType, setNftPriceType] = useState("");
+
   const owner = item.seller || account?.address || "";
   const price = item.list_price || {};
   let url = "";
@@ -48,6 +58,39 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
   const downloadImage = () => {
     saveAs(url, item.token_id);
+  };
+
+  const status = item.seller
+    ? item.seller === account?.address
+      ? "Withdraw"
+      : "Buy"
+    : "Sell";
+
+  const handleNFTItem = async () => {
+    if (status === "Sell") {
+      await sellNft(item, nftPrice, nftPriceType);
+    } else if (status === "Withdraw") {
+      await withdrawNft(item);
+    } else if (status === "Buy") {
+      await buyNft(item);
+    }
+  };
+  const handleChangeNFTPrice = (e: any) => {
+    const { value } = e.target;
+    setNftPrice(value);
+    // if (!isNaN(Number(value))) setNftPrice(Number(value));
+  };
+
+  const handleChangePriceType = (e: any) => {
+    const { value } = e.target;
+    setNftPriceType(value);
+  };
+  const handleChangeTransferAdd = (e: any) => {
+    const { value } = e.target;
+    setTransferAdd(value);
+  };
+  const handleTransferNFT = async () => {
+    await transferNft(transferAdd, item, "/profile");
   };
 
   return (
@@ -74,17 +117,80 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
       </MintVideoContainer>
       <NFTDetailContainer>
         <DetailTitle>NFT ID</DetailTitle>
-        <DetailContent>{item.token_id_display || ""}</DetailContent>
+        <DetailContent>
+          {item.token_id_display || item.token_id || ""}
+        </DetailContent>
         <DetailTitle>Owner</DetailTitle>
         <DetailContent>{`${owner}${
           account?.address === owner ? " (YOU)" : ""
         }`}</DetailContent>
         <DetailTitle>Price</DetailTitle>
-        <DetailContent>{`${+(price?.amount || 0) / 1e6} ${
-          price.denom
-            ? `${price.denom === NFTPriceType.HOPE ? "HOPE" : "JUNO"}`
-            : ""
-        }`}</DetailContent>
+        <DetailContent>
+          <CoinIcon
+            alt=""
+            src={
+              price.denom === NFTPriceType.HOPE
+                ? "/coin-images/hope.png"
+                : "/coin-images/juno.png"
+            }
+          />
+          {`${+(price?.amount || 0) / 1e6} ${
+            price.denom
+              ? `${price.denom === NFTPriceType.HOPE ? "HOPE" : "JUNO"}`
+              : ""
+          }`}
+        </DetailContent>
+        <NFTItemOperationContainer>
+          <NFTItemOperationButton onClick={handleNFTItem}>
+            {status} Now
+          </NFTItemOperationButton>
+          {status === "Sell" && (
+            <div style={{ display: "flex" }}>
+              <NFTItemPriceInputer
+                width="200px"
+                key={item.token_id}
+                value={nftPrice}
+                onChange={handleChangeNFTPrice}
+              />
+              <NFTItemPriceType>
+                <input
+                  type="radio"
+                  id={`hope-${item.token_id}`}
+                  name="priceType"
+                  value={NFTPriceType.HOPE}
+                  onClick={handleChangePriceType}
+                />
+                <label htmlFor={`hope-${item.token_id}`}>HOPE</label>
+                <br />
+                <input
+                  type="radio"
+                  id={`juno-${item.token_id}`}
+                  name="priceType"
+                  value={NFTPriceType.JUNO}
+                  onClick={handleChangePriceType}
+                />
+                <label htmlFor={`juno-${item.token_id}`}>JUNO</label>
+                <br />
+              </NFTItemPriceType>
+            </div>
+          )}
+        </NFTItemOperationContainer>
+        {status === "Sell" && (
+          <NFTItemOperationContainer>
+            <NFTItemOperationButton
+              onClick={handleTransferNFT}
+              style={{ background: "#0000ff" }}
+            >
+              Transfer
+            </NFTItemOperationButton>
+
+            <NFTItemPriceInputer
+              width="270px"
+              value={transferAdd}
+              onChange={handleChangeTransferAdd}
+            />
+          </NFTItemOperationContainer>
+        )}
       </NFTDetailContainer>
     </Wrapper>
   );

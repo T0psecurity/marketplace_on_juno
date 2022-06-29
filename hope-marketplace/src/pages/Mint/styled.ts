@@ -8,7 +8,8 @@ export const Wrapper = styled.div`
 
 export const ButtonContainer = styled.div`
   display: flex;
-  justify-content: left;
+  justify-content: center;
+  flex-wrap: wrap;
 `;
 
 export const MintDetailContainer = styled.div<{ isMobile?: boolean }>`
@@ -146,8 +147,9 @@ export const StyledButton = styled(Button)<{
   color?: string;
   checked?: boolean;
 }>`
-  width: 132px;
+  width: 120px;
   height: 45px;
+  font-size: 18px;
   color: black;
   ${({ backgroundColor }) =>
     backgroundColor &&
