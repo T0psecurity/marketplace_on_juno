@@ -136,7 +136,7 @@ const NFTDetail: React.FC = () => {
             ) =>
               collectionTraitsState[attribute.value] && (
                 <NFTItemAttributeItem key={index}>
-                  <span>{attribute.value}</span>
+                  <span>{attribute.value.replace(/_/g, " ")}</span>
                   <span>{`${collectionTraitsState[attribute.value]} / ${
                     collectionTraitsState.total
                   } `}</span>

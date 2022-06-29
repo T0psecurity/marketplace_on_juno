@@ -4,11 +4,14 @@ import { ChevronIcon } from "./Icons";
 export const Wrapper = styled.div``;
 
 export const CartTitle = styled.div`
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
   text-align: left;
   font-size: 1em;
   font-weight: bold;
   position: relative;
   cursor: pointer;
+  padding: 15px 5px;
 `;
 
 export const Icon = styled(ChevronIcon)<{ expanded: boolean }>`
@@ -29,10 +32,10 @@ export const ContentContainer = styled.div<{
   flex-wrap: wrap;
   transition: height 1s;
   overflow-y: auto;
-  animation: ${({ expanded, maxHeight }) =>
+  ${({ expanded, maxHeight }) =>
     expanded
       ? css`
-          ${keyframes`
+          animation: ${keyframes`
             from {
               max-height: 0px;
               opacity: 0;
@@ -42,9 +45,10 @@ export const ContentContainer = styled.div<{
               opacity: 1;
             }
           `} 500ms linear forwards;
+          padding: 10px 5px;
         `
       : css`
-          ${keyframes`
+          animation: ${keyframes`
             from {
               max-height: ${maxHeight || "500px"};
               opacity: 1;
@@ -53,6 +57,6 @@ export const ContentContainer = styled.div<{
               max-height: 0px;
               opacity: 0;
             }
-          `} 500ms linear forwards
+          `} 500ms linear forwards;
         `};
 `;

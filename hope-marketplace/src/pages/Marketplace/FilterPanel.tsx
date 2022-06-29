@@ -175,7 +175,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             )}
           </StatusFilterPanel>
         </CollapseCard> */}
-        <CollapseCard title="On Sale in">
+        <CollapseCard title="On Sale in" expanded>
           <CoinImageWrapper>
             <CoinImage
               coinType="hope"
@@ -215,7 +215,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                         metaDataFilter[optionKey][option]
                       }
                     >
-                      {option.replace(/ /g, "")}
+                      {option.replace(/_/g, " ")}
                     </Button>
                   ))}
                 </CollapseCard>

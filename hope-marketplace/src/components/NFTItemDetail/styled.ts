@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 export const MintVideoContainer = styled.div`
-  width: 200px;
-  height: 300px;
+  width: 50vw;
+  /* height: 300px; */
   margin-right: 30px;
   position: relative;
 `;
@@ -33,7 +33,8 @@ export const NFTItemImage = styled.img`
 
 export const Wrapper = styled.div<{ isMobile: boolean }>`
   display: grid;
-  grid-template-columns: 230px auto;
+  grid-template-columns: 50vw auto;
+  grid-gap: 20px;
   ${({ isMobile }) =>
     isMobile &&
     css`
