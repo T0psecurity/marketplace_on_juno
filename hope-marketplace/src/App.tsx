@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   // HashRouter,
   Router,
@@ -27,17 +27,14 @@ import {
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Main from "./pages/Main";
-import {
-  // useAppDispatch,
-  //  useAppDispatch,
-  useAppSelector,
-} from "./app/hooks";
+import { useAppDispatch, useAppSelector } from "./app/hooks";
 // import { deleteAccount } from "./features/accounts/accountsSlice";
 // import useContract from "./hook/useContract";
 // import useFetch from "./hook/useFetch";
 
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
+import { fetchTokenPrices } from "./features/tokenPrices/tokenPricesSlice";
 
 const history = createBrowserHistory();
 
@@ -45,7 +42,16 @@ setBasePath(
   "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.64/dist/"
 );
 function App() {
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchTokenPrices());
+    const fetchTokenPriceInterval = setInterval(() => {
+      dispatch(fetchTokenPrices());
+    }, 1000 * 60 * 10);
+    return clearInterval(fetchTokenPriceInterval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const config = useAppSelector((state) => state.connection.config);
   // const chainInfo: ChainInfo = getChainConfig(config);
 

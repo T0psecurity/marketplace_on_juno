@@ -157,6 +157,34 @@ const Collections: MarketplaceInfo[] = [
     isLaunched: true,
   },
   {
+    title: "Neta NOTs",
+    creator: "NOTs",
+    imageUrl: "/backgrounds/neta_nots.png",
+    backgroundUrl: "/marketplace-backgrounds/nots.png",
+    logoUrl: "/logos/nots.jpg",
+    collectionId: "netanots",
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmZMiSthAoW2qikg5LNz2TeWbf79Coyd1RtMbSGLSMEyhD",
+    nftContract:
+      "juno1pu5k9965hcxx670gzxmlxqsy90pvfd8muef3lttux95gal5vsecqlf9x7h",
+    mintContract: "",
+    marketplaceContract: [""],
+    socialLinks: {
+      discord: "https://t.co/6sfjxZD6U6",
+      website: "https://t.co/eohk7QllPb",
+      twitter: "https://twitter.com/NotsNfts",
+    },
+    description: "NetaNOTs are Space Warriors in the NOTs Universe",
+    mintInfo: {
+      totalNfts: 200,
+      royalties: "5% + 3%",
+      price: "4 JUNO",
+      mintImage: "/mint-images/NetaNOTs.png",
+      mintDate: "2022-06-28",
+    },
+    isLaunched: true,
+  },
+  {
     title: "Sunnyside Nightlife",
     creator: "Sunnyside Reapers",
     imageUrl: "/backgrounds/Sunnyside.png",
@@ -219,31 +247,6 @@ const Collections: MarketplaceInfo[] = [
     },
     isLaunched: true,
   },
-  {
-    title: "Neta NOTs",
-    creator: "NOTs",
-    imageUrl: "/backgrounds/neta_nots.png",
-    backgroundUrl: "/marketplace-backgrounds/nots.png",
-    logoUrl: "/logos/nots.jpg",
-    collectionId: "netanots",
-    nftContract: "",
-    mintContract: "",
-    marketplaceContract: [""],
-    socialLinks: {
-      discord: "https://t.co/6sfjxZD6U6",
-      website: "https://t.co/eohk7QllPb",
-      twitter: "https://twitter.com/NotsNfts",
-    },
-    description: "NetaNOTs are Space Warriors in the NOTs Universe",
-    mintInfo: {
-      totalNfts: 200,
-      royalties: "~% + 3%",
-      price: "5 JUNO",
-      mintImage: "/mint-images/NetaNOTs.png",
-      mintDate: "2022-06-28",
-    },
-    isLaunched: false,
-  },
 ];
 
 export const getCollectionById = (id: string): MarketplaceInfo => {
@@ -254,6 +257,10 @@ export const getCollectionById = (id: string): MarketplaceInfo => {
 
 export const MarketplaceContracts: string[] = [
   "juno1r0panlafacxwvuffvvf6lpkc4wx7kcupuuvq6ve9jd7hlheklpgsdumamt",
+];
+
+export const MintContracts: string[] = [
+  "juno1c9dr05cryh2fn5hwr4aa9rhzfy5vxdmq3uc3xfrku9e5cs8sqcrq5r5g6d",
 ];
 
 export default Collections;

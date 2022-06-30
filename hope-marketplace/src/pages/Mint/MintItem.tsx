@@ -3,8 +3,10 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../../app/hooks";
 import {
+  getCollectionById,
   MarketplaceInfo,
   MarketplaceMintInfo,
+  MintContracts,
 } from "../../constants/Collections";
 import { CollectionStateType } from "../../features/collections/collectionsSlice";
 import useContract from "../../hook/useContract";
@@ -91,6 +93,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[mintItem.collectionId]
   );
+  const targetCollection = getCollectionById(mintItem.collectionId);
   const mintDate = mintInfo.mintDate ? new Date(mintInfo.mintDate) : new Date();
   const now = new Date();
   const isLive = compareDate(now, mintDate) !== -1;
@@ -103,10 +106,10 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   ).toString();
 
   const handleMintNft = async () => {
-    if (!mintItem.mintContract && !mintItem.mintInfo?.mintUrl) {
-      toast.error("Mint contract not found!");
-      return;
-    }
+    // if (!mintItem.mintContract && !mintItem.mintInfo?.mintUrl) {
+    //   toast.error("Mint contract not found!");
+    //   return;
+    // }
     if (mintItem.mintInfo?.mintUrl) {
       window.open(mintItem.mintInfo.mintUrl);
       return;
@@ -120,12 +123,16 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       if (item) mintIndexArray.push(index);
     });
     const selectedIndex = mintIndexArray.sort(() => 0.5 - Math.random()).pop();
-    const message = {
-      mint: { rand: `${(selectedIndex || 0) + 1}` },
-    };
+    const message = mintItem.mintContract
+      ? {
+          mint: { rand: `${(selectedIndex || 0) + 1}` },
+        }
+      : {
+          mint: { address: targetCollection.nftContract },
+        };
     // console.log(mintItem.mintContract, "message", message);
     try {
-      await runExecute(mintItem.mintContract, message, {
+      await runExecute(mintItem.mintContract || MintContracts[0], message, {
         funds: `${collectionState.price > 0 ? collectionState.price : ""}`,
       });
       toast.success("Success!");
@@ -200,7 +207,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
           >
             {isSoldOut
               ? "Mint Sold Out"
-              : isLive && mintItem.mintContract
+              : isLive && targetCollection.isLaunched
               ? "Mint Now"
               : `Mint ${convertDateToString(mintInfo.mintDate || "")}`}
           </MintButton>

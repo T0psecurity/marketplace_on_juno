@@ -123,9 +123,9 @@ const useHandleNftItem = () => {
                 msg: btoa(
                   JSON.stringify({
                     offering_id: item.id,
-                    ...(!MarketplaceContracts.includes(
-                      item.contractAddress
-                    ) && { nft_address: targetCollection.nftContract }),
+                    ...(MarketplaceContracts.includes(item.contractAddress) && {
+                      nft_address: targetCollection.nftContract,
+                    }),
                   })
                 ),
               },

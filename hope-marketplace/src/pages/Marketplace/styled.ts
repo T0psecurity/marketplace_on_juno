@@ -63,12 +63,17 @@ export const SearchSortPanel = styled.div`
   padding: 0 10px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-items: start;
-  /* align-items: center; */
+  justify-items: center;
+  align-items: center;
+`;
+
+export const FilterResultPanel = styled.div<{ siblingHeight: number }>`
+  height: calc(100% - ${({ siblingHeight }) => siblingHeight}px);
 `;
 
 export const SortContainer = styled.div`
-  width: 50%;
+  margin-top: 10px;
+  width: 100%;
 `;
 
 export const SearchContainer = styled.div`
@@ -78,7 +83,12 @@ export const SearchContainer = styled.div`
 `;
 
 export const SearchWrapper = styled.div`
-  width: 50%;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 `;
 
 export const SearchInput = styled.input`
@@ -101,17 +111,27 @@ export const SearchInput = styled.input`
     letter-spacing: 2px;
     font-weight: 100;
   }
-  &:focus {
+
+  /* &:focus {
     width: 300px;
     border-radius: 0px;
     background-color: transparent;
-    /* border-bottom: 1px solid rgba(255, 255, 255, 0.5); */
     border-bottom: 1px solid #ccc;
     transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
     color: black;
     &::placeholder {
       color: #ccc;
     }
+  } */
+
+  width: 300px;
+  border-radius: 0px;
+  background-color: transparent;
+  border-bottom: 1px solid #ccc;
+  transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+  color: black;
+  &::placeholder {
+    color: #ccc;
   }
 `;
 
@@ -129,12 +149,11 @@ export const SearchIcon = styled.button`
   color: #ccc;
   background-color: transparent;
   pointer-events: painted;
-  &:focus {
+  /* &:focus {
     & ~ ${SearchInput} {
       width: 300px;
       border-radius: 0px;
       background-color: transparent;
-      /* border-bottom: 1px solid rgba(255, 255, 255, 0.5); */
       border-bottom: 1px solid #ccc;
       transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
       color: black;
@@ -142,7 +161,7 @@ export const SearchIcon = styled.button`
         color: #ccc;
       }
     }
-  }
+  } */
 `;
 
 export const StyledSvg = styled.svg`
@@ -171,7 +190,7 @@ export const NftList = styled.div`
   font-size: 1em;
   font-weight: bold;
   margin-top: 20px;
-  height: calc(100% - 75px);
+  height: calc(100% - 20px);
   overflow-x: hidden;
   overflow-y: auto;
 `;
@@ -208,6 +227,7 @@ export const StyledButton = styled(Button)<{ selected?: boolean }>`
   font-size: 1em;
   min-height: 30px;
   padding: 6px 5px;
+  overflow-wrap: break-word;
   ${({ selected }) =>
     !selected &&
     css`
@@ -256,6 +276,7 @@ export const StatisticName = styled.div`
 
 export const SortByPriceButton = styled(Button)`
   width: 300px;
+  max-width: 100%;
   margin: auto;
 `;
 
