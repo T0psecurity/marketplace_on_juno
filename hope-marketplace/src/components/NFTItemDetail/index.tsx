@@ -147,7 +147,8 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
               : ""
           }`}</MainPriceContainer>
           <UsdPriceContainer>
-            {tokenPrice && `(${(+(price?.amount || 0) / 1e6) * tokenPrice}$)`}
+            {tokenPrice &&
+              `(${((+(price?.amount || 0) / 1e6) * tokenPrice).toFixed(2)}$)`}
           </UsdPriceContainer>
         </DetailContent>
         <NFTItemOperationContainer>
