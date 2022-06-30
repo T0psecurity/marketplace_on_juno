@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 export const MintVideoContainer = styled.div`
   width: 50vw;
+  max-width: 500px;
   /* height: 300px; */
   margin-right: 30px;
   position: relative;
@@ -42,7 +43,7 @@ export const NFTItemImage = styled.img`
 
 export const Wrapper = styled.div<{ isMobile: boolean }>`
   display: grid;
-  grid-template-columns: 50vw auto;
+  grid-template-columns: auto auto;
   grid-gap: 20px;
   ${({ isMobile }) =>
     isMobile &&
