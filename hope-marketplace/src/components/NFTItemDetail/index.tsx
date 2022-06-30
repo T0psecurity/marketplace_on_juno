@@ -18,6 +18,8 @@ import {
   NFTItemPriceInputer,
   NFTItemPriceType,
   CoinIcon,
+  MainPriceContainer,
+  UsdPriceContainer,
 } from "./styled";
 
 interface NFTItemDetailProps {
@@ -34,6 +36,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const isMobile = isXs || isSm || isMd;
   const account = useAppSelector((state) => state.accounts.keplrAccount);
+  const tokenPrices = useAppSelector((state) => state.tokenPrices);
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[item.collectionId]
   );
@@ -43,6 +46,10 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
   const owner = item.seller || account?.address || "";
   const price = item.list_price || {};
+  const tokenPrice =
+    tokenPrices[price.denom === NFTPriceType.HOPE ? "hope" : "juno"]
+      ?.market_data.current_price?.usd || 0;
+
   let url = "";
   if (item.collectionId === "mintpass1") {
     url = "/others/mint_pass.png";
@@ -134,11 +141,14 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                 : "/coin-images/juno.png"
             }
           />
-          {`${+(price?.amount || 0) / 1e6} ${
+          <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
             price.denom
               ? `${price.denom === NFTPriceType.HOPE ? "HOPE" : "JUNO"}`
               : ""
-          }`}
+          }`}</MainPriceContainer>
+          <UsdPriceContainer>
+            {tokenPrice && `(${(+(price?.amount || 0) / 1e6) * tokenPrice}$)`}
+          </UsdPriceContainer>
         </DetailContent>
         <NFTItemOperationContainer>
           <NFTItemOperationButton onClick={handleNFTItem}>

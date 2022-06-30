@@ -13,6 +13,7 @@ import consoleReducer from "../features/console/consoleSlice";
 import nftsReducer from "../features/nfts/nftsSlice";
 import collectionsReducer from "../features/collections/collectionsSlice";
 import collectionTraitsReducer from "../features/collectionTraits/collectionTraitsSlice";
+import tokenPricesReducer from "../features/tokenPrices/tokenPricesSlice";
 
 const persistConfig = {
   key: "root",
@@ -29,6 +30,7 @@ const reducer = persistReducer(
     nfts: nftsReducer,
     collectionStates: collectionsReducer,
     collectionTraitsStates: collectionTraitsReducer,
+    tokenPrices: tokenPricesReducer,
   })
 );
 

@@ -27,6 +27,13 @@ export const DetailContent = styled.div`
   align-items: center;
 `;
 
+export const MainPriceContainer = styled.div`
+  font-size: 25px;
+  font-weight: bold;
+`;
+
+export const UsdPriceContainer = styled.div``;
+
 export const NFTItemImage = styled.img`
   cursor: pointer;
   height: 300px;
