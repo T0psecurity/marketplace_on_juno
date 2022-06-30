@@ -29,7 +29,7 @@ const NFTContainer: React.FC<NFTContainerProps> = ({
         ? nfts.map((nft: any, index: any) => {
             return (
               <NFTItem
-                key={index}
+                key={`${index}-${nft.token_id}`}
                 item={nft}
                 status={
                   nft?.seller === account?.address
