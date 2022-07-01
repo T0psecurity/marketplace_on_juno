@@ -247,6 +247,33 @@ const Collections: MarketplaceInfo[] = [
     },
     isLaunched: true,
   },
+  {
+    title: "Bored Ape Ibc Club",
+    creator: "Hope Galaxy NFT",
+    imageUrl: "/backgrounds/bored.png",
+    backgroundUrl: "/marketplace-backgrounds/bored.png",
+    logoUrl: "/logos/bored.gif",
+    collectionId: "bored",
+    nftContract:
+      "juno1xcnjcqes5qdyys0ewr99w6salalaa6st4w3sqcephp6f9uh9qhdsnnarsw ",
+    mintContract: "",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://launchpad.hopers.io/bored-ape-ibc-club",
+      twitter: "https://twitter.com/BoredApeIbcClub",
+    },
+    description:
+      "This is mint pass is the ticket for the minting of the Hope Galaxy NFT collection once it is launched.",
+    mintInfo: {
+      totalNfts: 500,
+      royalties: "7% + 3%",
+      price: "1.69 JUNO",
+      mintImage: "/mint-images/bored.gif",
+      mintDate: "2022-07-01",
+    },
+    isLaunched: false,
+  },
 ];
 
 export const getCollectionById = (id: string): MarketplaceInfo => {

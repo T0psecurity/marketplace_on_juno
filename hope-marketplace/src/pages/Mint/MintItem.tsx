@@ -198,6 +198,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
           <MintButton
             soldOut={isSoldOut}
             disabled={
+              !targetCollection.isLaunched ||
               (mintItem.mintContract &&
                 collectionState.myMintedNfts === null) ||
               isSoldOut

@@ -32,16 +32,8 @@ export const compareDate = (
 ): 1 | 0 | -1 => {
   const dateString1 = String(date1);
   const dateString2 = String(date2);
-  const converted1 = convertDateToString(
-    dateString1,
-    (year: number, month: number, date: number) =>
-      `${year}-${MONTHS[month]}-${date}`
-  );
-  const converted2 = convertDateToString(
-    dateString2,
-    (year: number, month: number, date: number) =>
-      `${year}-${MONTHS[month]}-${date}`
-  );
+  const converted1 = new Date(dateString1);
+  const converted2 = new Date(dateString2);
   if (converted1 > converted2) return 1;
   if (converted2 > converted1) return -1;
   return 0;
