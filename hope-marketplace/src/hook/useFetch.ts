@@ -88,11 +88,10 @@ const useFetch = () => {
 
   const fetchCollectionInfo = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
-      // console.log("collection", collection.collectionId);
       let storeObject: CollectionStateType = {
         mintCheck: [],
         mintedNfts: 0,
-        totalNfts: 0,
+        totalNfts: collection?.mintInfo?.totalNfts || 0,
         maxNfts: 0,
         imageUrl: "",
         price: 0,
@@ -173,11 +172,9 @@ const useFetch = () => {
             hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
             hopeTotal: newHopeTotal,
           };
-        } catch (e) {
-        } finally {
-          dispatch(setCollectionState([collection.collectionId, storeObject]));
-        }
+        } catch (e) {}
       }
+      dispatch(setCollectionState([collection.collectionId, storeObject]));
     });
   }, [account, dispatch, runQuery]);
 

@@ -128,7 +128,8 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                           ((+(price?.amount || 0) / 1e6) * tokenPrice).toFixed(
                             2
                           )
-                        )
+                        ),
+                        1
                       )}$)`}
                   </NFTItemUsdPrice>
                 </NFTItemPriceContainer>

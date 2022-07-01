@@ -255,7 +255,7 @@ const Collections: MarketplaceInfo[] = [
     logoUrl: "/logos/bored.gif",
     collectionId: "bored",
     nftContract:
-      "juno1xcnjcqes5qdyys0ewr99w6salalaa6st4w3sqcephp6f9uh9qhdsnnarsw ",
+      "juno1xcnjcqes5qdyys0ewr99w6salalaa6st4w3sqcephp6f9uh9qhdsnnarsw",
     mintContract: "",
     marketplaceContract: [],
     socialLinks: {
@@ -272,7 +272,7 @@ const Collections: MarketplaceInfo[] = [
       mintImage: "/mint-images/bored.gif",
       mintDate: "2022-07-01",
     },
-    isLaunched: false,
+    isLaunched: true,
   },
 ];
 
