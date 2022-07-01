@@ -1,7 +1,11 @@
 import { useMemo } from "react";
+import { useAppSelector } from "../../../app/hooks";
+import { NFTPriceType } from "../../../hook/useHandleNftItem";
 import { FilterOptions, PriceSortDirectionType } from "../types";
 
 const useFilter = (nfts: any[], filterOption: FilterOptions | undefined) => {
+  const tokenPrices = useAppSelector((state) => state.tokenPrices);
+
   return useMemo(() => {
     if (!filterOption) return nfts;
     let resultNfts = nfts.slice();
@@ -44,12 +48,28 @@ const useFilter = (nfts: any[], filterOption: FilterOptions | undefined) => {
         }
       );
     }
-    return resultNfts.sort((nft1: any, nft2) =>
-      filterOption.price === PriceSortDirectionType.asc
-        ? Number(nft1.list_price?.amount) - Number(nft2.list_price?.amount)
-        : Number(nft2.list_price?.amount) - Number(nft1.list_price?.amount)
-    );
-  }, [nfts, filterOption]);
+    return resultNfts.sort((nft1: any, nft2) => {
+      const price1 = nft1?.list_price || {};
+      const tokenPrice1 =
+        tokenPrices[price1.denom === NFTPriceType.HOPE ? "hope" : "juno"]
+          ?.market_data.current_price?.usd || 0;
+
+      const price2 = nft2?.list_price || {};
+      const tokenPrice2 =
+        tokenPrices[price2.denom === NFTPriceType.HOPE ? "hope" : "juno"]
+          ?.market_data.current_price?.usd || 0;
+
+      // return filterOption.price === PriceSortDirectionType.asc
+      //   ? Number(nft1.list_price?.amount) - Number(nft2.list_price?.amount)
+      //   : Number(nft2.list_price?.amount) - Number(nft1.list_price?.amount);
+
+      return filterOption.price === PriceSortDirectionType.asc
+        ? Number(nft1.list_price?.amount) * tokenPrice1 -
+            Number(nft2.list_price?.amount) * tokenPrice2
+        : Number(nft2.list_price?.amount) * tokenPrice2 -
+            Number(nft1.list_price?.amount) * tokenPrice1;
+    });
+  }, [nfts, filterOption, tokenPrices]);
 };
 
 export default useFilter;

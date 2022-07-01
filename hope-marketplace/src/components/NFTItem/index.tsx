@@ -8,6 +8,7 @@ import { getTokenIdNumber } from "../../hook/useFetch";
 // import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useHandleNftItem, { NFTPriceType } from "../../hook/useHandleNftItem";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
+import { addSuffix } from "../../util/string";
 import Image from "../Image";
 
 import {
@@ -20,6 +21,9 @@ import {
   NFTItemPriceInputer,
   NFTItemPriceType,
   CoinIcon,
+  NFTItemPriceContainer,
+  NFTItemTokenPrice,
+  NFTItemUsdPrice,
 } from "./styled";
 
 export interface NFTItemProps {
@@ -40,6 +44,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const { isXs, isSm } = useMatchBreakpoints();
   const isMobile = isXs || isSm;
+  const tokenPrices = useAppSelector((state) => state.tokenPrices);
 
   const targetCollection = getCollectionById(item.collectionId);
   const collectionState: CollectionStateType = useAppSelector(
@@ -50,6 +55,9 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   // const dispatch = useAppDispatch();
   const history = useHistory();
   const price = item?.list_price || {};
+  const tokenPrice =
+    tokenPrices[price.denom === NFTPriceType.HOPE ? "hope" : "juno"]
+      ?.market_data.current_price?.usd || 0;
   let url = "";
   if (item.collectionId === "mintpass1") {
     url = "/others/mint_pass.png";
@@ -111,7 +119,19 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                       : "/coin-images/juno.png"
                   }
                 />
-                {price.amount / 1e6}
+                <NFTItemPriceContainer>
+                  <NFTItemTokenPrice>{price.amount / 1e6}</NFTItemTokenPrice>
+                  <NFTItemUsdPrice>
+                    {tokenPrice &&
+                      `(${addSuffix(
+                        Number(
+                          ((+(price?.amount || 0) / 1e6) * tokenPrice).toFixed(
+                            2
+                          )
+                        )
+                      )}$)`}
+                  </NFTItemUsdPrice>
+                </NFTItemPriceContainer>
               </>
             ) : null}
           </NFTItemInfo>

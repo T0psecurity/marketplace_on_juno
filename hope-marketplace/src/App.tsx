@@ -106,6 +106,7 @@ function App() {
     <WalletManagerProvider
       defaultChainId={config.chainId}
       enabledWalletTypes={[WalletType.Keplr, WalletType.WalletConnectKeplr]}
+      localStorageKey="keplr-wallet"
       walletConnectClientMeta={{
         name: "Hopers.io Marketplace",
         description:
