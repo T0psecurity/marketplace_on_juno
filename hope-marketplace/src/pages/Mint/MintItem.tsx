@@ -164,10 +164,15 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const renderMintImage = () => (
     <MintImage isMobile={!isXl} alt="mint image" src={mintInfo.mintImage} />
   );
+  console.log(
+    "collection state",
+    targetCollection.collectionId,
+    collectionState
+  );
 
   const isSoldOut: boolean =
     !!collectionState.mintedNfts &&
-    collectionState.mintedNfts >= collectionState.maxNfts;
+    collectionState.mintedNfts >= collectionState.totalNfts;
 
   return (
     <MintDetailContainer isMobile={!isXl}>
