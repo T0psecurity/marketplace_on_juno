@@ -42,11 +42,11 @@ const Marketplace: React.FC = () => {
   const marketplaceNFTs = useAppSelector((state) => {
     // console.log("nfts", state.nfts);
     return state.nfts[`${targetCollection.collectionId}_marketplace`];
-  });
+  }) || [];
 
   const metaDataOptions = useMemo(() => {
     let result: { [key: string]: string[] } = {};
-    marketplaceNFTs.forEach((nft: any) => {
+    marketplaceNFTs?.forEach((nft: any) => {
       if (
         nft.metaData &&
         nft.metaData.attributes &&
