@@ -249,11 +249,13 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "Bored Ape Ibc Club",
-    creator: "Hope Galaxy NFT",
+    creator: "Bored Ape Ibc Club",
     imageUrl: "/backgrounds/bored.png",
     backgroundUrl: "/marketplace-backgrounds/bored.png",
     logoUrl: "/logos/bored.gif",
     collectionId: "bored",
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmekySg1tU6GHCRKrtey2G7N6Q9cKxUomrzHxU5HQS5hnz/_metadata.json",
     nftContract:
       "juno1xcnjcqes5qdyys0ewr99w6salalaa6st4w3sqcephp6f9uh9qhdsnnarsw",
     mintContract: "",
@@ -264,7 +266,7 @@ const Collections: MarketplaceInfo[] = [
       twitter: "https://twitter.com/BoredApeIbcClub",
     },
     description:
-      "This is mint pass is the ticket for the minting of the Hope Galaxy NFT collection once it is launched.",
+      "Bored Ape IBC Club/ community driven project/ in honour of the #BAYC 🙌 for the #COSMOS #IBC ⚛️",
     mintInfo: {
       totalNfts: 500,
       royalties: "7% + 3%",
