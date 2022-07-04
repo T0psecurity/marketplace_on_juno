@@ -33,14 +33,20 @@ const MarketplaceItem: React.FC<MarketplaceBasicInfo> = ({
         {description}
       </Text>
       <Button
-        disabled={!!targetCollection.mintInfo?.mintDate && !isLive}
+        disabled={
+          !targetCollection.isLaunched ||
+          (!!targetCollection.mintInfo?.mintDate && !isLive)
+        }
         onClick={() => {
           history.push(`/collections/marketplace?id=${collectionId}`);
         }}
       >
-        {!targetCollection.mintInfo?.mintDate || isLive
+        {targetCollection.isLaunched &&
+        (!targetCollection.mintInfo?.mintDate || isLive)
           ? "View Collection"
-          : convertDateToString(targetCollection.mintInfo.mintDate)}
+          : targetCollection?.mintInfo?.mintDate
+          ? convertDateToString(targetCollection.mintInfo.mintDate)
+          : "View Soon"}
       </Button>
     </Card>
   );

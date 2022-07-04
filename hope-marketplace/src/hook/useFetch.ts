@@ -25,7 +25,7 @@ type MetaDataItemType = {
   [key: string]: any;
 };
 
-const MAX_ITEMS = 300;
+const MAX_ITEMS = 100;
 
 const getMin = (number: number, max?: number): number => {
   const maxNumber = max || 1e5;
@@ -88,11 +88,10 @@ const useFetch = () => {
 
   const fetchCollectionInfo = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
-      // console.log("collection", collection.collectionId);
       let storeObject: CollectionStateType = {
         mintCheck: [],
         mintedNfts: 0,
-        totalNfts: 0,
+        totalNfts: collection?.mintInfo?.totalNfts || 0,
         maxNfts: 0,
         imageUrl: "",
         price: 0,
@@ -173,44 +172,41 @@ const useFetch = () => {
             hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
             hopeTotal: newHopeTotal,
           };
-        } catch (e) {
-        } finally {
-          dispatch(setCollectionState([collection.collectionId, storeObject]));
-        }
+        } catch (e) {}
       }
+      dispatch(setCollectionState([collection.collectionId, storeObject]));
     });
   }, [account, dispatch, runQuery]);
 
   const fetchMarketplaceNFTs = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
+      let queries: any = [];
+      let contractAddresses: string[] = [];
+
+      const tokenIds = await runQuery(MarketplaceContracts[0], {
+        get_offering_id: {
+          address: collection.nftContract,
+        },
+      });
+      for (let i = 0; i < Math.ceil(tokenIds.length / MAX_ITEMS); i++) {
+        queries.push(
+          runQuery(MarketplaceContracts[0], {
+            get_offering_page: {
+              id: tokenIds.slice(
+                i * MAX_ITEMS,
+                Math.min(MAX_ITEMS * (i + 1), tokenIds.length)
+              ),
+              address: collection.nftContract,
+            },
+          })
+        );
+        contractAddresses.push(MarketplaceContracts[0]);
+      }
       if (
         collection.isLaunched &&
         collection.marketplaceContract &&
         collection.marketplaceContract.length
       ) {
-        let queries: any = [];
-        let contractAddresses: string[] = [];
-
-        const tokenIds = await runQuery(MarketplaceContracts[0], {
-          get_offering_id: {
-            address: collection.nftContract,
-          },
-        });
-        for (let i = 0; i < Math.ceil(tokenIds.length / MAX_ITEMS); i++) {
-          queries.push(
-            runQuery(MarketplaceContracts[0], {
-              get_offering_page: {
-                id: tokenIds.slice(
-                  i * MAX_ITEMS,
-                  Math.min(MAX_ITEMS * (i + 1), tokenIds.length)
-                ),
-                address: collection.nftContract,
-              },
-            })
-          );
-          contractAddresses.push(MarketplaceContracts[0]);
-        }
-
         collection.marketplaceContract.forEach(
           (contract: string, index: number) => {
             if (contracts[contract]) {
@@ -223,46 +219,46 @@ const useFetch = () => {
             }
           }
         );
-
-        const metaData = collection.metaDataUrl
-          ? await getQuery(collection.metaDataUrl)
-          : null;
-        if (metaData) {
-          dispatch(
-            setCollectionTraitStates([
-              collection.collectionId,
-              getTraitsStatus(metaData),
-            ])
-          );
-        }
-
-        await Promise.all(queries).then((queryResults: any) => {
-          let listedNFTs: any = [],
-            marketplaceNFTs: any = [];
-          queryResults.forEach((queryResult: any, index: number) => {
-            const fetchedResult =
-              queryResult?.offerings ||
-              (!!queryResult.length && queryResult) ||
-              [];
-            fetchedResult.forEach((item: any, itemIndex: number) => {
-              const crrItem = buildNFTItem(
-                item,
-                contractAddresses[index],
-                collection,
-                metaData
-              );
-              if (item.seller === account?.address) {
-                listedNFTs = [...listedNFTs, crrItem];
-              }
-              marketplaceNFTs = [...marketplaceNFTs, crrItem];
-            });
-          });
-          dispatch(setNFTs([`${collection.collectionId}_listed`, listedNFTs]));
-          dispatch(
-            setNFTs([`${collection.collectionId}_marketplace`, marketplaceNFTs])
-          );
-        });
       }
+      const metaData = collection.metaDataUrl
+        ? await getQuery(collection.metaDataUrl)
+        : null;
+      if (metaData) {
+        dispatch(
+          setCollectionTraitStates([
+            collection.collectionId,
+            getTraitsStatus(metaData),
+          ])
+        );
+      }
+
+      console.log("collection", collection.collectionId, queries);
+      await Promise.all(queries).then((queryResults: any) => {
+        let listedNFTs: any = [],
+          marketplaceNFTs: any = [];
+        queryResults.forEach((queryResult: any, index: number) => {
+          const fetchedResult =
+            queryResult?.offerings ||
+            (!!queryResult.length && queryResult) ||
+            [];
+          fetchedResult.forEach((item: any, itemIndex: number) => {
+            const crrItem = buildNFTItem(
+              item,
+              contractAddresses[index],
+              collection,
+              metaData
+            );
+            if (item.seller === account?.address) {
+              listedNFTs = [...listedNFTs, crrItem];
+            }
+            marketplaceNFTs = [...marketplaceNFTs, crrItem];
+          });
+        });
+        dispatch(setNFTs([`${collection.collectionId}_listed`, listedNFTs]));
+        dispatch(
+          setNFTs([`${collection.collectionId}_marketplace`, marketplaceNFTs])
+        );
+      });
     });
   }, [account, contracts, dispatch, runQuery]);
 

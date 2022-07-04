@@ -6,18 +6,7 @@ import {
 } from "../../../constants/Collections";
 import { CollectionStateType } from "../../../features/collections/collectionsSlice";
 import { NFTPriceType } from "../../../hook/useHandleNftItem";
-
-const convertNumberToString = (number: number): string => {
-  return number.toLocaleString(undefined, {
-    maximumFractionDigits: 2,
-  });
-};
-
-const addSuffix = (number: number): string => {
-  if (number >= 1e6) return `${convertNumberToString(number / 1e6)}M`;
-  if (number >= 1e3) return `${convertNumberToString(number / 1e3)}K`;
-  return convertNumberToString(number);
-};
+import { addSuffix, convertNumberToString } from "../../../util/string";
 
 const useStatistic = (collectionId: string, items: any) => {
   const targetCollection: MarketplaceInfo = useMemo(

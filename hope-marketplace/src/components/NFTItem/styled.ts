@@ -28,9 +28,18 @@ export const NFTItemInfo = styled.div`
   font-size: 18px;
   font-weight: bold;
   text-align: left;
-  margin: 10px;
+  margin: 10px 0 10px 10px;
   display: flex;
   align-items: center;
+`;
+
+export const NFTItemPriceContainer = styled.div``;
+
+export const NFTItemTokenPrice = styled.div``;
+
+export const NFTItemUsdPrice = styled.div`
+  font-weight: normal;
+  font-size: 14px;
 `;
 
 export const NFTItemOperationButton = styled.div`
