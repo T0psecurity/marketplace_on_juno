@@ -286,7 +286,7 @@ const Collections: MarketplaceInfo[] = [
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmYVs4Y4kTz7B8rXtocgnitc5msBPqD3U6yh33cxafELDj/_metadata.json",
     nftContract:
-      "juno1xw4meu7pvewd5gldxgm6cemmrmvuqrnzx3e9tw22r6cz2lcjg4jq9swfjv",
+      "juno1zj2zy5zny2y8atnpp3l6gq72ka29xp3v2t00u7cfct4jgtkdye7qgvwfsp",
     mintContract: "",
     marketplaceContract: [],
     socialLinks: {
