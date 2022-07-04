@@ -232,7 +232,6 @@ const useFetch = () => {
         );
       }
 
-      console.log("collection", collection.collectionId, queries);
       await Promise.all(queries).then((queryResults: any) => {
         let listedNFTs: any = [],
           marketplaceNFTs: any = [];
