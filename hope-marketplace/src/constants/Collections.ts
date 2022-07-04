@@ -276,6 +276,35 @@ const Collections: MarketplaceInfo[] = [
     },
     isLaunched: true,
   },
+  {
+    title: "Cute Crypto Girls",
+    creator: "GIRI",
+    imageUrl: "/backgrounds/cryptogirls.png",
+    backgroundUrl: "/marketplace-backgrounds/cryptogirls.png",
+    logoUrl: "/logos/cryptogirls.png",
+    collectionId: "cryptogirls",
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmYVs4Y4kTz7B8rXtocgnitc5msBPqD3U6yh33cxafELDj/_metadata.json",
+    nftContract:
+      "juno1xw4meu7pvewd5gldxgm6cemmrmvuqrnzx3e9tw22r6cz2lcjg4jq9swfjv",
+    mintContract: "",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://www.hopers.io/",
+      twitter: "https://twitter.com/CuteCryptoGirls",
+    },
+    description:
+      "Cute Crypto Girls is all about being curious & exploring and enjoying the crypto life to have fun. First of a kind PFPs for Cosmonauts. Gift an NFT to your partner or girl in your life to onboard them to crypto/web3.",
+    mintInfo: {
+      totalNfts: 333,
+      royalties: "7%",
+      price: "2 JUNO",
+      mintImage: "/mint-images/cryptogirls.png",
+      mintDate: "2022-07-04",
+    },
+    isLaunched: true,
+  },
 ];
 
 export const getCollectionById = (id: string): MarketplaceInfo => {

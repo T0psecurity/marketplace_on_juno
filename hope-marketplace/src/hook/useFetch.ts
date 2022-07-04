@@ -25,7 +25,7 @@ type MetaDataItemType = {
   [key: string]: any;
 };
 
-const MAX_ITEMS = 300;
+const MAX_ITEMS = 100;
 
 const getMin = (number: number, max?: number): number => {
   const maxNumber = max || 1e5;
@@ -232,6 +232,7 @@ const useFetch = () => {
         );
       }
 
+      console.log("collection", collection.collectionId, queries);
       await Promise.all(queries).then((queryResults: any) => {
         let listedNFTs: any = [],
           marketplaceNFTs: any = [];
