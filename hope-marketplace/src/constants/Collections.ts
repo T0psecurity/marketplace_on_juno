@@ -286,7 +286,7 @@ const Collections: MarketplaceInfo[] = [
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmYVs4Y4kTz7B8rXtocgnitc5msBPqD3U6yh33cxafELDj/_metadata.json",
     nftContract:
-      "juno1xw4meu7pvewd5gldxgm6cemmrmvuqrnzx3e9tw22r6cz2lcjg4jq9swfjv",
+      "juno1zj2zy5zny2y8atnpp3l6gq72ka29xp3v2t00u7cfct4jgtkdye7qgvwfsp",
     mintContract: "",
     marketplaceContract: [],
     socialLinks: {
@@ -302,6 +302,36 @@ const Collections: MarketplaceInfo[] = [
       price: "2 JUNO",
       mintImage: "/mint-images/cryptogirls.png",
       mintDate: "2022-07-04",
+    },
+    isLaunched: true,
+  },
+  {
+    title: "Juno Goblin Town",
+    creator: "Juno Goblin",
+    imageUrl: "/backgrounds/goblin.png",
+    backgroundUrl: "/marketplace-backgrounds/goblin.png",
+    logoUrl: "/logos/goblin.gif",
+    collectionId: "goblin",
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmaLapkMZTmRpRtcCZAGedipMdiZxLaCy4pRS56RQ9wffW/_metadata.json",
+    nftContract:
+      "juno1lxvlu538vs3dl7jquhjh00p4gadkr8ql7uwyjxn2rkjfqrxnwqxqq84ead",
+    mintContract:
+      "juno1rrgql8w83k37y8vsxl6supey4dgtp9avwedyxjljjaq3httzxd5qlt77rr",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://hopers.io/",
+      twitter: "https://twitter.com/JunoGoblinTown",
+    },
+    description:
+      "ₐₐₐₐₐₐₐᵤᵤᵤᵤᵤGGGₕₕₕₕₕ ₙₒ ₑₑₙₛₜₐgᵣᵤₘ ₙₒ dₑₛcᵤᵣd | ⱼᵤₙₒ Bₗₒcₖcₕₐᵢₙ",
+    mintInfo: {
+      totalNfts: 500,
+      royalties: "10% + 3%",
+      price: "FREE",
+      mintImage: "/mint-images/goblin.gif",
+      mintDate: "2022-07-05",
     },
     isLaunched: true,
   },
