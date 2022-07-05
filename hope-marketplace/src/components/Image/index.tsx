@@ -29,7 +29,7 @@ const Image: React.FC<ImageProps> = ({ onClick, alt, src }) => {
     if (offsetHeight && offsetWidth) {
       const ratioParent = offsetHeight / offsetWidth;
       const ratioImage = naturalHeight / naturalWidth;
-      if (ratioParent < ratioImage) {
+      if (ratioParent <= ratioImage) {
         setImageSize({
           height: "100%",
         });

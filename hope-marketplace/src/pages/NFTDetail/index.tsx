@@ -27,7 +27,7 @@ const NFTDetail: React.FC = () => {
 
   return (
     <Wrapper>
-      <Title title={targetCollection.title} />
+      <Title title={targetCollection?.title} />
       <NFTItemDetail item={selectedNFT} />
 
       {selectedNFT.metaData?.attributes?.length && (
