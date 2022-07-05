@@ -305,6 +305,36 @@ const Collections: MarketplaceInfo[] = [
     },
     isLaunched: true,
   },
+  {
+    title: "Juno Goblin Town",
+    creator: "Juno Goblin",
+    imageUrl: "/backgrounds/goblin.png",
+    backgroundUrl: "/marketplace-backgrounds/goblin.png",
+    logoUrl: "/logos/goblin.gif",
+    collectionId: "goblin",
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmaLapkMZTmRpRtcCZAGedipMdiZxLaCy4pRS56RQ9wffW/_metadata.json",
+    nftContract:
+      "juno1lxvlu538vs3dl7jquhjh00p4gadkr8ql7uwyjxn2rkjfqrxnwqxqq84ead",
+    mintContract:
+      "juno1rrgql8w83k37y8vsxl6supey4dgtp9avwedyxjljjaq3httzxd5qlt77rr",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://hopers.io/",
+      twitter: "https://twitter.com/JunoGoblinTown",
+    },
+    description:
+      "ₐₐₐₐₐₐₐᵤᵤᵤᵤᵤGGGₕₕₕₕₕ ₙₒ ₑₑₙₛₜₐgᵣᵤₘ ₙₒ dₑₛcᵤᵣd | ⱼᵤₙₒ Bₗₒcₖcₕₐᵢₙ",
+    mintInfo: {
+      totalNfts: 500,
+      royalties: "10% + 3%",
+      price: "FREE",
+      mintImage: "/mint-images/goblin.gif",
+      mintDate: "2022-07-05",
+    },
+    isLaunched: true,
+  },
 ];
 
 export const getCollectionById = (id: string): MarketplaceInfo => {
