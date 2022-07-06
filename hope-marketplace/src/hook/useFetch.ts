@@ -115,7 +115,8 @@ const useFetch = () => {
           const userInfo = await runQuery(collection.mintContract, {
             get_user_info: { address: account.address },
           });
-          storeObject.myMintedNfts = +(userInfo || "0");
+          storeObject.myMintedNfts =
+            (storeObject.myMintedNfts || 0) + (userInfo || "0");
         }
       } else if (collection.isLaunched) {
         try {
@@ -232,7 +233,6 @@ const useFetch = () => {
         );
       }
 
-      console.log("collection", collection.collectionId, queries);
       await Promise.all(queries).then((queryResults: any) => {
         let listedNFTs: any = [],
           marketplaceNFTs: any = [];
