@@ -79,7 +79,6 @@ const useHandleNftItem = () => {
   );
   const withdrawNft = useCallback(
     async (item: any) => {
-      console.log("withdraw item", item);
       const targetCollection = getCollectionById(item.collectionId);
       const message = {
         withdraw_nft: {
