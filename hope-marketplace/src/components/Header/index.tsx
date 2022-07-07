@@ -65,14 +65,14 @@ const Header: React.FC = () => {
 
   const { isMobile } = useWindowSize(900);
 
-  // useEffect(() => {
-  //   initContracts();
-  //   setInterval(() => {
-  //     fetchMarketplaceNFTs();
-  //     fetchCollectionInfo();
-  //   }, 5000);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    initContracts();
+    // setInterval(() => {
+    //   fetchMarketplaceNFTs();
+    //   fetchCollectionInfo();
+    // }, 5000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // useEffect(() => {
   //   if (account) {
