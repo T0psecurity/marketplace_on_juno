@@ -6,7 +6,7 @@ import Collections, {
 } from "../constants/Collections";
 import {
   CollectionStateType,
-  DEFAULT_COLLECTION_STATE,
+  // DEFAULT_COLLECTION_STATE,
   setCollectionState,
 } from "../features/collections/collectionsSlice";
 import { setNFTs } from "../features/nfts/nftsSlice";
@@ -323,9 +323,9 @@ const useFetch = () => {
 
   const clearAllNFTs = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
-      dispatch(
-        setCollectionState([collection.collectionId, DEFAULT_COLLECTION_STATE])
-      );
+      // dispatch(
+      //   setCollectionState([collection.collectionId, DEFAULT_COLLECTION_STATE])
+      // );
       dispatch(setNFTs([collection.collectionId, []]));
       dispatch(setNFTs([`${collection.collectionId}_listed`, []]));
       // dispatch(setNFTs([`${collection.collectionId}_marketplace`, []]));
