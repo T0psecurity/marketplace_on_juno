@@ -126,26 +126,30 @@ export const checkContract = createAsyncThunk(
 
 export const importContract = createAsyncThunk(
   "accounts/importContract",
-  async (address: string, { getState, dispatch }): Promise<Contract> => {
+  async (addresses: string[], { getState, dispatch }): Promise<Contract[]> => {
     const state = getState() as RootState;
     const config = state.connection.config;
     const client = await connectionManager.getQueryClient(config);
     try {
-      const contract = await client.getContract(address);
-      const { label } = contract;
+      let result: Contract[] = []
+      addresses.forEach(async (address: string) => {
+        const contract = await client.getContract(address);
+        const { label } = contract;
 
-      dispatch(setImportContractOpen(false));
+        dispatch(setImportContractOpen(false));
 
-      return {
-        type: AccountType.Contract,
-        address,
-        label,
-        contract,
-        balance: coin(0, config["microDenom"]),
-        exists: true,
-      };
+        result.push({
+          type: AccountType.Contract,
+          address,
+          label,
+          contract,
+          balance: coin(0, config["microDenom"]),
+          exists: true,
+        });
+      })
+      return result
     } catch (e) {
-      console.error("import contract error", address, e);
+      console.error("import contract error", addresses, e);
       dispatch(
         pushMessage({
           status: "danger",
@@ -257,7 +261,7 @@ export const instantiateContract = createAsyncThunk(
         })
       );
 
-      dispatch(importContract(contractAddress));
+      dispatch(importContract([contractAddress]));
     } catch (e) {
       dispatch(
         pushMessage({
@@ -464,9 +468,11 @@ export const accountsSlice = createSlice({
         }
       })
       .addCase(importContract.fulfilled, (state, action) => {
-        const account = action.payload;
-        state.accountList[account.address] = account;
-        state.currentContract = account.address;
+        const accounts = action.payload;
+        accounts.forEach((account: Contract) => {
+          state.accountList[account.address] = account;
+        // state.currentContract = account.address;
+        })
       })
       .addCase(checkContract.fulfilled, (state, action) => {
         const newAccountInfo = action.payload;

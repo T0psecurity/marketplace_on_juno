@@ -10,9 +10,9 @@ import {
 } from "../../constants/Collections";
 import { CollectionStateType } from "../../features/collections/collectionsSlice";
 import useContract from "../../hook/useContract";
-import useFetch from "../../hook/useFetch";
 
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
+import useRefresh from "../../hook/useRefresh";
 import useResponsiveSize from "../../hook/useResponsiveSize";
 import { compareDate, convertDateToString } from "../../util/date";
 
@@ -88,8 +88,8 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   };
   const { isXl } = useMatchBreakpoints();
   const { runExecute } = useContract();
-  const { fetchAllNFTs } = useFetch();
   const history = useHistory();
+  const { refresh } = useRefresh();
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[mintItem.collectionId]
   );
@@ -136,7 +136,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
         funds: `${collectionState.price > 0 ? collectionState.price : ""}`,
       });
       toast.success("Success!");
-      fetchAllNFTs();
+      refresh();
     } catch (err) {
       console.error(err);
       toast.error("Fail!");

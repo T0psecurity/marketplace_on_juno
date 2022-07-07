@@ -1,9 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
-const REFRESH_INTERVAL = 5000;
+const REFRESH_INTERVAL = 1000 * 60;
 const FETCH_PRICE_INTERVAL = 60 * 60 * 1000;
 
-const RefreshContext = React.createContext({ value: 0, price: 0 });
+const RefreshContext = React.createContext({
+  value: 0,
+  price: 0,
+  refreshAll: () => {},
+});
 
 // Check if the tab is active in the user browser
 const useIsBrowserTabActive = () => {
@@ -48,8 +52,13 @@ const RefreshContextProvider = ({ children }: { children: any }) => {
     return () => clearInterval(interval);
   }, [isBrowserTabActiveRef]);
 
+  const refreshAll = useCallback(() => {
+    setValue((prev) => prev + 1);
+    setPriceValue((prev) => prev + 1);
+  }, []);
+
   return (
-    <RefreshContext.Provider value={{ value, price: priceValue }}>
+    <RefreshContext.Provider value={{ value, price: priceValue, refreshAll }}>
       {children}
     </RefreshContext.Provider>
   );

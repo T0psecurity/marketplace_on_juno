@@ -82,11 +82,10 @@ export const getTokenIdNumber = (id: string): string => {
 const useFetch = () => {
   const { runQuery } = useContract();
   const dispatch = useAppDispatch();
-  const account = useAppSelector((state) => state?.accounts.keplrAccount);
 
   const contracts = useAppSelector((state) => state?.accounts.accountList);
 
-  const fetchCollectionInfo = useCallback(() => {
+  const fetchCollectionInfo = useCallback((account) => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
       let storeObject: CollectionStateType = {
         mintCheck: [],
@@ -187,9 +186,9 @@ const useFetch = () => {
       }
       dispatch(setCollectionState([collection.collectionId, storeObject]));
     });
-  }, [account, dispatch, runQuery]);
+  }, [dispatch, runQuery]);
 
-  const fetchMarketplaceNFTs = useCallback(() => {
+  const fetchMarketplaceNFTs = useCallback((account) => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
       let queries: any = [];
       let contractAddresses: string[] = [];
@@ -275,9 +274,9 @@ const useFetch = () => {
         );
       });
     });
-  }, [account, contracts, dispatch, runQuery]);
+  }, [contracts, dispatch, runQuery]);
 
-  const fetchMyNFTs = useCallback(() => {
+  const fetchMyNFTs = useCallback((account) => {
     if (!account) return;
     Collections.forEach(async (collection: MarketplaceInfo) => {
       if (collection.nftContract) {
@@ -301,14 +300,14 @@ const useFetch = () => {
         dispatch(setNFTs([collection.collectionId, nftList]));
       }
     });
-  }, [account, dispatch, runQuery]);
+  }, [dispatch, runQuery]);
 
-  const fetchAllNFTs = useCallback(() => {
-    fetchMarketplaceNFTs();
-    fetchCollectionInfo();
+  const fetchAllNFTs = useCallback((account) => {
+    fetchMarketplaceNFTs(account);
+    fetchCollectionInfo(account);
     if (!account) return;
-    fetchMyNFTs();
-  }, [account, fetchCollectionInfo, fetchMarketplaceNFTs, fetchMyNFTs]);
+    fetchMyNFTs(account);
+  }, [fetchCollectionInfo, fetchMarketplaceNFTs, fetchMyNFTs]);
 
   const clearAllNFTs = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {

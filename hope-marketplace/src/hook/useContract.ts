@@ -1,7 +1,10 @@
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { GasPrice } from "@cosmjs/stargate";
 import { coins } from "@cosmjs/proto-signing";
-import { useWallet, useWalletManager } from "@noahsaso/cosmodal";
+import {
+  useWallet,
+  // useWalletManager
+} from "@noahsaso/cosmodal";
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -18,7 +21,7 @@ import {
   // contractAccounts,
   // deleteAccount,
 } from "../features/accounts/accountsSlice";
-import connectionManager from "../features/connection/connectionManager";
+// import connectionManager from "../features/connection/connectionManager";
 import { toMicroAmount } from "../util/coins";
 
 export const contractAddresses: any = {
@@ -33,10 +36,12 @@ export const contractAddresses: any = {
 const useContract = () => {
   const dispatch = useAppDispatch();
   // const contracts = useAppSelector(contractAccounts);
-  const { connect } = useWalletManager();
+  // const { connect } = useWalletManager();
 
   const state = useSelector((state: any) => state);
-  const { offlineSigner } = useWallet(state.connection.config.chainId);
+  const { offlineSigner, signingCosmWasmClient } = useWallet(
+    state.connection.config.chainId
+  );
 
   const initContracts = useCallback(() => {
     // remove existing contracts
@@ -48,25 +53,28 @@ const useContract = () => {
     // }
 
     // import target contracts
+    let targetContractAddresses: string[] = [];
     Object.keys(contractAddresses).forEach((key: string) => {
-      dispatch(importContract(contractAddresses[key]));
+      targetContractAddresses.push(contractAddresses[key]);
     });
     Collections.forEach((collection: MarketplaceInfo) => {
       if (collection.nftContract)
-        dispatch(importContract(collection.nftContract));
+        targetContractAddresses.push(collection.nftContract);
       if (collection.mintContract)
-        dispatch(importContract(collection.mintContract));
+        targetContractAddresses.push(collection.mintContract);
       if (collection.marketplaceContract.length)
         collection.marketplaceContract.forEach((contract: string) => {
-          if (contract) dispatch(importContract(contract));
+          if (contract) targetContractAddresses.push(contract);
         });
     });
     MarketplaceContracts.forEach((contract: string) =>
-      dispatch(importContract(contract))
+      targetContractAddresses.push(contract)
     );
     MintContracts.forEach((contract: string) =>
-      dispatch(importContract(contract))
+      targetContractAddresses.push(contract)
     );
+
+    dispatch(importContract(targetContractAddresses));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Collections]);
@@ -77,20 +85,25 @@ const useContract = () => {
       // const contract = state.accounts.accountList[contractAddress];
       const contract = state.accounts.accountList[contractAddress];
       if (!contract) {
-        if (contractAddress) dispatch(importContract(contractAddress));
+        // if (contractAddress) dispatch(importContract(contractAddress));
         console.error("contract selection error", contractAddress);
         throw new Error("No contract selected");
       }
-      const client = await connectionManager.getQueryClient(
-        state.connection.config
-      );
-      const result = await client.queryContractSmart(
+      // const client = await connectionManager.getQueryClient(
+      //   state.connection.config
+      // );
+      // const result = await client.queryContractSmart(
+      //   contract.address,
+      //   queryMsg
+      // );
+
+      const result = await signingCosmWasmClient?.queryContractSmart(
         contract.address,
         queryMsg
       );
       return result;
     },
-    [state, dispatch]
+    [state, signingCosmWasmClient]
   );
 
   const runExecute = useCallback(
@@ -102,15 +115,14 @@ const useContract = () => {
         funds?: string;
       }
     ) => {
-      console.log("offlineSigner", offlineSigner);
       if (!offlineSigner) {
-        connect();
+        // connect();
         throw new Error("No account selected");
       }
       const contract = state.accounts.accountList[contractAddress];
       const account = state.accounts.keplrAccount;
       if (!contract) {
-        if (contractAddress) dispatch(importContract(contractAddress));
+        // if (contractAddress) dispatch(importContract(contractAddress));
         console.error("contract selection error");
         throw new Error("No contract selected");
       }
@@ -175,7 +187,7 @@ const useContract = () => {
           : undefined
       );
     },
-    [state, dispatch, connect, offlineSigner]
+    [state, offlineSigner]
   );
 
   return {
