@@ -102,6 +102,7 @@ const useContract = () => {
         funds?: string;
       }
     ) => {
+      console.log("offlineSigner", offlineSigner);
       if (!offlineSigner) {
         connect();
         throw new Error("No account selected");

@@ -139,6 +139,7 @@ const useHandleNftItem = () => {
               },
             };
       try {
+        console.log("buy message", message);
         if (price.denom === NFTPriceType.HOPE) {
           await runExecute(contractAddresses.TOKEN_CONTRACT, message);
         } else {

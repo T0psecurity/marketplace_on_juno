@@ -139,13 +139,23 @@ const useFetch = () => {
 
       if (collection.isLaunched) {
         const tradingInfoResult = await runQuery(MarketplaceContracts[0], {
-          get_trading_info: {
+          get_tvl_all: {
             address: collection.nftContract,
+            symbols: ["ujuno", "hope"],
           },
         });
+        let totalJuno = 0,
+          totalHope = 0;
+        tradingInfoResult.forEach((item: any) => {
+          if (item.denom === "ujuno") {
+            totalJuno = +item.amount / 1e6;
+          } else if (item.denom === "hope") {
+            totalHope = +item.amount / 1e6;
+          }
+        });
         storeObject.tradingInfo = {
-          junoTotal: +(tradingInfoResult.total_juno || 0) / 1e6,
-          hopeTotal: +(tradingInfoResult.total_hope || 0) / 1e6,
+          junoTotal: totalJuno,
+          hopeTotal: totalHope,
         };
       }
       if (
@@ -184,19 +194,24 @@ const useFetch = () => {
       let queries: any = [];
       let contractAddresses: string[] = [];
 
-      const tokenIds = await runQuery(MarketplaceContracts[0], {
-        get_offering_id: {
+      const collectionInfo = await runQuery(MarketplaceContracts[0], {
+        get_collection_info: {
           address: collection.nftContract,
         },
       });
-      for (let i = 0; i < Math.ceil(tokenIds.length / MAX_ITEMS); i++) {
+      for (
+        let i = 0;
+        i < Math.ceil(collectionInfo.offering_id / MAX_ITEMS);
+        i++
+      ) {
+        let tokenIds = [];
+        for (let j = 0; j < MAX_ITEMS; j++) {
+          tokenIds.push("" + (MAX_ITEMS * i + j + 1));
+        }
         queries.push(
           runQuery(MarketplaceContracts[0], {
             get_offering_page: {
-              id: tokenIds.slice(
-                i * MAX_ITEMS,
-                Math.min(MAX_ITEMS * (i + 1), tokenIds.length)
-              ),
+              id: tokenIds,
               address: collection.nftContract,
             },
           })

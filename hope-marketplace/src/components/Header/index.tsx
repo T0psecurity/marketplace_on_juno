@@ -65,29 +65,29 @@ const Header: React.FC = () => {
 
   const { isMobile } = useWindowSize(900);
 
-  useEffect(() => {
-    initContracts();
-    setInterval(() => {
-      fetchMarketplaceNFTs();
-      fetchCollectionInfo();
-    }, 5000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   initContracts();
+  //   setInterval(() => {
+  //     fetchMarketplaceNFTs();
+  //     fetchCollectionInfo();
+  //   }, 5000);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  useEffect(() => {
-    if (account) {
-      // setRunningFetch(true);
-      // initContracts();
-      const intervalId: NodeJS.Timeout | null = setInterval(() => {
-        fetchMyNFTs();
-      }, 5000);
-      setFetchingIntervalId(intervalId);
-    } else {
-      clearAllNFTs();
-      if (fetchingIntervalId) clearInterval(fetchingIntervalId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
+  // useEffect(() => {
+  //   if (account) {
+  //     // setRunningFetch(true);
+  //     // initContracts();
+  //     const intervalId: NodeJS.Timeout | null = setInterval(() => {
+  //       fetchMyNFTs();
+  //     }, 5000);
+  //     setFetchingIntervalId(intervalId);
+  //   } else {
+  //     clearAllNFTs();
+  //     if (fetchingIntervalId) clearInterval(fetchingIntervalId);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [account]);
 
   useEffect(() => {
     if (!connectedWallet) {
@@ -113,10 +113,10 @@ const Header: React.FC = () => {
       connect();
       // connectWithCosmodal();
     } else {
-      dispatch(setKeplrAccount());
-      Collections.forEach((collection: MarketplaceInfo) =>
-        setNFTs([collection.collectionId, []])
-      );
+      // dispatch(setKeplrAccount());
+      // Collections.forEach((collection: MarketplaceInfo) =>
+      //   setNFTs([collection.collectionId, []])
+      // );
       disconnect();
     }
   };
