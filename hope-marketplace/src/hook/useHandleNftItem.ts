@@ -6,8 +6,8 @@ import {
   MarketplaceContracts,
 } from "../constants/Collections";
 import useContract from "./useContract";
-import useFetch from "./useFetch";
 import { contractAddresses } from "./useContract";
+import useRefresh from "./useRefresh";
 
 export const NFTPriceType = {
   HOPE: "hope",
@@ -16,7 +16,7 @@ export const NFTPriceType = {
 
 const useHandleNftItem = () => {
   const { runExecute } = useContract();
-  const { fetchAllNFTs } = useFetch();
+  const { refresh } = useRefresh();
   const history = useHistory();
 
   const sellNft = useCallback(
@@ -69,17 +69,16 @@ const useHandleNftItem = () => {
           message
         );
         toast.success("Success!");
-        fetchAllNFTs();
+        refresh();
       } catch (err) {
         console.error(err);
         toast.error("Fail!");
       }
     },
-    [runExecute, fetchAllNFTs]
+    [runExecute, refresh]
   );
   const withdrawNft = useCallback(
     async (item: any) => {
-      console.log("withdraw item", item);
       const targetCollection = getCollectionById(item.collectionId);
       const message = {
         withdraw_nft: {
@@ -98,13 +97,13 @@ const useHandleNftItem = () => {
           message
         );
         toast.success("Success!");
-        fetchAllNFTs();
+        refresh();
       } catch (err) {
         console.error(err);
         toast.error("Fail!");
       }
     },
-    [runExecute, fetchAllNFTs]
+    [runExecute, refresh]
   );
   const buyNft = useCallback(
     async (item: any) => {
@@ -139,6 +138,7 @@ const useHandleNftItem = () => {
               },
             };
       try {
+        console.log("buy message", message);
         if (price.denom === NFTPriceType.HOPE) {
           await runExecute(contractAddresses.TOKEN_CONTRACT, message);
         } else {
@@ -154,13 +154,13 @@ const useHandleNftItem = () => {
           );
         }
         toast.success("Success!");
-        fetchAllNFTs();
+        refresh();
       } catch (err) {
         console.error(err);
         toast.error("Fail!");
       }
     },
-    [runExecute, fetchAllNFTs]
+    [runExecute, refresh]
   );
   const transferNft = useCallback(
     async (recipient: any, item: any, callbackLink?: string) => {

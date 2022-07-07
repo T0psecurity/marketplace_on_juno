@@ -50,7 +50,7 @@ export const ImportContract: FC = () => {
   }, [open]);
 
   function doImport() {
-    dispatch(importContract(address));
+    dispatch(importContract([address]));
   }
 
   async function doUpload() {

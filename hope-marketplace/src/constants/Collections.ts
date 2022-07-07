@@ -344,7 +344,7 @@ export const getCollectionById = (id: string): MarketplaceInfo => {
 };
 
 export const MarketplaceContracts: string[] = [
-  "juno1r0panlafacxwvuffvvf6lpkc4wx7kcupuuvq6ve9jd7hlheklpgsdumamt",
+  "juno18pj60pnhhv8p45sehwf6s34sad5f6lqrwrsdvwkqsk94tk8jv9xsmh4nl0",
 ];
 
 export const MintContracts: string[] = [

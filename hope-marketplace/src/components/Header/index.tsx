@@ -10,7 +10,6 @@ import {
   setKeplrAccount,
 } from "../../features/accounts/accountsSlice";
 import useContract from "../../hook/useContract";
-import useFetch from "../../hook/useFetch";
 import useOnClickOutside from "../../hook/useOnClickOutside";
 import useWindowSize from "../../hook/useWindowSize";
 import { ListIcon } from "../Icons";
@@ -31,6 +30,7 @@ import {
   MenuItem,
 } from "./styled";
 import { coin } from "@cosmjs/proto-signing";
+import useRefresh from "../../hook/useRefresh";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
@@ -46,8 +46,6 @@ const Header: React.FC = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   // const [runningFetch, setRunningFetch] = useState(false);
   const [ref, setRef] = useState<HTMLDivElement | null>(null); // TODO: must use useRef
-  const [fetchingIntervalId, setFetchingIntervalId] =
-    useState<NodeJS.Timeout | null>(null);
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const config = useAppSelector((state) => state.connection.config);
@@ -55,39 +53,22 @@ const Header: React.FC = () => {
   // const { connect: connectWithCosmodal } = useCosmodal();
   const { connect, disconnect, connectedWallet } = useWalletManager();
   const history = useHistory();
-  const {
-    fetchCollectionInfo,
-    fetchMyNFTs,
-    fetchMarketplaceNFTs,
-    clearAllNFTs,
-  } = useFetch();
   const { initContracts } = useContract();
+  const { refresh } = useRefresh();
 
   const { isMobile } = useWindowSize(900);
 
   useEffect(() => {
+    refresh();
     initContracts();
-    setInterval(() => {
-      fetchMarketplaceNFTs();
-      fetchCollectionInfo();
-    }, 5000);
+    return () => {
+      dispatch(setKeplrAccount());
+      Collections.forEach((collection: MarketplaceInfo) =>
+        setNFTs([collection.collectionId, []])
+      );
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (account) {
-      // setRunningFetch(true);
-      // initContracts();
-      const intervalId: NodeJS.Timeout | null = setInterval(() => {
-        fetchMyNFTs();
-      }, 5000);
-      setFetchingIntervalId(intervalId);
-    } else {
-      clearAllNFTs();
-      if (fetchingIntervalId) clearInterval(fetchingIntervalId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
 
   useEffect(() => {
     if (!connectedWallet) {
@@ -106,17 +87,17 @@ const Header: React.FC = () => {
         })
       );
     }
-  }, [connectedWallet, dispatch, config]);
+  }, [connectedWallet, dispatch, config, refresh]);
 
   const clickWalletButton = () => {
     if (!account) {
       connect();
       // connectWithCosmodal();
     } else {
-      dispatch(setKeplrAccount());
-      Collections.forEach((collection: MarketplaceInfo) =>
-        setNFTs([collection.collectionId, []])
-      );
+      // dispatch(setKeplrAccount());
+      // Collections.forEach((collection: MarketplaceInfo) =>
+      //   setNFTs([collection.collectionId, []])
+      // );
       disconnect();
     }
   };

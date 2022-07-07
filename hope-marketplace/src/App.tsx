@@ -24,6 +24,8 @@ import {
 //   setKeplrAccount,
 // } from "./features/accounts/accountsSlice";
 
+import { RefreshContextProvider } from "./context/RefreshContext";
+import Updater from "./context/Updater";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Main from "./pages/Main";
@@ -115,25 +117,28 @@ function App() {
         icons: ["https://hopers.io/logo.png"],
       }}
     >
-      <div className="main">
-        <Router history={history}>
-          <Header />
-          <Main />
-          <Footer />
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            hideProgressBar
-            newestOnTop
-            closeOnClick
-            theme="colored"
-          />
-        </Router>
-      </div>
+      <RefreshContextProvider>
+        <Updater />
+        <div className="main">
+          <Router history={history}>
+            <Header />
+            <Main />
+            <Footer />
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              hideProgressBar
+              newestOnTop
+              closeOnClick
+              theme="colored"
+            />
+          </Router>
+        </div>
+      </RefreshContextProvider>
     </WalletManagerProvider>
   );
 }
