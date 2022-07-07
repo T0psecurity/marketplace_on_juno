@@ -21,7 +21,7 @@ import {
   // contractAccounts,
   // deleteAccount,
 } from "../features/accounts/accountsSlice";
-// import connectionManager from "../features/connection/connectionManager";
+import connectionManager from "../features/connection/connectionManager";
 import { toMicroAmount } from "../util/coins";
 
 export const contractAddresses: any = {
@@ -83,25 +83,29 @@ const useContract = () => {
     // async (contractAddress: string, queryMsg: any) => {
     async (contractAddress: string, queryMsg: any) => {
       // const contract = state.accounts.accountList[contractAddress];
-      const contract = state.accounts.accountList[contractAddress];
-      if (!contract) {
-        // if (contractAddress) dispatch(importContract(contractAddress));
-        console.error("contract selection error", contractAddress);
-        throw new Error("No contract selected");
+      // const contract = state.accounts.accountList[contractAddress];
+      // if (!contract) {
+      //   if (contractAddress) dispatch(importContract([contractAddress]));
+      //   console.error("contract selection error", contractAddress);
+      //   throw new Error("No contract selected");
+      // }
+      if (signingCosmWasmClient) {
+        const result = await signingCosmWasmClient?.queryContractSmart(
+          // contract.address,
+          contractAddress,
+          queryMsg
+        );
+        return result;
+      } else {
+        const client = await connectionManager.getQueryClient(
+          state.connection.config
+        );
+        const result = await client.queryContractSmart(
+          contractAddress,
+          queryMsg
+        );
+        return result;
       }
-      // const client = await connectionManager.getQueryClient(
-      //   state.connection.config
-      // );
-      // const result = await client.queryContractSmart(
-      //   contract.address,
-      //   queryMsg
-      // );
-
-      const result = await signingCosmWasmClient?.queryContractSmart(
-        contract.address,
-        queryMsg
-      );
-      return result;
     },
     [state, signingCosmWasmClient]
   );
@@ -119,13 +123,13 @@ const useContract = () => {
         // connect();
         throw new Error("No account selected");
       }
-      const contract = state.accounts.accountList[contractAddress];
+      // const contract = state.accounts.accountList[contractAddress];
       const account = state.accounts.keplrAccount;
-      if (!contract) {
-        // if (contractAddress) dispatch(importContract(contractAddress));
-        console.error("contract selection error");
-        throw new Error("No contract selected");
-      }
+      // if (!contract) {
+      //   if (contractAddress) dispatch(importContract([contractAddress]));
+      //   console.error("contract selection error");
+      //   throw new Error("No contract selected");
+      // }
 
       // const client = await connectionManager.getSigningClient(
       //   account,
@@ -172,7 +176,8 @@ const useContract = () => {
       // );
       return cwClient.execute(
         account.address,
-        contract.address,
+        // contract.address,
+        contractAddress,
         executeMsg,
         "auto",
         executeMemo,
