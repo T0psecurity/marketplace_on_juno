@@ -1,24 +1,9 @@
 import styled, { css } from "styled-components";
 
-export const NFTItemWrapper = styled.div<{ isMobile: boolean }>`
-  /* border: 1px solid black; */
-  /* padding: 10px; */
-  border-radius: 10px;
-  box-shadow: 1px 4px 10px 1px rgba(0, 0, 0, 0.7);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  scroll-snap-align: start;
-  ${({ isMobile }) =>
-    isMobile &&
-    css`
-      width: 170px;
-    `}
-`;
 export const NFTItemImageWrapper = styled.div<{ isMobile?: boolean }>`
   width: calc(100% - 20px);
   max-width: calc(100% - 20px);
-  height: ${({ isMobile }) => (isMobile ? 170 : 250)}px;
+  height: ${({ isMobile }) => (isMobile ? 140 : 250)}px;
   margin: 10px;
   position: relative;
 `;
@@ -123,4 +108,24 @@ export const CoinIcon = styled.img`
   width: 35px;
   height: 35px;
   margin-right: 5px;
+`;
+
+export const NFTItemWrapper = styled.div<{ isMobile: boolean }>`
+  /* border: 1px solid black; */
+  /* padding: 10px; */
+  border-radius: 10px;
+  box-shadow: 1px 4px 10px 1px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  scroll-snap-align: start;
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      width: 140px;
+      ${NFTItemInfo} {
+        font-size: 14px;
+        margin: 5px;
+      }
+    `}
 `;
