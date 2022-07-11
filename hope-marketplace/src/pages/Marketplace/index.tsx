@@ -20,6 +20,7 @@ import {
   // SortButtonContainer,
   MainContentContainer,
   NftList,
+  NftListTitle,
 } from "./styled";
 import { FilterOptions } from "./types";
 
@@ -91,7 +92,7 @@ const Marketplace: React.FC = () => {
           metaDataOptions={metaDataOptions}
         >
           <NftList>
-            Items
+            <NftListTitle>Items</NftListTitle>
             <NFTContainer
               nfts={filteredNfts}
               status={NFTItemStatus.BUY}

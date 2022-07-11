@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useAppDispatch } from "../app/hooks";
 import Collections, {
   MarketplaceContracts,
   MarketplaceInfo,
@@ -82,8 +82,6 @@ export const getTokenIdNumber = (id: string): string => {
 const useFetch = () => {
   const { runQuery } = useContract();
   const dispatch = useAppDispatch();
-
-  const contracts = useAppSelector((state) => state?.accounts.accountList);
 
   const fetchCollectionInfo = useCallback(
     (account) => {
@@ -228,7 +226,7 @@ const useFetch = () => {
         ) {
           collection.marketplaceContract.forEach(
             (contract: string, index: number) => {
-              if (contracts[contract]) {
+              if (contract) {
                 queries.push(
                   runQuery(contract, {
                     get_offerings: {},
@@ -279,7 +277,7 @@ const useFetch = () => {
         });
       });
     },
-    [contracts, dispatch, runQuery]
+    [dispatch, runQuery]
   );
 
   const fetchMyNFTs = useCallback(

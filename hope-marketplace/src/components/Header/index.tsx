@@ -9,7 +9,7 @@ import {
   AccountType,
   setKeplrAccount,
 } from "../../features/accounts/accountsSlice";
-import useContract from "../../hook/useContract";
+// import useContract from "../../hook/useContract";
 import useOnClickOutside from "../../hook/useOnClickOutside";
 import useWindowSize from "../../hook/useWindowSize";
 import { ListIcon } from "../Icons";
@@ -53,14 +53,14 @@ const Header: React.FC = () => {
   // const { connect: connectWithCosmodal } = useCosmodal();
   const { connect, disconnect, connectedWallet } = useWalletManager();
   const history = useHistory();
-  const { initContracts } = useContract();
+  // const { initContracts } = useContract();
   const { refresh } = useRefresh();
 
   const { isMobile } = useWindowSize(900);
 
   useEffect(() => {
     refresh();
-    initContracts();
+    // initContracts();
     return () => {
       dispatch(setKeplrAccount());
       Collections.forEach((collection: MarketplaceInfo) =>

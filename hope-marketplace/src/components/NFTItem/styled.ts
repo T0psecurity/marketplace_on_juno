@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-export const NFTItemWrapper = styled.div`
+export const NFTItemWrapper = styled.div<{ isMobile: boolean }>`
   /* border: 1px solid black; */
   /* padding: 10px; */
   border-radius: 10px;
@@ -8,11 +8,17 @@ export const NFTItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  scroll-snap-align: start;
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      width: 170px;
+    `}
 `;
 export const NFTItemImageWrapper = styled.div<{ isMobile?: boolean }>`
   width: calc(100% - 20px);
   max-width: calc(100% - 20px);
-  height: ${({ isMobile }) => (isMobile ? 200 : 250)}px;
+  height: ${({ isMobile }) => (isMobile ? 170 : 250)}px;
   margin: 10px;
   position: relative;
 `;
@@ -33,13 +39,23 @@ export const NFTItemInfo = styled.div`
   align-items: center;
 `;
 
-export const NFTItemPriceContainer = styled.div``;
-
 export const NFTItemTokenPrice = styled.div``;
 
 export const NFTItemUsdPrice = styled.div`
   font-weight: normal;
   font-size: 14px;
+`;
+
+export const NFTItemPriceContainer = styled.div<{ isMobile: boolean }>`
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      display: flex;
+      align-items: center;
+      ${NFTItemUsdPrice} {
+        margin-left: 10px;
+      }
+    `}
 `;
 
 export const NFTItemOperationButton = styled.div`

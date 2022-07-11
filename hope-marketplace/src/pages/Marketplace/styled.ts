@@ -193,6 +193,11 @@ export const NftList = styled.div`
   height: calc(100% - 20px);
   overflow-x: hidden;
   overflow-y: auto;
+  scroll-snap-type: y mandatory;
+`;
+
+export const NftListTitle = styled.span`
+  scroll-snap-align: start;
 `;
 
 export const StyledCollapseCard = styled(CollapseCard)`

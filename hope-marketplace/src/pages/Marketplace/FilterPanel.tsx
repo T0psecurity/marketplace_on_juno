@@ -175,52 +175,56 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             )}
           </StatusFilterPanel>
         </CollapseCard> */}
-        <CollapseCard title="On Sale in" expanded>
-          <CoinImageWrapper>
-            <CoinImage
-              coinType="hope"
-              onClick={() => handleClickPriceType("hope")}
-            />
-            <CoinImage
-              coinType="juno"
-              onClick={() => handleClickPriceType("ujuno")}
-            />
-          </CoinImageWrapper>
-        </CollapseCard>
-        {!!metaDataOptions &&
-          Object.keys(metaDataOptions)
-            .sort((metaDataOption1: string, metaDataOption2: string) =>
-              metaDataOption1 > metaDataOption2 ? 1 : -1
-            )
-            .map((optionKey: string, keyIndex: number) => {
-              const options = metaDataOptions[optionKey];
-              if (!options || !options.length) return null;
-              const sortedOptions = options.sort(
-                (option1: string, option2: string) =>
-                  option1 > option2 ? 1 : -1
-              );
-              return (
-                <CollapseCard
-                  title={optionKey}
-                  key={`${optionKey}-${keyIndex}`}
-                >
-                  {sortedOptions.map((option: string, index: number) => (
-                    <Button
-                      key={index}
-                      onClick={() =>
-                        handleChangeMetaDataFilter(optionKey, option)
-                      }
-                      selected={
-                        !!metaDataFilter[optionKey] &&
-                        metaDataFilter[optionKey][option]
-                      }
+        {expanded && (
+          <>
+            <CollapseCard title="On Sale in" expanded>
+              <CoinImageWrapper>
+                <CoinImage
+                  coinType="hope"
+                  onClick={() => handleClickPriceType("hope")}
+                />
+                <CoinImage
+                  coinType="juno"
+                  onClick={() => handleClickPriceType("ujuno")}
+                />
+              </CoinImageWrapper>
+            </CollapseCard>
+            {!!metaDataOptions &&
+              Object.keys(metaDataOptions)
+                .sort((metaDataOption1: string, metaDataOption2: string) =>
+                  metaDataOption1 > metaDataOption2 ? 1 : -1
+                )
+                .map((optionKey: string, keyIndex: number) => {
+                  const options = metaDataOptions[optionKey];
+                  if (!options || !options.length) return null;
+                  const sortedOptions = options.sort(
+                    (option1: string, option2: string) =>
+                      option1 > option2 ? 1 : -1
+                  );
+                  return (
+                    <CollapseCard
+                      title={optionKey}
+                      key={`${optionKey}-${keyIndex}`}
                     >
-                      {option.replace(/_/g, " ")}
-                    </Button>
-                  ))}
-                </CollapseCard>
-              );
-            })}
+                      {sortedOptions.map((option: string, index: number) => (
+                        <Button
+                          key={index}
+                          onClick={() =>
+                            handleChangeMetaDataFilter(optionKey, option)
+                          }
+                          selected={
+                            !!metaDataFilter[optionKey] &&
+                            metaDataFilter[optionKey][option]
+                          }
+                        >
+                          {option.replace(/_/g, " ")}
+                        </Button>
+                      ))}
+                    </CollapseCard>
+                  );
+                })}
+          </>
+        )}
       </FilterContainer>
       <FilterMainContent>
         <SearchSortPanel ref={searchSortContainer}>
