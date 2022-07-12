@@ -2,11 +2,18 @@ export enum PriceSortDirectionType {
   "asc",
   "desc",
 }
+
+export enum MarketplaceTabs {
+  "ITEMS",
+  "ACTIVITY",
+}
+
 export interface FilterPanelProps {
   onChangeExpanded: any;
   expanded: boolean;
   onChangeFilterOption: any;
   metaDataOptions?: { [key: string]: string[] };
+  onChangeNftListTab: (selectedTab: MarketplaceTabs) => void;
 }
 
 export type StatusFilterType = {

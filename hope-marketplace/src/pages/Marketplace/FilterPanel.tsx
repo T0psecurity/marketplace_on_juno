@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   // DEFAULT_STATUS_FILTER,
   FilterPanelProps,
+  MarketplaceTabs,
   MetaDataFilterOption,
   PriceSortDirectionType,
   // StatusFilterButtonType,
@@ -28,6 +29,8 @@ import {
   CoinImage,
   CoinImageWrapper,
   FilterResultPanel,
+  NftListTabs,
+  NftListTab,
 } from "./styled";
 
 const ArrowIcon = ({
@@ -85,11 +88,13 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   onChangeExpanded,
   onChangeFilterOption,
   metaDataOptions,
+  onChangeNftListTab,
   children,
 }) => {
   // const [statusFilter, setStatusFilter] = useState<StatusFilterType>(
   //   DEFAULT_STATUS_FILTER
   // );
+  const [selectedTab, setSelectedTab] = useState(MarketplaceTabs.ITEMS);
   const [metaDataFilter, setMetaDataFilter] = useState<MetaDataFilterOption>(
     {}
   );
@@ -151,6 +156,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         [value]: !currentValue,
       },
     });
+  };
+
+  const handleChangeNftListTab = (selected: MarketplaceTabs) => {
+    setSelectedTab(selected);
+    onChangeNftListTab(selected);
   };
 
   return (
@@ -228,11 +238,27 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       </FilterContainer>
       <FilterMainContent>
         <SearchSortPanel ref={searchSortContainer}>
-          <SortContainer>
-            <SortByPriceButton onClick={handleSortByPrice}>{`Sort By ${
-              isAscending ? "Descending" : "Ascending"
-            }`}</SortByPriceButton>
-          </SortContainer>
+          <NftListTabs>
+            <NftListTab
+              selected={selectedTab === MarketplaceTabs.ITEMS}
+              onClick={() => handleChangeNftListTab(MarketplaceTabs.ITEMS)}
+            >
+              Items
+            </NftListTab>
+            <NftListTab
+              selected={selectedTab === MarketplaceTabs.ACTIVITY}
+              onClick={() => handleChangeNftListTab(MarketplaceTabs.ACTIVITY)}
+            >
+              Activity
+            </NftListTab>
+          </NftListTabs>
+          {selectedTab === MarketplaceTabs.ITEMS && (
+            <SortContainer>
+              <SortByPriceButton onClick={handleSortByPrice}>{`Sort By ${
+                isAscending ? "Descending" : "Ascending"
+              }`}</SortByPriceButton>
+            </SortContainer>
+          )}
           <SearchWrapper>
             <SearchContainer>
               <SearchIcon>

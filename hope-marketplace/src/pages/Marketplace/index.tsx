@@ -7,7 +7,9 @@ import NFTIntroduction from "../../components/NFTIntroduction";
 import { NFTItemStatus } from "../../components/NFTItem";
 import { Title } from "../../components/PageTitle";
 import { getCollectionById } from "../../constants/Collections";
+import { getCustomTokenId } from "../../hook/useFetch";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
+import ActivityList from "./AcitivityList";
 import FilterPanel from "./FilterPanel";
 import useFilter from "./hook/useFilter";
 import Statistic from "./Statistic";
@@ -20,11 +22,12 @@ import {
   // SortButtonContainer,
   MainContentContainer,
   NftList,
-  NftListTitle,
+  // NftListTitle,
 } from "./styled";
-import { FilterOptions } from "./types";
+import { FilterOptions, MarketplaceTabs } from "./types";
 
 const Marketplace: React.FC = () => {
+  const [selectedTab, setSelectedTab] = useState(MarketplaceTabs.ITEMS);
   const { isXl } = useMatchBreakpoints();
   const [expandedFilter, setExpandedFilter] = useState<boolean>(isXl);
   const [filterOption, setFilterOption] = useState<FilterOptions>();
@@ -44,6 +47,9 @@ const Marketplace: React.FC = () => {
     // console.log("nfts", state.nfts);
     return state.nfts[`${targetCollection.collectionId}_marketplace`] || [];
   });
+  const saleHistory = useAppSelector(
+    (state) => state.collectionStates[collectionId || ""]?.saleHistory
+  );
 
   const metaDataOptions = useMemo(() => {
     let result: { [key: string]: string[] } = {};
@@ -68,6 +74,31 @@ const Marketplace: React.FC = () => {
   }, [marketplaceNFTs]);
 
   const filteredNfts = useFilter(marketplaceNFTs, filterOption);
+  const filteredHistory = useMemo(() => {
+    const sortedSaleHistory = saleHistory
+      ? saleHistory
+          .slice()
+          .sort((history1: any, history2: any) =>
+            history1?.time < history2.time ? 1 : -1
+          )
+      : [];
+    if (filterOption?.searchWord) {
+      const result: any[] = [];
+      sortedSaleHistory.forEach((item: any) => {
+        const tokenId = targetCollection.customTokenId
+          ? getCustomTokenId(item.token_id, targetCollection.customTokenId)
+          : item.token_id;
+        if (tokenId.includes(filterOption.searchWord)) result.push(item);
+      });
+      return result;
+    } else {
+      return sortedSaleHistory;
+    }
+  }, [filterOption, saleHistory, targetCollection]);
+
+  const handleChangeNftListTab = (selected: MarketplaceTabs) => {
+    setSelectedTab(selected);
+  };
 
   return (
     <Wrapper>
@@ -90,16 +121,25 @@ const Marketplace: React.FC = () => {
           expanded={expandedFilter}
           onChangeFilterOption={setFilterOption}
           metaDataOptions={metaDataOptions}
+          onChangeNftListTab={handleChangeNftListTab}
         >
           <NftList>
-            <NftListTitle>Items</NftListTitle>
-            <NFTContainer
-              nfts={filteredNfts}
-              status={NFTItemStatus.BUY}
-              // sort={isAscending ? "as" : "des"}
-              emptyMsg="No NFTs on Sale"
-              sort={"as"}
-            />
+            {/* <NftListTitle>Items</NftListTitle> */}
+            {selectedTab === MarketplaceTabs.ITEMS && (
+              <NFTContainer
+                nfts={filteredNfts}
+                status={NFTItemStatus.BUY}
+                // sort={isAscending ? "as" : "des"}
+                emptyMsg="No NFTs on Sale"
+                sort={"as"}
+              />
+            )}
+            {selectedTab === MarketplaceTabs.ACTIVITY && (
+              <ActivityList
+                collectionId={collectionId || ""}
+                history={filteredHistory}
+              />
+            )}
           </NftList>
         </FilterPanel>
       </MainContentContainer>
