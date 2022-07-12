@@ -1,12 +1,12 @@
 import { useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useAppDispatch } from "../app/hooks";
 import Collections, {
   MarketplaceContracts,
   MarketplaceInfo,
 } from "../constants/Collections";
 import {
   CollectionStateType,
-  DEFAULT_COLLECTION_STATE,
+  // DEFAULT_COLLECTION_STATE,
   setCollectionState,
 } from "../features/collections/collectionsSlice";
 import { setNFTs } from "../features/nfts/nftsSlice";
@@ -32,7 +32,7 @@ const getMin = (number: number, max?: number): number => {
   return maxNumber === number ? 0 : number;
 };
 
-const getCustomTokenId = (origin: string, target: string): string =>
+export const getCustomTokenId = (origin: string, target: string): string =>
   `${target}.${origin.split(".").pop()}`;
 
 const buildNFTItem = (
@@ -82,8 +82,6 @@ export const getTokenIdNumber = (id: string): string => {
 const useFetch = () => {
   const { runQuery } = useContract();
   const dispatch = useAppDispatch();
-
-  const contracts = useAppSelector((state) => state?.accounts.accountList);
 
   const fetchCollectionInfo = useCallback(
     (account) => {
@@ -185,7 +183,37 @@ const useFetch = () => {
             };
           } catch (e) {}
         }
-        dispatch(setCollectionState([collection.collectionId, storeObject]));
+        const collectionInfo = await runQuery(MarketplaceContracts[0], {
+          get_collection_info: {
+            address: collection.nftContract,
+          },
+        });
+        let actionHistoryQueries = [];
+        for (
+          let i = 0;
+          i < Math.ceil((collectionInfo?.sale_id || 0) / MAX_ITEMS);
+          i++
+        ) {
+          let saleIds = [];
+          for (let j = 0; j < MAX_ITEMS; j++)
+            saleIds.push("" + (MAX_ITEMS * i + j + 1));
+          actionHistoryQueries.push(
+            runQuery(MarketplaceContracts[0], {
+              get_sale_history: {
+                address: collection.nftContract,
+                id: saleIds,
+              },
+            })
+          );
+        }
+        await Promise.all(actionHistoryQueries).then((queryResults: any) => {
+          let saleHistory: any[] = [];
+          queryResults.forEach(
+            (result: any[]) => (saleHistory = saleHistory.concat(result))
+          );
+          storeObject.saleHistory = saleHistory;
+          dispatch(setCollectionState([collection.collectionId, storeObject]));
+        });
       });
     },
     [dispatch, runQuery]
@@ -202,6 +230,7 @@ const useFetch = () => {
             address: collection.nftContract,
           },
         });
+
         for (
           let i = 0;
           i < Math.ceil((collectionInfo?.offering_id || 0) / MAX_ITEMS);
@@ -228,7 +257,7 @@ const useFetch = () => {
         ) {
           collection.marketplaceContract.forEach(
             (contract: string, index: number) => {
-              if (contracts[contract]) {
+              if (contract) {
                 queries.push(
                   runQuery(contract, {
                     get_offerings: {},
@@ -279,7 +308,7 @@ const useFetch = () => {
         });
       });
     },
-    [contracts, dispatch, runQuery]
+    [dispatch, runQuery]
   );
 
   const fetchMyNFTs = useCallback(
@@ -323,9 +352,9 @@ const useFetch = () => {
 
   const clearAllNFTs = useCallback(() => {
     Collections.forEach(async (collection: MarketplaceInfo) => {
-      dispatch(
-        setCollectionState([collection.collectionId, DEFAULT_COLLECTION_STATE])
-      );
+      // dispatch(
+      //   setCollectionState([collection.collectionId, DEFAULT_COLLECTION_STATE])
+      // );
       dispatch(setNFTs([collection.collectionId, []]));
       dispatch(setNFTs([`${collection.collectionId}_listed`, []]));
       // dispatch(setNFTs([`${collection.collectionId}_marketplace`, []]));

@@ -131,7 +131,7 @@ export const importContract = createAsyncThunk(
     const config = state.connection.config;
     const client = await connectionManager.getQueryClient(config);
     try {
-      let result: Contract[] = []
+      let result: Contract[] = [];
       addresses.forEach(async (address: string) => {
         const contract = await client.getContract(address);
         const { label } = contract;
@@ -146,8 +146,8 @@ export const importContract = createAsyncThunk(
           balance: coin(0, config["microDenom"]),
           exists: true,
         });
-      })
-      return result
+      });
+      return result;
     } catch (e) {
       console.error("import contract error", addresses, e);
       dispatch(
@@ -416,6 +416,7 @@ export const accountsSlice = createSlice({
       const account = action.payload;
 
       if (account) {
+        if (!state.accountList) state.accountList = {};
         state.accountList[account.address] = account;
         state.currentAccount = account.address;
       } else {
@@ -471,8 +472,8 @@ export const accountsSlice = createSlice({
         const accounts = action.payload;
         accounts.forEach((account: Contract) => {
           state.accountList[account.address] = account;
-        // state.currentContract = account.address;
-        })
+          // state.currentContract = account.address;
+        });
       })
       .addCase(checkContract.fulfilled, (state, action) => {
         const newAccountInfo = action.payload;

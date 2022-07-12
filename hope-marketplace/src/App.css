@@ -1,16 +1,17 @@
-*::-webkit-scrollbar {
+/* *::-webkit-scrollbar {
   width: 5px;
+  position: absolute;
 }
 
 *::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: black;
 }
 
 *::-webkit-scrollbar-thumb {
   background-color: #444857;
   border-radius: 10px;
-  border: 3px solid #ffffff;
-}
+  border: 3px solid #444857;
+} */
 
 body,
 pre {

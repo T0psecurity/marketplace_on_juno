@@ -18,6 +18,7 @@ export type CollectionStateType = {
     hopeMin?: number;
     hopeTotal: number;
   };
+  saleHistory?: any[];
 };
 
 export const DEFAULT_COLLECTION_STATE = {
@@ -28,6 +29,7 @@ export const DEFAULT_COLLECTION_STATE = {
   imageUrl: "",
   myMintedNfts: null,
   price: 0,
+  saleHistory: [],
 };
 
 let initialState: { [key: string]: CollectionStateType } = {};

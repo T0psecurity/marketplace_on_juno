@@ -99,8 +99,38 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const isSellItem = status === NFTItemStatus.SELL;
 
+  const NFTItemPriceItem = () =>
+    !!price.amount && +price.amount > 0 ? (
+      <NFTItemInfo>
+        <CoinIcon
+          alt=""
+          src={
+            price.denom === NFTPriceType.HOPE
+              ? "/coin-images/hope.png"
+              : "/coin-images/juno.png"
+          }
+        />
+        <NFTItemPriceContainer isMobile={isMobile}>
+          <NFTItemTokenPrice>{price.amount / 1e6}</NFTItemTokenPrice>
+          <NFTItemUsdPrice>
+            {tokenPrice &&
+              `(${addSuffix(
+                Number(((+(price?.amount || 0) / 1e6) * tokenPrice).toFixed(2)),
+                1
+              )}$)`}
+          </NFTItemUsdPrice>
+        </NFTItemPriceContainer>
+      </NFTItemInfo>
+    ) : null;
+
+  const NFTItemOperationButtonItem = () => (
+    <NFTItemOperationButton onClick={handleNFTItem}>
+      {status} Now
+    </NFTItemOperationButton>
+  );
+
   return (
-    <NFTItemWrapper>
+    <NFTItemWrapper isMobile={isMobile}>
       <NFTItemImageWrapper onClick={handleGotoDetail} isMobile={isMobile}>
         <Image alt="" src={url} key={url} />
       </NFTItemImageWrapper>
@@ -108,41 +138,13 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         <NFTItemInfo>{targetCollection.title}</NFTItemInfo>
         <NFTItemInfoContainer>
           <NFTItemInfo>{item.token_id_display || item.token_id}</NFTItemInfo>
-          <NFTItemInfo>
-            {!!price.amount && +price.amount > 0 ? (
-              <>
-                <CoinIcon
-                  alt=""
-                  src={
-                    price.denom === NFTPriceType.HOPE
-                      ? "/coin-images/hope.png"
-                      : "/coin-images/juno.png"
-                  }
-                />
-                <NFTItemPriceContainer>
-                  <NFTItemTokenPrice>{price.amount / 1e6}</NFTItemTokenPrice>
-                  <NFTItemUsdPrice>
-                    {tokenPrice &&
-                      `(${addSuffix(
-                        Number(
-                          ((+(price?.amount || 0) / 1e6) * tokenPrice).toFixed(
-                            2
-                          )
-                        ),
-                        1
-                      )}$)`}
-                  </NFTItemUsdPrice>
-                </NFTItemPriceContainer>
-              </>
-            ) : null}
-          </NFTItemInfo>
+          {!isMobile && <NFTItemPriceItem />}
         </NFTItemInfoContainer>
+        {isMobile && <NFTItemPriceItem />}
       </div>
 
       <NFTItemOperationContainer isSellItem={isSellItem}>
-        <NFTItemOperationButton onClick={handleNFTItem}>
-          {status} Now
-        </NFTItemOperationButton>
+        {!isMobile && <NFTItemOperationButtonItem />}
         {isSellItem && (
           <>
             <NFTItemPriceInputer
@@ -173,6 +175,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
           </>
         )}
       </NFTItemOperationContainer>
+      {isMobile && <NFTItemOperationButtonItem />}
     </NFTItemWrapper>
   );
 }

@@ -9,6 +9,8 @@ import { createBrowserHistory } from "history";
 import "@shoelace-style/shoelace/dist/themes/light.css";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path";
 import { ToastContainer } from "react-toastify";
+import useMatchBreakpoints from "./hook/useMatchBreakpoints";
+import { createGlobalStyle, css } from "styled-components";
 import {
   // KeplrWalletConnectV1,
   // Wallet,
@@ -43,6 +45,28 @@ const history = createBrowserHistory();
 setBasePath(
   "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.64/dist/"
 );
+
+const GlobalStyle = createGlobalStyle<{ isMobile: boolean }>`
+  ${({ isMobile }) =>
+    !isMobile &&
+    css`
+      *::-webkit-scrollbar {
+        width: 5px;
+        position: absolute;
+      }
+
+      *::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      *::-webkit-scrollbar-thumb {
+        background-color: #444857;
+        border-radius: 10px;
+        border: 3px solid #444857;
+      }
+    `}
+`;
+
 function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -54,6 +78,8 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const { isXs, isSm } = useMatchBreakpoints();
+  const isMobile = isXs || isSm;
   const config = useAppSelector((state) => state.connection.config);
   // const chainInfo: ChainInfo = getChainConfig(config);
 
@@ -105,41 +131,44 @@ function App() {
   // ];
 
   return (
-    <WalletManagerProvider
-      defaultChainId={config.chainId}
-      enabledWalletTypes={[WalletType.Keplr, WalletType.WalletConnectKeplr]}
-      localStorageKey="keplr-wallet"
-      walletConnectClientMeta={{
-        name: "Hopers.io Marketplace",
-        description:
-          "The DAO governs the marketplace and earns rewards through the staking system of the token $HOPE.",
-        url: "https://hopers.io",
-        icons: ["https://hopers.io/logo.png"],
-      }}
-    >
-      <RefreshContextProvider>
-        <Updater />
-        <div className="main">
-          <Router history={history}>
-            <Header />
-            <Main />
-            <Footer />
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              hideProgressBar
-              newestOnTop
-              closeOnClick
-              theme="colored"
-            />
-          </Router>
-        </div>
-      </RefreshContextProvider>
-    </WalletManagerProvider>
+    <>
+      <GlobalStyle isMobile={isMobile} />
+      <WalletManagerProvider
+        defaultChainId={config.chainId}
+        enabledWalletTypes={[WalletType.Keplr, WalletType.WalletConnectKeplr]}
+        localStorageKey="keplr-wallet"
+        walletConnectClientMeta={{
+          name: "Hopers.io Marketplace",
+          description:
+            "The DAO governs the marketplace and earns rewards through the staking system of the token $HOPE.",
+          url: "https://hopers.io",
+          icons: ["https://hopers.io/logo.png"],
+        }}
+      >
+        <RefreshContextProvider>
+          <Updater />
+          <div className="main">
+            <Router history={history}>
+              <Header />
+              <Main />
+              <Footer />
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                hideProgressBar
+                newestOnTop
+                closeOnClick
+                theme="colored"
+              />
+            </Router>
+          </div>
+        </RefreshContextProvider>
+      </WalletManagerProvider>
+    </>
   );
 }
 

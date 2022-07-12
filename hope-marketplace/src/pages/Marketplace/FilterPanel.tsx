@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   // DEFAULT_STATUS_FILTER,
   FilterPanelProps,
+  MarketplaceTabs,
   MetaDataFilterOption,
   PriceSortDirectionType,
   // StatusFilterButtonType,
@@ -28,6 +29,8 @@ import {
   CoinImage,
   CoinImageWrapper,
   FilterResultPanel,
+  NftListTabs,
+  NftListTab,
 } from "./styled";
 
 const ArrowIcon = ({
@@ -85,11 +88,13 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   onChangeExpanded,
   onChangeFilterOption,
   metaDataOptions,
+  onChangeNftListTab,
   children,
 }) => {
   // const [statusFilter, setStatusFilter] = useState<StatusFilterType>(
   //   DEFAULT_STATUS_FILTER
   // );
+  const [selectedTab, setSelectedTab] = useState(MarketplaceTabs.ITEMS);
   const [metaDataFilter, setMetaDataFilter] = useState<MetaDataFilterOption>(
     {}
   );
@@ -153,6 +158,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     });
   };
 
+  const handleChangeNftListTab = (selected: MarketplaceTabs) => {
+    setSelectedTab(selected);
+    onChangeNftListTab(selected);
+  };
+
   return (
     <FilterWrapper>
       <FilterContainer>
@@ -175,60 +185,80 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             )}
           </StatusFilterPanel>
         </CollapseCard> */}
-        <CollapseCard title="On Sale in" expanded>
-          <CoinImageWrapper>
-            <CoinImage
-              coinType="hope"
-              onClick={() => handleClickPriceType("hope")}
-            />
-            <CoinImage
-              coinType="juno"
-              onClick={() => handleClickPriceType("ujuno")}
-            />
-          </CoinImageWrapper>
-        </CollapseCard>
-        {!!metaDataOptions &&
-          Object.keys(metaDataOptions)
-            .sort((metaDataOption1: string, metaDataOption2: string) =>
-              metaDataOption1 > metaDataOption2 ? 1 : -1
-            )
-            .map((optionKey: string, keyIndex: number) => {
-              const options = metaDataOptions[optionKey];
-              if (!options || !options.length) return null;
-              const sortedOptions = options.sort(
-                (option1: string, option2: string) =>
-                  option1 > option2 ? 1 : -1
-              );
-              return (
-                <CollapseCard
-                  title={optionKey}
-                  key={`${optionKey}-${keyIndex}`}
-                >
-                  {sortedOptions.map((option: string, index: number) => (
-                    <Button
-                      key={index}
-                      onClick={() =>
-                        handleChangeMetaDataFilter(optionKey, option)
-                      }
-                      selected={
-                        !!metaDataFilter[optionKey] &&
-                        metaDataFilter[optionKey][option]
-                      }
+        {expanded && (
+          <>
+            <CollapseCard title="On Sale in" expanded>
+              <CoinImageWrapper>
+                <CoinImage
+                  coinType="hope"
+                  onClick={() => handleClickPriceType("hope")}
+                />
+                <CoinImage
+                  coinType="juno"
+                  onClick={() => handleClickPriceType("ujuno")}
+                />
+              </CoinImageWrapper>
+            </CollapseCard>
+            {!!metaDataOptions &&
+              Object.keys(metaDataOptions)
+                .sort((metaDataOption1: string, metaDataOption2: string) =>
+                  metaDataOption1 > metaDataOption2 ? 1 : -1
+                )
+                .map((optionKey: string, keyIndex: number) => {
+                  const options = metaDataOptions[optionKey];
+                  if (!options || !options.length) return null;
+                  const sortedOptions = options.sort(
+                    (option1: string, option2: string) =>
+                      option1 > option2 ? 1 : -1
+                  );
+                  return (
+                    <CollapseCard
+                      title={optionKey}
+                      key={`${optionKey}-${keyIndex}`}
                     >
-                      {option.replace(/_/g, " ")}
-                    </Button>
-                  ))}
-                </CollapseCard>
-              );
-            })}
+                      {sortedOptions.map((option: string, index: number) => (
+                        <Button
+                          key={index}
+                          onClick={() =>
+                            handleChangeMetaDataFilter(optionKey, option)
+                          }
+                          selected={
+                            !!metaDataFilter[optionKey] &&
+                            metaDataFilter[optionKey][option]
+                          }
+                        >
+                          {option.replace(/_/g, " ")}
+                        </Button>
+                      ))}
+                    </CollapseCard>
+                  );
+                })}
+          </>
+        )}
       </FilterContainer>
       <FilterMainContent>
         <SearchSortPanel ref={searchSortContainer}>
-          <SortContainer>
-            <SortByPriceButton onClick={handleSortByPrice}>{`Sort By ${
-              isAscending ? "Descending" : "Ascending"
-            }`}</SortByPriceButton>
-          </SortContainer>
+          <NftListTabs>
+            <NftListTab
+              selected={selectedTab === MarketplaceTabs.ITEMS}
+              onClick={() => handleChangeNftListTab(MarketplaceTabs.ITEMS)}
+            >
+              Items
+            </NftListTab>
+            <NftListTab
+              selected={selectedTab === MarketplaceTabs.ACTIVITY}
+              onClick={() => handleChangeNftListTab(MarketplaceTabs.ACTIVITY)}
+            >
+              Activity
+            </NftListTab>
+          </NftListTabs>
+          {selectedTab === MarketplaceTabs.ITEMS && (
+            <SortContainer>
+              <SortByPriceButton onClick={handleSortByPrice}>{`Sort By ${
+                isAscending ? "Descending" : "Ascending"
+              }`}</SortByPriceButton>
+            </SortContainer>
+          )}
           <SearchWrapper>
             <SearchContainer>
               <SearchIcon>
