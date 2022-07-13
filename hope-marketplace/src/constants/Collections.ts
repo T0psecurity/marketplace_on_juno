@@ -335,6 +335,35 @@ const Collections: MarketplaceInfo[] = [
     },
     isLaunched: true,
   },
+  {
+    title: "Wizards & Witches of Cosmos",
+    creator: "Juno Farming",
+    imageUrl: "/backgrounds/witches.jpg",
+    backgroundUrl: "/bmarketplace-ackgrounds/witches.jpg",
+    logoUrl: "/logos/witches.jpg",
+    collectionId: "witches",
+    metaDataUrl: "",
+    nftContract:
+      "juno1yta5dreyjsphprfd0unt7edhhu8jfx2c74z8l9c8p9294a8wz5qs8ls20e",
+    mintContract:
+      "juno1svuh44h5jd29vljvy4vuszx97dwt640589m0fuaagpsv3hc4g02q4c8ner",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://www.hopers.io/",
+      twitter: "https://twitter.com/JunoFarming",
+    },
+    description:
+      "2nd collection of JunoFarming NFT, which will allow to generate rewards for Junofarming stakers through minting and trading. Furthermore, anyone who buys 1 NFT of the 2nd collection will have exclusive access to the White List for the 3rd collection.",
+    mintInfo: {
+      totalNfts: 348,
+      royalties: "TBA",
+      price: "8 $JUNO",
+      mintImage: "/mint-images/witches.jpg",
+      mintDate: "2022-07-13",
+    },
+    isLaunched: true,
+  },
 ];
 
 export const getCollectionById = (id: string): MarketplaceInfo => {
