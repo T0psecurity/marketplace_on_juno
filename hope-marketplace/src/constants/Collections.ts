@@ -342,7 +342,8 @@ const Collections: MarketplaceInfo[] = [
     backgroundUrl: "/bmarketplace-ackgrounds/witches.jpg",
     logoUrl: "/logos/witches.jpg",
     collectionId: "witches",
-    metaDataUrl: "",
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmVqucWUnQTAu5V3V4ubZGs7zhiiT28PQ797zmYzEh5C4w/_metadata.json",
     nftContract:
       "juno1yta5dreyjsphprfd0unt7edhhu8jfx2c74z8l9c8p9294a8wz5qs8ls20e",
     mintContract:
