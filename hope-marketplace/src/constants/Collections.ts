@@ -339,7 +339,7 @@ const Collections: MarketplaceInfo[] = [
     title: "Wizards & Witches of Cosmos",
     creator: "Juno Farming",
     imageUrl: "/backgrounds/witches.jpg",
-    backgroundUrl: "/bmarketplace-ackgrounds/witches.jpg",
+    backgroundUrl: "/marketplace-backgrounds/witches.jpg",
     logoUrl: "/logos/witches.jpg",
     collectionId: "witches",
     metaDataUrl:
