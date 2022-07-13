@@ -358,7 +358,7 @@ const Collections: MarketplaceInfo[] = [
       "2nd collection of JunoFarming NFT, which will allow to generate rewards for Junofarming stakers through minting and trading. Furthermore, anyone who buys 1 NFT of the 2nd collection will have exclusive access to the White List for the 3rd collection.",
     mintInfo: {
       totalNfts: 348,
-      royalties: "TBA",
+      royalties: "7% + 3%",
       price: "8 $JUNO",
       mintImage: "/mint-images/witches.jpg",
       mintDate: "2022-07-13",
