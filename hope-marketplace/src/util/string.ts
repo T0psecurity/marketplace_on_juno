@@ -21,6 +21,5 @@ export const escapeSpecialForUrl = (string: string): string => {
 
 export const addSpecialForUrl = (string: string | null): string => {
   const regExp = new RegExp(SpecialChar, "g");
-  console.log(string, regExp);
   return (string || "").replace(regExp, "&");
 };
