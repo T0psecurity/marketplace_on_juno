@@ -54,7 +54,12 @@ const useHandleNftItem = () => {
           msg: btoa(
             JSON.stringify({
               list_price: {
-                denom: nftPriceType === NFTPriceType.HOPE ? "hope" : "ujuno",
+                denom:
+                  nftPriceType === NFTPriceType.HOPE
+                    ? "hope"
+                    : nftPriceType === NFTPriceType.RAW
+                    ? "raw"
+                    : "ujuno",
                 amount: `${price * 1e6}`,
               },
             })
@@ -112,8 +117,16 @@ const useHandleNftItem = () => {
       const targetCollection = getCollectionById(item.collectionId);
       const price = item?.list_price || {};
       const message =
-        price.denom === NFTPriceType.HOPE
+        price.denom === NFTPriceType.JUNO
           ? {
+              buy_nft: {
+                offering_id: item.id,
+                ...(MarketplaceContracts.includes(item.contractAddress) && {
+                  nft_address: targetCollection.nftContract,
+                }),
+              },
+            }
+          : {
               send: {
                 // contract: item.token_id.includes("Hope")
                 //   ? contractAddresses.MARKET_CONTRACT
@@ -129,20 +142,9 @@ const useHandleNftItem = () => {
                   })
                 ),
               },
-            }
-          : {
-              buy_nft: {
-                offering_id: item.id,
-                ...(MarketplaceContracts.includes(item.contractAddress) && {
-                  nft_address: targetCollection.nftContract,
-                }),
-              },
             };
       try {
-        console.log("buy message", message);
-        if (price.denom === NFTPriceType.HOPE) {
-          await runExecute(contractAddresses.TOKEN_CONTRACT, message);
-        } else {
+        if (price.denom === NFTPriceType.JUNO) {
           await runExecute(
             // item.token_id.includes("Hope")
             //   ? contractAddresses.MARKET_CONTRACT
@@ -152,6 +154,13 @@ const useHandleNftItem = () => {
             {
               funds: "" + price.amount / 1e6,
             }
+          );
+        } else {
+          await runExecute(
+            price.denom === NFTPriceType.HOPE
+              ? contractAddresses.HOPE_TOKEN_CONTRACT
+              : contractAddresses.RAW_TOKEN_CONTRACT,
+            message
           );
         }
         toast.success("Success!");

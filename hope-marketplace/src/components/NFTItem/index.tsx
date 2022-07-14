@@ -147,7 +147,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       </NFTItemImageWrapper>
       <div>
         <NFTItemInfo>{targetCollection.title}</NFTItemInfo>
-        <NFTItemInfoContainer>
+        <NFTItemInfoContainer isMobile={isMobile}>
           <NFTItemInfo>{item.token_id_display || item.token_id}</NFTItemInfo>
           {!isMobile && <NFTItemPriceItem />}
         </NFTItemInfoContainer>
@@ -189,6 +189,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                 options={[
                   { value: NFTPriceType.HOPE, label: "HOPE" },
                   { value: NFTPriceType.JUNO, label: "JUNO" },
+                  { value: NFTPriceType.RAW, label: "RAW" },
                 ]}
               />
               {/* <input

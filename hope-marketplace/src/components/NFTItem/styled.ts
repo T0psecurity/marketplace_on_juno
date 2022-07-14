@@ -8,8 +8,9 @@ export const NFTItemImageWrapper = styled.div<{ isMobile?: boolean }>`
   position: relative;
 `;
 
-export const NFTItemInfoContainer = styled.div`
-  display: flex;
+export const NFTItemInfoContainer = styled.div<{ isMobile: boolean }>`
+  display: grid;
+  grid-template-columns: ${({ isMobile }) => (isMobile ? "auto" : "1fr 1fr")};
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;

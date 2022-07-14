@@ -21,6 +21,7 @@ import {
   MainPriceContainer,
   UsdPriceContainer,
 } from "./styled";
+import ReactSelect from "react-select";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -93,9 +94,12 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
     // if (!isNaN(Number(value))) setNftPrice(Number(value));
   };
 
-  const handleChangePriceType = (e: any) => {
-    const { value } = e.target;
-    setNftPriceType(value);
+  // const handleChangePriceType = (e: any) => {
+  //   const { value } = e.target;
+  //   setNftPriceType(value);
+  // };
+  const handleChangePriceType = (item: any) => {
+    setNftPriceType(item.value);
   };
   const handleChangeTransferAdd = (e: any) => {
     const { value } = e.target;
@@ -136,28 +140,34 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
         <DetailContent>{`${owner}${
           account?.address === owner ? " (YOU)" : ""
         }`}</DetailContent>
-        <DetailTitle>Price</DetailTitle>
-        <DetailContent>
-          <CoinIcon
-            alt=""
-            src={
-              price.denom === NFTPriceType.HOPE
-                ? "/coin-images/hope.png"
-                : price.denom === NFTPriceType.JUNO
-                ? "/coin-images/juno.png"
-                : "/coin-images/raw.png"
-            }
-          />
-          <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
-            price.denom
-              ? `${price.denom === NFTPriceType.HOPE ? "HOPE" : "JUNO"}`
-              : ""
-          }`}</MainPriceContainer>
-          <UsdPriceContainer>
-            {tokenPrice &&
-              `(${((+(price?.amount || 0) / 1e6) * tokenPrice).toFixed(2)}$)`}
-          </UsdPriceContainer>
-        </DetailContent>
+        {status !== "Sell" && (
+          <>
+            <DetailTitle>Price</DetailTitle>
+            <DetailContent>
+              <CoinIcon
+                alt=""
+                src={
+                  price.denom === NFTPriceType.HOPE
+                    ? "/coin-images/hope.png"
+                    : price.denom === NFTPriceType.JUNO
+                    ? "/coin-images/juno.png"
+                    : "/coin-images/raw.png"
+                }
+              />
+              <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
+                price.denom
+                  ? `${price.denom === NFTPriceType.HOPE ? "HOPE" : "JUNO"}`
+                  : ""
+              }`}</MainPriceContainer>
+              <UsdPriceContainer>
+                {tokenPrice &&
+                  `(${((+(price?.amount || 0) / 1e6) * tokenPrice).toFixed(
+                    2
+                  )}$)`}
+              </UsdPriceContainer>
+            </DetailContent>
+          </>
+        )}
         <NFTItemOperationContainer>
           <NFTItemOperationButton onClick={handleNFTItem}>
             {status} Now
@@ -171,7 +181,35 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                 onChange={handleChangeNFTPrice}
               />
               <NFTItemPriceType>
-                <input
+                <ReactSelect
+                  styles={{
+                    dropdownIndicator: (provided, state) => ({
+                      ...provided,
+                      padding: 0,
+                    }),
+                    valueContainer: (provided, state) => ({
+                      ...provided,
+                      // height: 10,
+                      padding: 0,
+                    }),
+                    container: (provided, state) => ({
+                      ...provided,
+                      margin: "5px 10px",
+                      minWidth: 100,
+                    }),
+                    control: (provided, state) => ({
+                      ...provided,
+                      minHeight: "unset",
+                    }),
+                  }}
+                  onChange={handleChangePriceType}
+                  options={[
+                    { value: NFTPriceType.HOPE, label: "HOPE" },
+                    { value: NFTPriceType.JUNO, label: "JUNO" },
+                    { value: NFTPriceType.RAW, label: "RAW" },
+                  ]}
+                />
+                {/* <input
                   type="radio"
                   id={`hope-${item.token_id}`}
                   name="priceType"
@@ -188,7 +226,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                   onClick={handleChangePriceType}
                 />
                 <label htmlFor={`juno-${item.token_id}`}>JUNO</label>
-                <br />
+                <br /> */}
               </NFTItemPriceType>
             </div>
           )}

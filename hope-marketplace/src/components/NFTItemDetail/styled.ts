@@ -108,7 +108,7 @@ export const NFTItemOperationButton = styled.div`
 
 export const NFTItemOperationContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   @media (max-width: 650px) {
     flex-direction: column-reverse;

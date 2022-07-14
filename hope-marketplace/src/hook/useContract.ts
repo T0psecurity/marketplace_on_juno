@@ -28,9 +28,11 @@ export const contractAddresses: any = {
   MINT_CONTRACT:
     // "juno1u230upl8ut7vn8uyk7hd9ac2ygwrvk5jygsjzv838hkn2u4xj34slyg2qy",
     "juno17kr4uahqlz8hl8nucx82q4vmlj7lrzzlz0yr0ax9hejaevw6ewqsf8p5ux",
-  TOKEN_CONTRACT:
+  HOPE_TOKEN_CONTRACT:
     // "juno1ckulym5ufeu29kqcqn0pw7qfavdmup9a9kwt9uzgt4arkq84qetssd9ltl",
     "juno1re3x67ppxap48ygndmrc7har2cnc7tcxtm9nplcas4v0gc3wnmvs3s807z",
+  RAW_TOPKEN_CONTRACT:
+    "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
 };
 
 const useContract = () => {
