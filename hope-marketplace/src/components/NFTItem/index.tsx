@@ -8,7 +8,7 @@ import { getTokenIdNumber } from "../../hook/useFetch";
 // import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useHandleNftItem, { NFTPriceType } from "../../hook/useHandleNftItem";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import { addSuffix } from "../../util/string";
+import { addSuffix, escapeSpecialForUrl } from "../../util/string";
 import Image from "../Image";
 
 import {
@@ -94,7 +94,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const handleGotoDetail = () => {
     // dispatch(setSelectedNFT(item));
-    history.push(`/detail?token_id=${item.token_id}`);
+    history.push(`/detail?token_id=${escapeSpecialForUrl(item.token_id)}`);
   };
 
   const isSellItem = status === NFTItemStatus.SELL;
