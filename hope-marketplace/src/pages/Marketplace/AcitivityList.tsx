@@ -75,7 +75,11 @@ const ActivityList: React.FC<ActivityListProps> = ({
           const time = new Date(historyItem.time * 1000);
           const tokenPrice =
             tokenPrices[
-              historyItem.denom === NFTPriceType.HOPE ? "hope" : "juno"
+              historyItem.denom === NFTPriceType.HOPE
+                ? "hope"
+                : historyItem.denom === NFTPriceType.JUNO
+                ? "juno"
+                : "raw"
             ]?.market_data.current_price?.usd || 0;
           return (
             <SaleHistoryItem key={index} isMobile={isMobile}>
@@ -99,7 +103,9 @@ const ActivityList: React.FC<ActivityListProps> = ({
                   src={
                     historyItem.denom === NFTPriceType.HOPE
                       ? "/coin-images/hope.png"
-                      : "/coin-images/juno.png"
+                      : historyItem.denom === NFTPriceType.JUNO
+                      ? "/coin-images/juno.png"
+                      : "/coin-images/raw.png"
                   }
                 />
                 <div>

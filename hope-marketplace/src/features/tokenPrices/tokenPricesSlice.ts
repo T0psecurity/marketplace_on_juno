@@ -4,6 +4,7 @@ import getQuery from "../../util/useAxios";
 export type TokenPriceType = {
   hope: any;
   juno: any;
+  raw: any;
 };
 
 export const DEFAULT_COLLECTION_STATE = {
@@ -13,6 +14,7 @@ export const DEFAULT_COLLECTION_STATE = {
 let initialState: TokenPriceType = {
   hope: null,
   juno: null,
+  raw: null,
 };
 
 export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
@@ -22,7 +24,10 @@ export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
   const junoPrice = await getQuery(
     "https://api.coingecko.com/api/v3/coins/juno-network"
   );
-  return { hope: hopePrice, juno: junoPrice };
+  const rawPrice = await getQuery(
+    "https://api.coingecko.com/api/v3/coins/junoswap-raw-dao"
+  );
+  return { hope: hopePrice, juno: junoPrice, raw: rawPrice };
 });
 
 export const tokenPricesSlice = createSlice({
@@ -32,12 +37,14 @@ export const tokenPricesSlice = createSlice({
     clearTokenPrice: (state, action: PayloadAction) => {
       state.juno = null;
       state.hope = null;
+      state.raw = null;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchTokenPrices.fulfilled, (state, action) => {
       state.juno = action.payload.juno || null;
       state.hope = action.payload.hope || null;
+      state.raw = action.payload.raw || null;
     });
   },
 });

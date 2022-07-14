@@ -12,6 +12,7 @@ import useRefresh from "./useRefresh";
 export const NFTPriceType = {
   HOPE: "hope",
   JUNO: "ujuno",
+  RAW: "raw",
 };
 
 const useHandleNftItem = () => {

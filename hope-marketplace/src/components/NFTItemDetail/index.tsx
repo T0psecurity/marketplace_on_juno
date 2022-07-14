@@ -47,8 +47,13 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const owner = item.seller || account?.address || "";
   const price = item.list_price || {};
   const tokenPrice =
-    tokenPrices[price.denom === NFTPriceType.HOPE ? "hope" : "juno"]
-      ?.market_data.current_price?.usd || 0;
+    tokenPrices[
+      price.denom === NFTPriceType.HOPE
+        ? "hope"
+        : price.denom === NFTPriceType.JUNO
+        ? "juno"
+        : "raw"
+    ]?.market_data.current_price?.usd || 0;
 
   let url = "";
   if (item.collectionId === "mintpass1") {
@@ -138,7 +143,9 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
             src={
               price.denom === NFTPriceType.HOPE
                 ? "/coin-images/hope.png"
-                : "/coin-images/juno.png"
+                : price.denom === NFTPriceType.JUNO
+                ? "/coin-images/juno.png"
+                : "/coin-images/raw.png"
             }
           />
           <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
