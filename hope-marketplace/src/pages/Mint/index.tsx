@@ -21,7 +21,7 @@ type FILTERED_RESULT = {
 };
 
 const Mint: React.FC = () => {
-  const [filterType, setFilterType] = useState<FILTER_TYPE>(FILTER_TYPE.ALL);
+  const [filterType, setFilterType] = useState<FILTER_TYPE>(FILTER_TYPE.LIVE);
   const collectionStates: { [key: string]: CollectionStateType } =
     useAppSelector((state: any) => state.collectionStates);
 
