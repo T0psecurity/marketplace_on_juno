@@ -300,7 +300,7 @@ const Collections: MarketplaceInfo[] = [
       "Cute Crypto Girls is all about being curious & exploring and enjoying the crypto life to have fun. First of a kind PFPs for Cosmonauts. Gift an NFT to your partner or girl in your life to onboard them to crypto/web3.",
     mintInfo: {
       totalNfts: 333,
-      royalties: "7%",
+      royalties: "7% + 3%",
       price: "2 JUNO",
       mintImage: "/mint-images/cryptogirls.png",
       mintDate: "2022-07-04",
