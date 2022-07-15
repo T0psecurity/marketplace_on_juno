@@ -17,6 +17,9 @@ export type CollectionStateType = {
     hopeMax?: number;
     hopeMin?: number;
     hopeTotal: number;
+    rawMax?: number;
+    rawMin?: number;
+    rawTotal: number;
   };
   saleHistory?: any[];
 };

@@ -11,6 +11,8 @@ export enum StatisticKeys {
   "hopeVolume" = "hopeVolume",
   "junoFloorPrice" = "junoFloorPrice",
   "junoVolume" = "junoVolume",
+  "rawFloorPrice" = "rawFloorPrice",
+  "totalVolumeInJuno" = "totalVolumeInJuno",
 }
 
 export type StatisticOption = { [key in StatisticKeys]?: boolean };
