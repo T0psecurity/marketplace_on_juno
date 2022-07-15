@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAppSelector } from "../../../app/hooks";
-import { NFTPriceType } from "../../../hook/useHandleNftItem";
+import { NFTPriceType } from "../../../types/nftPriceTypes";
 import { FilterOptions, PriceSortDirectionType } from "../types";
 
 const useFilter = (nfts: any[], filterOption: FilterOptions | undefined) => {
@@ -51,23 +51,13 @@ const useFilter = (nfts: any[], filterOption: FilterOptions | undefined) => {
     return resultNfts.sort((nft1: any, nft2) => {
       const price1 = nft1?.list_price || {};
       const tokenPrice1 =
-        tokenPrices[
-          price1.denom === NFTPriceType.HOPE
-            ? "hope"
-            : price1.denom === NFTPriceType.JUNO
-            ? "juno"
-            : "raw"
-        ]?.market_data.current_price?.usd || 0;
+        tokenPrices[price1.denom as NFTPriceType]?.market_data.current_price
+          ?.usd || 0;
 
       const price2 = nft2?.list_price || {};
       const tokenPrice2 =
-        tokenPrices[
-          price2.denom === NFTPriceType.HOPE
-            ? "hope"
-            : price2.denom === NFTPriceType.JUNO
-            ? "juno"
-            : "raw"
-        ]?.market_data.current_price?.usd || 0;
+        tokenPrices[price2.denom as NFTPriceType]?.market_data.current_price
+          ?.usd || 0;
 
       // return filterOption.price === PriceSortDirectionType.asc
       //   ? Number(nft1.list_price?.amount) - Number(nft2.list_price?.amount)

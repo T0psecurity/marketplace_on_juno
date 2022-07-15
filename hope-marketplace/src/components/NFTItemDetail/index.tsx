@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { saveAs } from "file-saver";
 import { useAppSelector } from "../../app/hooks";
 import { CollectionStateType } from "../../features/collections/collectionsSlice";
-import useHandleNftItem, { NFTPriceType } from "../../hook/useHandleNftItem";
+import useHandleNftItem from "../../hook/useHandleNftItem";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import Image from "../Image";
 import {
@@ -22,6 +22,7 @@ import {
   UsdPriceContainer,
 } from "./styled";
 import ReactSelect from "react-select";
+import { NFTPriceType } from "../../types/nftPriceTypes";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -48,13 +49,8 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const owner = item.seller || account?.address || "";
   const price = item.list_price || {};
   const tokenPrice =
-    tokenPrices[
-      price.denom === NFTPriceType.HOPE
-        ? "hope"
-        : price.denom === NFTPriceType.JUNO
-        ? "juno"
-        : "raw"
-    ]?.market_data.current_price?.usd || 0;
+    tokenPrices[price.denom as NFTPriceType]?.market_data.current_price?.usd ||
+    0;
 
   let url = "";
   if (item.collectionId === "mintpass1") {
@@ -88,6 +84,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
       await buyNft(item);
     }
   };
+
   const handleChangeNFTPrice = (e: any) => {
     const { value } = e.target;
     setNftPrice(value);
@@ -101,10 +98,12 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const handleChangePriceType = (item: any) => {
     setNftPriceType(item.value);
   };
+
   const handleChangeTransferAdd = (e: any) => {
     const { value } = e.target;
     setTransferAdd(value);
   };
+
   const handleTransferNFT = async () => {
     await transferNft(transferAdd, item, "/profile");
   };
@@ -144,25 +143,12 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
           <>
             <DetailTitle>Price</DetailTitle>
             <DetailContent>
-              <CoinIcon
-                alt=""
-                src={
-                  price.denom === NFTPriceType.HOPE
-                    ? "/coin-images/hope.png"
-                    : price.denom === NFTPriceType.JUNO
-                    ? "/coin-images/juno.png"
-                    : "/coin-images/raw.png"
-                }
-              />
+              <CoinIcon alt="" src={`/coin-images/${price.denom}.png`} />
               <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
                 price.denom
-                  ? `${
-                      price.denom === NFTPriceType.HOPE
-                        ? "HOPE"
-                        : price.denom === NFTPriceType.RAW
-                        ? "RAW"
-                        : "JUNO"
-                    }`
+                  ? `${Object.keys(NFTPriceType)
+                      .filter((x) => x === price.denom)[0]
+                      .toUpperCase()}`
                   : ""
               }`}</MainPriceContainer>
               <UsdPriceContainer>

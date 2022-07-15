@@ -5,15 +5,10 @@ import {
   getCollectionById,
   MarketplaceContracts,
 } from "../constants/Collections";
+import { NFTPriceType } from "../types/nftPriceTypes";
 import useContract from "./useContract";
 import { contractAddresses } from "./useContract";
 import useRefresh from "./useRefresh";
-
-export const NFTPriceType = {
-  HOPE: "hope",
-  JUNO: "ujuno",
-  RAW: "raw",
-};
 
 const useHandleNftItem = () => {
   const { runExecute } = useContract();
@@ -37,7 +32,7 @@ const useHandleNftItem = () => {
         toast.error("Select Price Type!");
         return;
       }
-      if (nftPriceType === NFTPriceType.HOPE && price < 1) {
+      if (nftPriceType !== NFTPriceType.JUNO && price < 1) {
         toast.error("Insufficient Price!");
         return;
       }
@@ -54,12 +49,7 @@ const useHandleNftItem = () => {
           msg: btoa(
             JSON.stringify({
               list_price: {
-                denom:
-                  nftPriceType === NFTPriceType.HOPE
-                    ? "hope"
-                    : nftPriceType === NFTPriceType.RAW
-                    ? "raw"
-                    : "ujuno",
+                denom: nftPriceType,
                 amount: `${price * 1e6}`,
               },
             })
@@ -156,12 +146,7 @@ const useHandleNftItem = () => {
             }
           );
         } else {
-          await runExecute(
-            price.denom === NFTPriceType.HOPE
-              ? contractAddresses.HOPE_TOKEN_CONTRACT
-              : contractAddresses.RAW_TOKEN_CONTRACT,
-            message
-          );
+          await runExecute(contractAddresses[price.denom], message);
         }
         toast.success("Success!");
         refresh();

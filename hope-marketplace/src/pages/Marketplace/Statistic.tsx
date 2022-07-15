@@ -63,13 +63,13 @@ const STATISTIC_PARAMS: StatisticItemType[] = [
   {
     name: "Floor Price",
     key: "junoFloorPrice",
-    icon: "/coin-images/juno.png",
+    icon: "/coin-images/ujuno.png",
     mobileRenderOrder: 5,
   },
   {
     name: "Volume",
     key: "totalVolumeInJuno",
-    icon: "/coin-images/juno.png",
+    icon: "/coin-images/ujuno.png",
     mobileRenderOrder: 6,
   },
 ];

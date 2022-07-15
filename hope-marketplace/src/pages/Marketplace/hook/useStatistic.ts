@@ -5,7 +5,7 @@ import {
   MarketplaceInfo,
 } from "../../../constants/Collections";
 import { CollectionStateType } from "../../../features/collections/collectionsSlice";
-import { NFTPriceType } from "../../../hook/useHandleNftItem";
+import { NFTPriceType } from "../../../types/nftPriceTypes";
 import { addSuffix, convertNumberToString } from "../../../util/string";
 
 const useStatistic = (collectionId: string, items: any) => {
@@ -71,7 +71,7 @@ const useStatistic = (collectionId: string, items: any) => {
 
     const hopeUsd = tokenPrices["hope"]?.market_data.current_price?.usd || 0;
     const rawUsd = tokenPrices["raw"]?.market_data.current_price?.usd || 0;
-    const junoUsd = tokenPrices["juno"]?.market_data.current_price?.usd || 0;
+    const junoUsd = tokenPrices["ujuno"]?.market_data.current_price?.usd || 0;
 
     const totalVolumeInJuno =
       junoVolume +
