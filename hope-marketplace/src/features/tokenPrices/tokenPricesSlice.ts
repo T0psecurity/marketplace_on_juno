@@ -7,6 +7,7 @@ const TokenCoingeckoIds: { [key in NFTPriceType]: string } = {
   [NFTPriceType.HOPE]: "hope-galaxy",
   [NFTPriceType.JUNO]: "juno-network",
   [NFTPriceType.RAW]: "junoswap-raw-dao",
+  [NFTPriceType.NETA]: "neta",
 };
 
 export type TokenPriceType = {
@@ -21,6 +22,7 @@ let initialState: TokenPriceType = {
   hope: null,
   ujuno: null,
   raw: null,
+  neta: null,
 };
 
 export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {

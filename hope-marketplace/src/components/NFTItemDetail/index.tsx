@@ -199,6 +199,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                     { value: NFTPriceType.HOPE, label: "HOPE" },
                     { value: NFTPriceType.JUNO, label: "JUNO" },
                     { value: NFTPriceType.RAW, label: "RAW" },
+                    { value: NFTPriceType.NETA, label: "NETA" },
                   ]}
                 />
                 {/* <input

@@ -184,6 +184,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                   { value: NFTPriceType.HOPE, label: "HOPE" },
                   { value: NFTPriceType.JUNO, label: "JUNO" },
                   { value: NFTPriceType.RAW, label: "RAW" },
+                  { value: NFTPriceType.NETA, label: "NETA" },
                 ]}
                 // options={SelectOptions}
               />
