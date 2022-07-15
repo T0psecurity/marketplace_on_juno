@@ -237,7 +237,11 @@ const useFetch = () => {
           i++
         ) {
           let tokenIds = [];
-          for (let j = 0; j < MAX_ITEMS; j++) {
+          for (
+            let j = 0;
+            j < Math.min(collectionInfo?.offering_id || 0, MAX_ITEMS);
+            j++
+          ) {
             tokenIds.push("" + (MAX_ITEMS * i + j + 1));
           }
           queries.push(

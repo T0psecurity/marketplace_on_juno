@@ -156,7 +156,13 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
               />
               <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
                 price.denom
-                  ? `${price.denom === NFTPriceType.HOPE ? "HOPE" : "JUNO"}`
+                  ? `${
+                      price.denom === NFTPriceType.HOPE
+                        ? "HOPE"
+                        : price.denom === NFTPriceType.RAW
+                        ? "RAW"
+                        : "JUNO"
+                    }`
                   : ""
               }`}</MainPriceContainer>
               <UsdPriceContainer>

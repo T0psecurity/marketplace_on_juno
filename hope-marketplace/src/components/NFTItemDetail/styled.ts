@@ -33,7 +33,9 @@ export const MainPriceContainer = styled.div`
   font-weight: bold;
 `;
 
-export const UsdPriceContainer = styled.div``;
+export const UsdPriceContainer = styled.div`
+  margin-left: 20px;
+`;
 
 export const NFTItemImage = styled.img`
   cursor: pointer;

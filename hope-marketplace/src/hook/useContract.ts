@@ -31,7 +31,7 @@ export const contractAddresses: any = {
   HOPE_TOKEN_CONTRACT:
     // "juno1ckulym5ufeu29kqcqn0pw7qfavdmup9a9kwt9uzgt4arkq84qetssd9ltl",
     "juno1re3x67ppxap48ygndmrc7har2cnc7tcxtm9nplcas4v0gc3wnmvs3s807z",
-  RAW_TOPKEN_CONTRACT:
+  RAW_TOKEN_CONTRACT:
     "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
 };
 
