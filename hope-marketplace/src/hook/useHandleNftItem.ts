@@ -32,10 +32,10 @@ const useHandleNftItem = () => {
         toast.error("Select Price Type!");
         return;
       }
-      if (nftPriceType !== NFTPriceType.JUNO && price < 1) {
-        toast.error("Insufficient Price!");
-        return;
-      }
+      // if (nftPriceType === NFTPriceType.HOPE && price < 1) {
+      //   toast.error("Insufficient Price!");
+      //   return;
+      // }
       // const marketplaceContract = targetCollection.marketplaceContract[0];
       const marketplaceContract = MarketplaceContracts[0];
       const nftContract = targetCollection.nftContract;
