@@ -34,6 +34,8 @@ export const contractAddresses: any = {
     "juno1re3x67ppxap48ygndmrc7har2cnc7tcxtm9nplcas4v0gc3wnmvs3s807z",
   [NFTPriceType.RAW]:
     "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
+  [NFTPriceType.NETA]:
+    "juno168ctmpyppk90d34p3jjy658zf5a5l3w8wk35wht6ccqj4mr0yv8s4j5awr",
 };
 
 const useContract = () => {
