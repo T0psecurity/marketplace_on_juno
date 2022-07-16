@@ -108,6 +108,15 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
     await transferNft(transferAdd, item, "/profile");
   };
 
+const selectOptions = (
+  Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+).map((key) => {
+  return {
+    value: NFTPriceType[key],
+    label: key,
+  };
+});
+
   return (
     <Wrapper isMobile={isMobile}>
       <MintVideoContainer>
@@ -195,12 +204,13 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                     }),
                   }}
                   onChange={handleChangePriceType}
-                  options={[
-                    { value: NFTPriceType.HOPE, label: "HOPE" },
-                    { value: NFTPriceType.JUNO, label: "JUNO" },
-                    { value: NFTPriceType.RAW, label: "RAW" },
-                    { value: NFTPriceType.NETA, label: "NETA" },
-                  ]}
+                  // options={[
+                  //   { value: NFTPriceType.HOPE, label: "HOPE" },
+                  //   { value: NFTPriceType.JUNO, label: "JUNO" },
+                  //   { value: NFTPriceType.RAW, label: "RAW" },
+                  //   { value: NFTPriceType.NETA, label: "NETA" },
+                  // ]}
+                  options={selectOptions}
                 />
                 {/* <input
                   type="radio"

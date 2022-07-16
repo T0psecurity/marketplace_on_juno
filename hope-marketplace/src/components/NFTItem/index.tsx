@@ -103,13 +103,14 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   };
 
   const isSellItem = status === NFTItemStatus.SELL;
-
-  // const SelectOptions = Object.keys(NFTPriceType).map((key: any) => {
-  //   return {
-  //     value: NFTPriceType[key as NFTPriceType],
-  //     label: key,
-  //   };
-  // });
+  const SelectOptions = (
+    Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+  ).map((key) => {
+    return {
+      value: NFTPriceType[key],
+      label: key,
+    };
+  });
 
   const NFTItemPriceItem = () =>
     !!price.amount && +price.amount > 0 ? (
@@ -180,13 +181,13 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                   }),
                 }}
                 onChange={handleChangePriceType}
-                options={[
-                  { value: NFTPriceType.HOPE, label: "HOPE" },
-                  { value: NFTPriceType.JUNO, label: "JUNO" },
-                  { value: NFTPriceType.RAW, label: "RAW" },
-                  { value: NFTPriceType.NETA, label: "NETA" },
-                ]}
-                // options={SelectOptions}
+                // options={[
+                //   { value: NFTPriceType.HOPE, label: "HOPE" },
+                //   { value: NFTPriceType.JUNO, label: "JUNO" },
+                //   { value: NFTPriceType.RAW, label: "RAW" },
+                //   { value: NFTPriceType.NETA, label: "NETA" },
+                // ]}
+                options={SelectOptions}
               />
               {/* <input
                 type="radio"

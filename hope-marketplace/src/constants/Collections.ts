@@ -145,7 +145,7 @@ const Collections: MarketplaceInfo[] = [
     ],
     socialLinks: {
       discord: "https://discord.gg/BfKPacc5jF",
-      website: "https://hopers.io/",
+      website: "https://dashboard-junopunks.app/",
       twitter: "https://twitter.com/JunoPunksNFT",
     },
     description:
