@@ -144,7 +144,8 @@ const useFetch = () => {
           });
           let totalJuno = 0,
             totalHope = 0,
-            totalRaw = 0;
+            totalRaw = 0,
+            totalNeta = 0;
           tradingInfoResult?.forEach((item: any) => {
             if (item.denom === "ujuno") {
               totalJuno = +item.amount / 1e6;
@@ -152,12 +153,15 @@ const useFetch = () => {
               totalHope = +item.amount / 1e6;
             } else if (item.denom === "raw") {
               totalRaw += item.amount / 1e6;
+            } else if (item.denom === "neta") {
+              totalNeta += item.amount / 1e6;
             }
           });
           storeObject.tradingInfo = {
             junoTotal: totalJuno,
             hopeTotal: totalHope,
             rawTotal: totalRaw,
+            netaTotal: totalNeta,
           };
         }
         if (
@@ -180,6 +184,9 @@ const useFetch = () => {
             const newRawTotal =
               (storeObject.tradingInfo?.rawTotal || 0) +
               +(tradingInfoResult.total_raw || "0") / 1e6;
+            const newNetaTotal =
+              (storeObject.tradingInfo?.netaTotal || 0) +
+              +(tradingInfoResult.total_raw || "0") / 1e6;
             storeObject.tradingInfo = {
               junoMax: +(tradingInfoResult.max_juno || "0") / 1e6,
               junoMin: getMin(+(tradingInfoResult.min_juno || "0") / 1e6),
@@ -190,6 +197,9 @@ const useFetch = () => {
               rawMax: +(tradingInfoResult.max_raw || "0") / 1e6,
               rawMin: getMin(+(tradingInfoResult.min_raw || "0") / 1e6),
               rawTotal: newRawTotal,
+              netaMax: +(tradingInfoResult.max_neta || "0") / 1e6,
+              netaMin: getMin(+(tradingInfoResult.min_neta || "0") / 1e6),
+              netaTotal: newNetaTotal,
             };
           } catch (e) {}
         }

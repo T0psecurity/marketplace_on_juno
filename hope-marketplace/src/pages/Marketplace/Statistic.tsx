@@ -62,15 +62,21 @@ const STATISTIC_PARAMS: StatisticItemType[] = [
   },
   {
     name: "Floor Price",
+    key: "netaFloorPrice",
+    icon: "/coin-images/neta.png",
+    mobileRenderOrder: 4,
+  },
+  {
+    name: "Floor Price",
     key: "junoFloorPrice",
     icon: "/coin-images/ujuno.png",
-    mobileRenderOrder: 5,
+    mobileRenderOrder: 6,
   },
   {
     name: "Volume",
     key: "totalVolumeInJuno",
     icon: "/coin-images/ujuno.png",
-    mobileRenderOrder: 6,
+    mobileRenderOrder: 7,
   },
 ];
 

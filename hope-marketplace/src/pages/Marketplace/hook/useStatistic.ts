@@ -41,9 +41,9 @@ const useStatistic = (collectionId: string, items: any) => {
   //   }),
   //   [collectionState]
   // );
-  const floorPrices: { hope: number; juno: number; raw: number } =
+  const floorPrices: { hope: number; juno: number; raw: number; neta: number } =
     useMemo(() => {
-      let result = { hope: 1e9, juno: 1e9, raw: 1e9 };
+      let result = { hope: 1e9, juno: 1e9, raw: 1e9, neta: 1e9 };
       items.forEach((item: any) => {
         const crrListedPrice = item.list_price || {};
         let crrPrice = Number(crrListedPrice.amount || "0");
@@ -54,6 +54,8 @@ const useStatistic = (collectionId: string, items: any) => {
           if (result.juno > crrPrice) result.juno = crrPrice;
         } else if (crrListedPrice.denom === NFTPriceType.RAW) {
           if (result.raw > crrPrice) result.raw = crrPrice;
+        } else if (crrListedPrice.denom === NFTPriceType.NETA) {
+          if (result.neta > crrPrice) result.neta = crrPrice;
         }
       });
       return result;
@@ -67,16 +69,19 @@ const useStatistic = (collectionId: string, items: any) => {
   } = useMemo(() => {
     const hopeVolume = collectionState.tradingInfo?.hopeTotal || 0;
     const rawVolume = collectionState.tradingInfo?.rawTotal || 0;
+    const netaVolume = collectionState.tradingInfo?.netaTotal || 0;
     const junoVolume = collectionState.tradingInfo?.junoTotal || 0;
 
     const hopeUsd = tokenPrices["hope"]?.market_data.current_price?.usd || 0;
     const rawUsd = tokenPrices["raw"]?.market_data.current_price?.usd || 0;
+    const netaUsd = tokenPrices["neta"]?.market_data.current_price?.usd || 0;
     const junoUsd = tokenPrices["ujuno"]?.market_data.current_price?.usd || 0;
 
     const totalVolumeInJuno =
       junoVolume +
       (hopeUsd ? hopeVolume * (junoUsd / hopeUsd) : 0) +
-      (rawUsd ? rawVolume * (junoUsd / rawUsd) : 0);
+      (rawUsd ? rawVolume * (junoUsd / rawUsd) : 0) +
+      (netaUsd ? netaVolume * (junoUsd / netaUsd) : 0);
 
     return {
       hope: hopeVolume,
@@ -95,6 +100,7 @@ const useStatistic = (collectionId: string, items: any) => {
     hopeFloorPrice: floorPrices.hope === 1e9 ? null : floorPrices.hope,
     junoFloorPrice: floorPrices.juno === 1e9 ? null : floorPrices.juno,
     rawFloorPrice: floorPrices.raw === 1e9 ? null : floorPrices.raw,
+    netaFloorPrice: floorPrices.neta === 1e9 ? null : floorPrices.neta,
     hopeVolume: addSuffix(volumePrices.hope),
     junoVolume: addSuffix(volumePrices.juno),
     totalVolumeInJuno: addSuffix(volumePrices.totalInJuno),

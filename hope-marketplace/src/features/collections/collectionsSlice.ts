@@ -20,6 +20,9 @@ export type CollectionStateType = {
     rawMax?: number;
     rawMin?: number;
     rawTotal: number;
+    netaMax?: number;
+    netaMin?: number;
+    netaTotal: number;
   };
   saleHistory?: any[];
 };

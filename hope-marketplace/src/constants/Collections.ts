@@ -12,6 +12,7 @@ export enum StatisticKeys {
   "junoFloorPrice" = "junoFloorPrice",
   "junoVolume" = "junoVolume",
   "rawFloorPrice" = "rawFloorPrice",
+  "netaFloorPrice" = "netaFloorPrice",
   "totalVolumeInJuno" = "totalVolumeInJuno",
 }
 

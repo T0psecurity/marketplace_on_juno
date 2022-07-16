@@ -108,14 +108,14 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
     await transferNft(transferAdd, item, "/profile");
   };
 
-const selectOptions = (
-  Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
-).map((key) => {
-  return {
-    value: NFTPriceType[key],
-    label: key,
-  };
-});
+  const selectOptions = (
+    Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+  ).map((key) => {
+    return {
+      value: NFTPriceType[key],
+      label: key,
+    };
+  });
 
   return (
     <Wrapper isMobile={isMobile}>
@@ -155,9 +155,13 @@ const selectOptions = (
               <CoinIcon alt="" src={`/coin-images/${price.denom}.png`} />
               <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
                 price.denom
-                  ? `${Object.keys(NFTPriceType)
-                      .filter((x) => x === price.denom)[0]
-                      .toUpperCase()}`
+                  ? `${(
+                      Object.keys(NFTPriceType) as Array<
+                        keyof typeof NFTPriceType
+                      >
+                    )
+                      .filter((x) => NFTPriceType[x] === price.denom)[0]
+                      ?.toUpperCase()}`
                   : ""
               }`}</MainPriceContainer>
               <UsdPriceContainer>
