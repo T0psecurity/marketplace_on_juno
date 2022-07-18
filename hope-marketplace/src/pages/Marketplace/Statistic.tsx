@@ -48,23 +48,35 @@ const STATISTIC_PARAMS: StatisticItemType[] = [
     icon: "/coin-images/hope.png",
     mobileRenderOrder: 2,
   },
+  // {
+  //   name: "Volume",
+  //   key: "hopeVolume",
+  //   icon: "/coin-images/hope.png",
+  //   mobileRenderOrder: 3,
+  // },
   {
-    name: "Volume",
-    key: "hopeVolume",
-    icon: "/coin-images/hope.png",
+    name: "Floor Price",
+    key: "rawFloorPrice",
+    icon: "/coin-images/raw.png",
     mobileRenderOrder: 3,
   },
   {
     name: "Floor Price",
+    key: "netaFloorPrice",
+    icon: "/coin-images/neta.png",
+    mobileRenderOrder: 4,
+  },
+  {
+    name: "Floor Price",
     key: "junoFloorPrice",
-    icon: "/coin-images/juno.png",
-    mobileRenderOrder: 5,
+    icon: "/coin-images/ujuno.png",
+    mobileRenderOrder: 6,
   },
   {
     name: "Volume",
-    key: "junoVolume",
-    icon: "/coin-images/juno.png",
-    mobileRenderOrder: 6,
+    key: "totalVolumeInJuno",
+    icon: "/coin-images/ujuno.png",
+    mobileRenderOrder: 7,
   },
 ];
 

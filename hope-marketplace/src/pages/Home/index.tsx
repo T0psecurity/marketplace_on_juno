@@ -20,7 +20,7 @@ const Home: React.FC = () => {
       {isMobile && <ImgWrapper src={home} alt="home" isMobile={isMobile} />}
       <SubWrapper>
         <MainContent isMobile={isMobile}>
-          Hopers.io is the first $JUNO NFT Marketplace.
+          Hopers.io NFT marketplace $JUNO
         </MainContent>
         <SubContent isMobile={isMobile}>
           The DAO governs the marketplace and earns rewards through the staking

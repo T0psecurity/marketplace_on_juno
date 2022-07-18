@@ -32,6 +32,7 @@ import {
   NftListTabs,
   NftListTab,
 } from "./styled";
+import { NFTPriceType } from "../../types/nftPriceTypes";
 
 const ArrowIcon = ({
   className,
@@ -189,14 +190,26 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           <>
             <CollapseCard title="On Sale in" expanded>
               <CoinImageWrapper>
-                <CoinImage
+                {(
+                  Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+                ).map((key, index) => {
+                  const denom = NFTPriceType[key];
+                  return (
+                    <CoinImage
+                      key={index}
+                      coinType={denom}
+                      onClick={() => handleClickPriceType(denom)}
+                    />
+                  );
+                })}
+                {/* <CoinImage
                   coinType="hope"
                   onClick={() => handleClickPriceType("hope")}
                 />
                 <CoinImage
                   coinType="juno"
                   onClick={() => handleClickPriceType("ujuno")}
-                />
+                /> */}
               </CoinImageWrapper>
             </CollapseCard>
             {!!metaDataOptions &&

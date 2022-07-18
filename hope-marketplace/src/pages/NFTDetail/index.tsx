@@ -11,11 +11,14 @@ import {
   NFTItemAttributeItem,
 } from "./styled";
 import { CollectionTraitsStateType } from "../../features/collectionTraits/collectionTraitsSlice";
+import { addSpecialForUrl } from "../../util/string";
 
 const NFTDetail: React.FC = () => {
   // const selectedNFT = useAppSelector((state) => state.nfts.selectedNFT);
   const { search } = useLocation();
-  const token_id = new URLSearchParams(search).get("token_id");
+  const token_id = addSpecialForUrl(
+    new URLSearchParams(search).get("token_id")
+  );
   const { pickNFTByTokenId } = usePickNFT();
   const selectedNFT: any = pickNFTByTokenId(token_id || "");
 

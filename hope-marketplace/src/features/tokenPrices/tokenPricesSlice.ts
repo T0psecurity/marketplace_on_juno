@@ -1,9 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import getQuery from "../../util/useAxios";
+import { NFTPriceType } from "../../types/nftPriceTypes";
+import { customPromiseAll } from "../../util/promiseAll";
+
+const TokenCoingeckoIds: { [key in NFTPriceType]: string } = {
+  [NFTPriceType.HOPE]: "hope-galaxy",
+  [NFTPriceType.JUNO]: "juno-network",
+  [NFTPriceType.RAW]: "junoswap-raw-dao",
+  [NFTPriceType.NETA]: "neta",
+};
 
 export type TokenPriceType = {
-  hope: any;
-  juno: any;
+  [key in NFTPriceType]: any;
 };
 
 export const DEFAULT_COLLECTION_STATE = {
@@ -12,17 +20,41 @@ export const DEFAULT_COLLECTION_STATE = {
 
 let initialState: TokenPriceType = {
   hope: null,
-  juno: null,
+  ujuno: null,
+  raw: null,
+  neta: null,
 };
 
 export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
-  const hopePrice = await getQuery(
-    "https://api.coingecko.com/api/v3/coins/hope-galaxy"
-  );
-  const junoPrice = await getQuery(
-    "https://api.coingecko.com/api/v3/coins/juno-network"
-  );
-  return { hope: hopePrice, juno: junoPrice };
+  // const hopePrice = await getQuery(
+  //   "https://api.coingecko.com/api/v3/coins/hope-galaxy"
+  // );
+  // const junoPrice = await getQuery(
+  //   "https://api.coingecko.com/api/v3/coins/juno-network"
+  // );
+  // const rawPrice = await getQuery(
+  //   "https://api.coingecko.com/api/v3/coins/junoswap-raw-dao"
+  // );
+
+  let keys: any = [];
+  const fetchQueries = Object.keys(TokenCoingeckoIds).map((key: string) => {
+    keys.push(key as NFTPriceType);
+    return getQuery(
+      `https://api.coingecko.com/api/v3/coins/${
+        TokenCoingeckoIds[key as NFTPriceType]
+      }`
+    );
+  });
+  try {
+    let tokenPrices: any = {};
+    const queryResults = await customPromiseAll(fetchQueries);
+    queryResults.forEach((result: any, index: number) => {
+      tokenPrices[keys[index]] = result;
+    });
+    return tokenPrices;
+  } catch (err) {
+    return initialState;
+  }
 });
 
 export const tokenPricesSlice = createSlice({
@@ -30,14 +62,17 @@ export const tokenPricesSlice = createSlice({
   initialState,
   reducers: {
     clearTokenPrice: (state, action: PayloadAction) => {
-      state.juno = null;
+      state.ujuno = null;
       state.hope = null;
+      state.raw = null;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchTokenPrices.fulfilled, (state, action) => {
-      state.juno = action.payload.juno || null;
-      state.hope = action.payload.hope || null;
+      const data: any = action.payload;
+      Object.keys(data).forEach((key: string) => {
+        state[key as NFTPriceType] = data[key as NFTPriceType];
+      });
     });
   },
 });

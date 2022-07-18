@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { saveAs } from "file-saver";
 import { useAppSelector } from "../../app/hooks";
 import { CollectionStateType } from "../../features/collections/collectionsSlice";
-import useHandleNftItem, { NFTPriceType } from "../../hook/useHandleNftItem";
+import useHandleNftItem from "../../hook/useHandleNftItem";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import Image from "../Image";
 import {
@@ -21,6 +21,8 @@ import {
   MainPriceContainer,
   UsdPriceContainer,
 } from "./styled";
+import ReactSelect from "react-select";
+import { NFTPriceType } from "../../types/nftPriceTypes";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -47,8 +49,8 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const owner = item.seller || account?.address || "";
   const price = item.list_price || {};
   const tokenPrice =
-    tokenPrices[price.denom === NFTPriceType.HOPE ? "hope" : "juno"]
-      ?.market_data.current_price?.usd || 0;
+    tokenPrices[price.denom as NFTPriceType]?.market_data.current_price?.usd ||
+    0;
 
   let url = "";
   if (item.collectionId === "mintpass1") {
@@ -82,23 +84,38 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
       await buyNft(item);
     }
   };
+
   const handleChangeNFTPrice = (e: any) => {
     const { value } = e.target;
     setNftPrice(value);
     // if (!isNaN(Number(value))) setNftPrice(Number(value));
   };
 
-  const handleChangePriceType = (e: any) => {
-    const { value } = e.target;
-    setNftPriceType(value);
+  // const handleChangePriceType = (e: any) => {
+  //   const { value } = e.target;
+  //   setNftPriceType(value);
+  // };
+  const handleChangePriceType = (item: any) => {
+    setNftPriceType(item.value);
   };
+
   const handleChangeTransferAdd = (e: any) => {
     const { value } = e.target;
     setTransferAdd(value);
   };
+
   const handleTransferNFT = async () => {
     await transferNft(transferAdd, item, "/profile");
   };
+
+  const selectOptions = (
+    Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+  ).map((key) => {
+    return {
+      value: NFTPriceType[key],
+      label: key,
+    };
+  });
 
   return (
     <Wrapper isMobile={isMobile}>
@@ -131,26 +148,31 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
         <DetailContent>{`${owner}${
           account?.address === owner ? " (YOU)" : ""
         }`}</DetailContent>
-        <DetailTitle>Price</DetailTitle>
-        <DetailContent>
-          <CoinIcon
-            alt=""
-            src={
-              price.denom === NFTPriceType.HOPE
-                ? "/coin-images/hope.png"
-                : "/coin-images/juno.png"
-            }
-          />
-          <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
-            price.denom
-              ? `${price.denom === NFTPriceType.HOPE ? "HOPE" : "JUNO"}`
-              : ""
-          }`}</MainPriceContainer>
-          <UsdPriceContainer>
-            {tokenPrice &&
-              `(${((+(price?.amount || 0) / 1e6) * tokenPrice).toFixed(2)}$)`}
-          </UsdPriceContainer>
-        </DetailContent>
+        {status !== "Sell" && (
+          <>
+            <DetailTitle>Price</DetailTitle>
+            <DetailContent>
+              <CoinIcon alt="" src={`/coin-images/${price.denom}.png`} />
+              <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
+                price.denom
+                  ? `${(
+                      Object.keys(NFTPriceType) as Array<
+                        keyof typeof NFTPriceType
+                      >
+                    )
+                      .filter((x) => NFTPriceType[x] === price.denom)[0]
+                      ?.toUpperCase()}`
+                  : ""
+              }`}</MainPriceContainer>
+              <UsdPriceContainer>
+                {tokenPrice &&
+                  `(${((+(price?.amount || 0) / 1e6) * tokenPrice).toFixed(
+                    2
+                  )}$)`}
+              </UsdPriceContainer>
+            </DetailContent>
+          </>
+        )}
         <NFTItemOperationContainer>
           <NFTItemOperationButton onClick={handleNFTItem}>
             {status} Now
@@ -164,7 +186,37 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                 onChange={handleChangeNFTPrice}
               />
               <NFTItemPriceType>
-                <input
+                <ReactSelect
+                  styles={{
+                    dropdownIndicator: (provided, state) => ({
+                      ...provided,
+                      padding: 0,
+                    }),
+                    valueContainer: (provided, state) => ({
+                      ...provided,
+                      // height: 10,
+                      padding: 0,
+                    }),
+                    container: (provided, state) => ({
+                      ...provided,
+                      margin: "5px 10px",
+                      minWidth: 100,
+                    }),
+                    control: (provided, state) => ({
+                      ...provided,
+                      minHeight: "unset",
+                    }),
+                  }}
+                  onChange={handleChangePriceType}
+                  // options={[
+                  //   { value: NFTPriceType.HOPE, label: "HOPE" },
+                  //   { value: NFTPriceType.JUNO, label: "JUNO" },
+                  //   { value: NFTPriceType.RAW, label: "RAW" },
+                  //   { value: NFTPriceType.NETA, label: "NETA" },
+                  // ]}
+                  options={selectOptions}
+                />
+                {/* <input
                   type="radio"
                   id={`hope-${item.token_id}`}
                   name="priceType"
@@ -181,7 +233,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                   onClick={handleChangePriceType}
                 />
                 <label htmlFor={`juno-${item.token_id}`}>JUNO</label>
-                <br />
+                <br /> */}
               </NFTItemPriceType>
             </div>
           )}

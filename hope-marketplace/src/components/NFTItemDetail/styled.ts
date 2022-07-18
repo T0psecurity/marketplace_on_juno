@@ -33,7 +33,9 @@ export const MainPriceContainer = styled.div`
   font-weight: bold;
 `;
 
-export const UsdPriceContainer = styled.div``;
+export const UsdPriceContainer = styled.div`
+  margin-left: 20px;
+`;
 
 export const NFTItemImage = styled.img`
   cursor: pointer;
@@ -108,7 +110,7 @@ export const NFTItemOperationButton = styled.div`
 
 export const NFTItemOperationContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   @media (max-width: 650px) {
     flex-direction: column-reverse;

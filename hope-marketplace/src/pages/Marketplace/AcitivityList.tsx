@@ -4,7 +4,7 @@ import { useAppSelector } from "../../app/hooks";
 import Image from "../../components/Image";
 import { getCollectionById } from "../../constants/Collections";
 import { getCustomTokenId, getTokenIdNumber } from "../../hook/useFetch";
-import { NFTPriceType } from "../../hook/useHandleNftItem";
+import { NFTPriceType } from "../../types/nftPriceTypes";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { addSuffix } from "../../util/string";
 
@@ -74,9 +74,8 @@ const ActivityList: React.FC<ActivityListProps> = ({
           }
           const time = new Date(historyItem.time * 1000);
           const tokenPrice =
-            tokenPrices[
-              historyItem.denom === NFTPriceType.HOPE ? "hope" : "juno"
-            ]?.market_data.current_price?.usd || 0;
+            tokenPrices[historyItem.denom as NFTPriceType]?.market_data
+              .current_price?.usd || 0;
           return (
             <SaleHistoryItem key={index} isMobile={isMobile}>
               {!isMobile && <CartIcon />}
@@ -96,11 +95,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
               <HistoryItemToken>
                 <CoinIcon
                   alt=""
-                  src={
-                    historyItem.denom === NFTPriceType.HOPE
-                      ? "/coin-images/hope.png"
-                      : "/coin-images/juno.png"
-                  }
+                  src={`/coin-images/${historyItem.denom}.png`}
                 />
                 <div>
                   <HistoryItemText>

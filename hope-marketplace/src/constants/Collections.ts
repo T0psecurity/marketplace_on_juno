@@ -1,3 +1,9 @@
+import { CollectionStateType } from "../features/collections/collectionsSlice";
+import {
+  LogicParamsInterface,
+  // MintLogics
+} from "./mintLogic";
+
 export interface SocialLinks {
   discord: string;
   website: string;
@@ -11,6 +17,9 @@ export enum StatisticKeys {
   "hopeVolume" = "hopeVolume",
   "junoFloorPrice" = "junoFloorPrice",
   "junoVolume" = "junoVolume",
+  "rawFloorPrice" = "rawFloorPrice",
+  "netaFloorPrice" = "netaFloorPrice",
+  "totalVolumeInJuno" = "totalVolumeInJuno",
 }
 
 export type StatisticOption = { [key in StatisticKeys]?: boolean };
@@ -39,6 +48,7 @@ export interface MarketplaceMintInfo {
   mintImage: string;
   mintDate?: string;
   mintUrl?: string;
+  mintLogic?: (params: LogicParamsInterface) => Promise<CollectionStateType>;
 }
 
 export interface MarketplaceInfo extends MarketplaceBasicInfo {
@@ -143,7 +153,7 @@ const Collections: MarketplaceInfo[] = [
     ],
     socialLinks: {
       discord: "https://discord.gg/BfKPacc5jF",
-      website: "https://hopers.io/",
+      website: "https://dashboard-junopunks.app/",
       twitter: "https://twitter.com/JunoPunksNFT",
     },
     description:
@@ -298,7 +308,7 @@ const Collections: MarketplaceInfo[] = [
       "Cute Crypto Girls is all about being curious & exploring and enjoying the crypto life to have fun. First of a kind PFPs for Cosmonauts. Gift an NFT to your partner or girl in your life to onboard them to crypto/web3.",
     mintInfo: {
       totalNfts: 333,
-      royalties: "7%",
+      royalties: "7% + 3%",
       price: "2 JUNO",
       mintImage: "/mint-images/cryptogirls.png",
       mintDate: "2022-07-04",
@@ -335,6 +345,67 @@ const Collections: MarketplaceInfo[] = [
     },
     isLaunched: true,
   },
+  {
+    title: "Wizards & Witches of Cosmos",
+    creator: "Juno Farming",
+    imageUrl: "/backgrounds/witches.jpg",
+    backgroundUrl: "/marketplace-backgrounds/witches.jpg",
+    logoUrl: "/logos/witches.jpg",
+    collectionId: "witches",
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmVqucWUnQTAu5V3V4ubZGs7zhiiT28PQ797zmYzEh5C4w/_metadata.json",
+    nftContract:
+      "juno1yta5dreyjsphprfd0unt7edhhu8jfx2c74z8l9c8p9294a8wz5qs8ls20e",
+    mintContract:
+      "juno1svuh44h5jd29vljvy4vuszx97dwt640589m0fuaagpsv3hc4g02q4c8ner",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://www.hopers.io/",
+      twitter: "https://twitter.com/JunoFarming",
+    },
+    description:
+      "2nd collection of JunoFarming NFT, which will allow to generate rewards for Junofarming stakers through minting and trading. Furthermore, anyone who buys 1 NFT of the 2nd collection will have exclusive access to the White List for the 3rd collection.",
+    mintInfo: {
+      totalNfts: 348,
+      royalties: "7% + 3%",
+      price: "8 $JUNO",
+      mintImage: "/mint-images/witches.jpg",
+      mintDate: "2022-07-13",
+    },
+    isLaunched: true,
+  },
+  // {
+  //   title: "Test Collection",
+  //   creator: "Juno Farming",
+  //   imageUrl: "/backgrounds/witches.jpg",
+  //   backgroundUrl: "/marketplace-backgrounds/witches.jpg",
+  //   logoUrl: "/logos/witches.jpg",
+  //   collectionId: "test",
+  //   metaDataUrl:
+  //     "https://hopegalaxy.mypinata.cloud/ipfs/QmVqucWUnQTAu5V3V4ubZGs7zhiiT28PQ797zmYzEh5C4w/_metadata.json",
+  //   nftContract:
+  //     "",
+  //   mintContract:
+  //     "juno1r3haf7uz8hvmegyffd74994fpdlj0yl7s0a5w0qaj68ktxt83yzqzxm7ta",
+  //   marketplaceContract: [],
+  //   socialLinks: {
+  //     discord: "https://discord.gg/BfKPacc5jF",
+  //     website: "https://www.hopers.io/",
+  //     twitter: "https://twitter.com/JunoFarming",
+  //   },
+  //   description:
+  //     "2nd collection of JunoFarming NFT, which will allow to generate rewards for Junofarming stakers through minting and trading. Furthermore, anyone who buys 1 NFT of the 2nd collection will have exclusive access to the White List for the 3rd collection.",
+  //   mintInfo: {
+  //     totalNfts: 348,
+  //     royalties: "7% + 3%",
+  //     price: "8 $JUNO",
+  //     mintImage: "/mint-images/witches.jpg",
+  //     mintDate: "2022-07-13",
+  //     mintLogic: MintLogics.logic1,
+  //   },
+  //   isLaunched: true,
+  // },
 ];
 
 export const getCollectionById = (id: string): MarketplaceInfo => {
@@ -344,11 +415,11 @@ export const getCollectionById = (id: string): MarketplaceInfo => {
 };
 
 export const MarketplaceContracts: string[] = [
-  "juno1992d4ka0j904mptt3tuxhfm7mnqu4gtkn98dglys6gr0yd7ytv5seqedht",
+  "juno1vmj8fa943t8pz4ezpfrzl330caevlshq8r4pz9cwa6ey27wcxfpsa5fnwk",
 ];
 
 export const MintContracts: string[] = [
-  "juno1c9dr05cryh2fn5hwr4aa9rhzfy5vxdmq3uc3xfrku9e5cs8sqcrq5r5g6d",
+  "juno1r3haf7uz8hvmegyffd74994fpdlj0yl7s0a5w0qaj68ktxt83yzqzxm7ta",
 ];
 
 export default Collections;

@@ -5,7 +5,7 @@ import {
   MarketplaceInfo,
 } from "../../../constants/Collections";
 import { CollectionStateType } from "../../../features/collections/collectionsSlice";
-import { NFTPriceType } from "../../../hook/useHandleNftItem";
+import { NFTPriceType } from "../../../types/nftPriceTypes";
 import { addSuffix, convertNumberToString } from "../../../util/string";
 
 const useStatistic = (collectionId: string, items: any) => {
@@ -16,6 +16,7 @@ const useStatistic = (collectionId: string, items: any) => {
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[collectionId]
   );
+  const tokenPrices = useAppSelector((state) => state.tokenPrices);
   // console.log("collectionState", collectionState);
 
   const total: string = useMemo(() => {
@@ -40,28 +41,55 @@ const useStatistic = (collectionId: string, items: any) => {
   //   }),
   //   [collectionState]
   // );
-  const floorPrices: { hope: number; juno: number } = useMemo(() => {
-    let result = { hope: 1e9, juno: 1e9 };
-    items.forEach((item: any) => {
-      const crrListedPrice = item.list_price || {};
-      let crrPrice = Number(crrListedPrice.amount || "0");
-      crrPrice = Number.isNaN(crrPrice) ? 0 : crrPrice / 1e6;
-      if (crrListedPrice.denom === NFTPriceType.HOPE) {
-        if (result.hope > crrPrice) result.hope = crrPrice;
-      } else if (crrListedPrice.denom === NFTPriceType.JUNO) {
-        if (result.juno > crrPrice) result.juno = crrPrice;
-      }
-    });
-    return result;
-  }, [items]);
+  const floorPrices: { hope: number; juno: number; raw: number; neta: number } =
+    useMemo(() => {
+      let result = { hope: 1e9, juno: 1e9, raw: 1e9, neta: 1e9 };
+      items.forEach((item: any) => {
+        const crrListedPrice = item.list_price || {};
+        let crrPrice = Number(crrListedPrice.amount || "0");
+        crrPrice = Number.isNaN(crrPrice) ? 0 : crrPrice / 1e6;
+        if (crrListedPrice.denom === NFTPriceType.HOPE) {
+          if (result.hope > crrPrice) result.hope = crrPrice;
+        } else if (crrListedPrice.denom === NFTPriceType.JUNO) {
+          if (result.juno > crrPrice) result.juno = crrPrice;
+        } else if (crrListedPrice.denom === NFTPriceType.RAW) {
+          if (result.raw > crrPrice) result.raw = crrPrice;
+        } else if (crrListedPrice.denom === NFTPriceType.NETA) {
+          if (result.neta > crrPrice) result.neta = crrPrice;
+        }
+      });
+      return result;
+    }, [items]);
 
-  const volumePrices: { hope: number; juno: number } = useMemo(
-    () => ({
-      hope: collectionState.tradingInfo?.hopeTotal || 0,
-      juno: collectionState.tradingInfo?.junoTotal || 0,
-    }),
-    [collectionState]
-  );
+  const volumePrices: {
+    hope: number;
+    juno: number;
+    raw: number;
+    totalInJuno: number;
+  } = useMemo(() => {
+    const hopeVolume = collectionState.tradingInfo?.hopeTotal || 0;
+    const rawVolume = collectionState.tradingInfo?.rawTotal || 0;
+    const netaVolume = collectionState.tradingInfo?.netaTotal || 0;
+    const junoVolume = collectionState.tradingInfo?.junoTotal || 0;
+
+    const hopeUsd = tokenPrices["hope"]?.market_data.current_price?.usd || 0;
+    const rawUsd = tokenPrices["raw"]?.market_data.current_price?.usd || 0;
+    const netaUsd = tokenPrices["neta"]?.market_data.current_price?.usd || 0;
+    const junoUsd = tokenPrices["ujuno"]?.market_data.current_price?.usd || 0;
+
+    const totalVolumeInJuno =
+      junoVolume +
+      (hopeUsd ? hopeVolume * (junoUsd / hopeUsd) : 0) +
+      (rawUsd ? rawVolume * (junoUsd / rawUsd) : 0) +
+      (netaUsd ? netaVolume * (junoUsd / netaUsd) : 0);
+
+    return {
+      hope: hopeVolume,
+      raw: rawVolume,
+      juno: junoVolume,
+      totalInJuno: totalVolumeInJuno,
+    };
+  }, [collectionState, tokenPrices]);
 
   return {
     total,
@@ -71,8 +99,11 @@ const useStatistic = (collectionId: string, items: any) => {
     // junoFloorPrice: floorPrices.juno,
     hopeFloorPrice: floorPrices.hope === 1e9 ? null : floorPrices.hope,
     junoFloorPrice: floorPrices.juno === 1e9 ? null : floorPrices.juno,
+    rawFloorPrice: floorPrices.raw === 1e9 ? null : floorPrices.raw,
+    netaFloorPrice: floorPrices.neta === 1e9 ? null : floorPrices.neta,
     hopeVolume: addSuffix(volumePrices.hope),
     junoVolume: addSuffix(volumePrices.juno),
+    totalVolumeInJuno: addSuffix(volumePrices.totalInJuno),
   };
 };
 

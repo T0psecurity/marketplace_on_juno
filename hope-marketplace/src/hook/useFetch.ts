@@ -96,25 +96,33 @@ const useFetch = () => {
           myMintedNfts: null,
         };
         if (collection.mintContract) {
-          const queryResult = await runQuery(collection.mintContract, {
-            get_state_info: {},
-          });
-          if (queryResult)
-            storeObject = {
-              mintCheck: queryResult.check_mint,
-              mintedNfts: +(queryResult.count || "0"),
-              totalNfts: +(queryResult.total_nft || "0"),
-              maxNfts: +(queryResult.max_nft || queryResult.total_nft || "0"),
-              imageUrl: queryResult.image_url,
-              price: +(queryResult.price || "0") / 1e6,
-              myMintedNfts: null,
-            };
-          if (account && account.address) {
-            const userInfo = await runQuery(collection.mintContract, {
-              get_user_info: { address: account.address },
+          if (collection.mintInfo?.mintLogic) {
+            storeObject = await collection.mintInfo.mintLogic({
+              collection,
+              runQuery,
+              account: account?.address,
             });
-            storeObject.myMintedNfts =
-              (storeObject.myMintedNfts || 0) + (userInfo || "0");
+          } else {
+            const queryResult = await runQuery(collection.mintContract, {
+              get_state_info: {},
+            });
+            if (queryResult)
+              storeObject = {
+                mintCheck: queryResult.check_mint,
+                mintedNfts: +(queryResult.count || "0"),
+                totalNfts: +(queryResult.total_nft || "0"),
+                maxNfts: +(queryResult.max_nft || queryResult.total_nft || "0"),
+                imageUrl: queryResult.image_url,
+                price: +(queryResult.price || "0") / 1e6,
+                myMintedNfts: null,
+              };
+            if (account && account.address) {
+              const userInfo = await runQuery(collection.mintContract, {
+                get_user_info: { address: account.address },
+              });
+              storeObject.myMintedNfts =
+                (storeObject.myMintedNfts || 0) + (userInfo || "0");
+            }
           }
         } else if (collection.isLaunched) {
           try {
@@ -143,17 +151,25 @@ const useFetch = () => {
             },
           });
           let totalJuno = 0,
-            totalHope = 0;
+            totalHope = 0,
+            totalRaw = 0,
+            totalNeta = 0;
           tradingInfoResult?.forEach((item: any) => {
             if (item.denom === "ujuno") {
               totalJuno = +item.amount / 1e6;
             } else if (item.denom === "hope") {
               totalHope = +item.amount / 1e6;
+            } else if (item.denom === "raw") {
+              totalRaw += item.amount / 1e6;
+            } else if (item.denom === "neta") {
+              totalNeta += item.amount / 1e6;
             }
           });
           storeObject.tradingInfo = {
             junoTotal: totalJuno,
             hopeTotal: totalHope,
+            rawTotal: totalRaw,
+            netaTotal: totalNeta,
           };
         }
         if (
@@ -173,6 +189,12 @@ const useFetch = () => {
             const newHopeTotal =
               (storeObject.tradingInfo?.hopeTotal || 0) +
               +(tradingInfoResult.total_hope || "0") / 1e6;
+            const newRawTotal =
+              (storeObject.tradingInfo?.rawTotal || 0) +
+              +(tradingInfoResult.total_raw || "0") / 1e6;
+            const newNetaTotal =
+              (storeObject.tradingInfo?.netaTotal || 0) +
+              +(tradingInfoResult.total_raw || "0") / 1e6;
             storeObject.tradingInfo = {
               junoMax: +(tradingInfoResult.max_juno || "0") / 1e6,
               junoMin: getMin(+(tradingInfoResult.min_juno || "0") / 1e6),
@@ -180,6 +202,12 @@ const useFetch = () => {
               hopeMax: +(tradingInfoResult.max_hope || "0") / 1e6,
               hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
               hopeTotal: newHopeTotal,
+              rawMax: +(tradingInfoResult.max_raw || "0") / 1e6,
+              rawMin: getMin(+(tradingInfoResult.min_raw || "0") / 1e6),
+              rawTotal: newRawTotal,
+              netaMax: +(tradingInfoResult.max_neta || "0") / 1e6,
+              netaMin: getMin(+(tradingInfoResult.min_neta || "0") / 1e6),
+              netaTotal: newNetaTotal,
             };
           } catch (e) {}
         }
@@ -206,14 +234,20 @@ const useFetch = () => {
             })
           );
         }
-        await Promise.all(actionHistoryQueries).then((queryResults: any) => {
-          let saleHistory: any[] = [];
-          queryResults.forEach(
-            (result: any[]) => (saleHistory = saleHistory.concat(result))
-          );
-          storeObject.saleHistory = saleHistory;
+        if (actionHistoryQueries.length) {
+          await Promise.all(actionHistoryQueries).then((queryResults: any) => {
+            let saleHistory: any[] = [];
+            queryResults.forEach(
+              (result: any[]) => (saleHistory = saleHistory.concat(result))
+            );
+            storeObject.saleHistory = saleHistory;
+            dispatch(
+              setCollectionState([collection.collectionId, storeObject])
+            );
+          });
+        } else {
           dispatch(setCollectionState([collection.collectionId, storeObject]));
-        });
+        }
       });
     },
     [dispatch, runQuery]
@@ -237,7 +271,11 @@ const useFetch = () => {
           i++
         ) {
           let tokenIds = [];
-          for (let j = 0; j < MAX_ITEMS; j++) {
+          for (
+            let j = 0;
+            j < Math.min(collectionInfo?.offering_id || 0, MAX_ITEMS);
+            j++
+          ) {
             tokenIds.push("" + (MAX_ITEMS * i + j + 1));
           }
           queries.push(

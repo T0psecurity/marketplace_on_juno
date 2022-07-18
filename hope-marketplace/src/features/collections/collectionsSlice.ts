@@ -17,8 +17,18 @@ export type CollectionStateType = {
     hopeMax?: number;
     hopeMin?: number;
     hopeTotal: number;
+    rawMax?: number;
+    rawMin?: number;
+    rawTotal: number;
+    netaMax?: number;
+    netaMin?: number;
+    netaTotal: number;
   };
   saleHistory?: any[];
+  mintInfo?: {
+    startMintTime: number;
+    mintPeriod: number;
+  };
 };
 
 export const DEFAULT_COLLECTION_STATE = {

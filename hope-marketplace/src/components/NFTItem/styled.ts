@@ -8,8 +8,9 @@ export const NFTItemImageWrapper = styled.div<{ isMobile?: boolean }>`
   position: relative;
 `;
 
-export const NFTItemInfoContainer = styled.div`
-  display: flex;
+export const NFTItemInfoContainer = styled.div<{ isMobile: boolean }>`
+  display: grid;
+  grid-template-columns: ${({ isMobile }) => (isMobile ? "auto" : "1fr 1fr")};
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
@@ -113,6 +114,7 @@ export const CoinIcon = styled.img`
 export const NFTItemWrapper = styled.div<{ isMobile: boolean }>`
   /* border: 1px solid black; */
   /* padding: 10px; */
+  width: 250px;
   border-radius: 10px;
   box-shadow: 1px 4px 10px 1px rgba(0, 0, 0, 0.7);
   display: flex;

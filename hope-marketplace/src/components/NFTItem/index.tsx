@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import ReactSelect from "react-select";
 import { useAppSelector } from "../../app/hooks";
 import { getCollectionById } from "../../constants/Collections";
 import { CollectionStateType } from "../../features/collections/collectionsSlice";
 import { getTokenIdNumber } from "../../hook/useFetch";
 // import { useAppDispatch } from "../../app/hooks";
 // import { setSelectedNFT } from "../../features/nfts/nftsSlice";
-import useHandleNftItem, { NFTPriceType } from "../../hook/useHandleNftItem";
+import useHandleNftItem from "../../hook/useHandleNftItem";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import { addSuffix } from "../../util/string";
+import { NFTPriceType } from "../../types/nftPriceTypes";
+import { addSuffix, escapeSpecialForUrl } from "../../util/string";
 import Image from "../Image";
 
 import {
@@ -56,8 +58,8 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const history = useHistory();
   const price = item?.list_price || {};
   const tokenPrice =
-    tokenPrices[price.denom === NFTPriceType.HOPE ? "hope" : "juno"]
-      ?.market_data.current_price?.usd || 0;
+    tokenPrices[price.denom as NFTPriceType]?.market_data.current_price?.usd ||
+    0;
   let url = "";
   if (item.collectionId === "mintpass1") {
     url = "/others/mint_pass.png";
@@ -87,29 +89,33 @@ export default function NFTItem({ item, status }: NFTItemProps) {
     // if (!isNaN(Number(value))) setNftPrice(Number(value));
   };
 
-  const handleChangePriceType = (e: any) => {
-    const { value } = e.target;
-    setNftPriceType(value);
+  // const handleChangePriceType = (e: any) => {
+  //   const { value } = e.target;
+  //   setNftPriceType(value);
+  // };
+  const handleChangePriceType = (item: any) => {
+    setNftPriceType(item.value);
   };
 
   const handleGotoDetail = () => {
     // dispatch(setSelectedNFT(item));
-    history.push(`/detail?token_id=${item.token_id}`);
+    history.push(`/detail?token_id=${escapeSpecialForUrl(item.token_id)}`);
   };
 
   const isSellItem = status === NFTItemStatus.SELL;
+  const SelectOptions = (
+    Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+  ).map((key) => {
+    return {
+      value: NFTPriceType[key],
+      label: key,
+    };
+  });
 
   const NFTItemPriceItem = () =>
     !!price.amount && +price.amount > 0 ? (
       <NFTItemInfo>
-        <CoinIcon
-          alt=""
-          src={
-            price.denom === NFTPriceType.HOPE
-              ? "/coin-images/hope.png"
-              : "/coin-images/juno.png"
-          }
-        />
+        <CoinIcon alt="" src={`/coin-images/${price.denom}.png`} />
         <NFTItemPriceContainer isMobile={isMobile}>
           <NFTItemTokenPrice>{price.amount / 1e6}</NFTItemTokenPrice>
           <NFTItemUsdPrice>
@@ -136,7 +142,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       </NFTItemImageWrapper>
       <div>
         <NFTItemInfo>{targetCollection.title}</NFTItemInfo>
-        <NFTItemInfoContainer>
+        <NFTItemInfoContainer isMobile={isMobile}>
           <NFTItemInfo>{item.token_id_display || item.token_id}</NFTItemInfo>
           {!isMobile && <NFTItemPriceItem />}
         </NFTItemInfoContainer>
@@ -146,14 +152,44 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       <NFTItemOperationContainer isSellItem={isSellItem}>
         {!isMobile && <NFTItemOperationButtonItem />}
         {isSellItem && (
-          <>
+          <div>
             <NFTItemPriceInputer
               key={item.token_id}
               value={nftPrice}
               onChange={handleChangeNFTPrice}
             />
             <NFTItemPriceType>
-              <input
+              <ReactSelect
+                styles={{
+                  dropdownIndicator: (provided, state) => ({
+                    ...provided,
+                    padding: 0,
+                  }),
+                  valueContainer: (provided, state) => ({
+                    ...provided,
+                    // height: 10,
+                    padding: 0,
+                  }),
+                  container: (provided, state) => ({
+                    ...provided,
+                    margin: "5px 10px",
+                    minWidth: 100,
+                  }),
+                  control: (provided, state) => ({
+                    ...provided,
+                    minHeight: "unset",
+                  }),
+                }}
+                onChange={handleChangePriceType}
+                // options={[
+                //   { value: NFTPriceType.HOPE, label: "HOPE" },
+                //   { value: NFTPriceType.JUNO, label: "JUNO" },
+                //   { value: NFTPriceType.RAW, label: "RAW" },
+                //   { value: NFTPriceType.NETA, label: "NETA" },
+                // ]}
+                options={SelectOptions}
+              />
+              {/* <input
                 type="radio"
                 id={`hope-${item.token_id}`}
                 name="priceType"
@@ -170,9 +206,9 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                 onClick={handleChangePriceType}
               />
               <label htmlFor={`juno-${item.token_id}`}>JUNO</label>
-              <br />
+              <br /> */}
             </NFTItemPriceType>
-          </>
+          </div>
         )}
       </NFTItemOperationContainer>
       {isMobile && <NFTItemOperationButtonItem />}

@@ -355,7 +355,9 @@ export const HistoryItemText = styled.div<{
 `;
 
 export const SaleHistoryItem = styled.div<{ isMobile: boolean }>`
-  display: flex;
+  display: grid;
+  grid-template-columns: ${({ isMobile }) =>
+    isMobile ? "1fr 1fr 1fr 1fr" : "60px 1fr 1fr 1fr 1fr"};
   align-items: center;
   justify-content: space-evenly;
   flex-wrap: wrap;
