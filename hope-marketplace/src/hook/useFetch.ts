@@ -96,25 +96,33 @@ const useFetch = () => {
           myMintedNfts: null,
         };
         if (collection.mintContract) {
-          const queryResult = await runQuery(collection.mintContract, {
-            get_state_info: {},
-          });
-          if (queryResult)
-            storeObject = {
-              mintCheck: queryResult.check_mint,
-              mintedNfts: +(queryResult.count || "0"),
-              totalNfts: +(queryResult.total_nft || "0"),
-              maxNfts: +(queryResult.max_nft || queryResult.total_nft || "0"),
-              imageUrl: queryResult.image_url,
-              price: +(queryResult.price || "0") / 1e6,
-              myMintedNfts: null,
-            };
-          if (account && account.address) {
-            const userInfo = await runQuery(collection.mintContract, {
-              get_user_info: { address: account.address },
+          if (collection.mintInfo?.mintLogic) {
+            storeObject = await collection.mintInfo.mintLogic({
+              collection,
+              runQuery,
+              account: account?.address,
             });
-            storeObject.myMintedNfts =
-              (storeObject.myMintedNfts || 0) + (userInfo || "0");
+          } else {
+            const queryResult = await runQuery(collection.mintContract, {
+              get_state_info: {},
+            });
+            if (queryResult)
+              storeObject = {
+                mintCheck: queryResult.check_mint,
+                mintedNfts: +(queryResult.count || "0"),
+                totalNfts: +(queryResult.total_nft || "0"),
+                maxNfts: +(queryResult.max_nft || queryResult.total_nft || "0"),
+                imageUrl: queryResult.image_url,
+                price: +(queryResult.price || "0") / 1e6,
+                myMintedNfts: null,
+              };
+            if (account && account.address) {
+              const userInfo = await runQuery(collection.mintContract, {
+                get_user_info: { address: account.address },
+              });
+              storeObject.myMintedNfts =
+                (storeObject.myMintedNfts || 0) + (userInfo || "0");
+            }
           }
         } else if (collection.isLaunched) {
           try {
@@ -226,14 +234,20 @@ const useFetch = () => {
             })
           );
         }
-        await Promise.all(actionHistoryQueries).then((queryResults: any) => {
-          let saleHistory: any[] = [];
-          queryResults.forEach(
-            (result: any[]) => (saleHistory = saleHistory.concat(result))
-          );
-          storeObject.saleHistory = saleHistory;
+        if (actionHistoryQueries.length) {
+          await Promise.all(actionHistoryQueries).then((queryResults: any) => {
+            let saleHistory: any[] = [];
+            queryResults.forEach(
+              (result: any[]) => (saleHistory = saleHistory.concat(result))
+            );
+            storeObject.saleHistory = saleHistory;
+            dispatch(
+              setCollectionState([collection.collectionId, storeObject])
+            );
+          });
+        } else {
           dispatch(setCollectionState([collection.collectionId, storeObject]));
-        });
+        }
       });
     },
     [dispatch, runQuery]

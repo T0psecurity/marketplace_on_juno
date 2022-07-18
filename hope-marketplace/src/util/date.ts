@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const MONTHS = [
   "Jan",
   "Feb",
@@ -37,4 +39,14 @@ export const compareDate = (
   if (converted1 > converted2) return 1;
   if (converted2 > converted1) return -1;
   return 0;
+};
+
+export const timeDistance = (
+  time1: string | Date | number,
+  time2: string | Date | number
+): string => {
+  const duration = moment.duration(
+    moment(new Date(time2)).diff(new Date(time1))
+  );
+  return `${duration.hours()}:${duration.minutes()}:${duration.seconds()}`;
 };

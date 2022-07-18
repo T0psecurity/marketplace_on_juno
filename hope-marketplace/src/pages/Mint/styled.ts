@@ -114,8 +114,13 @@ export const FlexColumn = styled.div<{ width?: string }>`
     `};
 `;
 
-export const MintButton = styled(Button)<{ width?: string; soldOut: boolean }>`
-  background-color: ${({ soldOut }) => (soldOut ? "#C63939" : "#39c639")};
+export const MintButton = styled(Button)<{
+  width?: string;
+  soldOut: boolean;
+  backgroundColor?: string;
+}>`
+  background-color: ${({ soldOut, backgroundColor }) =>
+    backgroundColor ? backgroundColor : soldOut ? "#C63939" : "#39c639"};
   border: 1px solid black;
   border-radius: 4px;
   font-weight: 700;
@@ -125,8 +130,14 @@ export const MintButton = styled(Button)<{ width?: string; soldOut: boolean }>`
   transition: opacity 0.5s;
   &:hover {
     opacity: 0.8;
-    background-color: ${({ soldOut }) => (soldOut ? "#C63939" : "#39c639")};
+    background-color: ${({ soldOut, backgroundColor }) =>
+      backgroundColor ? backgroundColor : soldOut ? "#C63939" : "#39c639"};
   }
+`;
+
+export const LeftTimeContainer = styled.span`
+  position: absolute;
+  bottom: -40px;
 `;
 
 export const MintImageWrapper = styled.div`

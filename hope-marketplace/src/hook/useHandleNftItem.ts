@@ -146,7 +146,10 @@ const useHandleNftItem = () => {
             }
           );
         } else {
-          await runExecute(contractAddresses[price.denom], message);
+          await runExecute(
+            contractAddresses[price.denom as NFTPriceType],
+            message
+          );
         }
         toast.success("Success!");
         refresh();

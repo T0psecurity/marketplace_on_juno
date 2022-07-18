@@ -25,6 +25,10 @@ export type CollectionStateType = {
     netaTotal: number;
   };
   saleHistory?: any[];
+  mintInfo?: {
+    startMintTime: number;
+    mintPeriod: number;
+  };
 };
 
 export const DEFAULT_COLLECTION_STATE = {

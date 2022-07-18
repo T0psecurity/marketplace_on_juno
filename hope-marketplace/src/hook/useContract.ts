@@ -25,10 +25,19 @@ import connectionManager from "../features/connection/connectionManager";
 import { toMicroAmount } from "../util/coins";
 import { NFTPriceType } from "../types/nftPriceTypes";
 
-export const contractAddresses: any = {
+type TokenContractType = {
+  [key in NFTPriceType]: string;
+};
+
+interface ContractAddressesType extends TokenContractType {
+  MINT_CONTRACT: string;
+}
+
+export const contractAddresses: ContractAddressesType = {
   MINT_CONTRACT:
     // "juno1u230upl8ut7vn8uyk7hd9ac2ygwrvk5jygsjzv838hkn2u4xj34slyg2qy",
     "juno17kr4uahqlz8hl8nucx82q4vmlj7lrzzlz0yr0ax9hejaevw6ewqsf8p5ux",
+  [NFTPriceType.JUNO]: "",
   [NFTPriceType.HOPE]:
     // "juno1ckulym5ufeu29kqcqn0pw7qfavdmup9a9kwt9uzgt4arkq84qetssd9ltl",
     "juno1re3x67ppxap48ygndmrc7har2cnc7tcxtm9nplcas4v0gc3wnmvs3s807z",
@@ -60,7 +69,9 @@ const useContract = () => {
     // import target contracts
     let targetContractAddresses: string[] = [];
     Object.keys(contractAddresses).forEach((key: string) => {
-      targetContractAddresses.push(contractAddresses[key]);
+      targetContractAddresses.push(
+        contractAddresses[key as keyof ContractAddressesType]
+      );
     });
     Collections.forEach((collection: MarketplaceInfo) => {
       if (collection.nftContract)
