@@ -14,6 +14,7 @@ import getQuery from "../util/useAxios";
 import useContract from "./useContract";
 import { MintContracts } from "../constants/Collections";
 import { setCollectionTraitStates } from "../features/collectionTraits/collectionTraitsSlice";
+import { NFTPriceType } from "../types/nftPriceTypes";
 
 type AttributeType = {
   trait_type: string;
@@ -150,27 +151,20 @@ const useFetch = () => {
               symbols: ["ujuno", "hope"],
             },
           });
-          let totalJuno = 0,
-            totalHope = 0,
-            totalRaw = 0,
-            totalNeta = 0;
+          let totalVolume: any = {};
+          (
+            Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+          ).forEach((key) => (totalVolume[`${key.toLowerCase()}Total`] = 0));
           tradingInfoResult?.forEach((item: any) => {
-            if (item.denom === "ujuno") {
-              totalJuno = +item.amount / 1e6;
-            } else if (item.denom === "hope") {
-              totalHope = +item.amount / 1e6;
-            } else if (item.denom === "raw") {
-              totalRaw += item.amount / 1e6;
-            } else if (item.denom === "neta") {
-              totalNeta += item.amount / 1e6;
-            }
+            const tokenType = (
+              Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+            ).filter((x) => NFTPriceType[x] === item.denom)[0];
+            totalVolume[`${tokenType.toLowerCase()}Total`] =
+              (totalVolume[`${tokenType.toLowerCase()}Total`] || 0) +
+              item.amount / 1e6;
           });
-          storeObject.tradingInfo = {
-            junoTotal: totalJuno,
-            hopeTotal: totalHope,
-            rawTotal: totalRaw,
-            netaTotal: totalNeta,
-          };
+
+          storeObject.tradingInfo = totalVolume;
         }
         if (
           collection.marketplaceContract &&
@@ -183,32 +177,25 @@ const useFetch = () => {
                 get_trading_info: {},
               }
             );
-            const newJunoTotal =
-              (storeObject.tradingInfo?.junoTotal || 0) +
-              +(tradingInfoResult.total_juno || "0") / 1e6;
-            const newHopeTotal =
-              (storeObject.tradingInfo?.hopeTotal || 0) +
-              +(tradingInfoResult.total_hope || "0") / 1e6;
-            const newRawTotal =
-              (storeObject.tradingInfo?.rawTotal || 0) +
-              +(tradingInfoResult.total_raw || "0") / 1e6;
-            const newNetaTotal =
-              (storeObject.tradingInfo?.netaTotal || 0) +
-              +(tradingInfoResult.total_raw || "0") / 1e6;
-            storeObject.tradingInfo = {
-              junoMax: +(tradingInfoResult.max_juno || "0") / 1e6,
-              junoMin: getMin(+(tradingInfoResult.min_juno || "0") / 1e6),
-              junoTotal: newJunoTotal,
-              hopeMax: +(tradingInfoResult.max_hope || "0") / 1e6,
-              hopeMin: getMin(+(tradingInfoResult.min_hope || "0") / 1e6),
-              hopeTotal: newHopeTotal,
-              rawMax: +(tradingInfoResult.max_raw || "0") / 1e6,
-              rawMin: getMin(+(tradingInfoResult.min_raw || "0") / 1e6),
-              rawTotal: newRawTotal,
-              netaMax: +(tradingInfoResult.max_neta || "0") / 1e6,
-              netaMin: getMin(+(tradingInfoResult.min_neta || "0") / 1e6),
-              netaTotal: newNetaTotal,
-            };
+            let crrTradingInfo: any = storeObject.tradingInfo;
+            (
+              Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+            ).forEach((key) => {
+              const totalKey = `${key.toLowerCase()}Total`;
+              crrTradingInfo[totalKey] =
+                (crrTradingInfo[totalKey] || 0) +
+                +(tradingInfoResult[`total_${key.toLowerCase()}`] || "0") / 1e6;
+
+              const minKey = `${key.toLowerCase()}Min`;
+              const maxKey = `${key.toLowerCase()}Max`;
+              crrTradingInfo[minKey] = getMin(
+                +(tradingInfoResult[`min_${key.toLowerCase()}`] || "0") / 1e6
+              );
+              crrTradingInfo[maxKey] =
+                +(tradingInfoResult[`max_${key.toLowerCase()}`] || "0") / 1e6;
+            });
+
+            storeObject.tradingInfo = crrTradingInfo;
           } catch (e) {}
         }
         const collectionInfo = await runQuery(MarketplaceContracts[0], {
