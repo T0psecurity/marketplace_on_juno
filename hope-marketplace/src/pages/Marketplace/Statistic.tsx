@@ -2,7 +2,7 @@ import React from "react";
 import {
   getCollectionById,
   MarketplaceInfo,
-  StatisticKeys,
+  StatisticSettings,
 } from "../../constants/Collections";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import useStatistic from "./hook/useStatistic";
@@ -22,7 +22,7 @@ interface StatisticProps {
 
 type StatisticItemType = {
   name: string;
-  key: `${StatisticKeys}`;
+  key: keyof StatisticSettings;
   icon?: string;
   mobileRenderOrder: number;
 };
@@ -68,7 +68,7 @@ const STATISTIC_PARAMS: StatisticItemType[] = [
   },
   {
     name: "Floor Price",
-    key: "junoFloorPrice",
+    key: "ujunoFloorPrice",
     icon: "/coin-images/ujuno.png",
     mobileRenderOrder: 6,
   },

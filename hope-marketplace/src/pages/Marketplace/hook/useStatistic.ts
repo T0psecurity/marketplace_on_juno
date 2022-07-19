@@ -1,8 +1,10 @@
 import { useMemo } from "react";
 import { useAppSelector } from "../../../app/hooks";
 import {
+  FloorPriceType,
   getCollectionById,
   MarketplaceInfo,
+  VolumePriceType,
 } from "../../../constants/Collections";
 import { CollectionStateType } from "../../../features/collections/collectionsSlice";
 import { NFTPriceType } from "../../../types/nftPriceTypes";
@@ -17,7 +19,6 @@ const useStatistic = (collectionId: string, items: any) => {
     (state: any) => state.collectionStates[collectionId]
   );
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
-  // console.log("collectionState", collectionState);
 
   const total: string = useMemo(() => {
     if (!targetCollection) return "";
@@ -34,76 +35,52 @@ const useStatistic = (collectionId: string, items: any) => {
     return convertNumberToString([...new Set(sellers)].length);
   }, [items]);
 
-  // const floorPrices: { hope: number; juno: number } = useMemo(
-  //   () => ({
-  //     hope: collectionState.tradingInfo?.hopeMin || 0,
-  //     juno: collectionState.tradingInfo?.junoMin || 0,
-  //   }),
-  //   [collectionState]
-  // );
-  const floorPrices: { hope: number; juno: number; raw: number; neta: number } =
-    useMemo(() => {
-      let result = { hope: 1e9, juno: 1e9, raw: 1e9, neta: 1e9 };
-      items.forEach((item: any) => {
-        const crrListedPrice = item.list_price || {};
-        let crrPrice = Number(crrListedPrice.amount || "0");
-        crrPrice = Number.isNaN(crrPrice) ? 0 : crrPrice / 1e6;
-        if (crrListedPrice.denom === NFTPriceType.HOPE) {
-          if (result.hope > crrPrice) result.hope = crrPrice;
-        } else if (crrListedPrice.denom === NFTPriceType.JUNO) {
-          if (result.juno > crrPrice) result.juno = crrPrice;
-        } else if (crrListedPrice.denom === NFTPriceType.RAW) {
-          if (result.raw > crrPrice) result.raw = crrPrice;
-        } else if (crrListedPrice.denom === NFTPriceType.NETA) {
-          if (result.neta > crrPrice) result.neta = crrPrice;
-        }
-      });
-      return result;
-    }, [items]);
+  const floorPrices: FloorPriceType = useMemo(() => {
+    let result: FloorPriceType = {} as FloorPriceType;
+    items.forEach((item: any) => {
+      const crrListedPrice = item.list_price || {};
+      const denom: NFTPriceType = crrListedPrice.denom;
+      let crrPrice = Number(crrListedPrice.amount || "0");
+      crrPrice = Number.isNaN(crrPrice) ? 0 : crrPrice / 1e6;
 
-  const volumePrices: {
-    hope: number;
-    juno: number;
-    raw: number;
-    totalInJuno: number;
-  } = useMemo(() => {
-    const hopeVolume = collectionState.tradingInfo?.hopeTotal || 0;
-    const rawVolume = collectionState.tradingInfo?.rawTotal || 0;
-    const netaVolume = collectionState.tradingInfo?.netaTotal || 0;
-    const junoVolume = collectionState.tradingInfo?.ujunoTotal || 0;
+      if (
+        !(result as any)[`${denom}FloorPrice`] ||
+        (result as any)[`${denom}FloorPrice`] > crrPrice
+      )
+        (result as any)[`${denom}FloorPrice`] = crrPrice;
+    });
+    return result;
+  }, [items]);
 
-    const hopeUsd = tokenPrices["hope"]?.market_data.current_price?.usd || 0;
-    const rawUsd = tokenPrices["raw"]?.market_data.current_price?.usd || 0;
-    const netaUsd = tokenPrices["neta"]?.market_data.current_price?.usd || 0;
+  const volumePrices: VolumePriceType = useMemo(() => {
+    let result: VolumePriceType = {} as VolumePriceType;
     const junoUsd = tokenPrices["ujuno"]?.market_data.current_price?.usd || 0;
+    (Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>).forEach(
+      (key) => {
+        const crrVolume =
+          (collectionState.tradingInfo as any)?.[`${NFTPriceType[key]}Total`] ||
+          0;
+        const crrUsd =
+          tokenPrices[NFTPriceType[key]]?.market_data.current_price?.usd || 0;
+        (result as any)[`${NFTPriceType[key]}Volume`] = crrVolume;
+        result.totalVolumeInJuno =
+          (result.totalVolumeInJuno || 0) +
+          (crrUsd ? crrVolume * (junoUsd / crrUsd) : 0);
+      }
+    );
+    Object.keys(result).forEach((key) => {
+      (result as any)[key] = addSuffix((result as any)[key]);
+    });
 
-    const totalVolumeInJuno =
-      junoVolume +
-      (hopeUsd ? hopeVolume * (junoUsd / hopeUsd) : 0) +
-      (rawUsd ? rawVolume * (junoUsd / rawUsd) : 0) +
-      (netaUsd ? netaVolume * (junoUsd / netaUsd) : 0);
-
-    return {
-      hope: hopeVolume,
-      raw: rawVolume,
-      juno: junoVolume,
-      totalInJuno: totalVolumeInJuno,
-    };
+    return result;
   }, [collectionState, tokenPrices]);
 
   return {
     total,
     itemsOnSale,
     owners,
-    // hopeFloorPrice: floorPrices.hope,
-    // junoFloorPrice: floorPrices.juno,
-    hopeFloorPrice: floorPrices.hope === 1e9 ? null : floorPrices.hope,
-    junoFloorPrice: floorPrices.juno === 1e9 ? null : floorPrices.juno,
-    rawFloorPrice: floorPrices.raw === 1e9 ? null : floorPrices.raw,
-    netaFloorPrice: floorPrices.neta === 1e9 ? null : floorPrices.neta,
-    hopeVolume: addSuffix(volumePrices.hope),
-    junoVolume: addSuffix(volumePrices.juno),
-    totalVolumeInJuno: addSuffix(volumePrices.totalInJuno),
+    ...floorPrices,
+    ...volumePrices,
   };
 };
 

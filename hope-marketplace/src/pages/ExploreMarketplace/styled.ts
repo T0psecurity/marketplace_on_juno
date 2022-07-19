@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const CardWidth = "350px";
-const CardHeight = "500px";
 
 export const Wrapper = styled.div`
   margin: 0 150px;
@@ -11,12 +10,13 @@ export const Wrapper = styled.div`
 `;
 
 export const Card = styled.div`
-  border-radius: 30px;
+  border-radius: 10px;
   border: 1px solid black;
   width: ${CardWidth};
-  /* height: ${CardHeight}; */
+  height: 220px;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
   @media (max-width: 650px) {
     width: 100%;
     margin: 10px;
@@ -41,19 +41,40 @@ export const Flex = styled.div`
 export const StyledImg = styled.div<{ imageUrl: string }>`
   background: url(${({ imageUrl }) => imageUrl});
   width: 100%;
-  height: 200px;
+  height: 170px;
   background-size: cover;
   background-position: center;
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
+  border-radius: 10px;
+  border: 1px solid black;
   margin-left: auto;
   margin-right: auto;
+`;
 
-  /* position: absolute;
-  top: calc(50% + 1px);
-  left: calc(50% + 1px);
-  transform: scale(1.01) translate(-50%, -50%);
-  padding-bottom: calc(0.56 * 100%); */
+export const LogoImage = styled.div<{ imageUrl: string }>`
+  background: url(${({ imageUrl }) => imageUrl});
+  background-color: white;
+  background-size: cover;
+  border-radius: 10px;
+  border: 1px solid black;
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+`;
+
+export const CollectionTitle = styled.div<{ hasLogo: boolean }>`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: ${({ hasLogo }) => (hasLogo ? "calc(100% - 80px)" : "100%")};
+  height: 50px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const Text = styled.div<{

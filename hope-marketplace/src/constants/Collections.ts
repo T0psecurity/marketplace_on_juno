@@ -1,4 +1,5 @@
 import { CollectionStateType } from "../features/collections/collectionsSlice";
+import { NFTPriceType } from "../types/nftPriceTypes";
 import {
   LogicParamsInterface,
   // MintLogics
@@ -10,19 +11,19 @@ export interface SocialLinks {
   twitter: string;
 }
 
-export enum StatisticKeys {
-  "total" = "total",
-  "itemsOnSale" = "itemsOnSale",
-  "hopeFloorPrice" = "hopeFloorPrice",
-  "hopeVolume" = "hopeVolume",
-  "junoFloorPrice" = "junoFloorPrice",
-  "junoVolume" = "junoVolume",
-  "rawFloorPrice" = "rawFloorPrice",
-  "netaFloorPrice" = "netaFloorPrice",
-  "totalVolumeInJuno" = "totalVolumeInJuno",
+export type FloorPriceType = Record<`${NFTPriceType}FloorPrice`, number>;
+export interface VolumePriceType
+  extends Record<`${NFTPriceType}Volume`, number> {
+  totalVolumeInJuno: number;
 }
 
-export type StatisticOption = { [key in StatisticKeys]?: boolean };
+export interface StatisticSettings extends FloorPriceType, VolumePriceType {
+  total: string;
+  owner: string;
+  itemsOnSale: string;
+}
+
+export type StatisticOption = { [key in keyof StatisticSettings]?: boolean };
 
 export interface MarketplaceBasicInfo {
   imageUrl: string;
