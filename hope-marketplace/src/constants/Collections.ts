@@ -1,6 +1,5 @@
-import { CollectionStateType } from "../features/collections/collectionsSlice";
 import { NFTPriceType } from "../types/nftPriceTypes";
-import { LogicParamsInterface, MintLogics } from "./mintLogic";
+import { MintLogicItemInterface, MintLogics } from "./mintLogic";
 
 export interface SocialLinks {
   discord: string;
@@ -46,7 +45,7 @@ export interface MarketplaceMintInfo {
   mintImage: string;
   mintDate?: string;
   mintUrl?: string;
-  mintLogic?: (params: LogicParamsInterface) => Promise<CollectionStateType>;
+  mintLogic?: MintLogicItemInterface;
 }
 
 export interface MarketplaceInfo extends MarketplaceBasicInfo {

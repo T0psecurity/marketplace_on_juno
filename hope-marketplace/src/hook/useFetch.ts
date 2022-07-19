@@ -98,7 +98,7 @@ const useFetch = () => {
         };
         if (collection.mintContract) {
           if (collection.mintInfo?.mintLogic) {
-            storeObject = await collection.mintInfo.mintLogic({
+            storeObject = await collection.mintInfo.mintLogic.fetchInfo({
               collection,
               runQuery,
               account: account?.address,

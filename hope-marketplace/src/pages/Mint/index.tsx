@@ -20,6 +20,8 @@ type FILTERED_RESULT = {
   [key in keyof typeof FILTER_TYPE]: MarketplaceInfo[];
 };
 
+export const TIME_DIFF_BETWEEN_ONCHAIN = 100;
+
 const Mint: React.FC = () => {
   const [filterType, setFilterType] = useState<FILTER_TYPE>(FILTER_TYPE.LIVE);
   const collectionStates: TotalStateType = useAppSelector(
@@ -34,15 +36,21 @@ const Mint: React.FC = () => {
       const mintInfo = collection.mintInfo;
       let filteredType = FILTER_TYPE.ALL;
 
-      const mintDate = mintInfo?.mintDate
+      let mintDate = mintInfo?.mintDate
         ? new Date(mintInfo.mintDate)
         : new Date();
+      if (collectionState.mintInfo?.startMintTime) {
+        mintDate = new Date(
+          (collectionState.mintInfo.startMintTime + TIME_DIFF_BETWEEN_ONCHAIN) *
+            1000
+        );
+      }
       const now = new Date();
       const isLive = compareDate(now, mintDate) !== -1;
       if (
         !mintInfo ||
-        (collectionState.totalNfts !== 0 &&
-          collectionState.mintedNfts >= collectionState.totalNfts)
+        (collectionState?.totalNfts !== 0 &&
+          collectionState?.mintedNfts >= collectionState?.totalNfts)
       ) {
         filteredType = FILTER_TYPE.SOLDOUT;
       } else if (!mintInfo.mintDate || isLive) {
