@@ -141,7 +141,9 @@ const useFetch = () => {
               price: +(queryResult.price || "0") / 1e6,
               myMintedNfts: null,
             };
-          } catch (e) {}
+          } catch (e) {
+            console.error(collection.collectionId, e);
+          }
         }
 
         if (collection.isLaunched) {

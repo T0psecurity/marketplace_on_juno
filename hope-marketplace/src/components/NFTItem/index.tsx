@@ -72,6 +72,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   } else if (collectionState.imageUrl) {
     url = `${collectionState.imageUrl}${getTokenIdNumber(item.token_id)}.png`;
   }
+  // console.log(item.collectionId, collectionState, url);
 
   const handleNFTItem = async () => {
     if (status === NFTItemStatus.SELL) {

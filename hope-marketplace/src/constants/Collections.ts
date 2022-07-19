@@ -431,7 +431,7 @@ export const MarketplaceContracts: string[] = [
 ];
 
 export const MintContracts: string[] = [
-  "juno1r3haf7uz8hvmegyffd74994fpdlj0yl7s0a5w0qaj68ktxt83yzqzxm7ta",
+  "juno1c9dr05cryh2fn5hwr4aa9rhzfy5vxdmq3uc3xfrku9e5cs8sqcrq5r5g6d",
 ];
 
 export default Collections;
