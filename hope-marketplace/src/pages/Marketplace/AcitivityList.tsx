@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { useMemo } from "react";
 import { useAppSelector } from "../../app/hooks";
 import Image from "../../components/Image";
-import { getCollectionById } from "../../constants/Collections";
+import { CollectionIds, getCollectionById } from "../../constants/Collections";
 import { getCustomTokenId, getTokenIdNumber } from "../../hook/useFetch";
 import { NFTPriceType } from "../../types/nftPriceTypes";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
@@ -19,7 +19,7 @@ import {
 } from "./styled";
 
 interface ActivityListProps {
-  collectionId: string;
+  collectionId: CollectionIds;
   history: any[];
 }
 

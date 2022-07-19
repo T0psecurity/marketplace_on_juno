@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const CardWidth = "350px";
 
@@ -7,6 +7,43 @@ export const Wrapper = styled.div`
   @media (max-width: 650px) {
     margin: 0 10px;
   }
+`;
+
+export const FilterWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+
+export const FilterItem = styled.div<{ checked: boolean }>`
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  font-weight: 600;
+  font-size: 20px;
+  cursor: pointer;
+  & > svg {
+    margin-left: 5px;
+  }
+  ${({ checked }) =>
+    checked &&
+    css`
+      color: #6baf33;
+      & > svg {
+        path {
+          fill: #6baf33;
+        }
+      }
+    `}
+`;
+
+export const SearchWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  margin: 20px auto 40px;
 `;
 
 export const Card = styled.div`

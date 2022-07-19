@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { resourceLimits } from "worker_threads";
-import Collections, { MarketplaceInfo } from "../../constants/Collections";
+import Collections, {
+  CollectionIds,
+  MarketplaceInfo,
+} from "../../constants/Collections";
 import { NFTPriceType } from "../../types/nftPriceTypes";
 
 export type CollectionStateType = {
@@ -36,6 +39,8 @@ export type CollectionStateType = {
   };
 };
 
+export type TotalStateType = { [key in CollectionIds]: CollectionStateType };
+
 export const DEFAULT_COLLECTION_STATE = {
   mintCheck: [],
   mintedNfts: 0,
@@ -47,7 +52,7 @@ export const DEFAULT_COLLECTION_STATE = {
   saleHistory: [],
 };
 
-let initialState: { [key: string]: CollectionStateType } = {};
+let initialState: TotalStateType = {} as TotalStateType;
 
 Collections.forEach((collection: MarketplaceInfo) => {
   initialState[collection.collectionId] = DEFAULT_COLLECTION_STATE;
@@ -59,7 +64,7 @@ export const collectionSlice = createSlice({
   reducers: {
     setCollectionState: (state, action: PayloadAction<[string, any]>) => {
       const [key, data] = action.payload;
-      state[key] = data;
+      state[key as CollectionIds] = data;
     },
   },
 });

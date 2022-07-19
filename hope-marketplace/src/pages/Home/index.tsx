@@ -2,7 +2,10 @@ import React, { useMemo } from "react";
 import { useAppSelector } from "../../app/hooks";
 
 import Collections, { MarketplaceInfo } from "../../constants/Collections";
-import { CollectionStateType } from "../../features/collections/collectionsSlice";
+import {
+  CollectionStateType,
+  TotalStateType,
+} from "../../features/collections/collectionsSlice";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { NFTPriceType } from "../../types/nftPriceTypes";
 import { addSuffix } from "../../util/string";
@@ -25,9 +28,10 @@ const Home: React.FC = () => {
   const isMobile = isXs || isSm || isMd;
 
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
-  const totalMarketplaceNFTs = useAppSelector((state) => state.nfts);
-  const collectionStates: { [key: string]: CollectionStateType } =
-    useAppSelector((state) => state.collectionStates);
+  const totalMarketplaceNFTs: any = useAppSelector((state) => state.nfts);
+  const collectionStates: TotalStateType = useAppSelector(
+    (state) => state.collectionStates
+  );
 
   const { tradesVolume, totalItemsOnSale } = useMemo(() => {
     const junoUsd =

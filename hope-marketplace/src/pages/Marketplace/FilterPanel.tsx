@@ -22,9 +22,6 @@ import {
   StyledSvg,
   SearchSortPanel,
   SortContainer,
-  SearchContainer,
-  SearchInput,
-  SearchIcon,
   SearchWrapper,
   CoinImage,
   CoinImageWrapper,
@@ -33,6 +30,7 @@ import {
   NftListTab,
 } from "./styled";
 import { NFTPriceType } from "../../types/nftPriceTypes";
+import SearchInputer from "../../components/SearchInputer";
 
 const ArrowIcon = ({
   className,
@@ -171,21 +169,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           <FilterIcon /> Filter
           <ArrowIcon onClick={() => onChangeExpanded(!expanded)} />
         </FilterContainerTitle>
-        {/* <CollapseCard title="Status">
-          <StatusFilterPanel>
-            {STATUS_FILTER_BUTTONS.map(
-              (buttonItem: StatusFilterButtonType, index: number) => (
-                <Button
-                  key={index}
-                  onClick={() => handleChangeStatusFilter(buttonItem)}
-                  selected={statusFilter[buttonItem.key]}
-                >
-                  {buttonItem.title}
-                </Button>
-              )
-            )}
-          </StatusFilterPanel>
-        </CollapseCard> */}
         {expanded && (
           <>
             <CollapseCard title="On Sale in" expanded>
@@ -273,15 +256,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             </SortContainer>
           )}
           <SearchWrapper>
-            <SearchContainer>
-              <SearchIcon>
-                <i className="fa fa-search" />
-              </SearchIcon>
-              <SearchInput
-                onChange={handleChangeSearchWord}
-                placeholder="Search by ID number..."
-              />
-            </SearchContainer>
+            <SearchInputer
+              onChange={handleChangeSearchWord}
+              placeholder="Search by ID number..."
+            />
           </SearchWrapper>
         </SearchSortPanel>
         <FilterResultPanel siblingHeight={searchSortHeight}>

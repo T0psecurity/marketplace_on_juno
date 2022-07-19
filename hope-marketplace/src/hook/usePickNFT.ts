@@ -13,10 +13,10 @@ const usePickNFT = () => {
       const marketplaceKey = `${collectionId}_marketplace`;
       if (nfts[collectionId] && nfts[collectionId].length)
         total = total.concat(nfts[collectionId]);
-      if (nfts[listedKey] && nfts[listedKey].length)
-        total = total.concat(nfts[listedKey]);
-      if (nfts[marketplaceKey] && nfts[marketplaceKey].length)
-        total = total.concat(nfts[marketplaceKey]);
+      if ((nfts as any)[listedKey] && (nfts as any)[listedKey].length)
+        total = total.concat((nfts as any)[listedKey]);
+      if ((nfts as any)[marketplaceKey] && (nfts as any)[marketplaceKey].length)
+        total = total.concat((nfts as any)[marketplaceKey]);
     });
     return total;
   }, [nfts]);

@@ -3,7 +3,7 @@ import { useAppSelector } from "../../app/hooks";
 
 import { Title } from "../../components/PageTitle";
 import Collections, { MarketplaceInfo } from "../../constants/Collections";
-import { CollectionStateType } from "../../features/collections/collectionsSlice";
+import { TotalStateType } from "../../features/collections/collectionsSlice";
 import { compareDate } from "../../util/date";
 import MintItem from "./MintItem";
 
@@ -22,8 +22,9 @@ type FILTERED_RESULT = {
 
 const Mint: React.FC = () => {
   const [filterType, setFilterType] = useState<FILTER_TYPE>(FILTER_TYPE.LIVE);
-  const collectionStates: { [key: string]: CollectionStateType } =
-    useAppSelector((state: any) => state.collectionStates);
+  const collectionStates: TotalStateType = useAppSelector(
+    (state: any) => state.collectionStates
+  );
 
   const filteredCollections: MarketplaceInfo[] = useMemo(() => {
     if (filterType === FILTER_TYPE.ALL) return Collections;

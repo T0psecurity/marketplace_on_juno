@@ -94,12 +94,6 @@ export const SortContainer = styled.div`
   width: 100%;
 `;
 
-export const SearchContainer = styled.div`
-  width: fit-content;
-  height: fit-content;
-  position: relative;
-`;
-
 export const SearchWrapper = styled.div`
   width: 100%;
   max-width: 300px;
@@ -107,79 +101,6 @@ export const SearchWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-`;
-
-export const SearchInput = styled.input`
-  height: 50px;
-  width: 50px;
-  border-style: none;
-  /* padding: 10px; */
-  font-size: 18px;
-  letter-spacing: 2px;
-  outline: none;
-  border-radius: 25px;
-  transition: all 0.5s ease-in-out;
-  background-color: #22a6b3;
-  /* padding-right: 40px; */
-  color: transparent;
-  &::placeholder {
-    /* color: rgba(255, 255, 255, 0.5); */
-    color: transparent;
-    font-size: 18px;
-    letter-spacing: 2px;
-    font-weight: 100;
-  }
-
-  /* &:focus {
-    width: 300px;
-    border-radius: 0px;
-    background-color: transparent;
-    border-bottom: 1px solid #ccc;
-    transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
-    color: black;
-    &::placeholder {
-      color: #ccc;
-    }
-  } */
-
-  width: 300px;
-  border-radius: 0px;
-  background-color: transparent;
-  border-bottom: 1px solid #ccc;
-  transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
-  color: black;
-  &::placeholder {
-    color: #ccc;
-  }
-`;
-
-export const SearchIcon = styled.button`
-  width: 50px;
-  height: 50px;
-  border-style: none;
-  font-size: 20px;
-  font-weight: bold;
-  outline: none;
-  cursor: pointer;
-  border-radius: 50%;
-  position: absolute;
-  right: 0px;
-  color: #ccc;
-  background-color: transparent;
-  pointer-events: painted;
-  /* &:focus {
-    & ~ ${SearchInput} {
-      width: 300px;
-      border-radius: 0px;
-      background-color: transparent;
-      border-bottom: 1px solid #ccc;
-      transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
-      color: black;
-      &::placeholder {
-        color: #ccc;
-      }
-    }
-  } */
 `;
 
 export const StyledSvg = styled.svg`
