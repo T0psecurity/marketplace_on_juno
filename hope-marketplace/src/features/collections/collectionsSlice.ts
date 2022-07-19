@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { resourceLimits } from "worker_threads";
-import Collections, { MarketplaceInfo } from "../../constants/Collections";
+import Collections, {
+  CollectionIds,
+  MarketplaceInfo,
+} from "../../constants/Collections";
+import { NFTPriceType } from "../../types/nftPriceTypes";
 
 export type CollectionStateType = {
   mintCheck: boolean[];
@@ -10,26 +14,32 @@ export type CollectionStateType = {
   imageUrl: string;
   myMintedNfts: number | null;
   price: number;
-  tradingInfo?: {
-    junoMax?: number;
-    junoMin?: number;
-    junoTotal: number;
-    hopeMax?: number;
-    hopeMin?: number;
-    hopeTotal: number;
-    rawMax?: number;
-    rawMin?: number;
-    rawTotal: number;
-    netaMax?: number;
-    netaMin?: number;
-    netaTotal: number;
-  };
+  // tradingInfo?: {
+  //   junoMax?: number;
+  //   junoMin?: number;
+  //   junoTotal: number;
+  //   hopeMax?: number;
+  //   hopeMin?: number;
+  //   hopeTotal: number;
+  //   rawMax?: number;
+  //   rawMin?: number;
+  //   rawTotal: number;
+  //   netaMax?: number;
+  //   netaMin?: number;
+  //   netaTotal: number;
+  // };
+  tradingInfo?: Record<
+    `${NFTPriceType}Max` | `${NFTPriceType}Min` | `${NFTPriceType}Total`,
+    number
+  >;
   saleHistory?: any[];
   mintInfo?: {
     startMintTime: number;
     mintPeriod: number;
   };
 };
+
+export type TotalStateType = { [key in CollectionIds]: CollectionStateType };
 
 export const DEFAULT_COLLECTION_STATE = {
   mintCheck: [],
@@ -42,7 +52,7 @@ export const DEFAULT_COLLECTION_STATE = {
   saleHistory: [],
 };
 
-let initialState: { [key: string]: CollectionStateType } = {};
+let initialState: TotalStateType = {} as TotalStateType;
 
 Collections.forEach((collection: MarketplaceInfo) => {
   initialState[collection.collectionId] = DEFAULT_COLLECTION_STATE;
@@ -54,7 +64,7 @@ export const collectionSlice = createSlice({
   reducers: {
     setCollectionState: (state, action: PayloadAction<[string, any]>) => {
       const [key, data] = action.payload;
-      state[key] = data;
+      state[key as CollectionIds] = data;
     },
   },
 });

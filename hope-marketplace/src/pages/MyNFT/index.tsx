@@ -20,8 +20,8 @@ const MyNFT: React.FC = () => {
     const listedKey = `${collectionId}_listed`;
     if (nfts[collectionId] && nfts[collectionId].length)
       unlistedNFTs = unlistedNFTs.concat(nfts[collectionId]);
-    if (nfts[listedKey] && nfts[listedKey].length)
-      listedNFTs = listedNFTs.concat(nfts[listedKey]);
+    if ((nfts as any)[listedKey] && (nfts as any)[listedKey].length)
+      listedNFTs = listedNFTs.concat((nfts as any)[listedKey]);
   });
 
   return (

@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { resourceLimits } from "worker_threads";
-import Collections, { MarketplaceInfo } from "../../constants/Collections";
+import Collections, {
+  CollectionIds,
+  MarketplaceInfo,
+} from "../../constants/Collections";
 
 // const initialState = {
 //   unlistedNFTs: [],
@@ -16,13 +19,19 @@ import Collections, { MarketplaceInfo } from "../../constants/Collections";
 //     id:""
 //   },
 // };
+type NFTsStateType = Record<
+  | `${CollectionIds}`
+  | `${CollectionIds}_listed`
+  | `${CollectionIds}_marketplace`,
+  any
+>;
 
-let initialState: { [key: string]: any } = {};
+let initialState: NFTsStateType = {} as NFTsStateType;
 
 Collections.forEach((collection: MarketplaceInfo) => {
-  initialState[collection.collectionId] = [];
-  initialState[`${collection.collectionId}_listed`] = [];
-  initialState[`${collection.collectionId}_marketplace`] = [];
+  (initialState as any)[collection.collectionId] = [];
+  (initialState as any)[`${collection.collectionId}_listed`] = [];
+  (initialState as any)[`${collection.collectionId}_marketplace`] = [];
 });
 
 export const nftSlice = createSlice({
@@ -31,7 +40,7 @@ export const nftSlice = createSlice({
   reducers: {
     setNFTs: (state, action: PayloadAction<[string, any]>) => {
       const [key, data] = action.payload;
-      state[key] = data;
+      (state as any)[key] = data;
     },
     // setUnlistedNFTs: (state, action: PayloadAction<[]>) => {
     //   state.unlistedNFTs = action.payload;

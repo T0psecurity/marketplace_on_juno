@@ -6,7 +6,7 @@ import NFTContainer from "../../components/NFTContainer";
 import NFTIntroduction from "../../components/NFTIntroduction";
 import { NFTItemStatus } from "../../components/NFTItem";
 import { Title } from "../../components/PageTitle";
-import { getCollectionById } from "../../constants/Collections";
+import { getCollectionById, CollectionIds } from "../../constants/Collections";
 import { getCustomTokenId } from "../../hook/useFetch";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import ActivityList from "./AcitivityList";
@@ -32,7 +32,7 @@ const Marketplace: React.FC = () => {
   const [expandedFilter, setExpandedFilter] = useState<boolean>(isXl);
   const [filterOption, setFilterOption] = useState<FilterOptions>();
   const { search } = useLocation();
-  const collectionId = new URLSearchParams(search).get("id");
+  const collectionId = new URLSearchParams(search).get("id") || "";
 
   useEffect(() => {
     setExpandedFilter(isXl);
@@ -45,10 +45,13 @@ const Marketplace: React.FC = () => {
 
   const marketplaceNFTs = useAppSelector((state) => {
     // console.log("nfts", state.nfts);
-    return state.nfts[`${targetCollection.collectionId}_marketplace`] || [];
+    return (
+      (state.nfts as any)[`${targetCollection.collectionId}_marketplace`] || []
+    );
   });
   const saleHistory = useAppSelector(
-    (state) => state.collectionStates[collectionId || ""]?.saleHistory
+    (state) =>
+      state.collectionStates[collectionId as CollectionIds]?.saleHistory
   );
 
   const metaDataOptions = useMemo(() => {
@@ -136,7 +139,7 @@ const Marketplace: React.FC = () => {
             )}
             {selectedTab === MarketplaceTabs.ACTIVITY && (
               <ActivityList
-                collectionId={collectionId || ""}
+                collectionId={collectionId as CollectionIds}
                 history={filteredHistory}
               />
             )}

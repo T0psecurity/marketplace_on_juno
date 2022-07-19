@@ -1,8 +1,5 @@
-import { CollectionStateType } from "../features/collections/collectionsSlice";
-import {
-  LogicParamsInterface,
-  // MintLogics
-} from "./mintLogic";
+import { NFTPriceType } from "../types/nftPriceTypes";
+import { MintLogicItemInterface, MintLogics } from "./mintLogic";
 
 export interface SocialLinks {
   discord: string;
@@ -10,19 +7,19 @@ export interface SocialLinks {
   twitter: string;
 }
 
-export enum StatisticKeys {
-  "total" = "total",
-  "itemsOnSale" = "itemsOnSale",
-  "hopeFloorPrice" = "hopeFloorPrice",
-  "hopeVolume" = "hopeVolume",
-  "junoFloorPrice" = "junoFloorPrice",
-  "junoVolume" = "junoVolume",
-  "rawFloorPrice" = "rawFloorPrice",
-  "netaFloorPrice" = "netaFloorPrice",
-  "totalVolumeInJuno" = "totalVolumeInJuno",
+export type FloorPriceType = Record<`${NFTPriceType}FloorPrice`, number>;
+export interface VolumePriceType
+  extends Record<`${NFTPriceType}Volume`, number> {
+  totalVolumeInJuno: number;
 }
 
-export type StatisticOption = { [key in StatisticKeys]?: boolean };
+export interface StatisticSettings extends FloorPriceType, VolumePriceType {
+  total: string;
+  owner: string;
+  itemsOnSale: string;
+}
+
+export type StatisticOption = { [key in keyof StatisticSettings]?: boolean };
 
 export interface MarketplaceBasicInfo {
   imageUrl: string;
@@ -30,7 +27,7 @@ export interface MarketplaceBasicInfo {
   logoUrl?: string;
   title: string;
   creator: string;
-  collectionId: string;
+  collectionId: CollectionIds;
   description: string;
   nftContract: string;
   mintContract: string;
@@ -48,11 +45,26 @@ export interface MarketplaceMintInfo {
   mintImage: string;
   mintDate?: string;
   mintUrl?: string;
-  mintLogic?: (params: LogicParamsInterface) => Promise<CollectionStateType>;
+  mintLogic?: MintLogicItemInterface;
 }
 
 export interface MarketplaceInfo extends MarketplaceBasicInfo {
   mintInfo?: MarketplaceMintInfo;
+}
+
+export enum CollectionIds {
+  HOPEGALAXYI = "hopegalaxy1",
+  MINTPASSI = "mintpass1",
+  MINTPASSII = "mintpass2",
+  JUNOPUNKS = "junopunks",
+  NETANOTS = "netanots",
+  SUNNYSIDE = "sunnyside",
+  JUNOFARMING = "junofarming",
+  BORED = "bored",
+  CRYPTOGIRLS = "cryptogirls",
+  GOBLIN = "goblin",
+  WITCHES = "witches",
+  ROMANS = "romans",
 }
 
 const Collections: MarketplaceInfo[] = [
@@ -62,7 +74,7 @@ const Collections: MarketplaceInfo[] = [
     creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/HopeGalaxy.png",
     backgroundUrl: "/marketplace-backgrounds/hopeBackground.png",
-    collectionId: "hopegalaxy1",
+    collectionId: CollectionIds.HOPEGALAXYI,
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmRnRFS19fbs8Bo9VxSKxR3DAJfBqmYNiXPapQKhDTDku6/_metadata.json",
     nftContract:
@@ -90,7 +102,7 @@ const Collections: MarketplaceInfo[] = [
     creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/Collection.png",
     backgroundUrl: "/marketplace-backgrounds/background.png",
-    collectionId: "mintpass1",
+    collectionId: CollectionIds.MINTPASSI,
     nftContract:
       "juno1ccl3kw74hl3ez4ljhx0qzwe7hl8egqcsc2mcjkgga3af86jjek0q9645r8",
     mintContract: "",
@@ -116,7 +128,7 @@ const Collections: MarketplaceInfo[] = [
     imageUrl: "/backgrounds/MintPass2.png",
     backgroundUrl: "/marketplace-backgrounds/MintPass2.png",
     logoUrl: "/logos/mintPass2.png",
-    collectionId: "mintpass2",
+    collectionId: CollectionIds.MINTPASSII,
     nftContract:
       "juno1x5kqvep2fq5sgvwwjn9uctzn0ts8vxnrtalxjucs5juu07hxxsvqgseuhr",
     mintContract: "",
@@ -141,7 +153,7 @@ const Collections: MarketplaceInfo[] = [
     imageUrl: "/backgrounds/juno_punks.png",
     backgroundUrl: "/marketplace-backgrounds/JunoPunks.png",
     logoUrl: "/logos/JunoPunks.gif",
-    collectionId: "junopunks",
+    collectionId: CollectionIds.JUNOPUNKS,
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmTxetzZAqvhFrVVf1wQBx8hFrE8AnN85G5WvB489d81wV/_metadata.json",
     nftContract:
@@ -172,7 +184,7 @@ const Collections: MarketplaceInfo[] = [
     imageUrl: "/backgrounds/neta_nots.png",
     backgroundUrl: "/marketplace-backgrounds/nots.png",
     logoUrl: "/logos/nots.jpg",
-    collectionId: "netanots",
+    collectionId: CollectionIds.NETANOTS,
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmZMiSthAoW2qikg5LNz2TeWbf79Coyd1RtMbSGLSMEyhD",
     nftContract:
@@ -200,7 +212,7 @@ const Collections: MarketplaceInfo[] = [
     imageUrl: "/backgrounds/Sunnyside.png",
     backgroundUrl: "/marketplace-backgrounds/Sunnyside.png",
     logoUrl: "/logos/SunnysideNightlife.gif",
-    collectionId: "sunnyside",
+    collectionId: CollectionIds.SUNNYSIDE,
     nftContract:
       "juno199k5526srh0l845tt5dsyk8up22q729hc8n6w9njnqvyfwp7sjrskvvm3e",
     mintContract:
@@ -230,7 +242,7 @@ const Collections: MarketplaceInfo[] = [
     imageUrl: "/backgrounds/juno_farming.png",
     backgroundUrl: "/marketplace-backgrounds/JunoFarming.png",
     logoUrl: "/logos/JunoFarming.png",
-    collectionId: "junofarming",
+    collectionId: CollectionIds.JUNOFARMING,
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmW9347NYmMus1GWyw8jCRYmfw8nzV4ntPJ5WShkRvhyao/_metadata.json",
     nftContract:
@@ -263,7 +275,7 @@ const Collections: MarketplaceInfo[] = [
     imageUrl: "/backgrounds/bored.png",
     backgroundUrl: "/marketplace-backgrounds/bored.png",
     logoUrl: "/logos/bored.gif",
-    collectionId: "bored",
+    collectionId: CollectionIds.BORED,
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmekySg1tU6GHCRKrtey2G7N6Q9cKxUomrzHxU5HQS5hnz/_metadata.json",
     nftContract:
@@ -292,7 +304,7 @@ const Collections: MarketplaceInfo[] = [
     imageUrl: "/backgrounds/cryptogirls.png",
     backgroundUrl: "/marketplace-backgrounds/cryptogirls.png",
     logoUrl: "/logos/cryptogirls.png",
-    collectionId: "cryptogirls",
+    collectionId: CollectionIds.CRYPTOGIRLS,
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmYVs4Y4kTz7B8rXtocgnitc5msBPqD3U6yh33cxafELDj/_metadata.json",
     nftContract:
@@ -321,7 +333,7 @@ const Collections: MarketplaceInfo[] = [
     imageUrl: "/backgrounds/goblin.png",
     backgroundUrl: "/marketplace-backgrounds/goblin.png",
     logoUrl: "/logos/goblin.gif",
-    collectionId: "goblin",
+    collectionId: CollectionIds.GOBLIN,
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmaLapkMZTmRpRtcCZAGedipMdiZxLaCy4pRS56RQ9wffW/_metadata.json",
     nftContract:
@@ -351,7 +363,7 @@ const Collections: MarketplaceInfo[] = [
     imageUrl: "/backgrounds/witches.jpg",
     backgroundUrl: "/marketplace-backgrounds/witches.jpg",
     logoUrl: "/logos/witches.jpg",
-    collectionId: "witches",
+    collectionId: CollectionIds.WITCHES,
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmVqucWUnQTAu5V3V4ubZGs7zhiiT28PQ797zmYzEh5C4w/_metadata.json",
     nftContract:
@@ -375,37 +387,37 @@ const Collections: MarketplaceInfo[] = [
     },
     isLaunched: true,
   },
-  // {
-  //   title: "Test Collection",
-  //   creator: "Juno Farming",
-  //   imageUrl: "/backgrounds/witches.jpg",
-  //   backgroundUrl: "/marketplace-backgrounds/witches.jpg",
-  //   logoUrl: "/logos/witches.jpg",
-  //   collectionId: "test",
-  //   metaDataUrl:
-  //     "https://hopegalaxy.mypinata.cloud/ipfs/QmVqucWUnQTAu5V3V4ubZGs7zhiiT28PQ797zmYzEh5C4w/_metadata.json",
-  //   nftContract:
-  //     "",
-  //   mintContract:
-  //     "juno1r3haf7uz8hvmegyffd74994fpdlj0yl7s0a5w0qaj68ktxt83yzqzxm7ta",
-  //   marketplaceContract: [],
-  //   socialLinks: {
-  //     discord: "https://discord.gg/BfKPacc5jF",
-  //     website: "https://www.hopers.io/",
-  //     twitter: "https://twitter.com/JunoFarming",
-  //   },
-  //   description:
-  //     "2nd collection of JunoFarming NFT, which will allow to generate rewards for Junofarming stakers through minting and trading. Furthermore, anyone who buys 1 NFT of the 2nd collection will have exclusive access to the White List for the 3rd collection.",
-  //   mintInfo: {
-  //     totalNfts: 348,
-  //     royalties: "7% + 3%",
-  //     price: "8 $JUNO",
-  //     mintImage: "/mint-images/witches.jpg",
-  //     mintDate: "2022-07-13",
-  //     mintLogic: MintLogics.logic1,
-  //   },
-  //   isLaunched: true,
-  // },
+  {
+    title: "The Romans NFT",
+    creator: "The Rmomans NFT",
+    imageUrl: "/backgrounds/romans.png",
+    backgroundUrl: "/marketplace-backgrounds/romans.png",
+    logoUrl: "/logos/romans.gif",
+    collectionId: CollectionIds.ROMANS,
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/Qmf1hmTfjwtv1LynEvGUpXRQdterufhBNm2pEmhubDYkb9/_metadata.json",
+    nftContract:
+      "juno1vuvesdre2w8k0e0t5z584qsm8w3dfpafg8c0rkc08w7ea2zsexzq4u63kd",
+    mintContract:
+      "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/VEQtM2Hc",
+      website: "http://hopers.io/",
+      twitter: "https://twitter.com/RomansNFTs",
+    },
+    description:
+      "555 Romans Citizens #NFT on #JUNO The Romans have neither oil nor kebabs we have the sword 🗡",
+    mintInfo: {
+      totalNfts: 555,
+      royalties: "10%",
+      price: "1.55 $JUNO",
+      mintImage: "/mint-images/romans.gif",
+      mintDate: "2022-07-19",
+      mintLogic: MintLogics.logic1,
+    },
+    isLaunched: true,
+  },
 ];
 
 export const getCollectionById = (id: string): MarketplaceInfo => {
@@ -419,7 +431,7 @@ export const MarketplaceContracts: string[] = [
 ];
 
 export const MintContracts: string[] = [
-  "juno1r3haf7uz8hvmegyffd74994fpdlj0yl7s0a5w0qaj68ktxt83yzqzxm7ta",
+  "juno1c9dr05cryh2fn5hwr4aa9rhzfy5vxdmq3uc3xfrku9e5cs8sqcrq5r5g6d",
 ];
 
 export default Collections;

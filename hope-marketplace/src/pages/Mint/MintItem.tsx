@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { TIME_DIFF_BETWEEN_ONCHAIN } from ".";
 import { useAppSelector } from "../../app/hooks";
 import {
   getCollectionById,
@@ -118,17 +119,58 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const fontSize = useResponsiveSize(
     ELEMENT_SIZE.DETAIL_BLOCK_TITLE
   ).toString();
+
   const operationItemSize = useResponsiveSize(
     ELEMENT_SIZE.OPERATION_ITEM_WIDTH
   ).toString();
 
+  const isSoldOut: boolean =
+    !!collectionState?.mintedNfts &&
+    collectionState?.mintedNfts >= collectionState?.totalNfts;
+
+  const includesPrivateMint =
+    (collectionState?.mintInfo?.mintPeriod || 0) > 0 &&
+    (collectionState?.mintInfo?.startMintTime || 0) > 0;
+  const { passedPrivateMint, beforePrivateMint, timeLeft } = useMemo(() => {
+    let isPassed = false,
+      isBefore = false,
+      left = "";
+    if (
+      collectionState?.mintInfo &&
+      (collectionState.mintInfo?.startMintTime || 0) > 0
+    ) {
+      const startMintTime = new Date(
+        (collectionState?.mintInfo.startMintTime + TIME_DIFF_BETWEEN_ONCHAIN) *
+          1000
+      );
+      const endMintTime = new Date(
+        (collectionState.mintInfo.startMintTime +
+          (collectionState.mintInfo.mintPeriod || 0)) *
+          1000
+      );
+      isPassed = Number(crrTime) > Number(endMintTime);
+      isBefore = Number(crrTime) < Number(startMintTime);
+      if (isBefore) {
+        left = timeDistance(crrTime, startMintTime);
+      } else if (!isPassed) {
+        left = timeDistance(crrTime, endMintTime);
+      }
+    }
+    return {
+      passedPrivateMint: isPassed,
+      beforePrivateMint: isBefore,
+      timeLeft: left,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collectionState, crrTime]);
+
   const handleMintNft = async () => {
-    // if (!mintItem.mintContract && !mintItem.mintInfo?.mintUrl) {
-    //   toast.error("Mint contract not found!");
-    //   return;
-    // }
     if (mintItem.mintInfo?.mintUrl) {
       window.open(mintItem.mintInfo.mintUrl);
+      return;
+    }
+    if (beforePrivateMint) {
+      toast.error(`Mint is not started. ${timeLeft} left!`);
       return;
     }
     if (collectionState.totalNfts <= collectionState.mintedNfts) {
@@ -140,7 +182,11 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       if (item) mintIndexArray.push(index);
     });
     const selectedIndex = mintIndexArray.sort(() => 0.5 - Math.random()).pop();
-    const message = mintItem.mintContract
+    const message = targetCollection.mintInfo?.mintLogic?.getMintMessage
+      ? targetCollection.mintInfo?.mintLogic.getMintMessage({
+          collection: targetCollection,
+        })
+      : mintItem.mintContract
       ? {
           mint: { rand: `${(selectedIndex || 0) + 1}` },
         }
@@ -159,45 +205,6 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       toast.error("Fail!");
     }
   };
-
-  const isSoldOut: boolean =
-    !!collectionState.mintedNfts &&
-    collectionState.mintedNfts >= collectionState.totalNfts;
-
-  const includesPrivateMint =
-    (collectionState.mintInfo?.mintPeriod || 0) > 0 &&
-    (collectionState.mintInfo?.startMintTime || 0) > 0;
-  const { passedPrivateMint, beforePrivateMint, timeLeft } = useMemo(() => {
-    let isPassed = false,
-      isBefore = false,
-      left = "";
-    if (
-      collectionState.mintInfo &&
-      (collectionState.mintInfo?.mintPeriod || 0) > 0 &&
-      (collectionState.mintInfo?.startMintTime || 0) > 0
-    ) {
-      const startMintTime = new Date(
-        collectionState.mintInfo.startMintTime * 1000
-      );
-      const endMintTime = new Date(
-        (collectionState.mintInfo.startMintTime +
-          collectionState.mintInfo.mintPeriod) *
-          1000
-      );
-      isPassed = Number(crrTime) > Number(endMintTime);
-      isBefore = Number(crrTime) < Number(startMintTime);
-      if (isBefore) {
-        left = timeDistance(crrTime, startMintTime);
-      } else if (!isPassed) {
-        left = timeDistance(crrTime, endMintTime);
-      }
-    }
-    return {
-      passedPrivateMint: isPassed,
-      beforePrivateMint: isBefore,
-      timeLeft: left,
-    };
-  }, [collectionState, crrTime]);
 
   const buttonString = useMemo(() => {
     let result = "";
@@ -273,9 +280,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
           </FlexColumn>
           <MintButton
             soldOut={isSoldOut}
-            backgroundColor={
-              includesPrivateMint && beforePrivateMint ? "#FCFF5C" : ""
-            }
+            backgroundColor={beforePrivateMint ? "#FCFF5C" : ""}
             disabled={
               !targetCollection.isLaunched ||
               // (mintItem.mintContract &&
@@ -286,7 +291,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
             onClick={handleMintNft}
           >
             {buttonString}
-            {includesPrivateMint && !passedPrivateMint && (
+            {timeLeft && (
               <LeftTimeContainer>
                 {beforePrivateMint
                   ? `TIME LEFT ${timeLeft}`
