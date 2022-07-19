@@ -154,14 +154,10 @@ const useFetch = () => {
           let totalVolume: any = {};
           (
             Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
-          ).forEach((key) => (totalVolume[`${key.toLowerCase()}Total`] = 0));
+          ).forEach((key) => (totalVolume[`${NFTPriceType[key]}Total`] = 0));
           tradingInfoResult?.forEach((item: any) => {
-            const tokenType = (
-              Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
-            ).filter((x) => NFTPriceType[x] === item.denom)[0];
-            totalVolume[`${tokenType.toLowerCase()}Total`] =
-              (totalVolume[`${tokenType.toLowerCase()}Total`] || 0) +
-              item.amount / 1e6;
+            totalVolume[`${item.denom}Total`] =
+              (totalVolume[`${item.denom}Total`] || 0) + item.amount / 1e6;
           });
 
           storeObject.tradingInfo = totalVolume;
@@ -181,13 +177,14 @@ const useFetch = () => {
             (
               Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
             ).forEach((key) => {
-              const totalKey = `${key.toLowerCase()}Total`;
+              const totalKey = `${NFTPriceType[key]}Total`;
+              const minKey = `${NFTPriceType[key]}Min`;
+              const maxKey = `${NFTPriceType[key]}Max`;
+
               crrTradingInfo[totalKey] =
                 (crrTradingInfo[totalKey] || 0) +
                 +(tradingInfoResult[`total_${key.toLowerCase()}`] || "0") / 1e6;
 
-              const minKey = `${key.toLowerCase()}Min`;
-              const maxKey = `${key.toLowerCase()}Max`;
               crrTradingInfo[minKey] = getMin(
                 +(tradingInfoResult[`min_${key.toLowerCase()}`] || "0") / 1e6
               );

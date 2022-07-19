@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { resourceLimits } from "worker_threads";
 import Collections, { MarketplaceInfo } from "../../constants/Collections";
+import { NFTPriceType } from "../../types/nftPriceTypes";
 
 export type CollectionStateType = {
   mintCheck: boolean[];
@@ -10,20 +11,24 @@ export type CollectionStateType = {
   imageUrl: string;
   myMintedNfts: number | null;
   price: number;
-  tradingInfo?: {
-    junoMax?: number;
-    junoMin?: number;
-    junoTotal: number;
-    hopeMax?: number;
-    hopeMin?: number;
-    hopeTotal: number;
-    rawMax?: number;
-    rawMin?: number;
-    rawTotal: number;
-    netaMax?: number;
-    netaMin?: number;
-    netaTotal: number;
-  };
+  // tradingInfo?: {
+  //   junoMax?: number;
+  //   junoMin?: number;
+  //   junoTotal: number;
+  //   hopeMax?: number;
+  //   hopeMin?: number;
+  //   hopeTotal: number;
+  //   rawMax?: number;
+  //   rawMin?: number;
+  //   rawTotal: number;
+  //   netaMax?: number;
+  //   netaMin?: number;
+  //   netaTotal: number;
+  // };
+  tradingInfo?: Record<
+    `${NFTPriceType}Max` | `${NFTPriceType}Min` | `${NFTPriceType}Total`,
+    number
+  >;
   saleHistory?: any[];
   mintInfo?: {
     startMintTime: number;

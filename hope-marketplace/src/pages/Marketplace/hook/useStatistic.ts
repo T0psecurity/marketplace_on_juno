@@ -70,7 +70,7 @@ const useStatistic = (collectionId: string, items: any) => {
     const hopeVolume = collectionState.tradingInfo?.hopeTotal || 0;
     const rawVolume = collectionState.tradingInfo?.rawTotal || 0;
     const netaVolume = collectionState.tradingInfo?.netaTotal || 0;
-    const junoVolume = collectionState.tradingInfo?.junoTotal || 0;
+    const junoVolume = collectionState.tradingInfo?.ujunoTotal || 0;
 
     const hopeUsd = tokenPrices["hope"]?.market_data.current_price?.usd || 0;
     const rawUsd = tokenPrices["raw"]?.market_data.current_price?.usd || 0;
