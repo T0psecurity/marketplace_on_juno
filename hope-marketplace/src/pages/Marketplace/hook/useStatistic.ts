@@ -58,8 +58,9 @@ const useStatistic = (collectionId: string, items: any) => {
     (Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>).forEach(
       (key) => {
         const crrVolume =
-          (collectionState.tradingInfo as any)?.[`${NFTPriceType[key]}Total`] ||
-          0;
+          (collectionState?.tradingInfo as any)?.[
+            `${NFTPriceType[key]}Total`
+          ] || 0;
         const crrUsd =
           tokenPrices[NFTPriceType[key]]?.market_data.current_price?.usd || 0;
         (result as any)[`${NFTPriceType[key]}Volume`] = crrVolume;

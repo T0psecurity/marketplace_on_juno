@@ -48,7 +48,7 @@ const Home: React.FC = () => {
       (Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>).forEach(
         (key) => {
           const crrVolume =
-            (crrCollectionState.tradingInfo as any)?.[
+            (crrCollectionState?.tradingInfo as any)?.[
               `${NFTPriceType[key]}Total`
             ] || 0;
           const crrUsd =

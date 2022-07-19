@@ -74,7 +74,7 @@ const ExploreMarketplace: React.FC = () => {
       (Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>).forEach(
         (key) => {
           const crrVolume =
-            (collectionState.tradingInfo as any)?.[
+            (collectionState?.tradingInfo as any)?.[
               `${NFTPriceType[key]}Total`
             ] || 0;
           const crrUsd =
