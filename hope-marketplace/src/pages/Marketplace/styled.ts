@@ -186,7 +186,54 @@ export const StatisticWrapper = styled.div`
   justify-content: center;
   align-items: center;
   border-collapse: collapse;
+  flex-wrap: wrap;
   margin: 10px 0;
+`;
+
+export const SelectItem = styled.div<{ checked?: boolean }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 200px;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  ${({ checked }) =>
+    checked &&
+    css`
+      background-color: #6baf33;
+    `}
+  &: hover {
+    background-color: rgba(107, 175, 51, 0.5);
+  }
+`;
+
+export const SelectItemTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const SelectItemContent = styled.div<{
+  fontSize?: string;
+  bold?: boolean;
+}>`
+  ${({ bold }) =>
+    bold &&
+    css`
+      font-weight: bold;
+    `}
+`;
+
+export const CustomControl = styled.div`
+  display: flex;
+  align-items: center;
+  ${SelectItem} {
+    background-color: unset;
+    &:hover {
+      background-color: unset;
+    }
+  }
 `;
 
 export const StatisticItem = styled.div<{ isMobile?: boolean }>`
