@@ -103,10 +103,10 @@ const Home: React.FC = () => {
           </StatisticContent>
           <StatisticContent>Items on Sale</StatisticContent>
         </StatisticItem>
-        <StatisticItem>
+        {/* <StatisticItem>
           <StatisticContent bold>2,95K</StatisticContent>
           <StatisticContent>Transaction</StatisticContent>
-        </StatisticItem>
+        </StatisticItem> */}
       </StatisticContainer>
       {!isMobile && <Tokens />}
     </Wrapper>
