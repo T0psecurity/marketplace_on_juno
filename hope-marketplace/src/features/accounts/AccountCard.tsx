@@ -10,6 +10,7 @@ import {
   setSendCoinsOpen,
 } from "./accountsSlice";
 import styles from "./AccountCard.module.css";
+import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 
 interface AccountCardProps {
   icon?: JSX.Element;
@@ -35,7 +36,7 @@ export const AccountCard: FC<AccountCardProps> = ({
   onConfigChange,
 }) => {
   const dispatch = useAppDispatch();
-  const config = useAppSelector((state) => state.connection.config);
+  const config = ChainConfigs[ChainTypes.JUNO];
   const balance = useAppSelector(balanceString(account?.address));
   const [copyTooltip, setCopyTooltip] = useState("Copy to clipboard");
 

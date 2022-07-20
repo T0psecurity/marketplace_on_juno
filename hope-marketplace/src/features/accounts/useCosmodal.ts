@@ -1,16 +1,17 @@
 import { coin } from "@cosmjs/proto-signing";
 import { useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { AccountType, setKeplrAccount } from "../accounts/accountsSlice";
 import { Keplr } from "@keplr-wallet/types";
 import { KeplrWalletConnectV1, useWalletManager } from "cosmodal";
+import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 
 // let savedWallet: Keplr | KeplrWalletConnectV1;
 
 export function useCosmodal(): {
   connect: () => Promise<void>;
 } {
-  const config = useAppSelector((state) => state.connection.config);
+  const config = ChainConfigs[ChainTypes.JUNO];
   const { getWallet } = useWalletManager();
   const dispatch = useAppDispatch();
 

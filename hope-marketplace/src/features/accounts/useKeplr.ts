@@ -1,10 +1,11 @@
 import { coin } from "@cosmjs/proto-signing";
 import { useCallback, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch } from "../../app/hooks";
 import { AccountType, setKeplrAccount } from "../accounts/accountsSlice";
 import { ChainInfo, Keplr } from "@keplr-wallet/types";
 import { pushMessage } from "../messages/messagesSlice";
 import { fromMicroDenom } from "../../util/coins";
+import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 
 export const CosmosCoinType = 118;
 
@@ -102,7 +103,7 @@ export async function getKeplr(): Promise<Keplr> {
 export function useKeplr(): {
   connect: () => Promise<void>;
 } {
-  const config = useAppSelector((state) => state.connection.config);
+  const config = ChainConfigs[ChainTypes.JUNO];
   const dispatch = useAppDispatch();
 
   const getAccount = useCallback(async (): Promise<void> => {

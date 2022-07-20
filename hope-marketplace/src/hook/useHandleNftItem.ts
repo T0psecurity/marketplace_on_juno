@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { showCustomToast, ToastType } from "../components/CustomToast";
 import {
   getCollectionById,
   MarketplaceContracts,
@@ -151,7 +152,7 @@ const useHandleNftItem = () => {
             message
           );
         }
-        toast.success("Success!");
+        showCustomToast(item, ToastType.BUY);
         refresh();
       } catch (err) {
         console.error(err);

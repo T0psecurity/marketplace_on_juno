@@ -24,6 +24,7 @@ import {
 import connectionManager from "../features/connection/connectionManager";
 import { toMicroAmount } from "../util/coins";
 import { NFTPriceType } from "../types/nftPriceTypes";
+import { ChainConfigs, ChainTypes } from "../constants/ChainTypes";
 
 type TokenContractType = {
   [key in NFTPriceType]: string;
@@ -54,7 +55,7 @@ const useContract = () => {
 
   const state = useSelector((state: any) => state);
   const { offlineSigner, signingCosmWasmClient } = useWallet(
-    state.connection.config.chainId
+    ChainConfigs[ChainTypes.JUNO].chainId
   );
 
   const initContracts = useCallback(() => {
@@ -114,7 +115,7 @@ const useContract = () => {
         return result;
       } else {
         const client = await connectionManager.getQueryClient(
-          state.connection.config
+          ChainConfigs[ChainTypes.JUNO]
         );
         const result = await client.queryContractSmart(
           contractAddress,
@@ -123,7 +124,7 @@ const useContract = () => {
         return result;
       }
     },
-    [state, signingCosmWasmClient]
+    [signingCosmWasmClient]
   );
 
   const runExecute = useCallback(
@@ -162,7 +163,7 @@ const useContract = () => {
       //   client instanceof KeplrWalletConnectV1
       //     ? await client.getOfflineSignerOnlyAmino(config.chainId)
       //     : await client.getOfflineSignerAuto(config.chainId);
-      const config = state.connection.config;
+      const config = ChainConfigs[ChainTypes.JUNO];
 
       const cwClient = await SigningCosmWasmClient.connectWithSigner(
         config["rpcEndpoint"],
@@ -201,9 +202,9 @@ const useContract = () => {
           ? coins(
               toMicroAmount(
                 executeFunds,
-                state.connection.config["coinDecimals"]
+                ChainConfigs[ChainTypes.JUNO]["coinDecimals"]
               ),
-              state.connection.config["microDenom"]
+              ChainConfigs[ChainTypes.JUNO]["microDenom"]
             )
           : undefined
       );

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { RootState } from "../../app/store";
+import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 import { pushMessage } from "../messages/messagesSlice";
 import connectionManager from "./connectionManager";
 import presets from "./presets.json";
@@ -35,8 +35,7 @@ export const checkConnection = createAsyncThunk<
     { testing } = { testing: false },
     { dispatch, getState }
   ): Promise<void> => {
-    const state = getState() as RootState;
-    const config = state.connection.config;
+    const config = ChainConfigs[ChainTypes.JUNO];
 
     dispatch(setConnectionStatus(ConnectionStatus.Connecting));
     try {

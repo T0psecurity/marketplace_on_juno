@@ -6,6 +6,7 @@ import { fromMicroCoin, toMicroAmount } from "../../util/coins";
 import { pushMessage } from "../messages/messagesSlice";
 import { FaucetClient } from "@cosmjs/faucet-client";
 import connectionManager from "../connection/connectionManager";
+import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 
 export enum AccountType {
   Basic,
@@ -66,8 +67,7 @@ export const importAccount = createAsyncThunk(
     },
     { getState, dispatch }
   ): Promise<BasicAccount> => {
-    const state = getState() as RootState;
-    const config = state.connection.config;
+    const config = ChainConfigs[ChainTypes.JUNO];
     try {
       const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
         prefix: config["addressPrefix"],
@@ -101,8 +101,7 @@ export const checkContract = createAsyncThunk(
     account: Contract,
     { getState }
   ): Promise<Partial<Contract> | null> => {
-    const state = getState() as RootState;
-    const config = state.connection.config;
+    const config = ChainConfigs[ChainTypes.JUNO];
     const client = await connectionManager.getQueryClient(config);
     try {
       const contract = await client.getContract(account.address);
@@ -127,8 +126,7 @@ export const checkContract = createAsyncThunk(
 export const importContract = createAsyncThunk(
   "accounts/importContract",
   async (addresses: string[], { getState, dispatch }): Promise<Contract[]> => {
-    const state = getState() as RootState;
-    const config = state.connection.config;
+    const config = ChainConfigs[ChainTypes.JUNO];
     const client = await connectionManager.getQueryClient(config);
     try {
       let result: Contract[] = [];
@@ -180,7 +178,7 @@ export const uploadContract = createAsyncThunk(
     { getState, dispatch }
   ): Promise<void> => {
     const state = getState() as RootState;
-    const config = state.connection.config;
+    const config = ChainConfigs[ChainTypes.JUNO];
     const account = state.accounts.accountList[address];
 
     const client = await connectionManager.getSigningClient(account, config);
@@ -234,7 +232,7 @@ export const instantiateContract = createAsyncThunk(
     { getState, dispatch }
   ): Promise<void> => {
     const state = getState() as RootState;
-    const config = state.connection.config;
+    const config = ChainConfigs[ChainTypes.JUNO];
     const account = state.accounts.accountList[address];
     const client = await connectionManager.getSigningClient(account, config);
     dispatch(
@@ -279,8 +277,7 @@ export const instantiateContract = createAsyncThunk(
 export const checkBalance = createAsyncThunk(
   "accounts/checkBalance",
   async (address: string, { getState }): Promise<Coin> => {
-    const state = getState() as RootState;
-    const config = state.connection.config;
+    const config = ChainConfigs[ChainTypes.JUNO];
     const denom: string = config["microDenom"];
     const client = await connectionManager.getQueryClient(config);
     return client.getBalance(address, denom);
@@ -290,8 +287,7 @@ export const checkBalance = createAsyncThunk(
 export const hitFaucet = createAsyncThunk(
   "accounts/hitFaucet",
   async (address: string, { getState, dispatch }): Promise<void> => {
-    const state = getState() as RootState;
-    const config = state.connection.config;
+    const config = ChainConfigs[ChainTypes.JUNO];
     const faucet = new FaucetClient(config["faucetEndpoint"]);
     dispatch(
       pushMessage({
@@ -341,7 +337,7 @@ export const sendCoins = createAsyncThunk(
   ): Promise<void> => {
     try {
       const state = getState() as RootState;
-      const config = customConfig ?? state.connection.config;
+      const config = customConfig ?? ChainConfigs[ChainTypes.JUNO];
       const senderAccount = state.accounts.accountList[sender];
 
       if (!sender) {
@@ -512,7 +508,7 @@ export const selectedAccount = (state: RootState) => {
 };
 
 export const balanceString = (address?: string) => (state: RootState) => {
-  const config = state.connection.config;
+  const config = ChainConfigs[ChainTypes.JUNO];
   if (!address) return `0${config["microDenom"]}`;
 
   const account = state.accounts.accountList[address];
