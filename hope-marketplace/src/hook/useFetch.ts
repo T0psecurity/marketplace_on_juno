@@ -95,7 +95,10 @@ const useFetch = () => {
         if (weights.length) {
           rarities = {};
           weights.forEach((item: any) => {
-            rarities[item.token_id] = { weight: item.weight, rank: item.rank };
+            rarities[item.token_id + 1] = {
+              weight: item.weight,
+              rank: item.rank,
+            };
           });
           dispatch(setRarityRankState([collection.collectionId, rarities]));
         }
