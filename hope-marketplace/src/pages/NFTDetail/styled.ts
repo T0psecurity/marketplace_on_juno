@@ -27,3 +27,10 @@ export const NFTItemAttributeItem = styled.div`
     align-self: center;
   }
 `;
+
+export const HorizontalDivider = styled.div`
+  background-color: #39c639;
+  height: 4px;
+  margin: 20px 5vw;
+  width: 100%;
+`;

@@ -1,4 +1,4 @@
-export enum PriceSortDirectionType {
+export enum SortDirectionType {
   "asc",
   "desc",
 }
@@ -40,7 +40,10 @@ export type MetaDataFilterOption = {
 };
 
 export type FilterOptions = {
-  price: PriceSortDirectionType;
+  sortOption: {
+    field: "price" | "rank";
+    direction: SortDirectionType;
+  };
   searchWord?: string;
   priceType?: string;
   metaDataFilterOption?: MetaDataFilterOption;

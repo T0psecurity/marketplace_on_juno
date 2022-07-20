@@ -23,6 +23,7 @@ import {
 } from "./styled";
 import ReactSelect from "react-select";
 import { NFTPriceType } from "../../types/nftPriceTypes";
+import { CollectionIds } from "../../constants/Collections";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -41,6 +42,12 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[item.collectionId]
+  );
+  const rarityRanks = useAppSelector(
+    (state) =>
+      state.rarityRank[item.collectionId as CollectionIds]?.[
+        Number(getTokenIdNumber(item.token_id))
+      ]
   );
   const [nftPrice, setNftPrice] = useState("");
   const [transferAdd, setTransferAdd] = useState("");
@@ -148,6 +155,12 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
         <DetailContent>{`${owner}${
           account?.address === owner ? " (YOU)" : ""
         }`}</DetailContent>
+        {rarityRanks && (
+          <>
+            <DetailTitle>Rarity Rank</DetailTitle>
+            <DetailContent>{`#${rarityRanks.rank}`}</DetailContent>
+          </>
+        )}
         {status !== "Sell" && (
           <>
             <DetailTitle>Price</DetailTitle>

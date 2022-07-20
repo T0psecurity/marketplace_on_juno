@@ -7,27 +7,6 @@ export const Wrapper = styled.div`
   height: 100%;
 `;
 
-export const CreatorContainer = styled.div`
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const Creator = styled.div`
-  margin-left: 5px;
-  color: #0057ff;
-`;
-
-export const CollectionDetail = styled.div`
-  font-size: 1em;
-  color: #a4a5a6;
-  padding: 0 20px;
-  margin: 10px 0;
-`;
-
 export const HorizontalDivider = styled.div`
   background-color: #39c639;
   height: 4px;
@@ -92,6 +71,14 @@ export const FilterResultPanel = styled.div<{ siblingHeight: number }>`
 export const SortContainer = styled.div`
   margin-top: 10px;
   width: 100%;
+`;
+
+export const SortIcon = styled.svg<{ desc: boolean }>`
+  cursor: pointer;
+  transition: 0.3s;
+  transform: rotate(${({ desc }) => (desc ? "180" : "0")}deg);
+  width: 20px;
+  margin: 10px;
 `;
 
 export const SearchWrapper = styled.div`
@@ -186,7 +173,54 @@ export const StatisticWrapper = styled.div`
   justify-content: center;
   align-items: center;
   border-collapse: collapse;
+  flex-wrap: wrap;
   margin: 10px 0;
+`;
+
+export const SelectItem = styled.div<{ checked?: boolean }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 200px;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  ${({ checked }) =>
+    checked &&
+    css`
+      background-color: #6baf33;
+    `}
+  &: hover {
+    background-color: rgba(107, 175, 51, 0.5);
+  }
+`;
+
+export const SelectItemTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const SelectItemContent = styled.div<{
+  fontSize?: string;
+  bold?: boolean;
+}>`
+  ${({ bold }) =>
+    bold &&
+    css`
+      font-weight: bold;
+    `}
+`;
+
+export const CustomControl = styled.div`
+  display: flex;
+  align-items: center;
+  ${SelectItem} {
+    background-color: unset;
+    &:hover {
+      background-color: unset;
+    }
+  }
 `;
 
 export const StatisticItem = styled.div<{ isMobile?: boolean }>`

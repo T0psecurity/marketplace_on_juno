@@ -1,11 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, MouseEventHandler } from "react";
+import ReactSelect, { components } from "react-select";
 
 import {
   // DEFAULT_STATUS_FILTER,
   FilterPanelProps,
   MarketplaceTabs,
   MetaDataFilterOption,
-  PriceSortDirectionType,
+  SortDirectionType,
   // StatusFilterButtonType,
   // StatusFilterType,
 } from "./types";
@@ -14,7 +15,7 @@ import {
   FilterWrapper,
   FilterMainContent,
   StyledButton as Button,
-  SortByPriceButton,
+  // SortByPriceButton,
   FilterContainer,
   FilterContainerTitle,
   // StatusFilterPanel,
@@ -28,9 +29,25 @@ import {
   FilterResultPanel,
   NftListTabs,
   NftListTab,
+  SortIcon,
 } from "./styled";
 import { NFTPriceType } from "../../types/nftPriceTypes";
 import SearchInputer from "../../components/SearchInputer";
+
+type SortType =
+  | {
+      value: "price";
+      label: "PRICE";
+    }
+  | { value: "rank"; label: "RANK" };
+
+const SortOptions: SortType[] = [
+  {
+    value: "price",
+    label: "PRICE",
+  },
+  { value: "rank", label: "RANK" },
+];
 
 const ArrowIcon = ({
   className,
@@ -98,6 +115,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     {}
   );
   const [isAscending, setIsAscending] = useState(true);
+  const [sortKey, setSortKey] = useState<SortType>({
+    value: "price",
+    label: "PRICE",
+  });
   const [searchWord, setSearchWord] = useState<string>("");
   const [priceType, setPriceType] = useState<string>("");
 
@@ -108,14 +129,16 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   useEffect(() => {
     onChangeFilterOption({
-      price: isAscending
-        ? PriceSortDirectionType.asc
-        : PriceSortDirectionType.desc,
+      sortOption: {
+        field: sortKey.value,
+        direction: isAscending ? SortDirectionType.asc : SortDirectionType.desc,
+      },
       searchWord,
       priceType,
       metaDataFilterOption: metaDataFilter,
     });
   }, [
+    sortKey,
     isAscending,
     searchWord,
     onChangeFilterOption,
@@ -123,7 +146,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     metaDataFilter,
   ]);
 
-  const handleSortByPrice = () => {
+  const handleSortByPrice: MouseEventHandler<any> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setIsAscending(!isAscending);
   };
 
@@ -160,6 +185,26 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   const handleChangeNftListTab = (selected: MarketplaceTabs) => {
     setSelectedTab(selected);
     onChangeNftListTab(selected);
+  };
+
+  const CustomSortIcon = ({ desc, ...props }: any) => (
+    <SortIcon
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 320 512"
+      desc={desc}
+      {...props}
+    >
+      <path d="M27.66 224h264.7c24.6 0 36.89-29.78 19.54-47.12l-132.3-136.8c-5.406-5.406-12.47-8.107-19.53-8.107c-7.055 0-14.09 2.701-19.45 8.107L8.119 176.9C-9.229 194.2 3.055 224 27.66 224z" />
+    </SortIcon>
+  );
+
+  const Control = ({ children, ...props }: any) => {
+    return (
+      <components.Control {...props}>
+        <CustomSortIcon onMouseDown={handleSortByPrice} desc={!isAscending} />
+        {children}
+      </components.Control>
+    );
   };
 
   return (
@@ -250,9 +295,20 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </NftListTabs>
           {selectedTab === MarketplaceTabs.ITEMS && (
             <SortContainer>
-              <SortByPriceButton onClick={handleSortByPrice}>{`Sort By ${
+              {/* <SortByPriceButton onClick={handleSortByPrice}>{`Sort By ${
                 isAscending ? "Descending" : "Ascending"
-              }`}</SortByPriceButton>
+              }`}</SortByPriceButton> */}
+              <ReactSelect
+                value={sortKey}
+                onChange={(item: any) => {
+                  setSortKey(item);
+                }}
+                // @ts-ignore
+                onClickSortButton={handleSortByPrice}
+                isSearchable={false}
+                options={SortOptions}
+                components={{ Control }}
+              />
             </SortContainer>
           )}
           <SearchWrapper>

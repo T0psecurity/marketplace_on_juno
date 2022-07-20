@@ -111,6 +111,25 @@ export const CoinIcon = styled.img`
   margin-right: 5px;
 `;
 
+export const RarityRankContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+export const RarityRankContent = styled.div<{ bold?: boolean }>`
+  font-size: 20px;
+  line-height: 36px;
+  padding: 0 10px;
+  font-weight: normal;
+
+  ${({ bold }) =>
+    bold &&
+    css`
+      font-weight: bold;
+    `}
+`;
+
 export const NFTItemWrapper = styled.div<{ isMobile: boolean }>`
   /* border: 1px solid black; */
   /* padding: 10px; */

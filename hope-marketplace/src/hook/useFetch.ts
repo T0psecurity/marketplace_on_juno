@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useAppDispatch } from "../app/hooks";
 import Collections, {
   MarketplaceContracts,
@@ -15,6 +15,7 @@ import useContract from "./useContract";
 import { MintContracts } from "../constants/Collections";
 import { setCollectionTraitStates } from "../features/collectionTraits/collectionTraitsSlice";
 import { NFTPriceType } from "../types/nftPriceTypes";
+import { setRarityRankState } from "../features/rarityRanks/rarityRanksSlice";
 
 type AttributeType = {
   trait_type: string;
@@ -83,6 +84,27 @@ export const getTokenIdNumber = (id: string): string => {
 const useFetch = () => {
   const { runQuery } = useContract();
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    Collections.forEach(async (collection: MarketplaceInfo) => {
+      let rarities = null;
+      try {
+        const rarityData =
+          await require(`../rank_produce/${collection.collectionId}.json`);
+        const weights = rarityData.weights || [];
+        if (weights.length) {
+          rarities = {};
+          weights.forEach((item: any) => {
+            rarities[item.token_id] = { weight: item.weight, rank: item.rank };
+          });
+          dispatch(setRarityRankState([collection.collectionId, rarities]));
+        }
+      } catch (e) {
+        console.error("file read error", collection.collectionId, e);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchCollectionInfo = useCallback(
     (account) => {
@@ -307,7 +329,7 @@ const useFetch = () => {
         await Promise.all(queries).then((queryResults: any) => {
           let listedNFTs: any = [],
             marketplaceNFTs: any = [];
-          queryResults.forEach((queryResult: any, index: number) => {
+          queryResults.forEach(async (queryResult: any, index: number) => {
             const fetchedResult =
               queryResult?.offerings ||
               (!!queryResult?.length && queryResult) ||
