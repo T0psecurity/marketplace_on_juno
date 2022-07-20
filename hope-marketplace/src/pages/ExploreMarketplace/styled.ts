@@ -52,7 +52,7 @@ export const Card = styled.div`
   width: ${CardWidth};
   height: 220px;
   position: relative;
-  /* overflow: hidden; */
+  overflow: hidden;
   cursor: pointer;
   background-color: white;
 
