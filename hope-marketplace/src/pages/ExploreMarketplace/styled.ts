@@ -52,18 +52,65 @@ export const Card = styled.div`
   width: ${CardWidth};
   height: 220px;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   cursor: pointer;
+  background-color: white;
+
+  transition: 0.3s;
   @media (max-width: 650px) {
     width: 100%;
     margin: 10px;
+  }
+
+  &:hover {
+    box-shadow: 0 8px 16px 3px rgba(#000, 0.6);
+    transform: translateY(-3px) scale(1.05) rotateX(15deg);
+    &::after {
+      transform: translateY(0%);
+    }
+  }
+  /* &::before {
+    content: "";
+    position: absolute;
+    top: 90%;
+    left: 5%;
+    right: 5%;
+    bottom: 0;
+    border-radius: 5px;
+    background: #6baf33;
+    transform: translate(0, -15%) rotate(-4deg);
+    transform-origin: center center;
+    box-shadow: 0 0 10px 15px #6baf33;
+    z-index: -1;
+  } */
+
+  &::after {
+    display: block;
+    content: "";
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 120%;
+    background: linear-gradient(
+      226deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.4) 35%,
+      rgba(255, 255, 255, 0.2) 42%,
+      rgba(255, 255, 255, 0) 60%
+    );
+    transform: translateY(-20%);
+    will-change: transform;
+    transition: transform 0.65s cubic-bezier(0.18, 0.9, 0.58, 1);
   }
 `;
 
 export const Flex = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, ${CardWidth});
-  grid-gap: 20px;
+  grid-column-gap: 20px;
+  grid-row-gap: 40px;
   justify-content: space-around;
 
   margin-bottom: 50px;
@@ -82,7 +129,7 @@ export const StyledImg = styled.div<{ imageUrl: string }>`
   background-size: cover;
   background-position: center;
   border-radius: 10px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   margin-left: auto;
   margin-right: auto;
 `;
