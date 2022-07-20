@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
+import NFTAdvertise from "../../components/NFTAdvertise";
 // import CollapseCard from "../../components/CollapseCard";
 import NFTContainer from "../../components/NFTContainer";
-import NFTIntroduction from "../../components/NFTIntroduction";
 import { NFTItemStatus } from "../../components/NFTItem";
-import { Title } from "../../components/PageTitle";
 import { getCollectionById, CollectionIds } from "../../constants/Collections";
 import { getCustomTokenId } from "../../hook/useFetch";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
@@ -15,9 +14,6 @@ import useFilter from "./hook/useFilter";
 import Statistic from "./Statistic";
 import {
   Wrapper,
-  CreatorContainer,
-  Creator,
-  CollectionDetail,
   HorizontalDivider,
   // SortButtonContainer,
   MainContentContainer,
@@ -105,17 +101,7 @@ const Marketplace: React.FC = () => {
 
   return (
     <Wrapper>
-      <NFTIntroduction
-        backgroundImage={targetCollection.backgroundUrl}
-        logo={targetCollection.logoUrl}
-        socialLinks={targetCollection.socialLinks}
-      />
-      <Title title={targetCollection.title} />
-      <CreatorContainer>
-        created by
-        <Creator>{` ${targetCollection.creator || ""} •`}</Creator>
-      </CreatorContainer>
-      <CollectionDetail>{targetCollection.description}</CollectionDetail>
+      <NFTAdvertise collection={targetCollection} />
       <Statistic items={marketplaceNFTs} collectionId={collectionId || ""} />
       <HorizontalDivider />
       <MainContentContainer isMobile={!isXl} expanded={expandedFilter}>

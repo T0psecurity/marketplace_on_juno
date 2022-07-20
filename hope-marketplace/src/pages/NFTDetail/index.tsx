@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
-import { Title } from "../../components/PageTitle";
 import NFTItemDetail from "../../components/NFTItemDetail";
 import usePickNFT from "../../hook/usePickNFT";
 import { getCollectionById } from "../../constants/Collections";
@@ -9,9 +8,11 @@ import {
   Wrapper,
   NFTItemAttributesContainer,
   NFTItemAttributeItem,
+  HorizontalDivider,
 } from "./styled";
 import { CollectionTraitsStateType } from "../../features/collectionTraits/collectionTraitsSlice";
 import { addSpecialForUrl } from "../../util/string";
+import NFTAdvertise from "../../components/NFTAdvertise";
 
 const NFTDetail: React.FC = () => {
   // const selectedNFT = useAppSelector((state) => state.nfts.selectedNFT);
@@ -30,9 +31,10 @@ const NFTDetail: React.FC = () => {
 
   return (
     <Wrapper>
-      <Title title={targetCollection?.title} />
-      <NFTItemDetail item={selectedNFT} />
+      <NFTAdvertise collection={targetCollection} />
+      <HorizontalDivider />
 
+      <NFTItemDetail item={selectedNFT} />
       {selectedNFT.metaData?.attributes?.length && (
         <NFTItemAttributesContainer>
           {selectedNFT.metaData?.attributes.map(
