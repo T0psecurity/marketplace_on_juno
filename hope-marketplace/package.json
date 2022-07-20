@@ -63,6 +63,11 @@
       "last 1 safari version"
     ]
   },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
   "devDependencies": {
     "@keplr-wallet/types": "^0.9.12",
     "@types/file-saver": "^2.0.5",

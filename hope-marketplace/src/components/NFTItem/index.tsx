@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ReactSelect from "react-select";
 import { useAppSelector } from "../../app/hooks";
-import { getCollectionById } from "../../constants/Collections";
+import { CollectionIds, getCollectionById } from "../../constants/Collections";
 import { CollectionStateType } from "../../features/collections/collectionsSlice";
 import { getTokenIdNumber } from "../../hook/useFetch";
 // import { useAppDispatch } from "../../app/hooks";
@@ -26,6 +26,8 @@ import {
   NFTItemPriceContainer,
   NFTItemTokenPrice,
   NFTItemUsdPrice,
+  RarityRankContainer,
+  RarityRankContent,
 } from "./styled";
 
 export interface NFTItemProps {
@@ -47,6 +49,11 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const { isXs, isSm } = useMatchBreakpoints();
   const isMobile = isXs || isSm;
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
+  const tokenIdNumber = Number(getTokenIdNumber(item.token_id) || 0);
+  const tokenRarityRank = useAppSelector(
+    (state) =>
+      state.rarityRank[item.collectionId as CollectionIds]?.[tokenIdNumber]
+  );
 
   const targetCollection = getCollectionById(item.collectionId);
   const collectionState: CollectionStateType = useAppSelector(
@@ -138,6 +145,12 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   return (
     <NFTItemWrapper isMobile={isMobile}>
+      {tokenRarityRank && (
+        <RarityRankContainer>
+          <RarityRankContent bold>Rank</RarityRankContent>
+          <RarityRankContent>{`#${tokenRarityRank.rank}`}</RarityRankContent>
+        </RarityRankContainer>
+      )}
       <NFTItemImageWrapper onClick={handleGotoDetail} isMobile={isMobile}>
         <Image alt="" src={url} key={url} />
       </NFTItemImageWrapper>

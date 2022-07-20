@@ -14,6 +14,7 @@ import nftsReducer from "../features/nfts/nftsSlice";
 import collectionsReducer from "../features/collections/collectionsSlice";
 import collectionTraitsReducer from "../features/collectionTraits/collectionTraitsSlice";
 import tokenPricesReducer from "../features/tokenPrices/tokenPricesSlice";
+import rarityRankReducer from "../features/rarityRanks/rarityRanksSlice";
 
 const persistConfig = {
   key: "root",
@@ -31,6 +32,7 @@ const reducer = persistReducer(
     collectionStates: collectionsReducer,
     collectionTraitsStates: collectionTraitsReducer,
     tokenPrices: tokenPricesReducer,
+    rarityRank: rarityRankReducer,
   })
 );
 

@@ -72,7 +72,11 @@ const Marketplace: React.FC = () => {
     return result;
   }, [marketplaceNFTs]);
 
-  const filteredNfts = useFilter(marketplaceNFTs, filterOption);
+  const filteredNfts = useFilter(
+    marketplaceNFTs,
+    filterOption,
+    collectionId as CollectionIds
+  );
   const filteredHistory = useMemo(() => {
     const sortedSaleHistory = saleHistory
       ? saleHistory

@@ -1,10 +1,17 @@
 import { useMemo } from "react";
 import { useAppSelector } from "../../../app/hooks";
+import { CollectionIds } from "../../../constants/Collections";
+import { getTokenIdNumber } from "../../../hook/useFetch";
 import { NFTPriceType } from "../../../types/nftPriceTypes";
-import { FilterOptions, PriceSortDirectionType } from "../types";
+import { FilterOptions, SortDirectionType } from "../types";
 
-const useFilter = (nfts: any[], filterOption: FilterOptions | undefined) => {
+const useFilter = (
+  nfts: any[],
+  filterOption: FilterOptions | undefined,
+  collectionId: CollectionIds
+) => {
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
+  const rarityRanks = useAppSelector((state) => state.rarityRank[collectionId]);
 
   return useMemo(() => {
     if (!filterOption) return nfts;
@@ -49,27 +56,37 @@ const useFilter = (nfts: any[], filterOption: FilterOptions | undefined) => {
       );
     }
     return resultNfts.sort((nft1: any, nft2) => {
-      const price1 = nft1?.list_price || {};
-      const tokenPrice1 =
-        tokenPrices[price1.denom as NFTPriceType]?.market_data.current_price
-          ?.usd || 0;
+      if (filterOption.sortOption.field === "price") {
+        const price1 = nft1?.list_price || {};
+        const tokenPrice1 =
+          tokenPrices[price1.denom as NFTPriceType]?.market_data.current_price
+            ?.usd || 0;
 
-      const price2 = nft2?.list_price || {};
-      const tokenPrice2 =
-        tokenPrices[price2.denom as NFTPriceType]?.market_data.current_price
-          ?.usd || 0;
+        const price2 = nft2?.list_price || {};
+        const tokenPrice2 =
+          tokenPrices[price2.denom as NFTPriceType]?.market_data.current_price
+            ?.usd || 0;
 
-      // return filterOption.price === PriceSortDirectionType.asc
-      //   ? Number(nft1.list_price?.amount) - Number(nft2.list_price?.amount)
-      //   : Number(nft2.list_price?.amount) - Number(nft1.list_price?.amount);
+        // return filterOption.price === PriceSortDirectionType.asc
+        //   ? Number(nft1.list_price?.amount) - Number(nft2.list_price?.amount)
+        //   : Number(nft2.list_price?.amount) - Number(nft1.list_price?.amount);
 
-      return filterOption.price === PriceSortDirectionType.asc
-        ? Number(nft1.list_price?.amount) * tokenPrice1 -
-            Number(nft2.list_price?.amount) * tokenPrice2
-        : Number(nft2.list_price?.amount) * tokenPrice2 -
-            Number(nft1.list_price?.amount) * tokenPrice1;
+        return filterOption.sortOption.direction === SortDirectionType.asc
+          ? Number(nft1.list_price?.amount) * tokenPrice1 -
+              Number(nft2.list_price?.amount) * tokenPrice2
+          : Number(nft2.list_price?.amount) * tokenPrice2 -
+              Number(nft1.list_price?.amount) * tokenPrice1;
+      } else {
+        const tokenRarityRank1 =
+          rarityRanks?.[Number(getTokenIdNumber(nft1.token_id))]?.rank || 0;
+        const tokenRarityRank2 =
+          rarityRanks?.[Number(getTokenIdNumber(nft2.token_id))]?.rank || 0;
+        return filterOption.sortOption.direction === SortDirectionType.asc
+          ? tokenRarityRank1 - tokenRarityRank2
+          : tokenRarityRank2 - tokenRarityRank1;
+      }
     });
-  }, [nfts, filterOption, tokenPrices]);
+  }, [filterOption, nfts, tokenPrices, rarityRanks]);
 };
 
 export default useFilter;

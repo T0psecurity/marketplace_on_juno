@@ -73,6 +73,14 @@ export const SortContainer = styled.div`
   width: 100%;
 `;
 
+export const SortIcon = styled.svg<{ desc: boolean }>`
+  cursor: pointer;
+  transition: 0.3s;
+  transform: rotate(${({ desc }) => (desc ? "180" : "0")}deg);
+  width: 20px;
+  margin: 10px;
+`;
+
 export const SearchWrapper = styled.div`
   width: 100%;
   max-width: 300px;
