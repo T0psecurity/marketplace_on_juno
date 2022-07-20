@@ -4,7 +4,6 @@ import Collections, {
   CollectionIds,
   MarketplaceInfo,
 } from "../../constants/Collections";
-import { NFTPriceType } from "../../types/nftPriceTypes";
 
 export type RarityRankStateType = {
   [key: number]: {
