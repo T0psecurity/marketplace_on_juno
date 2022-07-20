@@ -208,7 +208,10 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
         <StatisticName>Items On Sale</StatisticName>
       </StatisticItem>
       <StatisticItem>
-        <StatisticValue>{statistics.totalVolumeInJuno || "X"}</StatisticValue>
+        <StatisticValue>
+          <StatisticIcon alt="" src={"/coin-images/ujuno.png"} />
+          {statistics.totalVolumeInJuno || "X"}
+        </StatisticValue>
         <StatisticName>Total Volume</StatisticName>
       </StatisticItem>
       <ReactSelect
@@ -220,11 +223,13 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
             ...provided,
             margin: "5px 10px",
             minWidth: 100,
+            border: "1px solid black",
+            borderRadius: "5px",
           }),
-          // control: (provided, state) => ({
-          //   ...provided,
-          //   minHeight: "unset",
-          // }),
+          dropdownIndicator: (provided, state) => ({
+            ...provided,
+            color: "black",
+          }),
         }}
         components={{ MenuList: CustomMenuList, Control: CustomControlItem }}
       />
