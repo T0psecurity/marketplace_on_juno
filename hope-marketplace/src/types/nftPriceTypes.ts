@@ -1,6 +1,6 @@
 export enum NFTPriceType {
-  HOPE = "hope",
   JUNO = "ujuno",
+  HOPE = "hope",
   RAW = "raw",
   NETA = "neta",
 }
