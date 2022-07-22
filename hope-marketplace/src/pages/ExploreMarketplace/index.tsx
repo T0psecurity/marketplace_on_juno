@@ -93,6 +93,7 @@ const ExploreMarketplace: React.FC = () => {
       title: "New",
       Icon: () => <NewIcon />,
       order: [
+        CollectionIds.JUNOPUNKS2,
         CollectionIds.ROMANS,
         CollectionIds.WITCHES,
         CollectionIds.CRYPTOGIRLS,
@@ -116,6 +117,7 @@ const ExploreMarketplace: React.FC = () => {
       Icon: () => <VerifiedIcon />,
       order: [
         CollectionIds.HOPEGALAXYI,
+        CollectionIds.JUNOPUNKS2,
         CollectionIds.MINTPASSI,
         CollectionIds.MINTPASSII,
         CollectionIds.JUNOPUNKS,
@@ -129,6 +131,7 @@ const ExploreMarketplace: React.FC = () => {
         CollectionIds.GOBLIN,
         CollectionIds.NETANOTS,
         CollectionIds.WITCHES,
+        CollectionIds.JUNOPUNKS2,
       ],
     },
     {
@@ -136,6 +139,7 @@ const ExploreMarketplace: React.FC = () => {
       Icon: () => <UtilityIcon />,
       order: [
         CollectionIds.HOPEGALAXYI,
+        CollectionIds.JUNOPUNKS2,
         CollectionIds.JUNOPUNKS,
         CollectionIds.JUNOFARMING,
         CollectionIds.MINTPASSI,

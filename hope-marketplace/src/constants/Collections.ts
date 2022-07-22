@@ -98,6 +98,38 @@ const Collections: MarketplaceInfo[] = [
     isLaunched: true,
   },
   {
+    title: "Juno Punks II Martians",
+    creator: "Juno Punks",
+    imageUrl: "/backgrounds/junopunks2.png",
+    backgroundUrl: "/marketplace-backgrounds/junopunks2.png",
+    logoUrl: "/logos/junopunks2.gif",
+    collectionId: CollectionIds.JUNOPUNKS2,
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmPXEd1xJeZnQmDkifH15WsYwfG8Pzm7EqcRmVA62Wn7Qo/_metadata.json",
+    nftContract:
+      "juno10u3st6w8tx95ejtq6drffk6zy68z76m32lapq9m5shj7gu0y5mxswj6we0",
+    mintContract:
+      "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://dashboard-junopunks.app/",
+      twitter: "https://twitter.com/JunoPunksNFT",
+    },
+    description:
+      "Juno Punks II Martians is the second collection of the Juno Punks project. This collection will play a key role in the development of the ecosystem. All the funds collected will be used to create a liquidity pool $JUNO/$PUNK on JunoSwap.",
+    mintInfo: {
+      totalNfts: 1000,
+      royalties: "7% + 3%",
+      price: "White List: 12.5 $JUNO Public Mint: 15$JUNO",
+      mintImage: "/mint-images/junopunks2.gif",
+      mintDate: "2022-07-22",
+      mintLogic: MintLogics.logic1,
+      isWhiteListMint: true,
+    },
+    isLaunched: true,
+  },
+  {
     title: "Hope Galaxy Mint Pass 1",
     customTokenId: "MintPassI",
     creator: "Hope Galaxy NFT",
@@ -416,38 +448,6 @@ const Collections: MarketplaceInfo[] = [
       mintImage: "/mint-images/romans.gif",
       mintDate: "2022-07-19",
       mintLogic: MintLogics.logic1,
-    },
-    isLaunched: true,
-  },
-  {
-    title: "Juno Punks II Martians",
-    creator: "Juno Punks",
-    imageUrl: "/backgrounds/junopunks2.png",
-    backgroundUrl: "/marketplace-backgrounds/junopunks2.png",
-    logoUrl: "/logos/junopunks2.gif",
-    collectionId: CollectionIds.JUNOPUNKS2,
-    metaDataUrl:
-      "https://hopegalaxy.mypinata.cloud/ipfs/QmPXEd1xJeZnQmDkifH15WsYwfG8Pzm7EqcRmVA62Wn7Qo/_metadata.json",
-    nftContract:
-      "juno10u3st6w8tx95ejtq6drffk6zy68z76m32lapq9m5shj7gu0y5mxswj6we0",
-    mintContract:
-      "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
-    marketplaceContract: [],
-    socialLinks: {
-      discord: "https://discord.gg/BfKPacc5jF",
-      website: "https://dashboard-junopunks.app/",
-      twitter: "https://twitter.com/JunoPunksNFT",
-    },
-    description:
-      "Juno Punks II Martians is the second collection of the Juno Punks project. This collection will play a key role in the development of the ecosystem. All the funds collected will be used to create a liquidity pool $JUNO/$PUNK on JunoSwap.",
-    mintInfo: {
-      totalNfts: 1000,
-      royalties: "7% + 3%",
-      price: "White List: 12.5 $JUNO Public Mint: 15$JUNO",
-      mintImage: "/mint-images/junopunks2.gif",
-      mintDate: "2022-07-22",
-      mintLogic: MintLogics.logic1,
-      isWhiteListMint: true,
     },
     isLaunched: true,
   },
