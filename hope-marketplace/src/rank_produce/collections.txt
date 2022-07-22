@@ -7,3 +7,4 @@ cryptogirls, https://hopegalaxy.mypinata.cloud/ipfs/QmYVs4Y4kTz7B8rXtocgnitc5msB
 goblin, https://hopegalaxy.mypinata.cloud/ipfs/QmaLapkMZTmRpRtcCZAGedipMdiZxLaCy4pRS56RQ9wffW/_metadata.json
 witches, https://hopegalaxy.mypinata.cloud/ipfs/QmVqucWUnQTAu5V3V4ubZGs7zhiiT28PQ797zmYzEh5C4w/_metadata.json
 romans, https://hopegalaxy.mypinata.cloud/ipfs/Qmf1hmTfjwtv1LynEvGUpXRQdterufhBNm2pEmhubDYkb9/_metadata.json
+junopunks2, https://hopegalaxy.mypinata.cloud/ipfs/QmPXEd1xJeZnQmDkifH15WsYwfG8Pzm7EqcRmVA62Wn7Qo/_metadata.json

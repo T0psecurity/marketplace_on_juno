@@ -185,7 +185,6 @@ const useFetch = () => {
               symbols: symbols,
             },
           });
-          console.log("use fetch", collection.collectionId, tradingInfoResult);
           let totalVolume: any = {};
           (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach(
             (key) => (totalVolume[`${TokenType[key]}Total`] = 0)
