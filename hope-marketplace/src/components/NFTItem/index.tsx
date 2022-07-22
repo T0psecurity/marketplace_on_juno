@@ -44,7 +44,7 @@ export const NFTItemStatus = {
 
 export default function NFTItem({ item, status }: NFTItemProps) {
   const [nftPrice, setNftPrice] = useState("");
-  const [TokenType, setTokenType] = useState("");
+  const [nftPriceType, setNftPriceType] = useState("");
 
   const { isXs, isSm } = useMatchBreakpoints();
   const isMobile = isXs || isSm;
@@ -66,6 +66,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const price = item?.list_price || {};
   const tokenPrice =
     tokenPrices[price.denom as TokenType]?.market_data.current_price?.usd || 0;
+
   let url = "";
   if (item.collectionId === "mintpass1") {
     url = "/others/mint_pass.png";
@@ -82,7 +83,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const handleNFTItem = async () => {
     if (status === NFTItemStatus.SELL) {
-      await sellNft(item, nftPrice, TokenType);
+      await sellNft(item, nftPrice, nftPriceType);
     } else if (status === NFTItemStatus.WITHDRAW) {
       await withdrawNft(item);
     } else if (status === NFTItemStatus.BUY) {
@@ -101,7 +102,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   //   setTokenType(value);
   // };
   const handleChangePriceType = (item: any) => {
-    setTokenType(item.value);
+    setNftPriceType(item.value);
   };
 
   const handleGotoDetail = () => {
@@ -197,12 +198,6 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                   }),
                 }}
                 onChange={handleChangePriceType}
-                // options={[
-                //   { value: TokenType.HOPE, label: "HOPE" },
-                //   { value: TokenType.JUNO, label: "JUNO" },
-                //   { value: TokenType.RAW, label: "RAW" },
-                //   { value: TokenType.NETA, label: "NETA" },
-                // ]}
                 options={SelectOptions}
               />
               {/* <input

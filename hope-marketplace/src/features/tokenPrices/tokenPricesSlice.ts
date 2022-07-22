@@ -40,7 +40,6 @@ export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
   try {
     let tokenPrices: any = {};
     const queryResults = await customPromiseAll(fetchQueries);
-    console.log("token prices", queryResults);
     queryResults.forEach((result: any, index: number) => {
       tokenPrices[keys[index]] = result;
     });

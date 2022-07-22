@@ -133,6 +133,7 @@ const useContract = () => {
       option?: {
         memo?: string;
         funds?: string;
+        denom?: string;
       }
     ) => {
       if (!offlineSigner) {
@@ -152,9 +153,9 @@ const useContract = () => {
       //   state.connection.config
       // );
 
-      const executeOptions = state.console.executeOptions;
-      const executeMemo = option?.memo ?? executeOptions?.memo;
-      const executeFunds = option?.funds ?? executeOptions?.funds;
+      const executeMemo = option?.memo || "";
+      const executeFunds = option?.funds || "";
+      const executeDenom = option?.denom || "";
 
       // --mobile connection
       // const { client } = connectedWallet;
@@ -203,7 +204,7 @@ const useContract = () => {
                 executeFunds,
                 ChainConfigs[ChainTypes.JUNO]["coinDecimals"]
               ),
-              ChainConfigs[ChainTypes.JUNO]["microDenom"]
+              executeDenom || ChainConfigs[ChainTypes.JUNO]["microDenom"]
             )
           : undefined
       );

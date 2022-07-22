@@ -70,3 +70,17 @@ export const NFTItemOperationButton = styled.div`
       0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
   }
 `;
+
+export const InsufficientErrorMessageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const InsufficientErrorMessage = styled.div``;
+
+export const QuickSwapLink = styled.div`
+  &:hover {
+    text-decoration: underline;
+  }
+`;

@@ -16,6 +16,31 @@ export const Logo = styled.div`
   cursor: pointer;
 `;
 
+export const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px 20px 20px;
+`;
+
+export const AmountInputer = styled.input`
+  border: 2px solid #333;
+  border-radius: 5px;
+  color: #333;
+  font-size: 32px;
+  margin: 0 0 10px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+`;
+
+export const ErrMsgContainer = styled.div`
+  width: 100%;
+  height: 34px;
+  text-align: left;
+  color: red;
+`;
+
 export const OperationButton = styled.div`
   text-transform: uppercase;
   display: inline-flex;
@@ -34,8 +59,6 @@ export const OperationButton = styled.div`
   line-height: 1.75;
   text-transform: capitalize;
   min-width: 64px;
-  height: 50px;
-  width: 100%;
   padding: 6px 16px;
   color: #fff;
   font-size: 16px;

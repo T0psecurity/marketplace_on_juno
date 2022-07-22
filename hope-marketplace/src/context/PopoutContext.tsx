@@ -48,7 +48,8 @@ const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
       // Append container
       newWindow?.current.document.body.appendChild(container);
       newWindow.current.addEventListener("beforeunload", () => {
-        onClose();
+        if (!newWindow.current.alreadyPrompted) onClose();
+        newWindow.current.alreadyPrompted = true;
       });
       copyStyles(window.document, newWindow.current.document);
 
@@ -67,9 +68,15 @@ const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
 
 interface WindowChildren extends ReactElement {}
 
+declare global {
+  interface Window {
+    promptedClosing: any;
+  }
+}
+
 const PopoutContext = React.createContext({
   showNewWindow: (component: WindowChildren, options?: WindowOption) => {},
-  closeNewWindow: () => {},
+  closeNewWindow: (params?: any) => {},
 });
 
 const PopoutContextProvider = ({ children }: { children: any }) => {
@@ -77,19 +84,23 @@ const PopoutContextProvider = ({ children }: { children: any }) => {
   const [windowOption, setWindowOption] = useState<WindowOption>();
   const [windowChildren, setWindowChildren] = useState<WindowChildren>();
 
-  const closeNewWindow = useCallback(() => {
-    setShowWindow(false);
-    if (windowOption?.onClose) {
-      windowOption.onClose();
-    }
-  }, [windowOption]);
+  const closeNewWindow = useCallback(
+    (params?: any) => {
+      setShowWindow(false);
+      if (windowOption?.onClose && !window.promptedClosing) {
+        windowOption.onClose(params);
+      }
+      window.promptedClosing = true;
+    },
+    [windowOption]
+  );
 
   const showNewWindow = useCallback(
     (component: WindowChildren, options?: WindowOption) => {
-      console.log("show new window", component);
       setWindowOption(options);
       setWindowChildren(component);
       setShowWindow(true);
+      window.promptedClosing = false;
     },
     []
   );

@@ -14,6 +14,9 @@ import {
   Content,
   NFTItemImageWrapper,
   NFTItemOperationButton,
+  InsufficientErrorMessage,
+  QuickSwapLink,
+  InsufficientErrorMessageWrapper,
 } from "./styled";
 
 export enum ToastType {
@@ -21,12 +24,12 @@ export enum ToastType {
   MINT = "minted",
 }
 
-interface CustomToastProps {
+interface BuySuccessToastProps {
   type: ToastType;
   nftItem: any;
 }
 
-const CustomToast: React.FC<CustomToastProps> = ({ type, nftItem }) => {
+const BuySuccessToast: React.FC<BuySuccessToastProps> = ({ type, nftItem }) => {
   const history = useHistory();
   const targetCollection = getCollectionById(nftItem.collectionId);
   const collectionState: CollectionStateType = useAppSelector(
@@ -71,12 +74,29 @@ const CustomToast: React.FC<CustomToastProps> = ({ type, nftItem }) => {
   );
 };
 
-export default CustomToast;
-
-export const showCustomToast = (item: any, type: ToastType) =>
-  toast(<CustomToast nftItem={item} type={type} />, {
+export const showBuySuccessToast = (item: any, type: ToastType) =>
+  toast(<BuySuccessToast nftItem={item} type={type} />, {
     autoClose: 10000,
     hideProgressBar: false,
     closeOnClick: false,
     pauseOnHover: true,
   });
+
+export const showInsufficientToast = (
+  balance: number,
+  tokenName: string,
+  clickLink?: any
+) => {
+  toast.error(
+    <InsufficientErrorMessageWrapper>
+      <InsufficientErrorMessage>{`Insufficient balance! You have only ${
+        (balance || 0) / 1e6
+      } ${tokenName}.`}</InsufficientErrorMessage>
+      {clickLink && (
+        <QuickSwapLink onClick={clickLink}>
+          Click here to quick swap!
+        </QuickSwapLink>
+      )}
+    </InsufficientErrorMessageWrapper>
+  );
+};
