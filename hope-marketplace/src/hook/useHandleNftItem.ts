@@ -1,20 +1,21 @@
 import { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAppSelector } from "../app/hooks";
 import { showCustomToast, ToastType } from "../components/CustomToast";
 import {
   getCollectionById,
   MarketplaceContracts,
 } from "../constants/Collections";
-import { TokenType } from "../types/tokens";
+import { TokenStatus, TokenType } from "../types/tokens";
 import useContract from "./useContract";
-import { contractAddresses } from "./useContract";
 import useRefresh from "./useRefresh";
 
 const useHandleNftItem = () => {
   const { runExecute } = useContract();
   const { refresh } = useRefresh();
   const history = useHistory();
+  const balances = useAppSelector((state) => state.balances);
 
   const sellNft = useCallback(
     async (item: any, nftPrice: any, TokenType: any) => {
@@ -105,8 +106,22 @@ const useHandleNftItem = () => {
   const buyNft = useCallback(
     async (item: any) => {
       if (!item.contractAddress) return;
-      const targetCollection = getCollectionById(item.collectionId);
       const price = item?.list_price || {};
+      const myBalance = balances[price.denom as TokenType];
+      if ((myBalance?.amount || 0) < Number(price.amount)) {
+        const tokenName = (
+          Object.keys(TokenType) as Array<keyof typeof TokenType>
+        )
+          .filter((x) => TokenType[x] === price.denom)[0]
+          ?.toUpperCase();
+        toast.error(
+          `Insufficient balance! You have only ${
+            (myBalance?.amount || 0) / 1e6
+          } ${tokenName}.`
+        );
+        return;
+      }
+      const targetCollection = getCollectionById(item.collectionId);
       const message =
         price.denom === TokenType.JUNO
           ? {
@@ -148,7 +163,7 @@ const useHandleNftItem = () => {
           );
         } else {
           await runExecute(
-            contractAddresses[price.denom as TokenType],
+            TokenStatus[price.denom as TokenType].contractAddress || "",
             message
           );
         }

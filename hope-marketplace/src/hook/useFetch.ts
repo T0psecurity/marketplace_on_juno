@@ -395,9 +395,7 @@ const useFetch = () => {
   );
 
   const getTokenBalances = useCallback(async () => {
-    console.log("get token balances start");
     const result = await getBalances();
-    console.log("token balances", result);
     if (!result) return;
     dispatch(setTokenBalances(result as BalancesType));
   }, [dispatch, getBalances]);

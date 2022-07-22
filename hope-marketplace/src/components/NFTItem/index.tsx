@@ -122,7 +122,10 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const NFTItemPriceItem = () =>
     !!price.amount && +price.amount > 0 ? (
       <NFTItemInfo>
-        <CoinIcon alt="" src={`/coin-images/${price.denom}.png`} />
+        <CoinIcon
+          alt=""
+          src={`/coin-images/${price.denom.replace(/\//g, "")}.png`}
+        />
         <NFTItemPriceContainer isMobile={isMobile}>
           <NFTItemTokenPrice>{price.amount / 1e6}</NFTItemTokenPrice>
           <NFTItemUsdPrice>

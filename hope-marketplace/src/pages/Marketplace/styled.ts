@@ -146,7 +146,8 @@ export const CoinImage = styled.div<{ coinType: string }>`
   width: 50px;
   height: 50px;
   margin-right: 20px;
-  background: url(${({ coinType }) => `/coin-images/${coinType}.png`});
+  background: url(${({ coinType }) =>
+    `/coin-images/${coinType.replace(/\//g, "")}.png`});
   background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;

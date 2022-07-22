@@ -51,7 +51,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   );
   const [nftPrice, setNftPrice] = useState("");
   const [transferAdd, setTransferAdd] = useState("");
-  const [TokenType, setTokenType] = useState("");
+  const [nftPriceType, setNftPriceType] = useState("");
 
   const owner = item.seller || account?.address || "";
   const price = item.list_price || {};
@@ -83,7 +83,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
   const handleNFTItem = async () => {
     if (status === "Sell") {
-      await sellNft(item, nftPrice, TokenType);
+      await sellNft(item, nftPrice, nftPriceType);
     } else if (status === "Withdraw") {
       await withdrawNft(item);
     } else if (status === "Buy") {
@@ -99,10 +99,11 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
   // const handleChangePriceType = (e: any) => {
   //   const { value } = e.target;
-  //   setTokenType(value);
+  //   setNftPriceType(value);
+
   // };
   const handleChangePriceType = (item: any) => {
-    setTokenType(item.value);
+    setNftPriceType(item.value);
   };
 
   const handleChangeTransferAdd = (e: any) => {
@@ -164,7 +165,10 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
           <>
             <DetailTitle>Price</DetailTitle>
             <DetailContent>
-              <CoinIcon alt="" src={`/coin-images/${price.denom}.png`} />
+              <CoinIcon
+                alt=""
+                src={`/coin-images/${price.denom.replace(/\//g, "")}.png`}
+              />
               <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
                 price.denom
                   ? `${(Object.keys(TokenType) as Array<keyof typeof TokenType>)
@@ -216,12 +220,6 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                     }),
                   }}
                   onChange={handleChangePriceType}
-                  // options={[
-                  //   { value: TokenType.HOPE, label: "HOPE" },
-                  //   { value: TokenType.JUNO, label: "JUNO" },
-                  //   { value: TokenType.RAW, label: "RAW" },
-                  //   { value: TokenType.NETA, label: "NETA" },
-                  // ]}
                   options={selectOptions}
                 />
                 {/* <input

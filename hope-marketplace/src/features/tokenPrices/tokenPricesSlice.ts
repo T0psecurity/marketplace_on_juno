@@ -8,6 +8,7 @@ const TokenCoingeckoIds: { [key in TokenType]: string } = {
   [TokenType.JUNO]: "juno-network",
   [TokenType.RAW]: "junoswap-raw-dao",
   [TokenType.NETA]: "neta",
+  [TokenType.ATOM]: "cosmos",
 };
 
 export type TokenPriceType = {
@@ -19,23 +20,14 @@ export const DEFAULT_COLLECTION_STATE = {
 };
 
 let initialState: TokenPriceType = {
-  hope: null,
-  ujuno: null,
-  raw: null,
-  neta: null,
+  [TokenType.HOPE]: null,
+  [TokenType.JUNO]: null,
+  [TokenType.RAW]: null,
+  [TokenType.NETA]: null,
+  [TokenType.ATOM]: null,
 };
 
 export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
-  // const hopePrice = await getQuery(
-  //   "https://api.coingecko.com/api/v3/coins/hope-galaxy"
-  // );
-  // const junoPrice = await getQuery(
-  //   "https://api.coingecko.com/api/v3/coins/juno-network"
-  // );
-  // const rawPrice = await getQuery(
-  //   "https://api.coingecko.com/api/v3/coins/junoswap-raw-dao"
-  // );
-
   let keys: any = [];
   const fetchQueries = Object.keys(TokenCoingeckoIds).map((key: string) => {
     keys.push(key as TokenType);
@@ -48,6 +40,7 @@ export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
   try {
     let tokenPrices: any = {};
     const queryResults = await customPromiseAll(fetchQueries);
+    console.log("token prices", queryResults);
     queryResults.forEach((result: any, index: number) => {
       tokenPrices[keys[index]] = result;
     });

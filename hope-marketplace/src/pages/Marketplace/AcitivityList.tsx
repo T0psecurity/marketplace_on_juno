@@ -95,7 +95,10 @@ const ActivityList: React.FC<ActivityListProps> = ({
               <HistoryItemToken>
                 <CoinIcon
                   alt=""
-                  src={`/coin-images/${historyItem.denom}.png`}
+                  src={`/coin-images/${historyItem.denom.replace(
+                    /\//g,
+                    ""
+                  )}.png`}
                 />
                 <div>
                   <HistoryItemText>

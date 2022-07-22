@@ -166,7 +166,10 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
         }}
         checked={option.value === selectValue.value}
       >
-        <StatisticIcon alt="" src={`/coin-images/${option.value}.png`} />
+        <StatisticIcon
+          alt=""
+          src={`/coin-images/${option.value.replace(/\//g, "")}.png`}
+        />
         <SelectItemTitle>
           <SelectItemContent>{option.text}</SelectItemContent>
           <SelectItemContent>Floor Price</SelectItemContent>
