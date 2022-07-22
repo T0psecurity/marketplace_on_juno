@@ -15,6 +15,7 @@ import useContract from "../../hook/useContract";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import useRefresh from "../../hook/useRefresh";
 import useResponsiveSize from "../../hook/useResponsiveSize";
+import { TokenType } from "../../types/tokens";
 import {
   compareDate,
   convertDateToString,
@@ -101,6 +102,8 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const { runExecute } = useContract();
   const history = useHistory();
   const { refresh } = useRefresh();
+  const account = useAppSelector((state) => state.accounts.keplrAccount);
+  const junoBalance = useAppSelector((state) => state.balances[TokenType.JUNO]);
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[mintItem.collectionId]
   );
@@ -165,6 +168,15 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   }, [collectionState, crrTime]);
 
   const handleMintNft = async () => {
+    if (!account) {
+      toast.error("Connect wallet!");
+      return;
+    }
+    console.log("mint nft start");
+    // const whiteLists = await React.lazy(
+    //   () => import(`../../assets/whiteLists/${targetCollection.collectionId}`)
+    // );
+
     if (mintItem.mintInfo?.mintUrl) {
       window.open(mintItem.mintInfo.mintUrl);
       return;
@@ -172,6 +184,26 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     if (beforePrivateMint) {
       toast.error(`Mint is not started. ${timeLeft} left!`);
       return;
+    }
+    if ((junoBalance.amount || 0) / 1e6 < collectionState.price) {
+      toast.error(
+        `Insufficient balance! You have only ${
+          (junoBalance.amount || 0) / 1e6
+        } JUNO.`
+      );
+      return;
+    }
+    if (
+      includesPrivateMint &&
+      targetCollection.mintInfo?.isWhiteListMint &&
+      !passedPrivateMint
+    ) {
+      const whiteLists =
+        await require(`../../assets/whiteLists/${targetCollection.collectionId}`);
+      if (!whiteLists.includes(account.address)) {
+        toast.error("You are not whitelisted.");
+        return;
+      }
     }
     if (collectionState.totalNfts <= collectionState.mintedNfts) {
       toast.error("All nfts are minted!");
