@@ -31,7 +31,7 @@ import {
   NftListTab,
   SortIcon,
 } from "./styled";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 import SearchInputer from "../../components/SearchInputer";
 
 type SortType =
@@ -218,18 +218,18 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           <>
             <CollapseCard title="On Sale in" expanded>
               <CoinImageWrapper>
-                {(
-                  Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
-                ).map((key, index) => {
-                  const denom = NFTPriceType[key];
-                  return (
-                    <CoinImage
-                      key={index}
-                      coinType={denom}
-                      onClick={() => handleClickPriceType(denom)}
-                    />
-                  );
-                })}
+                {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
+                  (key, index) => {
+                    const denom = TokenType[key];
+                    return (
+                      <CoinImage
+                        key={index}
+                        coinType={denom}
+                        onClick={() => handleClickPriceType(denom)}
+                      />
+                    );
+                  }
+                )}
                 {/* <CoinImage
                   coinType="hope"
                   onClick={() => handleClickPriceType("hope")}

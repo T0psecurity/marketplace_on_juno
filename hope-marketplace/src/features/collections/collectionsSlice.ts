@@ -4,7 +4,7 @@ import Collections, {
   CollectionIds,
   MarketplaceInfo,
 } from "../../constants/Collections";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 
 export type CollectionStateType = {
   mintCheck: boolean[];
@@ -29,7 +29,7 @@ export type CollectionStateType = {
   //   netaTotal: number;
   // };
   tradingInfo?: Record<
-    `${NFTPriceType}Max` | `${NFTPriceType}Min` | `${NFTPriceType}Total`,
+    `${TokenType}Max` | `${TokenType}Min` | `${TokenType}Total`,
     number
   >;
   saleHistory?: any[];

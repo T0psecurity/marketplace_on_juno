@@ -9,7 +9,7 @@ import { getTokenIdNumber } from "../../hook/useFetch";
 // import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useHandleNftItem from "../../hook/useHandleNftItem";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 import { addSuffix, escapeSpecialForUrl } from "../../util/string";
 import Image from "../Image";
 
@@ -44,7 +44,7 @@ export const NFTItemStatus = {
 
 export default function NFTItem({ item, status }: NFTItemProps) {
   const [nftPrice, setNftPrice] = useState("");
-  const [nftPriceType, setNftPriceType] = useState("");
+  const [TokenType, setTokenType] = useState("");
 
   const { isXs, isSm } = useMatchBreakpoints();
   const isMobile = isXs || isSm;
@@ -65,8 +65,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const history = useHistory();
   const price = item?.list_price || {};
   const tokenPrice =
-    tokenPrices[price.denom as NFTPriceType]?.market_data.current_price?.usd ||
-    0;
+    tokenPrices[price.denom as TokenType]?.market_data.current_price?.usd || 0;
   let url = "";
   if (item.collectionId === "mintpass1") {
     url = "/others/mint_pass.png";
@@ -83,7 +82,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const handleNFTItem = async () => {
     if (status === NFTItemStatus.SELL) {
-      await sellNft(item, nftPrice, nftPriceType);
+      await sellNft(item, nftPrice, TokenType);
     } else if (status === NFTItemStatus.WITHDRAW) {
       await withdrawNft(item);
     } else if (status === NFTItemStatus.BUY) {
@@ -99,10 +98,10 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   // const handleChangePriceType = (e: any) => {
   //   const { value } = e.target;
-  //   setNftPriceType(value);
+  //   setTokenType(value);
   // };
   const handleChangePriceType = (item: any) => {
-    setNftPriceType(item.value);
+    setTokenType(item.value);
   };
 
   const handleGotoDetail = () => {
@@ -112,10 +111,10 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const isSellItem = status === NFTItemStatus.SELL;
   const SelectOptions = (
-    Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+    Object.keys(TokenType) as Array<keyof typeof TokenType>
   ).map((key) => {
     return {
-      value: NFTPriceType[key],
+      value: TokenType[key],
       label: key,
     };
   });
@@ -196,10 +195,10 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                 }}
                 onChange={handleChangePriceType}
                 // options={[
-                //   { value: NFTPriceType.HOPE, label: "HOPE" },
-                //   { value: NFTPriceType.JUNO, label: "JUNO" },
-                //   { value: NFTPriceType.RAW, label: "RAW" },
-                //   { value: NFTPriceType.NETA, label: "NETA" },
+                //   { value: TokenType.HOPE, label: "HOPE" },
+                //   { value: TokenType.JUNO, label: "JUNO" },
+                //   { value: TokenType.RAW, label: "RAW" },
+                //   { value: TokenType.NETA, label: "NETA" },
                 // ]}
                 options={SelectOptions}
               />
@@ -207,7 +206,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                 type="radio"
                 id={`hope-${item.token_id}`}
                 name="priceType"
-                value={NFTPriceType.HOPE}
+                value={TokenType.HOPE}
                 onClick={handleChangePriceType}
               />
               <label htmlFor={`hope-${item.token_id}`}>HOPE</label>
@@ -216,7 +215,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                 type="radio"
                 id={`juno-${item.token_id}`}
                 name="priceType"
-                value={NFTPriceType.JUNO}
+                value={TokenType.JUNO}
                 onClick={handleChangePriceType}
               />
               <label htmlFor={`juno-${item.token_id}`}>JUNO</label>

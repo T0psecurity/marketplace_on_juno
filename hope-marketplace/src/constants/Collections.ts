@@ -1,4 +1,4 @@
-import { NFTPriceType } from "../types/nftPriceTypes";
+import { TokenType } from "../types/tokens";
 import { MintLogicItemInterface, MintLogics } from "./mintLogic";
 
 export interface SocialLinks {
@@ -7,9 +7,8 @@ export interface SocialLinks {
   twitter: string;
 }
 
-export type FloorPriceType = Record<`${NFTPriceType}FloorPrice`, number>;
-export interface VolumePriceType
-  extends Record<`${NFTPriceType}Volume`, number> {
+export type FloorPriceType = Record<`${TokenType}FloorPrice`, number>;
+export interface VolumePriceType extends Record<`${TokenType}Volume`, number> {
   totalVolumeInJuno: number;
 }
 

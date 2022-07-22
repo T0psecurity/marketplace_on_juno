@@ -7,7 +7,7 @@ import {
   TotalStateType,
 } from "../../features/collections/collectionsSlice";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 import { addSuffix } from "../../util/string";
 
 import {
@@ -35,7 +35,7 @@ const Home: React.FC = () => {
 
   const { tradesVolume, totalItemsOnSale } = useMemo(() => {
     const junoUsd =
-      tokenPrices[NFTPriceType.JUNO]?.market_data.current_price?.usd || 0;
+      tokenPrices[TokenType.JUNO]?.market_data.current_price?.usd || 0;
     let tradesVolumeResult = 0,
       totalItemsOnSaleResult = 0;
     Collections.forEach((collection: MarketplaceInfo) => {
@@ -45,14 +45,14 @@ const Home: React.FC = () => {
 
       const crrCollectionState: CollectionStateType =
         collectionStates[collection.collectionId];
-      (Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>).forEach(
+      (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach(
         (key) => {
           const crrVolume =
             (crrCollectionState?.tradingInfo as any)?.[
-              `${NFTPriceType[key]}Total`
+              `${TokenType[key]}Total`
             ] || 0;
           const crrUsd =
-            tokenPrices[NFTPriceType[key]]?.market_data.current_price?.usd || 0;
+            tokenPrices[TokenType[key]]?.market_data.current_price?.usd || 0;
           tradesVolumeResult += crrUsd ? crrVolume * (junoUsd / crrUsd) : 0;
         }
       );

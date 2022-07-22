@@ -22,7 +22,7 @@ import {
   UsdPriceContainer,
 } from "./styled";
 import ReactSelect from "react-select";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 import { CollectionIds } from "../../constants/Collections";
 
 interface NFTItemDetailProps {
@@ -51,13 +51,12 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   );
   const [nftPrice, setNftPrice] = useState("");
   const [transferAdd, setTransferAdd] = useState("");
-  const [nftPriceType, setNftPriceType] = useState("");
+  const [TokenType, setTokenType] = useState("");
 
   const owner = item.seller || account?.address || "";
   const price = item.list_price || {};
   const tokenPrice =
-    tokenPrices[price.denom as NFTPriceType]?.market_data.current_price?.usd ||
-    0;
+    tokenPrices[price.denom as TokenType]?.market_data.current_price?.usd || 0;
 
   let url = "";
   if (item.collectionId === "mintpass1") {
@@ -84,7 +83,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
   const handleNFTItem = async () => {
     if (status === "Sell") {
-      await sellNft(item, nftPrice, nftPriceType);
+      await sellNft(item, nftPrice, TokenType);
     } else if (status === "Withdraw") {
       await withdrawNft(item);
     } else if (status === "Buy") {
@@ -100,10 +99,10 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
   // const handleChangePriceType = (e: any) => {
   //   const { value } = e.target;
-  //   setNftPriceType(value);
+  //   setTokenType(value);
   // };
   const handleChangePriceType = (item: any) => {
-    setNftPriceType(item.value);
+    setTokenType(item.value);
   };
 
   const handleChangeTransferAdd = (e: any) => {
@@ -116,10 +115,10 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   };
 
   const selectOptions = (
-    Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+    Object.keys(TokenType) as Array<keyof typeof TokenType>
   ).map((key) => {
     return {
-      value: NFTPriceType[key],
+      value: TokenType[key],
       label: key,
     };
   });
@@ -168,12 +167,8 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
               <CoinIcon alt="" src={`/coin-images/${price.denom}.png`} />
               <MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
                 price.denom
-                  ? `${(
-                      Object.keys(NFTPriceType) as Array<
-                        keyof typeof NFTPriceType
-                      >
-                    )
-                      .filter((x) => NFTPriceType[x] === price.denom)[0]
+                  ? `${(Object.keys(TokenType) as Array<keyof typeof TokenType>)
+                      .filter((x) => TokenType[x] === price.denom)[0]
                       ?.toUpperCase()}`
                   : ""
               }`}</MainPriceContainer>
@@ -222,10 +217,10 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                   }}
                   onChange={handleChangePriceType}
                   // options={[
-                  //   { value: NFTPriceType.HOPE, label: "HOPE" },
-                  //   { value: NFTPriceType.JUNO, label: "JUNO" },
-                  //   { value: NFTPriceType.RAW, label: "RAW" },
-                  //   { value: NFTPriceType.NETA, label: "NETA" },
+                  //   { value: TokenType.HOPE, label: "HOPE" },
+                  //   { value: TokenType.JUNO, label: "JUNO" },
+                  //   { value: TokenType.RAW, label: "RAW" },
+                  //   { value: TokenType.NETA, label: "NETA" },
                   // ]}
                   options={selectOptions}
                 />
@@ -233,7 +228,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                   type="radio"
                   id={`hope-${item.token_id}`}
                   name="priceType"
-                  value={NFTPriceType.HOPE}
+                  value={TokenType.HOPE}
                   onClick={handleChangePriceType}
                 />
                 <label htmlFor={`hope-${item.token_id}`}>HOPE</label>
@@ -242,7 +237,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                   type="radio"
                   id={`juno-${item.token_id}`}
                   name="priceType"
-                  value={NFTPriceType.JUNO}
+                  value={TokenType.JUNO}
                   onClick={handleChangePriceType}
                 />
                 <label htmlFor={`juno-${item.token_id}`}>JUNO</label>

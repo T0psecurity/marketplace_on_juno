@@ -15,6 +15,7 @@ import collectionsReducer from "../features/collections/collectionsSlice";
 import collectionTraitsReducer from "../features/collectionTraits/collectionTraitsSlice";
 import tokenPricesReducer from "../features/tokenPrices/tokenPricesSlice";
 import rarityRankReducer from "../features/rarityRanks/rarityRanksSlice";
+import balancesReducer from "../features/balances/balancesSlice";
 
 const persistConfig = {
   key: "root",
@@ -33,6 +34,7 @@ const reducer = persistReducer(
     collectionTraitsStates: collectionTraitsReducer,
     tokenPrices: tokenPricesReducer,
     rarityRank: rarityRankReducer,
+    balances: balancesReducer,
   })
 );
 

@@ -25,7 +25,7 @@ import {
 } from "./SvgIcons";
 import { useAppSelector } from "../../app/hooks";
 import { TotalStateType } from "../../features/collections/collectionsSlice";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 
 type FilterOptionsType = {
   title: string;
@@ -67,18 +67,17 @@ const ExploreMarketplace: React.FC = () => {
 
   const tvlOrderIds = useMemo(() => {
     const junoUsd =
-      tokenPrices[NFTPriceType.JUNO]?.market_data.current_price?.usd || 0;
+      tokenPrices[TokenType.JUNO]?.market_data.current_price?.usd || 0;
     const idArray = Collections.map((collection: MarketplaceInfo) => {
       const collectionState = collectionStates[collection.collectionId];
       let tradesVolumeResult = 0;
-      (Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>).forEach(
+      (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach(
         (key) => {
           const crrVolume =
-            (collectionState?.tradingInfo as any)?.[
-              `${NFTPriceType[key]}Total`
-            ] || 0;
+            (collectionState?.tradingInfo as any)?.[`${TokenType[key]}Total`] ||
+            0;
           const crrUsd =
-            tokenPrices[NFTPriceType[key]]?.market_data.current_price?.usd || 0;
+            tokenPrices[TokenType[key]]?.market_data.current_price?.usd || 0;
           tradesVolumeResult += crrUsd ? crrVolume * (junoUsd / crrUsd) : 0;
         }
       );

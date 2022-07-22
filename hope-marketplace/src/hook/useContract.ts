@@ -23,11 +23,11 @@ import {
 } from "../features/accounts/accountsSlice";
 import connectionManager from "../features/connection/connectionManager";
 import { toMicroAmount } from "../util/coins";
-import { NFTPriceType } from "../types/nftPriceTypes";
+import { TokenType } from "../types/tokens";
 import { ChainConfigs, ChainTypes } from "../constants/ChainTypes";
 
 type TokenContractType = {
-  [key in NFTPriceType]: string;
+  [key in TokenType]: string;
 };
 
 interface ContractAddressesType extends TokenContractType {
@@ -38,13 +38,13 @@ export const contractAddresses: ContractAddressesType = {
   MINT_CONTRACT:
     // "juno1u230upl8ut7vn8uyk7hd9ac2ygwrvk5jygsjzv838hkn2u4xj34slyg2qy",
     "juno17kr4uahqlz8hl8nucx82q4vmlj7lrzzlz0yr0ax9hejaevw6ewqsf8p5ux",
-  [NFTPriceType.JUNO]: "",
-  [NFTPriceType.HOPE]:
+  [TokenType.JUNO]: "",
+  [TokenType.HOPE]:
     // "juno1ckulym5ufeu29kqcqn0pw7qfavdmup9a9kwt9uzgt4arkq84qetssd9ltl",
     "juno1re3x67ppxap48ygndmrc7har2cnc7tcxtm9nplcas4v0gc3wnmvs3s807z",
-  [NFTPriceType.RAW]:
+  [TokenType.RAW]:
     "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
-  [NFTPriceType.NETA]:
+  [TokenType.NETA]:
     "juno168ctmpyppk90d34p3jjy658zf5a5l3w8wk35wht6ccqj4mr0yv8s4j5awr",
 };
 
@@ -212,8 +212,50 @@ const useContract = () => {
     [state, offlineSigner]
   );
 
+  const getBalances = useCallback(async () => {
+    if (!offlineSigner) return {};
+    const account = state.accounts.keplrAccount;
+    const config = ChainConfigs[ChainTypes.JUNO];
+
+    const cwClient = await SigningCosmWasmClient.connectWithSigner(
+      config["rpcEndpoint"],
+      offlineSigner,
+      {
+        gasPrice: GasPrice.fromString(
+          `${config["gasPrice"]}${config["microDenom"]}`
+        ),
+      }
+    );
+    const denoms: TokenType[] = [];
+    const queries = (
+      Object.keys(TokenType) as Array<keyof typeof TokenType>
+    ).map((key) => {
+      denoms.push(TokenType[key]);
+      return cwClient.getBalance(account.address, TokenType[key]);
+    });
+    return await Promise.all(queries)
+      .then((results: any) => {
+        let returnValue: { [key in TokenType]: any } = {} as {
+          [key in TokenType]: any;
+        };
+        denoms.forEach((denom: TokenType, index: number) => {
+          const crrResult = results[index];
+          returnValue[denom] = {
+            denom,
+            amount: Number(crrResult.amount) / 1e6,
+          };
+        });
+        return returnValue;
+      })
+      .catch((err: any) => {
+        console.error(err);
+        return {};
+      });
+  }, [offlineSigner, state.accounts.keplrAccount]);
+
   return {
     initContracts,
+    getBalances,
     runQuery,
     runExecute,
   };

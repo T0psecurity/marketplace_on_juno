@@ -14,8 +14,12 @@ import getQuery from "../util/useAxios";
 import useContract from "./useContract";
 import { MintContracts } from "../constants/Collections";
 import { setCollectionTraitStates } from "../features/collectionTraits/collectionTraitsSlice";
-import { NFTPriceType } from "../types/nftPriceTypes";
+import { TokenType } from "../types/tokens";
 import { setRarityRankState } from "../features/rarityRanks/rarityRanksSlice";
+import {
+  BalancesType,
+  setTokenBalances,
+} from "../features/balances/balancesSlice";
 
 type AttributeType = {
   trait_type: string;
@@ -82,7 +86,7 @@ export const getTokenIdNumber = (id: string): string => {
 };
 
 const useFetch = () => {
-  const { runQuery } = useContract();
+  const { runQuery, getBalances } = useContract();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -179,9 +183,9 @@ const useFetch = () => {
             },
           });
           let totalVolume: any = {};
-          (
-            Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
-          ).forEach((key) => (totalVolume[`${NFTPriceType[key]}Total`] = 0));
+          (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach(
+            (key) => (totalVolume[`${TokenType[key]}Total`] = 0)
+          );
           tradingInfoResult?.forEach((item: any) => {
             totalVolume[`${item.denom}Total`] =
               (totalVolume[`${item.denom}Total`] || 0) + item.amount / 1e6;
@@ -201,23 +205,24 @@ const useFetch = () => {
               }
             );
             let crrTradingInfo: any = storeObject.tradingInfo;
-            (
-              Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
-            ).forEach((key) => {
-              const totalKey = `${NFTPriceType[key]}Total`;
-              const minKey = `${NFTPriceType[key]}Min`;
-              const maxKey = `${NFTPriceType[key]}Max`;
+            (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach(
+              (key) => {
+                const totalKey = `${TokenType[key]}Total`;
+                const minKey = `${TokenType[key]}Min`;
+                const maxKey = `${TokenType[key]}Max`;
 
-              crrTradingInfo[totalKey] =
-                (crrTradingInfo[totalKey] || 0) +
-                +(tradingInfoResult[`total_${key.toLowerCase()}`] || "0") / 1e6;
+                crrTradingInfo[totalKey] =
+                  (crrTradingInfo[totalKey] || 0) +
+                  +(tradingInfoResult[`total_${key.toLowerCase()}`] || "0") /
+                    1e6;
 
-              crrTradingInfo[minKey] = getMin(
-                +(tradingInfoResult[`min_${key.toLowerCase()}`] || "0") / 1e6
-              );
-              crrTradingInfo[maxKey] =
-                +(tradingInfoResult[`max_${key.toLowerCase()}`] || "0") / 1e6;
-            });
+                crrTradingInfo[minKey] = getMin(
+                  +(tradingInfoResult[`min_${key.toLowerCase()}`] || "0") / 1e6
+                );
+                crrTradingInfo[maxKey] =
+                  +(tradingInfoResult[`max_${key.toLowerCase()}`] || "0") / 1e6;
+              }
+            );
 
             storeObject.tradingInfo = crrTradingInfo;
           } catch (e) {}
@@ -389,14 +394,23 @@ const useFetch = () => {
     [dispatch, runQuery]
   );
 
+  const getTokenBalances = useCallback(async () => {
+    console.log("get token balances start");
+    const result = await getBalances();
+    console.log("token balances", result);
+    if (!result) return;
+    dispatch(setTokenBalances(result as BalancesType));
+  }, [dispatch, getBalances]);
+
   const fetchAllNFTs = useCallback(
     (account) => {
       fetchMarketplaceNFTs(account);
       fetchCollectionInfo(account);
       if (!account) return;
       fetchMyNFTs(account);
+      getTokenBalances();
     },
-    [fetchCollectionInfo, fetchMarketplaceNFTs, fetchMyNFTs]
+    [fetchCollectionInfo, fetchMarketplaceNFTs, fetchMyNFTs, getTokenBalances]
   );
 
   const clearAllNFTs = useCallback(() => {

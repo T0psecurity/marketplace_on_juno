@@ -6,7 +6,7 @@ import {
   getCollectionById,
   MarketplaceContracts,
 } from "../constants/Collections";
-import { NFTPriceType } from "../types/nftPriceTypes";
+import { TokenType } from "../types/tokens";
 import useContract from "./useContract";
 import { contractAddresses } from "./useContract";
 import useRefresh from "./useRefresh";
@@ -17,7 +17,7 @@ const useHandleNftItem = () => {
   const history = useHistory();
 
   const sellNft = useCallback(
-    async (item: any, nftPrice: any, nftPriceType: any) => {
+    async (item: any, nftPrice: any, TokenType: any) => {
       const targetCollection = getCollectionById(item.collectionId);
       const regExp = /^(\d+(\.\d+)?)$/;
       const price = +nftPrice;
@@ -29,11 +29,11 @@ const useHandleNftItem = () => {
         toast.error("Invalid Price!");
         return;
       }
-      if (!nftPriceType) {
+      if (!TokenType) {
         toast.error("Select Price Type!");
         return;
       }
-      // if (nftPriceType === NFTPriceType.HOPE && price < 1) {
+      // if (TokenType === TokenType.HOPE && price < 1) {
       //   toast.error("Insufficient Price!");
       //   return;
       // }
@@ -50,7 +50,7 @@ const useHandleNftItem = () => {
           msg: btoa(
             JSON.stringify({
               list_price: {
-                denom: nftPriceType,
+                denom: TokenType,
                 amount: `${price * 1e6}`,
               },
             })
@@ -108,7 +108,7 @@ const useHandleNftItem = () => {
       const targetCollection = getCollectionById(item.collectionId);
       const price = item?.list_price || {};
       const message =
-        price.denom === NFTPriceType.JUNO
+        price.denom === TokenType.JUNO
           ? {
               buy_nft: {
                 offering_id: item.id,
@@ -135,7 +135,7 @@ const useHandleNftItem = () => {
               },
             };
       try {
-        if (price.denom === NFTPriceType.JUNO) {
+        if (price.denom === TokenType.JUNO) {
           await runExecute(
             // item.token_id.includes("Hope")
             //   ? contractAddresses.MARKET_CONTRACT
@@ -148,15 +148,16 @@ const useHandleNftItem = () => {
           );
         } else {
           await runExecute(
-            contractAddresses[price.denom as NFTPriceType],
+            contractAddresses[price.denom as TokenType],
             message
           );
         }
         showCustomToast(item, ToastType.BUY);
         refresh();
-      } catch (err) {
-        console.error(err);
-        toast.error("Fail!");
+      } catch (err: any) {
+        const errMsg = err.message;
+        console.error(errMsg, typeof errMsg);
+        toast.error(`Fail! ${errMsg}`);
       }
     },
     [runExecute, refresh]

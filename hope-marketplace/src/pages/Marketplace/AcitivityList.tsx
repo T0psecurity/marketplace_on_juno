@@ -4,7 +4,7 @@ import { useAppSelector } from "../../app/hooks";
 import Image from "../../components/Image";
 import { CollectionIds, getCollectionById } from "../../constants/Collections";
 import { getCustomTokenId, getTokenIdNumber } from "../../hook/useFetch";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { addSuffix } from "../../util/string";
 
@@ -74,7 +74,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
           }
           const time = new Date(historyItem.time * 1000);
           const tokenPrice =
-            tokenPrices[historyItem.denom as NFTPriceType]?.market_data
+            tokenPrices[historyItem.denom as TokenType]?.market_data
               .current_price?.usd || 0;
           return (
             <SaleHistoryItem key={index} isMobile={isMobile}>

@@ -1,17 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import getQuery from "../../util/useAxios";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 import { customPromiseAll } from "../../util/promiseAll";
 
-const TokenCoingeckoIds: { [key in NFTPriceType]: string } = {
-  [NFTPriceType.HOPE]: "hope-galaxy",
-  [NFTPriceType.JUNO]: "juno-network",
-  [NFTPriceType.RAW]: "junoswap-raw-dao",
-  [NFTPriceType.NETA]: "neta",
+const TokenCoingeckoIds: { [key in TokenType]: string } = {
+  [TokenType.HOPE]: "hope-galaxy",
+  [TokenType.JUNO]: "juno-network",
+  [TokenType.RAW]: "junoswap-raw-dao",
+  [TokenType.NETA]: "neta",
 };
 
 export type TokenPriceType = {
-  [key in NFTPriceType]: any;
+  [key in TokenType]: any;
 };
 
 export const DEFAULT_COLLECTION_STATE = {
@@ -38,10 +38,10 @@ export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
 
   let keys: any = [];
   const fetchQueries = Object.keys(TokenCoingeckoIds).map((key: string) => {
-    keys.push(key as NFTPriceType);
+    keys.push(key as TokenType);
     return getQuery(
       `https://api.coingecko.com/api/v3/coins/${
-        TokenCoingeckoIds[key as NFTPriceType]
+        TokenCoingeckoIds[key as TokenType]
       }`
     );
   });
@@ -71,7 +71,7 @@ export const tokenPricesSlice = createSlice({
     builder.addCase(fetchTokenPrices.fulfilled, (state, action) => {
       const data: any = action.payload;
       Object.keys(data).forEach((key: string) => {
-        state[key as NFTPriceType] = data[key as NFTPriceType];
+        state[key as TokenType] = data[key as TokenType];
       });
     });
   },

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useAppSelector } from "../../../app/hooks";
 import { CollectionIds } from "../../../constants/Collections";
 import { getTokenIdNumber } from "../../../hook/useFetch";
-import { NFTPriceType } from "../../../types/nftPriceTypes";
+import { TokenType } from "../../../types/tokens";
 import { FilterOptions, SortDirectionType } from "../types";
 
 const useFilter = (
@@ -59,12 +59,12 @@ const useFilter = (
       if (filterOption.sortOption.field === "price") {
         const price1 = nft1?.list_price || {};
         const tokenPrice1 =
-          tokenPrices[price1.denom as NFTPriceType]?.market_data.current_price
+          tokenPrices[price1.denom as TokenType]?.market_data.current_price
             ?.usd || 0;
 
         const price2 = nft2?.list_price || {};
         const tokenPrice2 =
-          tokenPrices[price2.denom as NFTPriceType]?.market_data.current_price
+          tokenPrices[price2.denom as TokenType]?.market_data.current_price
             ?.usd || 0;
 
         // return filterOption.price === PriceSortDirectionType.asc
