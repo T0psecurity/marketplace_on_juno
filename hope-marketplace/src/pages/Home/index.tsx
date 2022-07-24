@@ -68,7 +68,7 @@ const Home: React.FC = () => {
   );
 
   const Tokens = () => (
-    <TokensContainer>$JUNO - $HOPE - $RAW - $NETA</TokensContainer>
+    <TokensContainer>$JUNO - $HOPE - $RAW - $NETA - $ATOM</TokensContainer>
   );
 
   return (
