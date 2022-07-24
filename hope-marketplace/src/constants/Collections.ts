@@ -35,6 +35,10 @@ export interface MarketplaceBasicInfo {
   statisticOption?: StatisticOption; // invisible status for statistic items. if true, invisible
   customTokenId?: string; // if this value exists token_id will be replaced. e.g. Hoper.1916 -> MintPass I.1916 when this value is "MintPass I"
   metaDataUrl?: string;
+  listMinPrice?: {
+    amount: number;
+    denom: TokenType;
+  };
   isLaunched: boolean;
 }
 export interface MarketplaceMintInfo {
@@ -104,6 +108,10 @@ const Collections: MarketplaceInfo[] = [
     backgroundUrl: "/marketplace-backgrounds/junopunks2.png",
     logoUrl: "/logos/junopunks2.gif",
     collectionId: CollectionIds.JUNOPUNKS2,
+    listMinPrice: {
+      amount: 15e6,
+      denom: TokenType.JUNO,
+    },
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmPXEd1xJeZnQmDkifH15WsYwfG8Pzm7EqcRmVA62Wn7Qo/_metadata.json",
     nftContract:
@@ -121,7 +129,7 @@ const Collections: MarketplaceInfo[] = [
     mintInfo: {
       totalNfts: 1000,
       royalties: "7% + 3%",
-      price: "White List: 12.5 $JUNO Public Mint: 15$JUNO",
+      price: "Mint: 15$JUNO",
       mintImage: "/mint-images/junopunks2.gif",
       mintDate: "2022-07-22",
       mintLogic: MintLogics.logic1,

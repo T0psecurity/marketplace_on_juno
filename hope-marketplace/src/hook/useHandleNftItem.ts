@@ -10,8 +10,8 @@ import {
   showInsufficientToast,
   ToastType,
 } from "../components/CustomToast";
-// import usePopoutQuickSwap, { SwapType } from "../components/Popout";
-// import { ChainTypes } from "../constants/ChainTypes";
+import usePopoutQuickSwap, { SwapType } from "../components/Popout";
+import { ChainTypes } from "../constants/ChainTypes";
 import {
   getCollectionById,
   MarketplaceContracts,
@@ -24,7 +24,7 @@ const useHandleNftItem = () => {
   const { runExecute } = useContract();
   const { refresh } = useRefresh();
   const history = useHistory();
-  // const popoutQuickSwap = usePopoutQuickSwap();
+  const popoutQuickSwap = usePopoutQuickSwap();
   const balances = useAppSelector((state) => state.balances);
 
   const sellNft = useCallback(
@@ -44,6 +44,9 @@ const useHandleNftItem = () => {
         toast.error("Select Price Type!");
         return;
       }
+      // if (targetCollection.listMinPrice?.amount && price * 1e6 < targetCollection.listMinPrice.amount) {
+      //   toast.error(`Price couldn't be smaller than `)
+      // }
       // if (TokenType === TokenType.HOPE && price < 1) {
       //   toast.error("Insufficient Price!");
       //   return;
@@ -176,25 +179,26 @@ const useHandleNftItem = () => {
         }
       };
 
-      // const showQuickSwapPopout = (insufficientAmount: number) => {
-      //   popoutQuickSwap(
-      //     {
-      //       swapType: SwapType.DEPOSIT,
-      //       denom: price.denom as TokenType,
-      //       swapChains: {
-      //         origin: ChainTypes.JUNO,
-      //         foreign: ChainTypes.COSMOS,
-      //       },
-      //       minAmount: insufficientAmount,
-      //     },
-      //     async (amount: any) => {
-      //       if (amount) {
-      //         await mainLogic();
-      //       }
-      //       return;
-      //     }
-      //   );
-      // };
+      const showQuickSwapPopout = (insufficientAmount: number) => {
+        popoutQuickSwap(
+          {
+            swapType: SwapType.DEPOSIT,
+            denom: price.denom as TokenType,
+            swapChains: {
+              origin: ChainTypes.JUNO,
+              foreign: ChainTypes.COSMOS,
+            },
+            minAmount: insufficientAmount,
+          },
+          false,
+          async (amount: any) => {
+            if (amount) {
+              await mainLogic();
+            }
+            return;
+          }
+        );
+      };
 
       if ((myBalance?.amount || 0) < Number(price.amount)) {
         const tokenName = (
@@ -202,19 +206,19 @@ const useHandleNftItem = () => {
         )
           .filter((x) => TokenType[x] === price.denom)[0]
           ?.toUpperCase();
-        // const insufficientAmount =
-        //   (Number(price.amount) - (myBalance?.amount || 0)) / 1e6;
+        const insufficientAmount =
+          (Number(price.amount) - (myBalance?.amount || 0)) / 1e6;
         showInsufficientToast(
           myBalance?.amount || 0,
-          tokenName
-          // tokenStatus.isIBCCOin &&
-          //   (() => showQuickSwapPopout(insufficientAmount))
+          tokenName,
+          tokenStatus.isIBCCOin &&
+            (() => showQuickSwapPopout(insufficientAmount))
         );
         return;
       }
       await mainLogic();
     },
-    [balances, refresh, runExecute]
+    [balances, popoutQuickSwap, refresh, runExecute]
   );
   const transferNft = useCallback(
     async (recipient: any, item: any, callbackLink?: string) => {

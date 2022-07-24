@@ -43,7 +43,7 @@ const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
       newWindow.current = window.open(
         "",
         option?.title || "",
-        "width=600,height=400,left=200,top=200"
+        "width=300,height=500,left=200,top=200,resizable=0"
       );
       // Append container
       newWindow?.current.document.body.appendChild(container);

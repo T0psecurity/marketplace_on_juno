@@ -431,6 +431,7 @@ const useFetch = () => {
     fetchCollectionInfo,
     fetchMarketplaceNFTs,
     fetchMyNFTs,
+    getTokenBalances,
     clearAllNFTs,
   };
 };

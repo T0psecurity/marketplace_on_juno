@@ -80,6 +80,7 @@ export const InsufficientErrorMessageWrapper = styled.div`
 export const InsufficientErrorMessage = styled.div``;
 
 export const QuickSwapLink = styled.div`
+  font-weight: bold;
   &:hover {
     text-decoration: underline;
   }

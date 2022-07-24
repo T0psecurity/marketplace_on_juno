@@ -94,7 +94,7 @@ export const showInsufficientToast = (
       } ${tokenName}.`}</InsufficientErrorMessage>
       {clickLink && (
         <QuickSwapLink onClick={clickLink}>
-          Click here to quick swap!
+          *** Click here to quick swap! ***
         </QuickSwapLink>
       )}
     </InsufficientErrorMessageWrapper>
