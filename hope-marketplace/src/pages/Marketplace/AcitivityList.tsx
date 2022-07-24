@@ -16,6 +16,7 @@ import {
   HistoryItemToken,
   HistoryItemText,
   CoinIcon,
+  HistoryItemTokenName,
 } from "./styled";
 
 interface ActivityListProps {
@@ -48,6 +49,9 @@ const ActivityList: React.FC<ActivityListProps> = ({
   const collectionState = useAppSelector(
     (state) => state.collectionStates[collectionId]
   );
+  const tokenRarityRanks = useAppSelector(
+    (state) => state.rarityRank[collectionId as CollectionIds]
+  );
 
   const targetCollection = useMemo(
     () => getCollectionById(collectionId || ""),
@@ -76,6 +80,10 @@ const ActivityList: React.FC<ActivityListProps> = ({
           const tokenPrice =
             tokenPrices[historyItem.denom as TokenType]?.market_data
               .current_price?.usd || 0;
+          const tokenIdNumber = Number(
+            getTokenIdNumber(historyItem.token_id) || 0
+          );
+          const tokenRarityRank = tokenRarityRanks[tokenIdNumber];
           return (
             <SaleHistoryItem key={index} isMobile={isMobile}>
               {!isMobile && <CartIcon />}
@@ -83,14 +91,20 @@ const ActivityList: React.FC<ActivityListProps> = ({
                 <HistoryItemImage>
                   <Image alt="" src={url} />
                 </HistoryItemImage>
-                <HistoryItemText>
-                  {targetCollection.customTokenId
-                    ? getCustomTokenId(
-                        historyItem.token_id,
-                        targetCollection.customTokenId
-                      )
-                    : historyItem.token_id}
-                </HistoryItemText>
+                <HistoryItemTokenName>
+                  <HistoryItemText>
+                    {targetCollection.customTokenId
+                      ? getCustomTokenId(
+                          historyItem.token_id,
+                          targetCollection.customTokenId
+                        )
+                      : historyItem.token_id}
+                  </HistoryItemText>
+                  <HistoryItemText
+                    margin="5px 0 0 0"
+                    color="#39C639"
+                  >{`Rank#${tokenRarityRank.rank}`}</HistoryItemText>
+                </HistoryItemTokenName>
               </HistoryItemBlock>
               <HistoryItemToken>
                 <CoinIcon

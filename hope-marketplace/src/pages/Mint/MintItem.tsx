@@ -305,12 +305,13 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
         </DetailBlockContainer>
         <DetailTitle>Public Sale</DetailTitle>
         <DetailInfo>{`Price ${mintItem.mintInfo?.price}`}</DetailInfo>
-        <OperationContainer>
+        <OperationContainer isMobile={!isXl}>
           <FlexColumn width={operationItemSize}>
             <DetailInfo># to mint</DetailInfo>
             {renderDetailBlocks([MINT_DETAIL_OPERATION])}
           </FlexColumn>
           <MintButton
+            isMobile={!isXl}
             soldOut={isSoldOut}
             backgroundColor={beforePrivateMint ? "#FCFF5C" : ""}
             disabled={

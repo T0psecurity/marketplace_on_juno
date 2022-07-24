@@ -79,6 +79,7 @@ export const SortIcon = styled.svg<{ desc: boolean }>`
   transform: rotate(${({ desc }) => (desc ? "180" : "0")}deg);
   width: 20px;
   margin: 10px;
+  z-index: 1;
 `;
 
 export const SearchWrapper = styled.div`
@@ -283,6 +284,11 @@ export const HistoryItemImage = styled.div`
   }
 `;
 
+export const HistoryItemTokenName = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const HistoryItemToken = styled.div`
   display: flex;
   align-items: center;
@@ -297,14 +303,17 @@ export const CoinIcon = styled.img`
 export const HistoryItemText = styled.div<{
   fontWeight?: string;
   fontSize?: string;
+  color?: string;
+  margin?: string;
   width?: string;
 }>`
   font-weight: ${({ fontWeight }) => fontWeight || "normal"};
   font-size: ${({ fontSize }) => fontSize || "20px"};
+  color: ${({ color }) => color || "black"};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0 10px;
+  margin: ${({ margin }) => margin || "0 10px"};
   ${({ width }) =>
     width &&
     css`

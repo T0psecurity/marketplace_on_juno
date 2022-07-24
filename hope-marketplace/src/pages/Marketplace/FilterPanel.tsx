@@ -147,6 +147,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   ]);
 
   const handleSortByPrice: MouseEventHandler<any> = (e) => {
+    console.log("clicked sort button");
     e.preventDefault();
     e.stopPropagation();
     setIsAscending(!isAscending);
