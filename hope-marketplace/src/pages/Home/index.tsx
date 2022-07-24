@@ -67,9 +67,12 @@ const Home: React.FC = () => {
     <ImgWrapper src="/others/home.jpg" alt="home" isMobile={isMobile} />
   );
 
-  const Tokens = () => (
-    <TokensContainer>$JUNO - $HOPE - $RAW - $NETA - $ATOM</TokensContainer>
-  );
+  const Tokens = () => {
+    const tokens = (
+      Object.keys(TokenType) as Array<keyof typeof TokenType>
+    ).map((key) => `$${key}`);
+    return <TokensContainer>{tokens.join(" - ")}</TokensContainer>;
+  };
 
   return (
     <Wrapper isMobile={isMobile}>
