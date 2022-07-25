@@ -256,6 +256,7 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
           "auto",
           "memo"
         );
+        console.log("end of transaction here");
         closeNewWindow(true);
       } catch (e) {
         setSendingTx(false);
@@ -309,6 +310,7 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
                   if (!tokenStatus.isIBCCOin) return null;
                   return (
                     <img
+                      key={key}
                       className="tokenIcon"
                       alt=""
                       src={`https://hopers.io/coin-images/${denom.replace(

@@ -100,10 +100,10 @@ const ActivityList: React.FC<ActivityListProps> = ({
                         )
                       : historyItem.token_id}
                   </HistoryItemText>
-                  <HistoryItemText
+                  {tokenRarityRank && <HistoryItemText
                     margin="5px 0 0 0"
                     color="#39C639"
-                  >{`Rank#${tokenRarityRank.rank}`}</HistoryItemText>
+                  >{`Rank#${tokenRarityRank.rank}`}</HistoryItemText>}
                 </HistoryItemTokenName>
               </HistoryItemBlock>
               <HistoryItemToken>
