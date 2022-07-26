@@ -190,14 +190,14 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
       setErrMsg("Invalid amount.");
       return;
     }
-    // if (
-    //   swapInfo.swapType === SwapType.DEPOSIT &&
-    //   swapInfo.minAmount &&
-    //   amount < swapInfo.minAmount
-    // ) {
-    //   setErrMsg(`Amount should be greater than ${swapInfo.minAmount}.`);
-    //   return;
-    // }
+    if (
+      swapInfo.swapType === SwapType.DEPOSIT &&
+      swapInfo.minAmount &&
+      amount < swapInfo.minAmount
+    ) {
+      setErrMsg(`Amount should be greater than ${swapInfo.minAmount}.`);
+      return;
+    }
     if (
       swapInfo.swapType === SwapType.WITHDRAW &&
       amount * 1e6 > balances[swapInfo.denom].amount
