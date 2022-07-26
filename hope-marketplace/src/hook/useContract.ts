@@ -138,6 +138,9 @@ const useContract = () => {
     ) => {
       if (!offlineSigner) {
         // connect();
+        // setTimeout(() => {
+        //   runExecute(contractAddress, executeMsg, option);
+        // }, 500);
         throw new Error("No account selected");
       }
       // const contract = state.accounts.accountList[contractAddress];

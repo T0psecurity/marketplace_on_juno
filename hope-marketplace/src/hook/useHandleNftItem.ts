@@ -88,6 +88,7 @@ const useHandleNftItem = () => {
     },
     [runExecute, refresh]
   );
+
   const withdrawNft = useCallback(
     async (item: any) => {
       const targetCollection = getCollectionById(item.collectionId);
@@ -116,6 +117,68 @@ const useHandleNftItem = () => {
     },
     [runExecute, refresh]
   );
+
+  const mainLogic = useCallback(
+    async (item: any) => {
+      const price = item?.list_price || {};
+      const targetCollection = getCollectionById(item.collectionId);
+      const tokenStatus = TokenStatus[price.denom as TokenType];
+      const message = tokenStatus.isNativeCoin
+        ? {
+            buy_nft: {
+              offering_id: item.id,
+              ...(MarketplaceContracts.includes(item.contractAddress) && {
+                nft_address: targetCollection.nftContract,
+              }),
+            },
+          }
+        : {
+            send: {
+              // contract: item.token_id.includes("Hope")
+              //   ? contractAddresses.MARKET_CONTRACT
+              //   : contractAddresses.MARKET_REVEAL_CONTRACT,
+              contract: item.contractAddress,
+              amount: price.amount,
+              msg: btoa(
+                JSON.stringify({
+                  offering_id: item.id,
+                  ...(MarketplaceContracts.includes(item.contractAddress) && {
+                    nft_address: targetCollection.nftContract,
+                  }),
+                })
+              ),
+            },
+          };
+      try {
+        if (tokenStatus.isNativeCoin) {
+          await runExecute(
+            // item.token_id.includes("Hope")
+            //   ? contractAddresses.MARKET_CONTRACT
+            //   : contractAddresses.MARKET_REVEAL_CONTRACT,
+            item.contractAddress,
+            message,
+            {
+              funds: "" + price.amount / 1e6,
+              denom: price.denom,
+            }
+          );
+        } else {
+          await runExecute(
+            TokenStatus[price.denom as TokenType].contractAddress || "",
+            message
+          );
+        }
+        showBuySuccessToast(item, ToastType.BUY);
+        refresh();
+      } catch (err: any) {
+        const errMsg = err.message;
+        console.error(err, errMsg, typeof errMsg);
+        toast.error(`Fail! ${errMsg}`);
+      }
+    },
+    [refresh, runExecute]
+  );
+
   const buyNft = useCallback(
     async (item: any) => {
       if (!item.contractAddress) return;
@@ -123,67 +186,15 @@ const useHandleNftItem = () => {
       const myBalance = balances[price.denom as TokenType];
       const tokenStatus = TokenStatus[price.denom as TokenType];
 
-      const mainLogic = async () => {
-        const targetCollection = getCollectionById(item.collectionId);
-        const message = tokenStatus.isNativeCoin
-          ? {
-              buy_nft: {
-                offering_id: item.id,
-                ...(MarketplaceContracts.includes(item.contractAddress) && {
-                  nft_address: targetCollection.nftContract,
-                }),
-              },
-            }
-          : {
-              send: {
-                // contract: item.token_id.includes("Hope")
-                //   ? contractAddresses.MARKET_CONTRACT
-                //   : contractAddresses.MARKET_REVEAL_CONTRACT,
-                contract: item.contractAddress,
-                amount: price.amount,
-                msg: btoa(
-                  JSON.stringify({
-                    offering_id: item.id,
-                    ...(MarketplaceContracts.includes(item.contractAddress) && {
-                      nft_address: targetCollection.nftContract,
-                    }),
-                  })
-                ),
-              },
-            };
-        try {
-          if (tokenStatus.isNativeCoin) {
-            await runExecute(
-              // item.token_id.includes("Hope")
-              //   ? contractAddresses.MARKET_CONTRACT
-              //   : contractAddresses.MARKET_REVEAL_CONTRACT,
-              item.contractAddress,
-              message,
-              {
-                funds: "" + price.amount / 1e6,
-                denom: price.denom,
-              }
-            );
-          } else {
-            await runExecute(
-              TokenStatus[price.denom as TokenType].contractAddress || "",
-              message
-            );
-          }
-          showBuySuccessToast(item, ToastType.BUY);
-          refresh();
-        } catch (err: any) {
-          const errMsg = err.message;
-          console.error(errMsg, typeof errMsg);
-          toast.error(`Fail! ${errMsg}`);
-        }
-      };
-
-      const showQuickSwapPopout = (insufficientAmount: number) => {
+      const showQuickSwapPopout = (
+        item: any,
+        denom: TokenType,
+        insufficientAmount: number
+      ) => {
         popoutQuickSwap(
           {
             swapType: SwapType.DEPOSIT,
-            denom: price.denom as TokenType,
+            denom,
             swapChains: {
               origin: ChainTypes.JUNO,
               foreign: ChainTypes.COSMOS,
@@ -193,7 +204,9 @@ const useHandleNftItem = () => {
           false,
           async (amount: any) => {
             if (amount) {
-              await mainLogic();
+              setTimeout(() => {
+                mainLogic(item);
+              }, 5000);
             }
             return;
           }
@@ -212,13 +225,18 @@ const useHandleNftItem = () => {
           myBalance?.amount || 0,
           tokenName,
           tokenStatus.isIBCCOin &&
-            (() => showQuickSwapPopout(insufficientAmount))
+            (() =>
+              showQuickSwapPopout(
+                item,
+                price.denom as TokenType,
+                insufficientAmount
+              ))
         );
         return;
       }
-      await mainLogic();
+      await mainLogic(item);
     },
-    [balances, popoutQuickSwap, refresh, runExecute]
+    [balances, mainLogic, popoutQuickSwap]
   );
   const transferNft = useCallback(
     async (recipient: any, item: any, callbackLink?: string) => {

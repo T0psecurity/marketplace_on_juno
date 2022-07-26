@@ -71,6 +71,7 @@ interface WindowChildren extends ReactElement {}
 declare global {
   interface Window {
     promptedClosing: any;
+    onClosePopoutFunc: any;
   }
 }
 
@@ -84,16 +85,16 @@ const PopoutContextProvider = ({ children }: { children: any }) => {
   const [windowOption, setWindowOption] = useState<WindowOption>();
   const [windowChildren, setWindowChildren] = useState<WindowChildren>();
 
-  const closeNewWindow = useCallback(
-    (params?: any) => {
-      setShowWindow(false);
-      if (windowOption?.onClose && !window.promptedClosing) {
-        windowOption.onClose(params);
-      }
-      window.promptedClosing = true;
-    },
-    [windowOption]
-  );
+  const closeNewWindow = useCallback((params?: any) => {
+    setShowWindow(false);
+    // if (windowOption?.onClose && !window.promptedClosing) {
+    //   windowOption.onClose(params);
+    // }
+    if (window.onClosePopoutFunc && !window.promptedClosing) {
+      window.onClosePopoutFunc(params);
+    }
+    window.promptedClosing = true;
+  }, []);
 
   const showNewWindow = useCallback(
     (component: WindowChildren, options?: WindowOption) => {
@@ -101,6 +102,8 @@ const PopoutContextProvider = ({ children }: { children: any }) => {
       setWindowChildren(component);
       setShowWindow(true);
       window.promptedClosing = false;
+      // setWindowOption doesn't work properly. So when the popout window closes, the previous onClose func ia called.
+      window.onClosePopoutFunc = options?.onClose;
     },
     []
   );

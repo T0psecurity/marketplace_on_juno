@@ -23,6 +23,7 @@ import {
 
 import "./style.scss";
 import { useAppSelector } from "../../app/hooks";
+import useFetch from "../../hook/useFetch";
 
 // import {
 //   Wrapper,
@@ -150,6 +151,7 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
   });
   const [errMsg, setErrorMsg] = useState("");
   const balances = useAppSelector((state) => state.balances);
+  const { getTokenBalances } = useFetch();
 
   useEffect(() => {
     setSwapInfo(swapInfoProps);
@@ -188,14 +190,14 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
       setErrMsg("Invalid amount.");
       return;
     }
-    if (
-      swapInfo.swapType === SwapType.DEPOSIT &&
-      swapInfo.minAmount &&
-      amount < swapInfo.minAmount
-    ) {
-      setErrMsg(`Amount should be greater than ${swapInfo.minAmount}.`);
-      return;
-    }
+    // if (
+    //   swapInfo.swapType === SwapType.DEPOSIT &&
+    //   swapInfo.minAmount &&
+    //   amount < swapInfo.minAmount
+    // ) {
+    //   setErrMsg(`Amount should be greater than ${swapInfo.minAmount}.`);
+    //   return;
+    // }
     if (
       swapInfo.swapType === SwapType.WITHDRAW &&
       amount * 1e6 > balances[swapInfo.denom].amount
@@ -225,6 +227,24 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
     const receiverAddress = wallets.origin.account?.address;
 
     const client = wallets.foreign.client;
+    if (swapInfo.swapType === SwapType.DEPOSIT && senderAddress && client) {
+      const balance = await client.getBalance(
+        senderAddress,
+        foreignChainConfig.microDenom
+      );
+      let balanceWithoutFee = Number(balance.amount);
+      if (isNaN(Number(balance?.amount))) {
+        setErrMsg("Can't fetch balance.");
+        setSendingTx(false);
+        return;
+      }
+      balanceWithoutFee = balanceWithoutFee / 1e6 - 0.025;
+      if (balanceWithoutFee < amount) {
+        setErrMsg("Not enough balance!");
+        setSendingTx(false);
+        return;
+      }
+    }
 
     const transferMsg: MsgTransferEncodeObject = {
       typeUrl: "/ibc.applications.transfer.v1.MsgTransfer",
@@ -256,9 +276,10 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
           "auto",
           "memo"
         );
-        console.log("end of transaction here");
+        await getTokenBalances();
         closeNewWindow(true);
       } catch (e) {
+        console.error("popout transaction error", e);
         setSendingTx(false);
       }
     } else {

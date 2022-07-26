@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 
 import {
   Wrapper,
@@ -20,14 +21,11 @@ import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { TokenStatus, TokenType } from "../../types/tokens";
 import usePopoutQuickSwap, { SwapType } from "../../components/Popout";
 import { ChainTypes } from "../../constants/ChainTypes";
-import { toast } from "react-toastify";
-import useFetch from "../../hook/useFetch";
 
 const MyNFT: React.FC = () => {
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const popoutQuickSwap = usePopoutQuickSwap();
   const isMobile = isXs || isSm || isMd;
-  const { getTokenBalances } = useFetch();
   const nfts = useAppSelector((state) => state.nfts);
   const balances = useAppSelector((state) => state.balances);
   let unlistedNFTs: any = [],
@@ -57,7 +55,6 @@ const MyNFT: React.FC = () => {
       (status: any) => {
         if (status) {
           toast.success("IBC Transfer Success!");
-          getTokenBalances();
         }
       }
     );
