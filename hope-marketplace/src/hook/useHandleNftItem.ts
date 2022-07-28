@@ -111,7 +111,7 @@ const useHandleNftItem = () => {
         toast.success("Success!");
         refresh();
       } catch (err) {
-        console.error(err);
+        console.error("withdraw error", item, message, err);
         toast.error("Fail!");
       }
     },

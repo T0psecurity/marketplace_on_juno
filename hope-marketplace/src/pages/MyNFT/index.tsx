@@ -82,7 +82,7 @@ const MyNFT: React.FC = () => {
                   src={`/coin-images/${denom.replace(/\//g, "")}.png`}
                 />
                 <TokenBalance>{`${
-                  balances[denom].amount / 1e6
+                  (balances?.[denom]?.amount || 0) / 1e6
                 } $${key}`}</TokenBalance>
               </TokenBalanceItem>
             );
@@ -108,7 +108,7 @@ const MyNFT: React.FC = () => {
                   src={`/coin-images/${denom.replace(/\//g, "")}.png`}
                 />
                 <TokenBalance>{`${
-                  balances[denom].amount / 1e6
+                  (balances?.[denom]?.amount || 0) / 1e6
                 } $${key}`}</TokenBalance>
               </TokenBalanceItem>
             );
