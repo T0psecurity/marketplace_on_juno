@@ -48,5 +48,7 @@ export const timeDistance = (
   const duration = moment.duration(
     moment(new Date(time2)).diff(new Date(time1))
   );
-  return `${duration.hours()}:${duration.minutes()}:${duration.seconds()}`;
+  return `${
+    duration.days() * 24 + duration.hours()
+  }:${duration.minutes()}:${duration.seconds()}`;
 };
