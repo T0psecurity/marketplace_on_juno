@@ -252,7 +252,7 @@ const useHandleNftItem = () => {
         toast.success("Success!");
         if (callbackLink) history.push(callbackLink);
       } catch (err) {
-        console.log("err: ", err);
+        console.error("transfer error", item, message, err);
         toast.error("Fail!");
       }
     },

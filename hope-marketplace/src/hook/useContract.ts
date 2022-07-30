@@ -266,7 +266,7 @@ const useContract = () => {
         return returnValue;
       })
       .catch((err: any) => {
-        console.error(err);
+        console.error("get balance error", err);
         return {};
       });
   }, [offlineSigner, runQuery, state.accounts.keplrAccount]);

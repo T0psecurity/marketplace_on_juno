@@ -8,3 +8,4 @@ goblin, https://hopegalaxy.mypinata.cloud/ipfs/QmaLapkMZTmRpRtcCZAGedipMdiZxLaCy
 witches, https://hopegalaxy.mypinata.cloud/ipfs/QmVqucWUnQTAu5V3V4ubZGs7zhiiT28PQ797zmYzEh5C4w/_metadata.json
 romans, https://hopegalaxy.mypinata.cloud/ipfs/Qmf1hmTfjwtv1LynEvGUpXRQdterufhBNm2pEmhubDYkb9/_metadata.json
 junopunks2, https://hopegalaxy.mypinata.cloud/ipfs/QmPXEd1xJeZnQmDkifH15WsYwfG8Pzm7EqcRmVA62Wn7Qo/_metadata.json
+bored3d, https://hopegalaxy.mypinata.cloud/ipfs/QmSiJT5Jz9w55G3S2QUq5ZHz8VxsUFDN7VFYmUGF5U9LYR/_metadata.json

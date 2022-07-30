@@ -70,6 +70,7 @@ export enum CollectionIds {
   WITCHES = "witches",
   ROMANS = "romans",
   JUNOPUNKS2 = "junopunks2",
+  BORED3D = "bored3d",
 }
 
 const Collections: MarketplaceInfo[] = [
@@ -455,6 +456,37 @@ const Collections: MarketplaceInfo[] = [
       price: "1.55 $JUNO",
       mintImage: "/mint-images/romans.gif",
       mintDate: "2022-07-19",
+      mintLogic: MintLogics.logic1,
+    },
+    isLaunched: true,
+  },
+  {
+    title: "BAIC3D - Bored Ape Ibc Club 3D",
+    creator: "Bored Ape Ibc Club",
+    imageUrl: "/backgrounds/bored3d.png",
+    backgroundUrl: "/marketplace-backgrounds/bored3d.png",
+    logoUrl: "/logos/bored3d.gif",
+    collectionId: CollectionIds.BORED3D,
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmSiJT5Jz9w55G3S2QUq5ZHz8VxsUFDN7VFYmUGF5U9LYR/_metadata.json",
+    nftContract:
+      "juno1vyvdyd70pz3yhnduzfhl098dk5pfpjl8nxmsrm6gmd3f7y5yrxvqw7e892",
+    mintContract:
+      "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/BfKPacc5jF",
+      website: "https://launchpad.hopers.io/bored-ape-ibc-club",
+      twitter: "https://twitter.com/BoredApeIbcClub",
+    },
+    description:
+      "Bored Ape IBC Club #BAIC3D/ community driven project/ in honour of the #BAYC 🙌 for the #COSMOS #IBC ⚛️",
+    mintInfo: {
+      totalNfts: 500,
+      royalties: "7% + 3%",
+      price: "2.69 $JUNO",
+      mintImage: "/mint-images/bored3d.gif",
+      mintDate: "2022-07-30",
       mintLogic: MintLogics.logic1,
     },
     isLaunched: true,
