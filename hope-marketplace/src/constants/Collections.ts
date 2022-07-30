@@ -488,6 +488,7 @@ const Collections: MarketplaceInfo[] = [
       mintImage: "/mint-images/bored3d.gif",
       mintDate: "2022-07-30",
       mintLogic: MintLogics.logic1,
+      isWhiteListMint: true,
     },
     isLaunched: true,
   },
