@@ -517,7 +517,7 @@ const Collections: MarketplaceInfo[] = [
     mintInfo: {
       totalNfts: 302,
       royalties: "5% + 3%",
-      price: "Private Sale: 0 $JUNO",
+      price: "Private Sale: 0.1 $JUNO",
       mintImage: "/mint-images/gorilla.gif",
       mintDate: "TBA",
       mintLogic: MintLogics.logic1,
