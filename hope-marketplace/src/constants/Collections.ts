@@ -503,7 +503,7 @@ const Collections: MarketplaceInfo[] = [
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmX1i7DKeHyDHrnhFT8ab4E5mtfgtGH4XQ29ETi3WsGS5a/_metadata.json",
     nftContract:
-      "juno1vyvdyd70pz3yhnduzfhl098dk5pfpjl8nxmsrm6gmd3f7y5yrxvqw7e892",
+      "juno1rwwnwhh3jrhh82v50gqmf2vyemlxvdea7zxl7yhpltsmf7trjw3s4yx5q8",
     mintContract:
       "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
     marketplaceContract: [],
@@ -515,9 +515,9 @@ const Collections: MarketplaceInfo[] = [
     description:
       "Each Hex Gorilla will have a hexadecimal color code that is unique to them. There are over 16 million colors in our universe that can be represented by hex color codes. In many examples, we have included the color globally recognized name, which is acknowledged by The Official Registry of Color Names, The International Color Consortium, and several designer sites such as Color-Name, ColorHexa, and many others.",
     mintInfo: {
-      totalNfts: 200,
-      royalties: "10%",
-      price: "3 $JUNO",
+      totalNfts: 302,
+      royalties: "5% + 3%",
+      price: "Private Sale: 0 $JUNO",
       mintImage: "/mint-images/gorilla.gif",
       mintDate: "TBA",
       mintLogic: MintLogics.logic1,
