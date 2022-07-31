@@ -93,6 +93,7 @@ const ExploreMarketplace: React.FC = () => {
       title: "New",
       Icon: () => <NewIcon />,
       order: [
+        CollectionIds.BORED3D,
         CollectionIds.JUNOPUNKS2,
         CollectionIds.ROMANS,
         CollectionIds.WITCHES,
@@ -128,6 +129,7 @@ const ExploreMarketplace: React.FC = () => {
       Icon: () => <CommunityIcon />,
       order: [
         CollectionIds.BORED,
+        CollectionIds.BORED3D,
         CollectionIds.GOBLIN,
         CollectionIds.NETANOTS,
         CollectionIds.WITCHES,
@@ -154,6 +156,7 @@ const ExploreMarketplace: React.FC = () => {
         CollectionIds.GOBLIN,
         CollectionIds.CRYPTOGIRLS,
         CollectionIds.BORED,
+        CollectionIds.BORED3D,
       ],
     },
     {

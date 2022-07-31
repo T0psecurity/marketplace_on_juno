@@ -9,3 +9,4 @@ witches, https://hopegalaxy.mypinata.cloud/ipfs/QmVqucWUnQTAu5V3V4ubZGs7zhiiT28P
 romans, https://hopegalaxy.mypinata.cloud/ipfs/Qmf1hmTfjwtv1LynEvGUpXRQdterufhBNm2pEmhubDYkb9/_metadata.json
 junopunks2, https://hopegalaxy.mypinata.cloud/ipfs/QmPXEd1xJeZnQmDkifH15WsYwfG8Pzm7EqcRmVA62Wn7Qo/_metadata.json
 bored3d, https://hopegalaxy.mypinata.cloud/ipfs/QmSiJT5Jz9w55G3S2QUq5ZHz8VxsUFDN7VFYmUGF5U9LYR/_metadata.json
+gorilla, https://hopegalaxy.mypinata.cloud/ipfs/QmX1i7DKeHyDHrnhFT8ab4E5mtfgtGH4XQ29ETi3WsGS5a/_metadata.json

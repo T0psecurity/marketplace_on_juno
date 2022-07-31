@@ -71,6 +71,7 @@ export enum CollectionIds {
   ROMANS = "romans",
   JUNOPUNKS2 = "junopunks2",
   BORED3D = "bored3d",
+  GORILLA = "gorilla",
 }
 
 const Collections: MarketplaceInfo[] = [
@@ -484,9 +485,41 @@ const Collections: MarketplaceInfo[] = [
     mintInfo: {
       totalNfts: 500,
       royalties: "7% + 3%",
-      price: "2.69 $JUNO",
+      price: "3.69 $JUNO",
       mintImage: "/mint-images/bored3d.gif",
       mintDate: "2022-07-30",
+      mintLogic: MintLogics.logic1,
+      isWhiteListMint: true,
+    },
+    isLaunched: true,
+  },
+  {
+    title: "Hex Gorilla Universe",
+    creator: "Gorilla Nixon",
+    imageUrl: "/backgrounds/gorilla.png",
+    backgroundUrl: "/marketplace-backgrounds/gorilla.png",
+    logoUrl: "/logos/gorilla.gif",
+    collectionId: CollectionIds.GORILLA,
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmX1i7DKeHyDHrnhFT8ab4E5mtfgtGH4XQ29ETi3WsGS5a/_metadata.json",
+    nftContract:
+      "juno1vyvdyd70pz3yhnduzfhl098dk5pfpjl8nxmsrm6gmd3f7y5yrxvqw7e892",
+    mintContract:
+      "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/w8neWTGGvz",
+      website: "https://docs.hexgorilla.com/",
+      twitter: "https://twitter.com/HexGorilla",
+    },
+    description:
+      "Each Hex Gorilla will have a hexadecimal color code that is unique to them. There are over 16 million colors in our universe that can be represented by hex color codes. In many examples, we have included the color globally recognized name, which is acknowledged by The Official Registry of Color Names, The International Color Consortium, and several designer sites such as Color-Name, ColorHexa, and many others.",
+    mintInfo: {
+      totalNfts: 200,
+      royalties: "10%",
+      price: "3 $JUNO",
+      mintImage: "/mint-images/gorilla.gif",
+      mintDate: "TBA",
       mintLogic: MintLogics.logic1,
       isWhiteListMint: true,
     },

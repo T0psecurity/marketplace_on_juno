@@ -48,6 +48,9 @@ const buildNFTItem = (
   metaData: any
 ) => {
   const customTokenId = collection.customTokenId;
+  const sortedMetaData = metaData.sort((item1: any, item2: any) =>
+    item1.edition > item2.edition ? 1 : -1
+  );
 
   const tokenNumberStr = Number(getTokenIdNumber(item.token_id));
   const tokenNumber: number = isNaN(tokenNumberStr) ? 0 : tokenNumberStr;
@@ -58,9 +61,9 @@ const buildNFTItem = (
     }),
     contractAddress,
     collectionId: collection.collectionId,
-    ...(metaData &&
-      metaData[tokenNumber - 1] && {
-        metaData: metaData[tokenNumber - 1],
+    ...(sortedMetaData &&
+      sortedMetaData[tokenNumber - 1] && {
+        metaData: sortedMetaData[tokenNumber - 1],
       }),
   };
   return crrItem;
