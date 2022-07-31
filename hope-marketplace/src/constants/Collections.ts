@@ -129,7 +129,7 @@ const Collections: MarketplaceInfo[] = [
     description:
       "Juno Punks II Martians is the second collection of the Juno Punks project. This collection will play a key role in the development of the ecosystem. All the funds collected will be used to create a liquidity pool $JUNO/$PUNK on JunoSwap.",
     mintInfo: {
-      totalNfts: 1000,
+      totalNfts: 260,
       royalties: "7% + 3%",
       price: "Mint: 15$JUNO",
       mintImage: "/mint-images/junopunks2.gif",
