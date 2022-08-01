@@ -48,7 +48,7 @@ const buildNFTItem = (
   metaData: any
 ) => {
   const customTokenId = collection.customTokenId;
-  const sortedMetaData = metaData.sort((item1: any, item2: any) =>
+  const sortedMetaData = metaData?.sort((item1: any, item2: any) =>
     item1.edition > item2.edition ? 1 : -1
   );
 
@@ -348,6 +348,7 @@ const useFetch = () => {
               queryResult?.offerings ||
               (!!queryResult?.length && queryResult) ||
               [];
+            console.log(collection.collectionId, queryResult, fetchedResult);
             fetchedResult?.forEach((item: any, itemIndex: number) => {
               const crrItem = buildNFTItem(
                 item,
@@ -361,6 +362,12 @@ const useFetch = () => {
               marketplaceNFTs = [...marketplaceNFTs, crrItem];
             });
           });
+          console.log(
+            collection.collectionId,
+            queryResults,
+            marketplaceNFTs,
+            listedNFTs
+          );
           dispatch(setNFTs([`${collection.collectionId}_listed`, listedNFTs]));
           dispatch(
             setNFTs([`${collection.collectionId}_marketplace`, marketplaceNFTs])
