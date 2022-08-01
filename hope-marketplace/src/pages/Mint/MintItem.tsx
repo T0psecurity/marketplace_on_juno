@@ -172,7 +172,6 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       toast.error("Connect wallet!");
       return;
     }
-    console.log("mint nft start");
     // const whiteLists = await React.lazy(
     //   () => import(`../../assets/whiteLists/${targetCollection.collectionId}`)
     // );
@@ -304,7 +303,11 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
           {renderDetailBlocks(NFT_DETAIL_KEYS, "25%")}
         </DetailBlockContainer>
         <DetailTitle>Public Sale</DetailTitle>
-        <DetailInfo>{`Price ${mintItem.mintInfo?.price}`}</DetailInfo>
+        <DetailInfo>{`Price ${
+          collectionState.price
+            ? `${collectionState.price} $JUNO`
+            : mintItem.mintInfo?.price
+        }`}</DetailInfo>
         <OperationContainer isMobile={!isXl}>
           <FlexColumn width={operationItemSize}>
             <DetailInfo># to mint</DetailInfo>
