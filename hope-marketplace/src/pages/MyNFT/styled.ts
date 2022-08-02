@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div<{ isMobile?: boolean }>`
   height: 100%;
@@ -37,11 +37,35 @@ export const TokenBalancesWrapper = styled.div`
   margin-left: 20px;
 `;
 
-export const TokenBalanceItem = styled.div`
+export const TokenBalanceItem = styled.div<{ marginBottom?: string }>`
+  width: 150px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   cursor: pointer;
   margin: 0 10px;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  padding: 5px;
+  position: relative;
+  ${({ marginBottom }) =>
+    marginBottom &&
+    css`
+      margin-bottom: ${marginBottom};
+    `}
+`;
+
+export const WithdrawButton = styled.div`
+  position: absolute;
+  cursor: pointer;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
+export const CoinIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export const CoinIcon = styled.img`
@@ -50,4 +74,43 @@ export const CoinIcon = styled.img`
   margin-right: 5px;
 `;
 
-export const TokenBalance = styled.div``;
+export const TokenBalance = styled.div`
+  font-weight: bold;
+`;
+
+export const MyNftsHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
+
+export const MyNftsTabs = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  /* width: 100%; */
+`;
+
+export const MyNftsTab = styled.div<{ selected: boolean }>`
+  cursor: pointer;
+  margin-right: 20px;
+  ${({ selected }) =>
+    selected &&
+    css`
+      font-weight: bold;
+    `}
+
+  &:last-child {
+    margin-right: 0;
+  }
+`;
+
+export const SearchWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 550px;
+`;
