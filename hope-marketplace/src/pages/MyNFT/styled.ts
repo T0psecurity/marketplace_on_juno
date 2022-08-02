@@ -38,12 +38,12 @@ export const TokenBalancesWrapper = styled.div`
 `;
 
 export const TokenBalanceItem = styled.div<{ marginBottom?: string }>`
-  width: 150px;
+  width: 180px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  margin: 0 10px;
+  margin: 10px;
   border: 1px solid rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   padding: 5px;

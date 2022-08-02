@@ -28,7 +28,7 @@ import usePopoutQuickSwap, { SwapType } from "../../components/Popout";
 import { ChainTypes } from "../../constants/ChainTypes";
 import { MyNftsTabs } from "./styled";
 import SearchInputer from "../../components/SearchInputer";
-import { getCustomTokenId } from "../../hook/useFetch";
+// import { getCustomTokenId } from "../../hook/useFetch";
 
 enum NFT_TYPE {
   ALL = "My NFTs",
@@ -36,16 +36,16 @@ enum NFT_TYPE {
   ONSALE = "On Sale",
 }
 
-const checkSearchedNft = (
-  nft: any,
-  searchWord: string,
-  customTokenId: string
-) => {
-  const tokenId = customTokenId
-    ? getCustomTokenId(nft.token_id, customTokenId)
-    : nft.token_id;
-  return tokenId.includes(searchWord);
-};
+// const checkSearchedNft = (
+//   nft: any,
+//   searchWord: string,
+//   customTokenId: string
+// ) => {
+//   const tokenId = customTokenId
+//     ? getCustomTokenId(nft.token_id, customTokenId)
+//     : nft.token_id;
+//   return tokenId.includes(searchWord);
+// };
 
 const MyNFT: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<NFT_TYPE>(NFT_TYPE.ALL);
@@ -63,31 +63,41 @@ const MyNFT: React.FC = () => {
     Collections.forEach((collection: MarketplaceInfo) => {
       const collectionId = collection.collectionId;
       const listedKey = `${collectionId}_listed`;
-      if (nfts[collectionId] && nfts[collectionId].length) {
-        nfts[collectionId].forEach((item: any) => {
-          if (
-            !searchValue ||
-            checkSearchedNft(item, searchValue, collection.customTokenId || "")
-          ) {
-            unlistedNFTs.push(item);
-            all.push(item);
-          }
-        });
-        // unlistedNFTs = unlistedNFTs.concat(nfts[collectionId]);
-        // all = all.concat(nfts[collectionId])
+      if (
+        nfts[collectionId] &&
+        nfts[collectionId].length &&
+        (!searchValue ||
+          collection.title.toLowerCase().includes(searchValue.toLowerCase()))
+      ) {
+        // nfts[collectionId].forEach((item: any) => {
+        //   if (
+        //     !searchValue ||
+        //     checkSearchedNft(item, searchValue, collection.customTokenId || "")
+        //   ) {
+        //     unlistedNFTs.push(item);
+        //     all.push(item);
+        //   }
+        // });
+        unlistedNFTs = unlistedNFTs.concat(nfts[collectionId]);
+        all = all.concat(nfts[collectionId]);
       }
-      if ((nfts as any)[listedKey] && (nfts as any)[listedKey].length) {
-        (nfts as any)[listedKey].forEach((item: any) => {
-          if (
-            !searchValue ||
-            checkSearchedNft(item, searchValue, collection.customTokenId || "")
-          ) {
-            listedNFTs.push(item);
-            all.push(item);
-          }
-        });
-        // listedNFTs = listedNFTs.concat((nfts as any)[listedKey]);
-        // all = all.concat((nfts as any)[listedKey]);
+      if (
+        (nfts as any)[listedKey] &&
+        (nfts as any)[listedKey].length &&
+        (!searchValue ||
+          collection.title.toLowerCase().includes(searchValue.toLowerCase()))
+      ) {
+        // (nfts as any)[listedKey].forEach((item: any) => {
+        //   if (
+        //     !searchValue ||
+        //     checkSearchedNft(item, searchValue, collection.customTokenId || "")
+        //   ) {
+        //     listedNFTs.push(item);
+        //     all.push(item);
+        //   }
+        // });
+        listedNFTs = listedNFTs.concat((nfts as any)[listedKey]);
+        all = all.concat((nfts as any)[listedKey]);
       }
     });
     return {
@@ -148,7 +158,10 @@ const MyNFT: React.FC = () => {
                   <TokenBalance>{key}</TokenBalance>
                 </CoinIconWrapper>
                 <TokenBalance>
-                  {(balances?.[denom]?.amount || 0) / 1e6}
+                  {((balances?.[denom]?.amount || 0) / 1e6).toLocaleString(
+                    "en-US",
+                    { maximumFractionDigits: 3 }
+                  )}
                 </TokenBalance>
               </TokenBalanceItem>
             );
@@ -156,7 +169,8 @@ const MyNFT: React.FC = () => {
         )}
       </TokenBalancesWrapper>
       <TokenTypeString>
-        IBC Assets <span>(Click Asset to Withdraw)</span>
+        IBC Assets
+        {/* <span>(Click Asset to Withdraw)</span> */}
       </TokenTypeString>
       <TokenBalancesWrapper>
         {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
@@ -174,7 +188,10 @@ const MyNFT: React.FC = () => {
                   <TokenBalance>{key}</TokenBalance>
                 </CoinIconWrapper>
                 <TokenBalance>
-                  {(balances?.[denom]?.amount || 0) / 1e6}
+                  {((balances?.[denom]?.amount || 0) / 1e6).toLocaleString(
+                    "en-US",
+                    { maximumFractionDigits: 3 }
+                  )}
                 </TokenBalance>
                 <WithdrawButton onClick={() => handleClickBalanceItem(denom)}>
                   Withdraw
