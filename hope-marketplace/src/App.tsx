@@ -31,7 +31,7 @@ import Updater from "./context/Updater";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Main from "./pages/Main";
-import { useAppDispatch, useAppSelector } from "./app/hooks";
+import { useAppDispatch } from "./app/hooks";
 // import { deleteAccount } from "./features/accounts/accountsSlice";
 // import useContract from "./hook/useContract";
 // import useFetch from "./hook/useFetch";
@@ -39,6 +39,8 @@ import { useAppDispatch, useAppSelector } from "./app/hooks";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchTokenPrices } from "./features/tokenPrices/tokenPricesSlice";
+import { ChainConfigs, ChainTypes } from "./constants/ChainTypes";
+import { PopoutContextProvider } from "./context/PopoutContext";
 
 const history = createBrowserHistory();
 
@@ -80,7 +82,7 @@ function App() {
 
   const { isXs, isSm } = useMatchBreakpoints();
   const isMobile = isXs || isSm;
-  const config = useAppSelector((state) => state.connection.config);
+  const config = ChainConfigs[ChainTypes.JUNO];
   // const chainInfo: ChainInfo = getChainConfig(config);
 
   // const enableWallet = async (wallet: Wallet, client: WalletClient) => {
@@ -146,26 +148,28 @@ function App() {
         }}
       >
         <RefreshContextProvider>
-          <Updater />
-          <div className="main">
-            <Router history={history}>
-              <Header />
-              <Main />
-              <Footer />
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                hideProgressBar
-                newestOnTop
-                closeOnClick
-                theme="colored"
-              />
-            </Router>
-          </div>
+          <PopoutContextProvider>
+            <Updater />
+            <div className="main">
+              <Router history={history}>
+                <Header />
+                <Main />
+                <Footer />
+                <ToastContainer
+                  position="top-right"
+                  autoClose={5000}
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  hideProgressBar
+                  newestOnTop
+                  closeOnClick
+                  theme="colored"
+                />
+              </Router>
+            </div>
+          </PopoutContextProvider>
         </RefreshContextProvider>
       </WalletManagerProvider>
     </>

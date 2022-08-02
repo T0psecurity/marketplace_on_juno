@@ -9,7 +9,7 @@ import { getTokenIdNumber } from "../../hook/useFetch";
 // import { setSelectedNFT } from "../../features/nfts/nftsSlice";
 import useHandleNftItem from "../../hook/useHandleNftItem";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 import { addSuffix, escapeSpecialForUrl } from "../../util/string";
 import Image from "../Image";
 
@@ -65,8 +65,8 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const history = useHistory();
   const price = item?.list_price || {};
   const tokenPrice =
-    tokenPrices[price.denom as NFTPriceType]?.market_data.current_price?.usd ||
-    0;
+    tokenPrices[price.denom as TokenType]?.market_data.current_price?.usd || 0;
+
   let url = "";
   if (item.collectionId === "mintpass1") {
     url = "/others/mint_pass.png";
@@ -99,7 +99,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   // const handleChangePriceType = (e: any) => {
   //   const { value } = e.target;
-  //   setNftPriceType(value);
+  //   setTokenType(value);
   // };
   const handleChangePriceType = (item: any) => {
     setNftPriceType(item.value);
@@ -112,10 +112,10 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const isSellItem = status === NFTItemStatus.SELL;
   const SelectOptions = (
-    Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+    Object.keys(TokenType) as Array<keyof typeof TokenType>
   ).map((key) => {
     return {
-      value: NFTPriceType[key],
+      value: TokenType[key],
       label: key,
     };
   });
@@ -123,7 +123,10 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const NFTItemPriceItem = () =>
     !!price.amount && +price.amount > 0 ? (
       <NFTItemInfo>
-        <CoinIcon alt="" src={`/coin-images/${price.denom}.png`} />
+        <CoinIcon
+          alt=""
+          src={`/coin-images/${price.denom.replace(/\//g, "")}.png`}
+        />
         <NFTItemPriceContainer isMobile={isMobile}>
           <NFTItemTokenPrice>{price.amount / 1e6}</NFTItemTokenPrice>
           <NFTItemUsdPrice>
@@ -195,19 +198,13 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                   }),
                 }}
                 onChange={handleChangePriceType}
-                // options={[
-                //   { value: NFTPriceType.HOPE, label: "HOPE" },
-                //   { value: NFTPriceType.JUNO, label: "JUNO" },
-                //   { value: NFTPriceType.RAW, label: "RAW" },
-                //   { value: NFTPriceType.NETA, label: "NETA" },
-                // ]}
                 options={SelectOptions}
               />
               {/* <input
                 type="radio"
                 id={`hope-${item.token_id}`}
                 name="priceType"
-                value={NFTPriceType.HOPE}
+                value={TokenType.HOPE}
                 onClick={handleChangePriceType}
               />
               <label htmlFor={`hope-${item.token_id}`}>HOPE</label>
@@ -216,7 +213,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                 type="radio"
                 id={`juno-${item.token_id}`}
                 name="priceType"
-                value={NFTPriceType.JUNO}
+                value={TokenType.JUNO}
                 onClick={handleChangePriceType}
               />
               <label htmlFor={`juno-${item.token_id}`}>JUNO</label>

@@ -7,29 +7,30 @@ import {
 } from "@noahsaso/cosmodal";
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
-import {
-  useAppDispatch,
-  // useAppSelector
-} from "../app/hooks";
-import Collections, {
-  MarketplaceContracts,
-  MarketplaceInfo,
-  MintContracts,
-} from "../constants/Collections";
-import {
-  importContract,
-  // contractAccounts,
-  // deleteAccount,
-} from "../features/accounts/accountsSlice";
+// import {
+//   // useAppSelector
+// } from "../app/hooks";
+// import Collections, {
+//   MarketplaceContracts,
+//   MarketplaceInfo,
+//   MintContracts,
+// } from "../constants/Collections";
+// import {
+//   importContract,
+//   // contractAccounts,
+//   // deleteAccount,
+// } from "../features/accounts/accountsSlice";
 import connectionManager from "../features/connection/connectionManager";
 import { toMicroAmount } from "../util/coins";
-import { NFTPriceType } from "../types/nftPriceTypes";
+import { TokenStatus, TokenType } from "../types/tokens";
+import { ChainConfigs, ChainTypes } from "../constants/ChainTypes";
 
-type TokenContractType = {
-  [key in NFTPriceType]: string;
-};
+// type TokenContractType = {
+//   [key in TokenType]: string;
+// };
 
-interface ContractAddressesType extends TokenContractType {
+// interface ContractAddressesType extends TokenContractType {
+interface ContractAddressesType {
   MINT_CONTRACT: string;
 }
 
@@ -37,63 +38,62 @@ export const contractAddresses: ContractAddressesType = {
   MINT_CONTRACT:
     // "juno1u230upl8ut7vn8uyk7hd9ac2ygwrvk5jygsjzv838hkn2u4xj34slyg2qy",
     "juno17kr4uahqlz8hl8nucx82q4vmlj7lrzzlz0yr0ax9hejaevw6ewqsf8p5ux",
-  [NFTPriceType.JUNO]: "",
-  [NFTPriceType.HOPE]:
-    // "juno1ckulym5ufeu29kqcqn0pw7qfavdmup9a9kwt9uzgt4arkq84qetssd9ltl",
-    "juno1re3x67ppxap48ygndmrc7har2cnc7tcxtm9nplcas4v0gc3wnmvs3s807z",
-  [NFTPriceType.RAW]:
-    "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
-  [NFTPriceType.NETA]:
-    "juno168ctmpyppk90d34p3jjy658zf5a5l3w8wk35wht6ccqj4mr0yv8s4j5awr",
+  // [TokenType.JUNO]: "",
+  // [TokenType.HOPE]:
+  //   // "juno1ckulym5ufeu29kqcqn0pw7qfavdmup9a9kwt9uzgt4arkq84qetssd9ltl",
+  //   "juno1re3x67ppxap48ygndmrc7har2cnc7tcxtm9nplcas4v0gc3wnmvs3s807z",
+  // [TokenType.RAW]:
+  //   "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
+  // [TokenType.NETA]:
+  //   "juno168ctmpyppk90d34p3jjy658zf5a5l3w8wk35wht6ccqj4mr0yv8s4j5awr",
 };
 
 const useContract = () => {
-  const dispatch = useAppDispatch();
   // const contracts = useAppSelector(contractAccounts);
   // const { connect } = useWalletManager();
 
   const state = useSelector((state: any) => state);
   const { offlineSigner, signingCosmWasmClient } = useWallet(
-    state.connection.config.chainId
+    ChainConfigs[ChainTypes.JUNO].chainId
   );
 
-  const initContracts = useCallback(() => {
-    // remove existing contracts
-    // if (contracts.length) {
-    //   for (let i = 0; i < contracts.length; i++) {
-    //     const contract = contracts[i];
-    //     dispatch(deleteAccount(contract.address));
-    //   }
-    // }
+  // const initContracts = useCallback(() => {
+  //   // remove existing contracts
+  //   // if (contracts.length) {
+  //   //   for (let i = 0; i < contracts.length; i++) {
+  //   //     const contract = contracts[i];
+  //   //     dispatch(deleteAccount(contract.address));
+  //   //   }
+  //   // }
 
-    // import target contracts
-    let targetContractAddresses: string[] = [];
-    Object.keys(contractAddresses).forEach((key: string) => {
-      targetContractAddresses.push(
-        contractAddresses[key as keyof ContractAddressesType]
-      );
-    });
-    Collections.forEach((collection: MarketplaceInfo) => {
-      if (collection.nftContract)
-        targetContractAddresses.push(collection.nftContract);
-      if (collection.mintContract)
-        targetContractAddresses.push(collection.mintContract);
-      if (collection.marketplaceContract.length)
-        collection.marketplaceContract.forEach((contract: string) => {
-          if (contract) targetContractAddresses.push(contract);
-        });
-    });
-    MarketplaceContracts.forEach((contract: string) =>
-      targetContractAddresses.push(contract)
-    );
-    MintContracts.forEach((contract: string) =>
-      targetContractAddresses.push(contract)
-    );
+  //   // import target contracts
+  //   let targetContractAddresses: string[] = [];
+  //   Object.keys(contractAddresses).forEach((key: string) => {
+  //     targetContractAddresses.push(
+  //       contractAddresses[key as keyof ContractAddressesType]
+  //     );
+  //   });
+  //   Collections.forEach((collection: MarketplaceInfo) => {
+  //     if (collection.nftContract)
+  //       targetContractAddresses.push(collection.nftContract);
+  //     if (collection.mintContract)
+  //       targetContractAddresses.push(collection.mintContract);
+  //     if (collection.marketplaceContract.length)
+  //       collection.marketplaceContract.forEach((contract: string) => {
+  //         if (contract) targetContractAddresses.push(contract);
+  //       });
+  //   });
+  //   MarketplaceContracts.forEach((contract: string) =>
+  //     targetContractAddresses.push(contract)
+  //   );
+  //   MintContracts.forEach((contract: string) =>
+  //     targetContractAddresses.push(contract)
+  //   );
 
-    dispatch(importContract(targetContractAddresses));
+  //   dispatch(importContract(targetContractAddresses));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Collections]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [Collections]);
 
   const runQuery = useCallback(
     // async (contractAddress: string, queryMsg: any) => {
@@ -114,7 +114,7 @@ const useContract = () => {
         return result;
       } else {
         const client = await connectionManager.getQueryClient(
-          state.connection.config
+          ChainConfigs[ChainTypes.JUNO]
         );
         const result = await client.queryContractSmart(
           contractAddress,
@@ -123,7 +123,7 @@ const useContract = () => {
         return result;
       }
     },
-    [state, signingCosmWasmClient]
+    [signingCosmWasmClient]
   );
 
   const runExecute = useCallback(
@@ -133,10 +133,14 @@ const useContract = () => {
       option?: {
         memo?: string;
         funds?: string;
+        denom?: string;
       }
     ) => {
       if (!offlineSigner) {
         // connect();
+        // setTimeout(() => {
+        //   runExecute(contractAddress, executeMsg, option);
+        // }, 500);
         throw new Error("No account selected");
       }
       // const contract = state.accounts.accountList[contractAddress];
@@ -152,9 +156,9 @@ const useContract = () => {
       //   state.connection.config
       // );
 
-      const executeOptions = state.console.executeOptions;
-      const executeMemo = option?.memo ?? executeOptions?.memo;
-      const executeFunds = option?.funds ?? executeOptions?.funds;
+      const executeMemo = option?.memo || "";
+      const executeFunds = option?.funds || "";
+      const executeDenom = option?.denom || "";
 
       // --mobile connection
       // const { client } = connectedWallet;
@@ -162,7 +166,7 @@ const useContract = () => {
       //   client instanceof KeplrWalletConnectV1
       //     ? await client.getOfflineSignerOnlyAmino(config.chainId)
       //     : await client.getOfflineSignerAuto(config.chainId);
-      const config = state.connection.config;
+      const config = ChainConfigs[ChainTypes.JUNO];
 
       const cwClient = await SigningCosmWasmClient.connectWithSigner(
         config["rpcEndpoint"],
@@ -201,9 +205,9 @@ const useContract = () => {
           ? coins(
               toMicroAmount(
                 executeFunds,
-                state.connection.config["coinDecimals"]
+                ChainConfigs[ChainTypes.JUNO]["coinDecimals"]
               ),
-              state.connection.config["microDenom"]
+              executeDenom || ChainConfigs[ChainTypes.JUNO]["microDenom"]
             )
           : undefined
       );
@@ -211,8 +215,65 @@ const useContract = () => {
     [state, offlineSigner]
   );
 
+  const getBalances = useCallback(async () => {
+    if (!offlineSigner) return {};
+    const account = state.accounts.keplrAccount;
+    const config = ChainConfigs[ChainTypes.JUNO];
+
+    const cwClient = await SigningCosmWasmClient.connectWithSigner(
+      config["rpcEndpoint"],
+      offlineSigner,
+      {
+        gasPrice: GasPrice.fromString(
+          `${config["gasPrice"]}${config["microDenom"]}`
+        ),
+      }
+    );
+    const denoms: { denom: TokenType; isNativeCoin: boolean }[] = [];
+    const queries = (
+      Object.keys(TokenType) as Array<keyof typeof TokenType>
+    ).map((key) => {
+      const tokenStatus = TokenStatus[TokenType[key]];
+      denoms.push({
+        denom: TokenType[key],
+        isNativeCoin: tokenStatus.isNativeCoin,
+      });
+      return !tokenStatus.isNativeCoin && tokenStatus.contractAddress
+        ? runQuery(tokenStatus.contractAddress, {
+            balance: { address: account.address },
+          })
+        : cwClient.getBalance(account.address, TokenType[key]);
+    });
+    return await Promise.all(queries)
+      .then((results: any) => {
+        let returnValue: { [key in TokenType]: any } = {} as {
+          [key in TokenType]: any;
+        };
+        denoms.forEach(
+          (
+            denom: { denom: TokenType; isNativeCoin: boolean },
+            index: number
+          ) => {
+            const crrResult = results[index];
+            returnValue[denom.denom] = {
+              denom: denom.denom,
+              amount: Number(
+                denom.isNativeCoin ? crrResult.amount : crrResult.balance
+              ),
+            };
+          }
+        );
+        return returnValue;
+      })
+      .catch((err: any) => {
+        console.error("get balance error", err);
+        return {};
+      });
+  }, [offlineSigner, runQuery, state.accounts.keplrAccount]);
+
   return {
-    initContracts,
+    // initContracts,
+    getBalances,
     runQuery,
     runExecute,
   };

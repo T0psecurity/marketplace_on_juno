@@ -16,6 +16,11 @@ import {
   setConfigModalOpen,
 } from "./connectionSlice";
 import presets from "./presets.json";
+import {
+  ChainConfigs,
+  ChainTypes,
+  ConfigType,
+} from "../../constants/ChainTypes";
 
 // add basic validation
 const config = {
@@ -50,7 +55,7 @@ const config = {
 
 export const Configuration: FC = () => {
   const open = useAppSelector((state) => state.connection.modalOpen);
-  const entries = useAppSelector((state) => state.connection.config);
+  const entries = ChainConfigs[ChainTypes.JUNO];
   const dispatch = useAppDispatch();
   const [localEntries, setLocalEntries] = useState(entries);
   const [preset, setPreset] = useState<keyof typeof presets>();
@@ -60,7 +65,7 @@ export const Configuration: FC = () => {
   }, [entries]);
 
   useEffect(() => {
-    if (preset) setLocalEntries(presets[preset]);
+    if (preset) setLocalEntries(presets[preset] as ConfigType);
   }, [preset]);
 
   function close(event: Event) {
@@ -118,7 +123,7 @@ export const Configuration: FC = () => {
           <SlInput
             key={key}
             label={label}
-            value={localEntries[key] ?? ""}
+            value={localEntries[key as keyof ConfigType] ?? ""}
             className={styles.label}
             onSlChange={(e) =>
               setEntry(key, (e.target as SlInputElement).value)

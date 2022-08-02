@@ -6,7 +6,7 @@ import ReactSelect, { ControlProps } from "react-select";
 //   StatisticSettings,
 // } from "../../constants/Collections";
 // import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 import useStatistic from "./hook/useStatistic";
 
 import {
@@ -88,10 +88,10 @@ interface StatisticProps {
 
 const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
   const SelectOptions = (
-    Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>
+    Object.keys(TokenType) as Array<keyof typeof TokenType>
   ).map((key) => {
     return {
-      value: NFTPriceType[key],
+      value: TokenType[key],
       text: key,
     };
   });
@@ -166,7 +166,10 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
         }}
         checked={option.value === selectValue.value}
       >
-        <StatisticIcon alt="" src={`/coin-images/${option.value}.png`} />
+        <StatisticIcon
+          alt=""
+          src={`/coin-images/${option.value.replace(/\//g, "")}.png`}
+        />
         <SelectItemTitle>
           <SelectItemContent>{option.text}</SelectItemContent>
           <SelectItemContent>Floor Price</SelectItemContent>
@@ -208,7 +211,10 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
         <StatisticName>Items On Sale</StatisticName>
       </StatisticItem>
       <StatisticItem>
-        <StatisticValue>{statistics.totalVolumeInJuno || "X"}</StatisticValue>
+        <StatisticValue>
+          <StatisticIcon alt="" src={"/coin-images/ujuno.png"} />
+          {statistics.totalVolumeInJuno || "X"}
+        </StatisticValue>
         <StatisticName>Total Volume</StatisticName>
       </StatisticItem>
       <ReactSelect
@@ -220,11 +226,13 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
             ...provided,
             margin: "5px 10px",
             minWidth: 100,
+            border: "1px solid black",
+            borderRadius: "5px",
           }),
-          // control: (provided, state) => ({
-          //   ...provided,
-          //   minHeight: "unset",
-          // }),
+          dropdownIndicator: (provided, state) => ({
+            ...provided,
+            color: "black",
+          }),
         }}
         components={{ MenuList: CustomMenuList, Control: CustomControlItem }}
       />

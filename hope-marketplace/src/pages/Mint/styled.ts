@@ -95,10 +95,11 @@ export const DetailBlockContent = styled.div<{ fontSize?: string }>`
     `}
 `;
 
-export const OperationContainer = styled.div`
+export const OperationContainer = styled.div<{ isMobile: boolean }>`
   display: flex;
+  flex-direction: ${({ isMobile }) => (isMobile ? "column" : "row")};
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: ${({ isMobile }) => (isMobile ? "center" : "flex-end")};
   margin-top: 30px;
 `;
 
@@ -117,6 +118,7 @@ export const FlexColumn = styled.div<{ width?: string }>`
 export const MintButton = styled(Button)<{
   width?: string;
   soldOut: boolean;
+  isMobile: boolean;
   backgroundColor?: string;
 }>`
   background-color: ${({ soldOut, backgroundColor }) =>
@@ -124,7 +126,7 @@ export const MintButton = styled(Button)<{
   border: 1px solid black;
   border-radius: 4px;
   font-weight: 700;
-  width: ${({ width }) => width ?? "325px"};
+  width: ${({ width, isMobile }) => (isMobile ? "100%" : width ?? "325px")};
   height: 53px;
   color: ${({ soldOut }) => (soldOut ? "white" : "black")};
   transition: opacity 0.5s;
@@ -158,10 +160,11 @@ export const StyledButton = styled(Button)<{
   color?: string;
   checked?: boolean;
 }>`
-  width: 120px;
+  width: 170px;
   height: 45px;
   font-size: 18px;
   color: black;
+  position: relative;
   ${({ backgroundColor }) =>
     backgroundColor &&
     css`

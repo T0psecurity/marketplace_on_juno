@@ -7,7 +7,7 @@ import {
   VolumePriceType,
 } from "../../../constants/Collections";
 import { CollectionStateType } from "../../../features/collections/collectionsSlice";
-import { NFTPriceType } from "../../../types/nftPriceTypes";
+import { TokenType } from "../../../types/tokens";
 import { addSuffix, convertNumberToString } from "../../../util/string";
 
 const useStatistic = (collectionId: string, items: any) => {
@@ -39,7 +39,7 @@ const useStatistic = (collectionId: string, items: any) => {
     let result: FloorPriceType = {} as FloorPriceType;
     items.forEach((item: any) => {
       const crrListedPrice = item.list_price || {};
-      const denom: NFTPriceType = crrListedPrice.denom;
+      const denom: TokenType = crrListedPrice.denom;
       let crrPrice = Number(crrListedPrice.amount || "0");
       crrPrice = Number.isNaN(crrPrice) ? 0 : crrPrice / 1e6;
 
@@ -55,20 +55,16 @@ const useStatistic = (collectionId: string, items: any) => {
   const volumePrices: VolumePriceType = useMemo(() => {
     let result: VolumePriceType = {} as VolumePriceType;
     const junoUsd = tokenPrices["ujuno"]?.market_data.current_price?.usd || 0;
-    (Object.keys(NFTPriceType) as Array<keyof typeof NFTPriceType>).forEach(
-      (key) => {
-        const crrVolume =
-          (collectionState?.tradingInfo as any)?.[
-            `${NFTPriceType[key]}Total`
-          ] || 0;
-        const crrUsd =
-          tokenPrices[NFTPriceType[key]]?.market_data.current_price?.usd || 0;
-        (result as any)[`${NFTPriceType[key]}Volume`] = crrVolume;
-        result.totalVolumeInJuno =
-          (result.totalVolumeInJuno || 0) +
-          (crrUsd ? crrVolume * (junoUsd / crrUsd) : 0);
-      }
-    );
+    (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach((key) => {
+      const crrVolume =
+        (collectionState?.tradingInfo as any)?.[`${TokenType[key]}Total`] || 0;
+      const crrUsd =
+        tokenPrices[TokenType[key]]?.market_data.current_price?.usd || 0;
+      (result as any)[`${TokenType[key]}Volume`] = crrVolume;
+      result.totalVolumeInJuno =
+        (result.totalVolumeInJuno || 0) +
+        (crrUsd ? crrVolume * (junoUsd / crrUsd) : 0);
+    });
     Object.keys(result).forEach((key) => {
       (result as any)[key] = addSuffix((result as any)[key]);
     });

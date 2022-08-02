@@ -79,6 +79,7 @@ export const SortIcon = styled.svg<{ desc: boolean }>`
   transform: rotate(${({ desc }) => (desc ? "180" : "0")}deg);
   width: 20px;
   margin: 10px;
+  z-index: 1;
 `;
 
 export const SearchWrapper = styled.div`
@@ -140,13 +141,16 @@ export const StatusFilterPanel = styled.div`
 export const CoinImageWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 `;
 
 export const CoinImage = styled.div<{ coinType: string }>`
   width: 50px;
   height: 50px;
-  margin-right: 20px;
-  background: url(${({ coinType }) => `/coin-images/${coinType}.png`});
+  margin: 10px;
+  background: url(${({ coinType }) =>
+    `/coin-images/${coinType.replace(/\//g, "")}.png`});
   background-size: contain;
   background-repeat: no-repeat;
   cursor: pointer;
@@ -280,6 +284,11 @@ export const HistoryItemImage = styled.div`
   }
 `;
 
+export const HistoryItemTokenName = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const HistoryItemToken = styled.div`
   display: flex;
   align-items: center;
@@ -294,14 +303,17 @@ export const CoinIcon = styled.img`
 export const HistoryItemText = styled.div<{
   fontWeight?: string;
   fontSize?: string;
+  color?: string;
+  margin?: string;
   width?: string;
 }>`
   font-weight: ${({ fontWeight }) => fontWeight || "normal"};
   font-size: ${({ fontSize }) => fontSize || "20px"};
+  color: ${({ color }) => color || "black"};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0 10px;
+  margin: ${({ margin }) => margin || "0 10px"};
   ${({ width }) =>
     width &&
     css`

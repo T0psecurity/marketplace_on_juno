@@ -4,7 +4,7 @@ import { useAppSelector } from "../../app/hooks";
 import Image from "../../components/Image";
 import { CollectionIds, getCollectionById } from "../../constants/Collections";
 import { getCustomTokenId, getTokenIdNumber } from "../../hook/useFetch";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { addSuffix } from "../../util/string";
 
@@ -16,6 +16,7 @@ import {
   HistoryItemToken,
   HistoryItemText,
   CoinIcon,
+  HistoryItemTokenName,
 } from "./styled";
 
 interface ActivityListProps {
@@ -48,6 +49,9 @@ const ActivityList: React.FC<ActivityListProps> = ({
   const collectionState = useAppSelector(
     (state) => state.collectionStates[collectionId]
   );
+  const tokenRarityRanks = useAppSelector(
+    (state) => state.rarityRank[collectionId as CollectionIds]
+  );
 
   const targetCollection = useMemo(
     () => getCollectionById(collectionId || ""),
@@ -74,8 +78,12 @@ const ActivityList: React.FC<ActivityListProps> = ({
           }
           const time = new Date(historyItem.time * 1000);
           const tokenPrice =
-            tokenPrices[historyItem.denom as NFTPriceType]?.market_data
+            tokenPrices[historyItem.denom as TokenType]?.market_data
               .current_price?.usd || 0;
+          const tokenIdNumber = Number(
+            getTokenIdNumber(historyItem.token_id) || 0
+          );
+          const tokenRarityRank = tokenRarityRanks[tokenIdNumber];
           return (
             <SaleHistoryItem key={index} isMobile={isMobile}>
               {!isMobile && <CartIcon />}
@@ -83,19 +91,28 @@ const ActivityList: React.FC<ActivityListProps> = ({
                 <HistoryItemImage>
                   <Image alt="" src={url} />
                 </HistoryItemImage>
-                <HistoryItemText>
-                  {targetCollection.customTokenId
-                    ? getCustomTokenId(
-                        historyItem.token_id,
-                        targetCollection.customTokenId
-                      )
-                    : historyItem.token_id}
-                </HistoryItemText>
+                <HistoryItemTokenName>
+                  <HistoryItemText>
+                    {targetCollection.customTokenId
+                      ? getCustomTokenId(
+                          historyItem.token_id,
+                          targetCollection.customTokenId
+                        )
+                      : historyItem.token_id}
+                  </HistoryItemText>
+                  {tokenRarityRank && <HistoryItemText
+                    margin="5px 0 0 0"
+                    color="#39C639"
+                  >{`Rank#${tokenRarityRank.rank}`}</HistoryItemText>}
+                </HistoryItemTokenName>
               </HistoryItemBlock>
               <HistoryItemToken>
                 <CoinIcon
                   alt=""
-                  src={`/coin-images/${historyItem.denom}.png`}
+                  src={`/coin-images/${historyItem.denom.replace(
+                    /\//g,
+                    ""
+                  )}.png`}
                 />
                 <div>
                   <HistoryItemText>

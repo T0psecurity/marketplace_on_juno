@@ -31,6 +31,7 @@ import {
 } from "./styled";
 import { coin } from "@cosmjs/proto-signing";
 import useRefresh from "../../hook/useRefresh";
+import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
@@ -48,7 +49,7 @@ const Header: React.FC = () => {
   const [ref, setRef] = useState<HTMLDivElement | null>(null); // TODO: must use useRef
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
-  const config = useAppSelector((state) => state.connection.config);
+  const config = ChainConfigs[ChainTypes.JUNO];
   // const { connect } = useKeplr();
   // const { connect: connectWithCosmodal } = useCosmodal();
   const { connect, disconnect, connectedWallet } = useWalletManager();

@@ -11,11 +11,12 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import styles from "./ExecuteOptions.module.css";
 import { execute, setExecuteOptions, setOptionsOpen } from "./consoleSlice";
 import { fromMicroDenom } from "../../util/coins";
+import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 
 export const ExecuteOptions: FC = () => {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state) => state.console.optionsOpen);
-  const config = useAppSelector((state) => state.connection.config);
+  const config = ChainConfigs[ChainTypes.JUNO];
   const [funds, setFunds] = useState("");
   const [memo, setMemo] = useState("");
   const [saveDefaults, setSaveDefaults] = useState(false);

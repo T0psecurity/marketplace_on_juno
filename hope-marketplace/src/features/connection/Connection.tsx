@@ -7,10 +7,11 @@ import {
   ConnectionStatus,
   setConfigModalOpen,
 } from "./connectionSlice";
+import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 
 export const Connection: FC = () => {
   const dispatch = useAppDispatch();
-  const config = useAppSelector((state) => state.connection.config);
+  const config = ChainConfigs[ChainTypes.JUNO];
   const connection = useAppSelector((state) => state.connection.status);
   const chainName: string = config["chainName"];
 

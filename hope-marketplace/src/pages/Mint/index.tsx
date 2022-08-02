@@ -16,6 +16,26 @@ enum FILTER_TYPE {
   ALL,
 }
 
+const FilterButtonOptions: {
+  [key in FILTER_TYPE]: { title: string; backgroundColor?: string };
+} = {
+  [FILTER_TYPE.LIVE]: {
+    title: "Live",
+  },
+  [FILTER_TYPE.SOLDOUT]: {
+    title: "Sold out",
+    backgroundColor: "#C63939",
+  },
+  [FILTER_TYPE.SCHEDULED]: {
+    title: "Scheduled",
+    backgroundColor: "#FCFF5C",
+  },
+  [FILTER_TYPE.ALL]: {
+    title: "All",
+    backgroundColor: "white",
+  },
+};
+
 type FILTERED_RESULT = {
   [key in keyof typeof FILTER_TYPE]: MarketplaceInfo[];
 };
@@ -28,8 +48,14 @@ const Mint: React.FC = () => {
     (state: any) => state.collectionStates
   );
 
-  const filteredCollections: MarketplaceInfo[] = useMemo(() => {
-    if (filterType === FILTER_TYPE.ALL) return Collections;
+  const {
+    filteredCollections,
+    totalFilteredCollections,
+  }: {
+    filteredCollections: MarketplaceInfo[];
+    totalFilteredCollections: FILTERED_RESULT;
+  } = useMemo(() => {
+    // if (filterType === FILTER_TYPE.ALL) return { filteredCollections: Collections };
     let filteredResult: FILTERED_RESULT = {} as FILTERED_RESULT;
     Collections.forEach((collection: MarketplaceInfo) => {
       const collectionState = collectionStates[collection.collectionId];
@@ -62,14 +88,37 @@ const Mint: React.FC = () => {
         ? filteredResult[filteredType].concat(collection)
         : [collection];
     });
-    return filteredResult[filterType];
+    filteredResult[FILTER_TYPE.ALL] = Collections;
+    return {
+      filteredCollections: filteredResult[filterType],
+      totalFilteredCollections: filteredResult,
+    };
   }, [collectionStates, filterType]);
 
   return (
     <Wrapper>
       <Title title="Mint Page" />
       <ButtonContainer>
-        <StyledButton
+        {(Object.keys(FILTER_TYPE) as Array<keyof typeof FILTER_TYPE>).map(
+          (key) => {
+            const crrOption = FilterButtonOptions[FILTER_TYPE[key]];
+            if (!crrOption) return null;
+            let count = 0;
+            totalFilteredCollections?.[FILTER_TYPE[key]]?.forEach(
+              (collection) => !!collection.mintInfo && count++
+            );
+            return (
+              <StyledButton
+                checked={filterType === FILTER_TYPE[key]}
+                onClick={() => setFilterType(FILTER_TYPE[key])}
+                backgroundColor={crrOption.backgroundColor}
+              >
+                {`${crrOption.title} (${count})`}
+              </StyledButton>
+            );
+          }
+        )}
+        {/* <StyledButton
           checked={filterType === FILTER_TYPE.LIVE}
           onClick={() => setFilterType(FILTER_TYPE.LIVE)}
         >
@@ -96,7 +145,7 @@ const Mint: React.FC = () => {
           onClick={() => setFilterType(FILTER_TYPE.ALL)}
         >
           All
-        </StyledButton>
+        </StyledButton> */}
       </ButtonContainer>
       {filteredCollections?.map((collection: MarketplaceInfo, index: number) =>
         collection.mintInfo ? (

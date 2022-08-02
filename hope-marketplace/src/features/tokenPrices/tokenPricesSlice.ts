@@ -1,17 +1,18 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import getQuery from "../../util/useAxios";
-import { NFTPriceType } from "../../types/nftPriceTypes";
+import { TokenType } from "../../types/tokens";
 import { customPromiseAll } from "../../util/promiseAll";
 
-const TokenCoingeckoIds: { [key in NFTPriceType]: string } = {
-  [NFTPriceType.HOPE]: "hope-galaxy",
-  [NFTPriceType.JUNO]: "juno-network",
-  [NFTPriceType.RAW]: "junoswap-raw-dao",
-  [NFTPriceType.NETA]: "neta",
+const TokenCoingeckoIds: { [key in TokenType]: string } = {
+  [TokenType.HOPE]: "hope-galaxy",
+  [TokenType.JUNO]: "juno-network",
+  [TokenType.RAW]: "junoswap-raw-dao",
+  [TokenType.NETA]: "neta",
+  [TokenType.ATOM]: "cosmos",
 };
 
 export type TokenPriceType = {
-  [key in NFTPriceType]: any;
+  [key in TokenType]: any;
 };
 
 export const DEFAULT_COLLECTION_STATE = {
@@ -19,29 +20,20 @@ export const DEFAULT_COLLECTION_STATE = {
 };
 
 let initialState: TokenPriceType = {
-  hope: null,
-  ujuno: null,
-  raw: null,
-  neta: null,
+  [TokenType.HOPE]: null,
+  [TokenType.JUNO]: null,
+  [TokenType.RAW]: null,
+  [TokenType.NETA]: null,
+  [TokenType.ATOM]: null,
 };
 
 export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
-  // const hopePrice = await getQuery(
-  //   "https://api.coingecko.com/api/v3/coins/hope-galaxy"
-  // );
-  // const junoPrice = await getQuery(
-  //   "https://api.coingecko.com/api/v3/coins/juno-network"
-  // );
-  // const rawPrice = await getQuery(
-  //   "https://api.coingecko.com/api/v3/coins/junoswap-raw-dao"
-  // );
-
   let keys: any = [];
   const fetchQueries = Object.keys(TokenCoingeckoIds).map((key: string) => {
-    keys.push(key as NFTPriceType);
+    keys.push(key as TokenType);
     return getQuery(
       `https://api.coingecko.com/api/v3/coins/${
-        TokenCoingeckoIds[key as NFTPriceType]
+        TokenCoingeckoIds[key as TokenType]
       }`
     );
   });
@@ -71,7 +63,7 @@ export const tokenPricesSlice = createSlice({
     builder.addCase(fetchTokenPrices.fulfilled, (state, action) => {
       const data: any = action.payload;
       Object.keys(data).forEach((key: string) => {
-        state[key as NFTPriceType] = data[key as NFTPriceType];
+        state[key as TokenType] = data[key as TokenType];
       });
     });
   },

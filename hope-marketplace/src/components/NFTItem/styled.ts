@@ -10,7 +10,7 @@ export const NFTItemImageWrapper = styled.div<{ isMobile?: boolean }>`
 
 export const NFTItemInfoContainer = styled.div<{ isMobile: boolean }>`
   display: grid;
-  grid-template-columns: ${({ isMobile }) => (isMobile ? "auto" : "1fr 1fr")};
+  grid-template-columns: ${({ isMobile }) => (isMobile ? "auto" : "50% 50%")};
   justify-content: space-between;
   align-items: center;
   margin-top: 10px;
@@ -23,6 +23,7 @@ export const NFTItemInfo = styled.div`
   margin: 10px 0 10px 10px;
   display: flex;
   align-items: center;
+  overflow-wrap: anywhere;
 `;
 
 export const NFTItemTokenPrice = styled.div``;
