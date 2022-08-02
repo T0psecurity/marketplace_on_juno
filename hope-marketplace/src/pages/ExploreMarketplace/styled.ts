@@ -42,7 +42,8 @@ export const SearchWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50%;
+  width: 100%;
+  max-width: 550px;
   margin: 20px auto 40px;
 `;
 
