@@ -160,10 +160,11 @@ export const StyledButton = styled(Button)<{
   color?: string;
   checked?: boolean;
 }>`
-  width: 120px;
+  width: 170px;
   height: 45px;
   font-size: 18px;
   color: black;
+  position: relative;
   ${({ backgroundColor }) =>
     backgroundColor &&
     css`
