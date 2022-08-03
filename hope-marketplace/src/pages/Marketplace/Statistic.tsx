@@ -183,8 +183,12 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
 
   const CustomMenuList = (props: any) => {
     const { options, selectOption } = props;
-    return options.map((option: any) => (
-      <CustomSelectItem selectOption={selectOption} option={option} />
+    return options.map((option: any, index: number) => (
+      <CustomSelectItem
+        key={index}
+        selectOption={selectOption}
+        option={option}
+      />
     ));
   };
 

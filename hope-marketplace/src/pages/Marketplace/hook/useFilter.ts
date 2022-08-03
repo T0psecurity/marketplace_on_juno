@@ -57,15 +57,27 @@ const useFilter = (
     }
     return resultNfts.sort((nft1: any, nft2) => {
       if (filterOption.sortOption.field === "price") {
-        const price1 = nft1?.list_price || {};
-        const tokenPrice1 =
+        const price1: any = nft1?.list_price || {};
+        let tokenPrice1: number =
           tokenPrices[price1.denom as TokenType]?.market_data.current_price
             ?.usd || 0;
+        if (
+          price1.denom === TokenType.RAW &&
+          filterOption.sortOption.direction === SortDirectionType.asc
+        ) {
+          tokenPrice1 = 1e10;
+        }
 
-        const price2 = nft2?.list_price || {};
-        const tokenPrice2 =
+        const price2: any = nft2?.list_price || {};
+        let tokenPrice2: number =
           tokenPrices[price2.denom as TokenType]?.market_data.current_price
             ?.usd || 0;
+        if (
+          price2.denom === TokenType.RAW &&
+          filterOption.sortOption.direction === SortDirectionType.asc
+        ) {
+          tokenPrice2 = 1e10;
+        }
 
         // return filterOption.price === PriceSortDirectionType.asc
         //   ? Number(nft1.list_price?.amount) - Number(nft2.list_price?.amount)
