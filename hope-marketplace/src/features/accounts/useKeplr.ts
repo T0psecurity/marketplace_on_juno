@@ -3,7 +3,6 @@ import { useCallback, useEffect } from "react";
 import { useAppDispatch } from "../../app/hooks";
 import { AccountType, setKeplrAccount } from "../accounts/accountsSlice";
 import { ChainInfo, Keplr } from "@keplr-wallet/types";
-import { pushMessage } from "../messages/messagesSlice";
 import { fromMicroDenom } from "../../util/coins";
 import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 
@@ -126,15 +125,7 @@ export function useKeplr(): {
   useEffect(() => {
     try {
       getKeplr();
-    } catch (e) {
-      dispatch(
-        pushMessage({
-          status: "danger",
-          header: "Keplr not found",
-          message: e instanceof Error ? e.message : JSON.stringify(e),
-        })
-      );
-    }
+    } catch (e) {}
   }, [dispatch]);
 
   const suggestChain = useCallback(async (): Promise<void> => {
@@ -147,16 +138,8 @@ export function useKeplr(): {
     try {
       await suggestChain();
       await getAccount();
-    } catch (e) {
-      dispatch(
-        pushMessage({
-          status: "danger",
-          header: "Keplr connection failed",
-          message: e instanceof Error ? e.message : JSON.stringify(e),
-        })
-      );
-    }
-  }, [getAccount, suggestChain, dispatch]);
+    } catch (e) {}
+  }, [getAccount, suggestChain]);
 
   return { connect };
 }
