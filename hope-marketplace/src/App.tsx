@@ -10,7 +10,7 @@ import "@shoelace-style/shoelace/dist/themes/light.css";
 import { setBasePath } from "@shoelace-style/shoelace/dist/utilities/base-path";
 import { ToastContainer } from "react-toastify";
 import useMatchBreakpoints from "./hook/useMatchBreakpoints";
-import { createGlobalStyle, css } from "styled-components";
+import styled, { createGlobalStyle, css } from "styled-components";
 import {
   // KeplrWalletConnectV1,
   // Wallet,
@@ -50,6 +50,9 @@ setBasePath(
 );
 
 const GlobalStyle = createGlobalStyle<{ isMobile: boolean }>`
+* {
+  transition: color 0.5s, background-color 0.5s;
+}
   ${({ isMobile }) =>
     !isMobile &&
     css`
@@ -68,6 +71,10 @@ const GlobalStyle = createGlobalStyle<{ isMobile: boolean }>`
         border: 3px solid #444857;
       }
     `}
+`;
+
+const MainWrapper = styled.div`
+  background-color: ${({ theme }) => theme.colors.backgroundColor};
 `;
 
 function App() {
@@ -134,7 +141,7 @@ function App() {
   // ];
 
   return (
-    <>
+    <ThemeContextProvider>
       <GlobalStyle isMobile={isMobile} />
       <WalletManagerProvider
         defaultChainId={config.chainId}
@@ -148,34 +155,32 @@ function App() {
           icons: ["https://hopers.io/logo.png"],
         }}
       >
-        <ThemeContextProvider>
-          <RefreshContextProvider>
-            <PopoutContextProvider>
-              <Updater />
-              <div className="main">
-                <Router history={history}>
-                  <Header />
-                  <Main />
-                  <Footer />
-                  <ToastContainer
-                    position="top-right"
-                    autoClose={5000}
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    hideProgressBar
-                    newestOnTop
-                    closeOnClick
-                    theme="colored"
-                  />
-                </Router>
-              </div>
-            </PopoutContextProvider>
-          </RefreshContextProvider>
-        </ThemeContextProvider>
+        <RefreshContextProvider>
+          <PopoutContextProvider>
+            <Updater />
+            <MainWrapper className="main">
+              <Router history={history}>
+                <Header />
+                <Main />
+                <Footer />
+                <ToastContainer
+                  position="top-right"
+                  autoClose={5000}
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  hideProgressBar
+                  newestOnTop
+                  closeOnClick
+                  theme="colored"
+                />
+              </Router>
+            </MainWrapper>
+          </PopoutContextProvider>
+        </RefreshContextProvider>
       </WalletManagerProvider>
-    </>
+    </ThemeContextProvider>
   );
 }
 

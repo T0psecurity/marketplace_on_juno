@@ -19,6 +19,7 @@ export const SubWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-self: center;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const ImgWrapper = styled.img<{ isMobile?: boolean }>`
@@ -104,6 +105,7 @@ export const StatisticContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const StatisticItem = styled.div`

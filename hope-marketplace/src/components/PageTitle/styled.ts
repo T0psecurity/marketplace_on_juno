@@ -8,6 +8,7 @@ export const Title = styled.div`
   text-align: center;
   font-size: 2em;
   font-weight: bold;
+  color: ${({theme}) => theme.colors.fontColor};
 `;
 
 export const SubTitle = styled.div<{ textAlign?: string }>`
@@ -15,4 +16,5 @@ export const SubTitle = styled.div<{ textAlign?: string }>`
   text-align: ${({ textAlign }) => textAlign ?? "center"};
   font-size: 1.17em;
   font-weight: bold;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;

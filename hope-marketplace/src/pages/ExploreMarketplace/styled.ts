@@ -14,6 +14,7 @@ export const FilterWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const FilterItem = styled.div<{ checked: boolean }>`
@@ -25,6 +26,10 @@ export const FilterItem = styled.div<{ checked: boolean }>`
   cursor: pointer;
   & > svg {
     margin-left: 5px;
+    path {
+      fill: ${({ theme }) => theme.colors.fontColor};
+      transition: fill 0.5s;
+    }
   }
   ${({ checked }) =>
     checked &&
@@ -57,9 +62,14 @@ export const ActivityButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: ${({ theme }) => theme.colors.fontColor};
   & > svg {
     width: 30px;
     height: 30px;
+    path {
+      fill: ${({ theme }) => theme.colors.fontColor};
+      transition: fill 0.5s;
+    }
   }
   @media (max-width: 650px) {
     position: relative;

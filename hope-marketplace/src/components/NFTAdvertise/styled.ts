@@ -7,6 +7,7 @@ export const CreatorContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const Creator = styled.div`

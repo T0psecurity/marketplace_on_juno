@@ -203,6 +203,7 @@ export const SelectItemTitle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const SelectItemContent = styled.div<{
@@ -234,6 +235,7 @@ export const StatisticItem = styled.div<{ isMobile?: boolean }>`
   align-items: center;
   min-width: 100px;
   height: 90px;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const StatisticValue = styled.div`
@@ -244,6 +246,7 @@ export const StatisticValue = styled.div`
   font-size: 1.5em;
   font-weight: bold;
   text-align: center;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const StatisticIcon = styled.img`

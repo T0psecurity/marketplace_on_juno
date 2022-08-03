@@ -35,7 +35,7 @@ export const Wrapper = styled.div<{
   /* background: url("/others/hopeBackground.png"); */
   background-size: auto var(--image-height);
   background-position-x: center;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.backgroundColor};
   background-repeat: no-repeat;
   width: 100%;
   height: calc(var(--image-height) + 100px);

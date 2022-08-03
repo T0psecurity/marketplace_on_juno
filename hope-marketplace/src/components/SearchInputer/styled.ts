@@ -36,7 +36,7 @@ export const SearchInput = styled.input`
 
 export const SearchIcon = styled.button`
   width: 50px;
-  height: 51px;
+  height: 52px;
   border-style: none;
   font-size: 20px;
   font-weight: bold;

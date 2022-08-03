@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ReactSelect, { ControlProps } from "react-select";
+import { ThemeContext } from "../../context/ThemeContext";
 // import {
 //   getCollectionById,
 //   MarketplaceInfo,
@@ -97,6 +98,7 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
   });
 
   const [selectValue, setSelectValue] = useState(SelectOptions[0]);
+  const { isDark } = useContext(ThemeContext);
   // const { isXs, isSm } = useMatchBreakpoints();
   // const isMobile = isXs || isSm;
 
@@ -236,6 +238,11 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
           dropdownIndicator: (provided, state) => ({
             ...provided,
             color: "black",
+          }),
+          menu: (provided, state) => ({
+            ...provided,
+            backgroundColor: isDark ? "#838383" : "white",
+            zIndex: 10,
           }),
         }}
         components={{ MenuList: CustomMenuList, Control: CustomControlItem }}

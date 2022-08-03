@@ -67,7 +67,7 @@ const Home: React.FC = () => {
   }, [collectionStates, tokenPrices, totalMarketplaceNFTs]);
 
   const HomeImage = () => (
-    <ImgWrapper src="/others/home.jpg" alt="home" isMobile={isMobile} />
+    <ImgWrapper src="/others/home.png" alt="home" isMobile={isMobile} />
   );
 
   const Tokens = () => {

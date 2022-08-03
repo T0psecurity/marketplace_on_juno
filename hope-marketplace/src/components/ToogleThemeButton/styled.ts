@@ -11,6 +11,7 @@ export const StyledSunIcon = styled(SunIcon)`
   width: 20px;
   height: 20px;
   cursor: pointer;
+  fill: white;
   ${({ theme }) =>
     !theme.isDark &&
     css`

@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import ReactSelect from "react-select";
 import { useAppSelector } from "../../app/hooks";
 import ActivityList from "../../components/ActivityList";
 import SearchInputer from "../../components/SearchInputer";
 import Collections from "../../constants/Collections";
+import { ThemeContext } from "../../context/ThemeContext";
 import { TotalStateType } from "../../features/collections/collectionsSlice";
 import { getCustomTokenId } from "../../hook/useFetch";
 import { TokenType } from "../../types/tokens";
@@ -47,6 +48,7 @@ const Activity: React.FC = () => {
     TokenType | undefined
   >();
   const [renderCount, setRenderCount] = useState<number>(INITIAL_RENDER_COUNT);
+  const { isDark } = useContext(ThemeContext);
 
   const collectionStates: TotalStateType = useAppSelector(
     (state) => state.collectionStates
@@ -154,6 +156,24 @@ const Activity: React.FC = () => {
             defaultValue={SortDirectionSelectOptions[0]}
             onChange={handleChangeSortDirection}
             options={SortDirectionSelectOptions}
+            styles={{
+              menu: (provided, state) => ({
+                ...provided,
+                backgroundColor: isDark ? "#838383" : "white",
+              }),
+              control: (provided, state) => ({
+                ...provided,
+                ...(isDark && {
+                  backgroundColor: "#838383",
+                }),
+              }),
+              singleValue: (provided, state) => ({
+                ...provided,
+                ...(isDark && {
+                  color: "white",
+                }),
+              }),
+            }}
           />
         </SearchContainer>
       </FilterContainer>
