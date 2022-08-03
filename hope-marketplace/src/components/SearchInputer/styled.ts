@@ -17,20 +17,20 @@ export const SearchInput = styled.input`
   outline: none;
   border-radius: 25px;
   transition: all 0.5s ease-in-out;
-  background-color: #eceeef;
+  background-color: ${({ theme }) => (theme.isDark ? "#838383" : "#eceeef")};
   /* padding-right: 40px; */
 
   border-radius: 25px;
   /* border-bottom: 1px solid #ccc; */
   transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
-  color: black;
+  color: ${({ theme }) => theme.colors.fontColor};
   margin-right: 25px;
   &::placeholder {
     /* color: rgba(255, 255, 255, 0.5); */
     font-size: 18px;
     letter-spacing: 2px;
     font-weight: 100;
-    color: #ccc;
+    color: ${({ theme }) => (theme.isDark ? "white" : "#ccc")};
   }
 `;
 

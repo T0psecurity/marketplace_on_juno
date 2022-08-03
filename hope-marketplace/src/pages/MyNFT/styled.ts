@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 export const Wrapper = styled.div<{ isMobile?: boolean }>`
   height: 100%;
   padding: 0 ${({ isMobile }) => (isMobile ? 10 : 100)}px;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const TokenTypeString = styled.div`
@@ -48,11 +49,12 @@ export const TokenBalanceItem = styled.div<{ marginBottom?: string }>`
   border-radius: 10px;
   padding: 5px;
   position: relative;
+  background-color: ${({ theme }) => theme.colors.panelBackgroundColor};
   ${({ marginBottom }) =>
     marginBottom &&
     css`
       margin-bottom: ${marginBottom};
-    `}
+    `};
 `;
 
 export const WithdrawButton = styled.div`

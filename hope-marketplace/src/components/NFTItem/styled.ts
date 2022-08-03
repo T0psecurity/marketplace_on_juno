@@ -141,6 +141,7 @@ export const NFTItemWrapper = styled.div<{ isMobile: boolean }>`
   flex-direction: column;
   justify-content: space-between;
   scroll-snap-align: start;
+  background-color: ${({ theme }) => theme.colors.panelBackgroundColor};
   ${({ isMobile }) =>
     isMobile &&
     css`

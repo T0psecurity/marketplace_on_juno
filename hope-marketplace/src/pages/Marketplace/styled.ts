@@ -50,6 +50,7 @@ export const NftListTabs = styled.div`
   display: flex;
   align-items: center;
   width: max-content;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const NftListTab = styled.div<{ selected: boolean }>`
@@ -59,7 +60,7 @@ export const NftListTab = styled.div<{ selected: boolean }>`
   ${({ selected }) =>
     selected &&
     css`
-      border-bottom: 2px solid black;
+      border-bottom: 2px solid ${({ theme }) => theme.colors.fontColor};
       font-weight: bold;
     `}
 `;
@@ -80,6 +81,10 @@ export const SortIcon = styled.svg<{ desc: boolean }>`
   width: 20px;
   margin: 10px;
   z-index: 1;
+  path {
+    fill: ${({ theme }) => theme.colors.fontColor};
+    transition: fill 0.5s;
+  }
 `;
 
 export const SearchWrapper = styled.div`
@@ -104,6 +109,13 @@ export const StyledSvg = styled.svg`
   opacity: 1 !important;
 `;
 
+export const FilterIconSvg = styled.svg`
+  path {
+    fill: ${({ theme }) => theme.colors.fontColor};
+    transition: fill 0.5s;
+  }
+`;
+
 export const FilterContainerTitle = styled.div`
   position: relative;
   width: calc(100% - 20px);
@@ -111,6 +123,7 @@ export const FilterContainerTitle = styled.div`
   font-weight: bold;
   transition: opacity 0.5s;
   user-select: none;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const NftList = styled.div`

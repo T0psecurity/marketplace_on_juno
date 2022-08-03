@@ -9,6 +9,7 @@ export const ThemeContext = React.createContext({
 type ThemeType = {
   colors: {
     backgroundColor: string;
+    panelBackgroundColor: string;
     fontColor: string;
   };
 };
@@ -17,19 +18,21 @@ const THEMES: { LIGHT: ThemeType; DARK: ThemeType } = {
   LIGHT: {
     colors: {
       backgroundColor: "white",
+      panelBackgroundColor: "white",
       fontColor: "black",
     },
   },
   DARK: {
     colors: {
       backgroundColor: "#313131",
+      panelBackgroundColor: "#838383",
       fontColor: "white",
     },
   },
 };
 
 export const ThemeContextProvider = ({ children }: { children: any }) => {
-  const [isDark, setIsDark] = useState<boolean>(false);
+  const [isDark, setIsDark] = useState<boolean>(true);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");

@@ -5,7 +5,9 @@ import React, {
   useRef,
   useCallback,
   ReactElement,
+  useContext,
 } from "react";
+import { ThemeContext } from "./ThemeContext";
 
 type WindowOption = {
   title?: string;
@@ -29,6 +31,7 @@ const copyStyles = (src: any, dest: any) => {
 
 const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
   const [container, setContainer] = useState<any>(null);
+  const { isDark } = useContext(ThemeContext);
   const newWindow: any = useRef(null);
 
   useEffect(() => {
@@ -47,6 +50,9 @@ const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
       );
       // Append container
       newWindow?.current.document.body.appendChild(container);
+      if (isDark && newWindow?.current?.document?.body) {
+        newWindow.current.document.body.style.backgroundColor = "#313131";
+      }
       newWindow.current.addEventListener("beforeunload", () => {
         if (!newWindow.current.alreadyPrompted) onClose();
         newWindow.current.alreadyPrompted = true;
@@ -61,7 +67,7 @@ const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
         curWindow.close();
       };
     }
-  }, [container, option, onClose]);
+  }, [container, option, onClose, isDark]);
 
   return container && ReactDOM.createPortal(children, container);
 };

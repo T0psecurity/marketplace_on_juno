@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { saveAs } from "file-saver";
 import { useAppSelector } from "../../app/hooks";
 import { CollectionStateType } from "../../features/collections/collectionsSlice";
@@ -24,6 +24,7 @@ import {
 import ReactSelect from "react-select";
 import { TokenType } from "../../types/tokens";
 import { CollectionIds } from "../../constants/Collections";
+import { ThemeContext } from "../../context/ThemeContext";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -35,6 +36,7 @@ const getTokenIdNumber = (id: string): string => {
 };
 
 const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
+  const { isDark } = useContext(ThemeContext);
   const { sellNft, withdrawNft, buyNft, transferNft } = useHandleNftItem();
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const isMobile = isXs || isSm || isMd;
@@ -158,7 +160,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
         {rarityRanks && (
           <>
             <DetailTitle>Rarity Rank</DetailTitle>
-            <DetailContent>{`#${rarityRanks.rank}`}</DetailContent>
+            <DetailContent color="#39C639">{`#${rarityRanks.rank}`}</DetailContent>
           </>
         )}
         {status !== "Sell" && (
@@ -217,6 +219,19 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                     control: (provided, state) => ({
                       ...provided,
                       minHeight: "unset",
+                      ...(isDark && {
+                        backgroundColor: "#838383",
+                      }),
+                    }),
+                    menu: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: isDark ? "#838383" : "white",
+                    }),
+                    singleValue: (provided, state) => ({
+                      ...provided,
+                      ...(isDark && {
+                        color: "white",
+                      }),
                     }),
                   }}
                   onChange={handleChangePriceType}

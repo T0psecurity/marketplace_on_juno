@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import ReactSelect from "react-select";
 import { useAppSelector } from "../../app/hooks";
 import { CollectionIds, getCollectionById } from "../../constants/Collections";
+import { ThemeContext } from "../../context/ThemeContext";
 import { CollectionStateType } from "../../features/collections/collectionsSlice";
 import { getTokenIdNumber } from "../../hook/useFetch";
 // import { useAppDispatch } from "../../app/hooks";
@@ -45,6 +46,7 @@ export const NFTItemStatus = {
 export default function NFTItem({ item, status }: NFTItemProps) {
   const [nftPrice, setNftPrice] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
+  const { isDark } = useContext(ThemeContext);
 
   const { isXs, isSm } = useMatchBreakpoints();
   const isMobile = isXs || isSm;
@@ -195,6 +197,19 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                   control: (provided, state) => ({
                     ...provided,
                     minHeight: "unset",
+                    ...(isDark && {
+                      backgroundColor: "#838383",
+                    }),
+                  }),
+                  menu: (provided, state) => ({
+                    ...provided,
+                    backgroundColor: isDark ? "#838383" : "white",
+                  }),
+                  singleValue: (provided, state) => ({
+                    ...provided,
+                    ...(isDark && {
+                      color: "white",
+                    }),
                   }),
                 }}
                 onChange={handleChangePriceType}

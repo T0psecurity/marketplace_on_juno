@@ -1,6 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useContext,
+} from "react";
 
-import { useContext } from "react";
 // import { toast } from "react-toastify";
 // import { MsgTransfer } from "cosmjs-types/ibc/applications/transfer/v1/tx";
 import {
@@ -24,6 +29,7 @@ import {
 import "./style.scss";
 import { useAppSelector } from "../../app/hooks";
 import useFetch from "../../hook/useFetch";
+import { ThemeContext } from "../../context/ThemeContext";
 
 // import {
 //   Wrapper,
@@ -150,6 +156,7 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
     },
   });
   const [errMsg, setErrorMsg] = useState("");
+  const { isDark } = useContext(ThemeContext);
   const balances = useAppSelector((state) => state.balances);
   const { getTokenBalances } = useFetch();
 
@@ -313,8 +320,15 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
   };
 
   return (
-    <div className="wrapper">
-      <div className="logo" />
+    <div
+      className="wrapper"
+      style={{
+        ...(isDark && {
+          color: "white",
+        }),
+      }}
+    >
+      <div className={isDark ? "logo-dark" : "logo"} />
       <div className="container">
         <div className="swapDirection">
           {fromChain}
@@ -352,6 +366,8 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
                   color:
                     swapInfo.swapType === SwapType.DEPOSIT
                       ? "#39c639"
+                      : isDark
+                      ? "white"
                       : "black",
                 }}
                 onClick={() => handleChangeSwapType(SwapType.DEPOSIT)}
@@ -365,6 +381,8 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
                   color:
                     swapInfo.swapType === SwapType.WITHDRAW
                       ? "#39c639"
+                      : isDark
+                      ? "white"
                       : "black",
                 }}
                 onClick={() => handleChangeSwapType(SwapType.WITHDRAW)}

@@ -4,7 +4,8 @@ import { ChevronIcon } from "./Icons";
 export const Wrapper = styled.div``;
 
 export const CartTitle = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.6);
+  border: 1px solid
+    ${({ theme }) => (theme.isDark ? "transparent" : "rgba(0, 0, 0, 0.6)")};
   border-radius: 10px;
   text-align: left;
   font-size: 1em;
@@ -12,6 +13,13 @@ export const CartTitle = styled.div`
   position: relative;
   cursor: pointer;
   padding: 15px 5px;
+  color: ${({ theme }) => theme.colors.fontColor};
+  background-color: ${({ theme }) => theme.colors.panelBackgroundColor};
+  /* ${({ theme }) =>
+    theme.isDark &&
+    css`
+      background-color: #838383;
+    `} */
 `;
 
 export const Icon = styled(ChevronIcon)<{ expanded: boolean }>`
@@ -20,6 +28,10 @@ export const Icon = styled(ChevronIcon)<{ expanded: boolean }>`
   transform: rotate(${({ expanded }) => (expanded ? "0deg" : "180deg")});
   transition: transform 0.5s;
   right: 0;
+  path {
+    fill ${({ theme }) => theme.colors.fontColor};
+    transition: fill 0.5s;
+  }
 `;
 
 export const ContentContainer = styled.div<{
