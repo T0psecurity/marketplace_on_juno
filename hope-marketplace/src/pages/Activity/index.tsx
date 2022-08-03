@@ -36,6 +36,8 @@ const SortDirectionSelectOptions = [
   },
 ];
 
+const INITIAL_RENDER_COUNT = 50;
+
 const Activity: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<
@@ -44,7 +46,7 @@ const Activity: React.FC = () => {
   const [selectedTokenType, setSelectedTokenType] = useState<
     TokenType | undefined
   >();
-  const [renderCount, setRenderCount] = useState<number>(50);
+  const [renderCount, setRenderCount] = useState<number>(INITIAL_RENDER_COUNT);
 
   const collectionStates: TotalStateType = useAppSelector(
     (state) => state.collectionStates
@@ -137,11 +139,12 @@ const Activity: React.FC = () => {
               <CoinIcon
                 alt=""
                 src={`/coin-images/${TokenType[key].replace(/\//g, "")}.png`}
-                onClick={() =>
+                onClick={() => {
+                  setRenderCount(INITIAL_RENDER_COUNT);
                   setSelectedTokenType((prev) =>
                     prev === TokenType[key] ? undefined : TokenType[key]
-                  )
-                }
+                  );
+                }}
               />
             )
           )}
@@ -158,11 +161,7 @@ const Activity: React.FC = () => {
         <ActivityList history={filteredSaleHistory.slice(0, renderCount)} />
       </HistoryContainer>
       <LoadMoreButton
-        onClick={() =>
-          setRenderCount((prev) =>
-            Math.min(prev + 15, filteredSaleHistory.length)
-          )
-        }
+        onClick={() => setRenderCount((prev) => Math.min(prev + 15))}
       >
         Load More Activities...
       </LoadMoreButton>
