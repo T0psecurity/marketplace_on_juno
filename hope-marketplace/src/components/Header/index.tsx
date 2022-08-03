@@ -32,6 +32,7 @@ import {
 import { coin } from "@cosmjs/proto-signing";
 import useRefresh from "../../hook/useRefresh";
 import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
+import ToggleThemeButton from "../ToogleThemeButton";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
@@ -125,11 +126,12 @@ const Header: React.FC = () => {
   return (
     <HeaderWrapper>
       <LogoContainer>
-        <HeaderLogo onClick={() => handleClickLink("/")} />
+        <HeaderLogo isMobile={isMobile} onClick={() => handleClickLink("/")} />
         {/* Hopers.io */}
       </LogoContainer>
       {isMobile ? (
         <MenuIconContainer ref={(node) => setRef(node)}>
+          <ToggleThemeButton />
           <MenuIcon onClick={handleOpenMenu}>{ListIcon}</MenuIcon>
           {isOpenMenu && (
             <MenuContainer onClick={(e) => e.preventDefault()}>
@@ -168,6 +170,7 @@ const Header: React.FC = () => {
             </LinkButton>
           ))}
           <ProfileIcon onClick={() => handleClickLink("/profile")} />
+          <ToggleThemeButton />
           <ConnectWalletButton onClick={clickWalletButton}>
             {account ? (
               <>

@@ -32,13 +32,13 @@ export const LogoContainer = styled.div`
   font-weight: bold;
 `;
 
-export const HeaderLogo = styled.div`
+export const HeaderLogo = styled.div<{ isMobile: boolean }>`
   /* background: url("/logo.png"); */
   background: url("/others/hopeHeaderLogo.png");
   background-size: cover;
   background-position: center;
-  width: 248px;
-  height: 60px;
+  width: ${({ isMobile }) => (isMobile ? "200px" : "248px")};
+  height: ${({ isMobile }) => (isMobile ? "50px" : "60px")};
   cursor: pointer;
 `;
 
@@ -109,13 +109,14 @@ export const MenuIconContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
   position: relative;
 `;
 
-export const MenuIcon = styled.div``;
+export const MenuIcon = styled.div`
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+`;
 
 export const MenuContainer = styled.div`
   position: absolute;

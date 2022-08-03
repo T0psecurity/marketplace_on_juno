@@ -41,6 +41,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { fetchTokenPrices } from "./features/tokenPrices/tokenPricesSlice";
 import { ChainConfigs, ChainTypes } from "./constants/ChainTypes";
 import { PopoutContextProvider } from "./context/PopoutContext";
+import { ThemeContextProvider } from "./context/ThemeContext";
 
 const history = createBrowserHistory();
 
@@ -147,30 +148,32 @@ function App() {
           icons: ["https://hopers.io/logo.png"],
         }}
       >
-        <RefreshContextProvider>
-          <PopoutContextProvider>
-            <Updater />
-            <div className="main">
-              <Router history={history}>
-                <Header />
-                <Main />
-                <Footer />
-                <ToastContainer
-                  position="top-right"
-                  autoClose={5000}
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  hideProgressBar
-                  newestOnTop
-                  closeOnClick
-                  theme="colored"
-                />
-              </Router>
-            </div>
-          </PopoutContextProvider>
-        </RefreshContextProvider>
+        <ThemeContextProvider>
+          <RefreshContextProvider>
+            <PopoutContextProvider>
+              <Updater />
+              <div className="main">
+                <Router history={history}>
+                  <Header />
+                  <Main />
+                  <Footer />
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    hideProgressBar
+                    newestOnTop
+                    closeOnClick
+                    theme="colored"
+                  />
+                </Router>
+              </div>
+            </PopoutContextProvider>
+          </RefreshContextProvider>
+        </ThemeContextProvider>
       </WalletManagerProvider>
     </>
   );
