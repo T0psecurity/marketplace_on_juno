@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useMemo } from "react";
+import React from "react";
 import { useAppSelector } from "../../app/hooks";
 import Image from "../../components/Image";
 import { CollectionIds, getCollectionById } from "../../constants/Collections";
@@ -17,10 +17,10 @@ import {
   HistoryItemText,
   CoinIcon,
   HistoryItemTokenName,
+  HistoryItemAddress,
 } from "./styled";
 
 interface ActivityListProps {
-  collectionId: CollectionIds;
   history: any[];
 }
 
@@ -39,35 +39,30 @@ const CartIcon = () => (
   </svg>
 );
 
-const ActivityList: React.FC<ActivityListProps> = ({
-  collectionId,
-  history,
-}) => {
+const ActivityList: React.FC<ActivityListProps> = ({ history }) => {
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const isMobile = isXs || isSm || isMd;
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
-  const collectionState = useAppSelector(
-    (state) => state.collectionStates[collectionId]
-  );
-  const tokenRarityRanks = useAppSelector(
-    (state) => state.rarityRank[collectionId as CollectionIds]
-  );
-
-  const targetCollection = useMemo(
-    () => getCollectionById(collectionId || ""),
-    [collectionId]
-  );
+  const collectionStates = useAppSelector((state) => state.collectionStates);
+  const totalTokenRarityRanks = useAppSelector((state) => state.rarityRank);
 
   return (
     <>
       <SaleHistoryWrapper>
         {history.map((historyItem: any, index: number) => {
+          const collectionState =
+            collectionStates[historyItem.collectionId as CollectionIds] || {};
+          const tokenRarityRanks =
+            totalTokenRarityRanks[historyItem.collectionId as CollectionIds] ||
+            [];
+          const targetCollection =
+            getCollectionById(historyItem.collectionId || "") || {};
           let url = "";
-          if (collectionId === "mintpass1") {
+          if (historyItem.collectionId === "mintpass1") {
             url = "/others/mint_pass.png";
-          } else if (collectionId === "mintpass2") {
+          } else if (historyItem.collectionId === "mintpass2") {
             url = "/others/mint_pass2.png";
-          } else if (collectionId === "hopegalaxy1") {
+          } else if (historyItem.collectionId === "hopegalaxy1") {
             url = `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${getTokenIdNumber(
               historyItem.token_id
             )}.png`;
@@ -100,10 +95,12 @@ const ActivityList: React.FC<ActivityListProps> = ({
                         )
                       : historyItem.token_id}
                   </HistoryItemText>
-                  {tokenRarityRank && <HistoryItemText
-                    margin="5px 0 0 0"
-                    color="#39C639"
-                  >{`Rank#${tokenRarityRank.rank}`}</HistoryItemText>}
+                  {tokenRarityRank && (
+                    <HistoryItemText
+                      margin="5px 0 0 0"
+                      color="#39C639"
+                    >{`Rank#${tokenRarityRank.rank}`}</HistoryItemText>
+                  )}
                 </HistoryItemTokenName>
               </HistoryItemBlock>
               <HistoryItemToken>
@@ -133,12 +130,12 @@ const ActivityList: React.FC<ActivityListProps> = ({
                 </div>
               </HistoryItemToken>
               <HistoryItemBlock isMobile={isMobile}>
-                <HistoryItemText width="100px">
+                <HistoryItemAddress title={historyItem.from}>
                   {historyItem.from}
-                </HistoryItemText>
-                <HistoryItemText width="100px">
+                </HistoryItemAddress>
+                <HistoryItemAddress title={historyItem.to}>
                   {historyItem.to}
-                </HistoryItemText>
+                </HistoryItemAddress>
               </HistoryItemBlock>
               <HistoryItemText>
                 {moment(moment(time).toISOString(true)).fromNow()}

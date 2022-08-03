@@ -8,7 +8,7 @@ import { NFTItemStatus } from "../../components/NFTItem";
 import { getCollectionById, CollectionIds } from "../../constants/Collections";
 import { getCustomTokenId } from "../../hook/useFetch";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import ActivityList from "./AcitivityList";
+import ActivityList from "../../components/ActivityList";
 import FilterPanel from "./FilterPanel";
 import useFilter from "./hook/useFilter";
 import Statistic from "./Statistic";
@@ -128,10 +128,7 @@ const Marketplace: React.FC = () => {
               />
             )}
             {selectedTab === MarketplaceTabs.ACTIVITY && (
-              <ActivityList
-                collectionId={collectionId as CollectionIds}
-                history={filteredHistory}
-              />
+              <ActivityList history={filteredHistory} />
             )}
           </NftList>
         </FilterPanel>

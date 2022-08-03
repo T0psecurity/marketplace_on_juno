@@ -39,12 +39,34 @@ export const FilterItem = styled.div<{ checked: boolean }>`
 `;
 
 export const SearchWrapper = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   max-width: 550px;
   margin: 20px auto 40px;
+`;
+
+export const ActivityButton = styled.div`
+  position: absolute;
+  cursor: pointer;
+  right: -100px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  & > svg {
+    width: 30px;
+    height: 30px;
+  }
+  @media (max-width: 650px) {
+    position: relative;
+    right: unset;
+    top: unset;
+    transform: unset;
+  }
 `;
 
 export const Card = styled.div`

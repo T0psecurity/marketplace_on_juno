@@ -35,7 +35,43 @@ export const ImgWrapper = styled.img<{ isMobile?: boolean }>`
   /* width: 550px; */
 `;
 
-export const StyledButton = styled.button``;
+export const StyledButton = styled.div`
+  margin: 20px auto;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  outline: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  text-decoration: none;
+  font-weight: 500;
+  line-height: 1.75;
+  text-transform: capitalize;
+  height: 50px;
+  width: 200px;
+  padding: 6px 16px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #39c639;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  &:hover {
+    text-decoration: none;
+    background-color: #1b5e20;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
+      0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  }
+`;
 
 export const MainContent = styled.h1<{ isMobile?: boolean }>`
   text-align: center;
