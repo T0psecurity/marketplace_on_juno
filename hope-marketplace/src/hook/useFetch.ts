@@ -260,7 +260,13 @@ const useFetch = () => {
           await Promise.all(actionHistoryQueries).then((queryResults: any) => {
             let saleHistory: any[] = [];
             queryResults.forEach(
-              (result: any[]) => (saleHistory = saleHistory.concat(result))
+              (result: any[]) =>
+                (saleHistory = saleHistory.concat(
+                  result.map((resultItem: any) => ({
+                    ...resultItem,
+                    collectionId: collection.collectionId,
+                  }))
+                ))
             );
             storeObject.saleHistory = saleHistory;
             dispatch(

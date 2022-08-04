@@ -7,9 +7,6 @@ import {
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import accountsReducer from "../features/accounts/accountsSlice";
-import connectionReducer from "../features/connection/connectionSlice";
-import messagesReducer from "../features/messages/messagesSlice";
-import consoleReducer from "../features/console/consoleSlice";
 import nftsReducer from "../features/nfts/nftsSlice";
 import collectionsReducer from "../features/collections/collectionsSlice";
 import collectionTraitsReducer from "../features/collectionTraits/collectionTraitsSlice";
@@ -26,9 +23,6 @@ const reducer = persistReducer(
   persistConfig,
   combineReducers({
     accounts: accountsReducer,
-    connection: connectionReducer,
-    messages: messagesReducer,
-    console: consoleReducer,
     nfts: nftsReducer,
     collectionStates: collectionsReducer,
     collectionTraitsStates: collectionTraitsReducer,

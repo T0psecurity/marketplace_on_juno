@@ -15,17 +15,23 @@ export const MintVideo = styled.video`
 export const NFTDetailContainer = styled.div`
   text-align: left;
   font-size: 20px;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const DetailTitle = styled.div`
   font-weight: bold;
 `;
 
-export const DetailContent = styled.div`
+export const DetailContent = styled.div<{ color?: string }>`
   margin-bottom: 10px;
   overflow-wrap: anywhere;
   display: flex;
   align-items: center;
+  ${({ color }) =>
+    color &&
+    css`
+      color: ${color};
+    `}
 `;
 
 export const MainPriceContainer = styled.div`

@@ -20,6 +20,8 @@ export const MintDetailContainer = styled.div<{ isMobile?: boolean }>`
   margin-bottom: 90px;
   border: 1px solid #d6d6d6;
   border-radius: 10px;
+  background-color: ${({ theme }) => theme.colors.panelBackgroundColor};
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const MintDetailInfo = styled.div`
@@ -45,7 +47,7 @@ export const DetailTitle = styled.div<{ bold?: boolean; isMobile?: boolean }>`
 export const DetailInfo = styled.div<{ isMobile?: boolean }>`
   font-size: 22px;
   font-weight: 400;
-  color: #797979;
+  color: ${({ theme }) => (theme.isDark ? "white" : "#797979")};
   ${({ isMobile }) =>
     isMobile &&
     css`
@@ -77,7 +79,7 @@ export const DetailBlock = styled.div<{ width?: string }>`
 
 export const DetailBlockTitle = styled.div<{ fontSize?: string }>`
   text-align: center;
-  color: #797979;
+  color: ${({ theme }) => (theme.isDark ? "white" : "#797979")};
   ${({ fontSize }) =>
     fontSize &&
     css`

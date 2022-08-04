@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef, MouseEventHandler } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  MouseEventHandler,
+  useContext,
+} from "react";
 import ReactSelect, { components } from "react-select";
 
 import {
@@ -30,9 +36,11 @@ import {
   NftListTabs,
   NftListTab,
   SortIcon,
+  FilterIconSvg,
 } from "./styled";
 import { TokenType } from "../../types/tokens";
 import SearchInputer from "../../components/SearchInputer";
+import { ThemeContext } from "../../context/ThemeContext";
 
 type SortType =
   | {
@@ -71,7 +79,7 @@ const ArrowIcon = ({
 );
 
 const FilterIcon = () => (
-  <svg
+  <FilterIconSvg
     width="20"
     height="20"
     viewBox="0 0 45 46"
@@ -89,7 +97,7 @@ const FilterIcon = () => (
         <rect width="45" height="46" fill="white" />
       </clipPath>
     </defs>
-  </svg>
+  </FilterIconSvg>
 );
 
 // const STATUS_FILTER_BUTTONS: StatusFilterButtonType[] = [
@@ -121,6 +129,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   });
   const [searchWord, setSearchWord] = useState<string>("");
   const [priceType, setPriceType] = useState<string>("");
+  const { isDark } = useContext(ThemeContext);
 
   const searchSortContainer = useRef(null);
 
@@ -147,7 +156,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   ]);
 
   const handleSortByPrice: MouseEventHandler<any> = (e) => {
-    console.log("clicked sort button");
     e.preventDefault();
     e.stopPropagation();
     setIsAscending(!isAscending);
@@ -303,6 +311,24 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 value={sortKey}
                 onChange={(item: any) => {
                   setSortKey(item);
+                }}
+                styles={{
+                  menu: (provided, state) => ({
+                    ...provided,
+                    backgroundColor: isDark ? "#838383" : "white",
+                  }),
+                  control: (provided, state) => ({
+                    ...provided,
+                    ...(isDark && {
+                      backgroundColor: "#838383",
+                    }),
+                  }),
+                  singleValue: (provided, state) => ({
+                    ...provided,
+                    ...(isDark && {
+                      color: "white",
+                    }),
+                  }),
                 }}
                 // @ts-ignore
                 onClickSortButton={handleSortByPrice}

@@ -1,4 +1,7 @@
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import {
+  CosmWasmClient,
+  SigningCosmWasmClient,
+} from "@cosmjs/cosmwasm-stargate";
 import { GasPrice } from "@cosmjs/stargate";
 import { coins } from "@cosmjs/proto-signing";
 import {
@@ -20,7 +23,6 @@ import { useSelector } from "react-redux";
 //   // contractAccounts,
 //   // deleteAccount,
 // } from "../features/accounts/accountsSlice";
-import connectionManager from "../features/connection/connectionManager";
 import { toMicroAmount } from "../util/coins";
 import { TokenStatus, TokenType } from "../types/tokens";
 import { ChainConfigs, ChainTypes } from "../constants/ChainTypes";
@@ -46,6 +48,21 @@ export const contractAddresses: ContractAddressesType = {
   //   "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
   // [TokenType.NETA]:
   //   "juno168ctmpyppk90d34p3jjy658zf5a5l3w8wk35wht6ccqj4mr0yv8s4j5awr",
+};
+
+const getQueryClient = async (
+  config: {
+    [key: string]: string;
+  },
+  forceRefresh = false
+): Promise<CosmWasmClient> => {
+  const rpcEndpoint: string = config["rpcEndpoint"];
+  const queryingClientConnection = {
+    client: await CosmWasmClient.connect(rpcEndpoint),
+    rpcEndpoint,
+  };
+
+  return queryingClientConnection.client;
 };
 
 const useContract = () => {
@@ -113,9 +130,7 @@ const useContract = () => {
         );
         return result;
       } else {
-        const client = await connectionManager.getQueryClient(
-          ChainConfigs[ChainTypes.JUNO]
-        );
+        const client = await getQueryClient(ChainConfigs[ChainTypes.JUNO]);
         const result = await client.queryContractSmart(
           contractAddress,
           queryMsg

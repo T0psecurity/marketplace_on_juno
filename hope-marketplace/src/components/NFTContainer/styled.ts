@@ -4,6 +4,7 @@ export const Wrapper = styled.div<{ noGrid?: boolean; isMobile?: boolean }>`
   text-align: center;
   display: flex;
   flex-wrap: wrap;
+  color: ${({ theme }) => theme.colors.fontColor};
   ${({ noGrid }) =>
     !noGrid &&
     css`

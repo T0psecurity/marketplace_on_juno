@@ -23,6 +23,7 @@ export const NFTItemAttributeItem = styled.div`
   border-radius: 10px;
   margin: 10px 20px;
   width: 200px;
+  color: ${({ theme }) => theme.colors.fontColor};
   & > span {
     align-self: center;
   }

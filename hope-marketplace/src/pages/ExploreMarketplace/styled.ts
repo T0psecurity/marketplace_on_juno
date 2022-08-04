@@ -14,6 +14,7 @@ export const FilterWrapper = styled.div`
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const FilterItem = styled.div<{ checked: boolean }>`
@@ -25,6 +26,10 @@ export const FilterItem = styled.div<{ checked: boolean }>`
   cursor: pointer;
   & > svg {
     margin-left: 5px;
+    path {
+      fill: ${({ theme }) => theme.colors.fontColor};
+      transition: fill 0.5s;
+    }
   }
   ${({ checked }) =>
     checked &&
@@ -39,11 +44,39 @@ export const FilterItem = styled.div<{ checked: boolean }>`
 `;
 
 export const SearchWrapper = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50%;
+  width: 100%;
+  max-width: 550px;
   margin: 20px auto 40px;
+`;
+
+export const ActivityButton = styled.div`
+  position: absolute;
+  cursor: pointer;
+  right: -100px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: ${({ theme }) => theme.colors.fontColor};
+  & > svg {
+    width: 30px;
+    height: 30px;
+    path {
+      fill: ${({ theme }) => theme.colors.fontColor};
+      transition: fill 0.5s;
+    }
+  }
+  @media (max-width: 650px) {
+    position: relative;
+    right: unset;
+    top: unset;
+    transform: unset;
+  }
 `;
 
 export const Card = styled.div`

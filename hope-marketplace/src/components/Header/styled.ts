@@ -5,7 +5,7 @@ export const HeaderWrapper = styled.div`
   height: 70px;
   padding-left: 24px;
   padding-right: 24px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.backgroundColor};
   box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
     0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
   display: flex;
@@ -32,19 +32,23 @@ export const LogoContainer = styled.div`
   font-weight: bold;
 `;
 
-export const HeaderLogo = styled.div`
+export const HeaderLogo = styled.div<{ isMobile: boolean }>`
   /* background: url("/logo.png"); */
-  background: url("/others/hopeHeaderLogo.png");
+  background: url(${({ theme }) =>
+    theme.isDark
+      ? "/others/hopeHeaderLogo_dark.png"
+      : "/others/hopeHeaderLogo.png"});
   background-size: cover;
   background-position: center;
-  width: 248px;
-  height: 60px;
+  width: ${({ isMobile }) => (isMobile ? "205px" : "248px")};
+  height: ${({ isMobile }) => (isMobile ? "50px" : "60px")};
   cursor: pointer;
 `;
 
 export const ProfileIcon = styled.div`
-  background: url("/others/user-hopers.jpg");
+  background: url("/others/user-hopers.png");
   background-size: cover;
+  background-color: ${({ theme }) => theme.colors.backgroundColor};
   width: 40px;
   height: 40px;
   margin: 0 10px;
@@ -62,6 +66,7 @@ export const LinkButton = styled.div`
   background: none;
   font-weight: bold;
   margin: 0 10px;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const ConnectWalletButton = styled.div`
@@ -72,6 +77,7 @@ export const ConnectWalletButton = styled.div`
   box-sizing: border-box;
   outline: 0;
   border: 0;
+  border-radius: 10px;
   cursor: pointer;
   user-select: none;
   vertical-align: middle;
@@ -109,13 +115,14 @@ export const MenuIconContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
   position: relative;
 `;
 
-export const MenuIcon = styled.div``;
+export const MenuIcon = styled.div`
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+`;
 
 export const MenuContainer = styled.div`
   position: absolute;

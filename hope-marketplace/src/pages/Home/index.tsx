@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useHistory } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 
 import Collections, { MarketplaceInfo } from "../../constants/Collections";
@@ -21,9 +22,11 @@ import {
   StatisticItem,
   StatisticContent,
   CoinIcon,
+  StyledButton,
 } from "./styled";
 
 const Home: React.FC = () => {
+  const history = useHistory();
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const isMobile = isXs || isSm || isMd;
 
@@ -64,7 +67,7 @@ const Home: React.FC = () => {
   }, [collectionStates, tokenPrices, totalMarketplaceNFTs]);
 
   const HomeImage = () => (
-    <ImgWrapper src="/others/home.jpg" alt="home" isMobile={isMobile} />
+    <ImgWrapper src="/others/home.png" alt="home" isMobile={isMobile} />
   );
 
   const Tokens = () => {
@@ -90,6 +93,9 @@ const Home: React.FC = () => {
           The DAO governs the marketplace and earns rewards through the staking
           system of the token $HOPE.
         </SubContent>
+        <StyledButton onClick={() => history.push("/collections/explore")}>
+          Explore
+        </StyledButton>
       </SubWrapper>
       {!isMobile && <HomeImage />}
       <StatisticContainer>

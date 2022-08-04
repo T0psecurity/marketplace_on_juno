@@ -50,6 +50,7 @@ export const NftListTabs = styled.div`
   display: flex;
   align-items: center;
   width: max-content;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const NftListTab = styled.div<{ selected: boolean }>`
@@ -59,7 +60,7 @@ export const NftListTab = styled.div<{ selected: boolean }>`
   ${({ selected }) =>
     selected &&
     css`
-      border-bottom: 2px solid black;
+      border-bottom: 2px solid ${({ theme }) => theme.colors.fontColor};
       font-weight: bold;
     `}
 `;
@@ -80,6 +81,10 @@ export const SortIcon = styled.svg<{ desc: boolean }>`
   width: 20px;
   margin: 10px;
   z-index: 1;
+  path {
+    fill: ${({ theme }) => theme.colors.fontColor};
+    transition: fill 0.5s;
+  }
 `;
 
 export const SearchWrapper = styled.div`
@@ -104,6 +109,13 @@ export const StyledSvg = styled.svg`
   opacity: 1 !important;
 `;
 
+export const FilterIconSvg = styled.svg`
+  path {
+    fill: ${({ theme }) => theme.colors.fontColor};
+    transition: fill 0.5s;
+  }
+`;
+
 export const FilterContainerTitle = styled.div`
   position: relative;
   width: calc(100% - 20px);
@@ -111,6 +123,7 @@ export const FilterContainerTitle = styled.div`
   font-weight: bold;
   transition: opacity 0.5s;
   user-select: none;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const NftList = styled.div`
@@ -203,6 +216,7 @@ export const SelectItemTitle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const SelectItemContent = styled.div<{
@@ -234,6 +248,7 @@ export const StatisticItem = styled.div<{ isMobile?: boolean }>`
   align-items: center;
   min-width: 100px;
   height: 90px;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const StatisticValue = styled.div`
@@ -244,6 +259,7 @@ export const StatisticValue = styled.div`
   font-size: 1.5em;
   font-weight: bold;
   text-align: center;
+  color: ${({ theme }) => theme.colors.fontColor};
 `;
 
 export const StatisticIcon = styled.img`
@@ -261,84 +277,6 @@ export const SortByPriceButton = styled(Button)`
   width: 300px;
   max-width: 100%;
   margin: auto;
-`;
-
-export const SaleHistoryWrapper = styled.div``;
-
-export const HistoryItemBlock = styled.div<{ isMobile: boolean }>`
-  display: flex;
-  align-items: center;
-  ${({ isMobile }) =>
-    isMobile &&
-    css`
-      flex-direction: column;
-    `}
-`;
-
-export const HistoryItemImage = styled.div`
-  width: 60px;
-  height: 60px;
-  margin: 0 10px;
-  & > img {
-    border-radius: 0;
-  }
-`;
-
-export const HistoryItemTokenName = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const HistoryItemToken = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-export const CoinIcon = styled.img`
-  width: 35px;
-  height: 35px;
-  margin-right: 5px;
-`;
-
-export const HistoryItemText = styled.div<{
-  fontWeight?: string;
-  fontSize?: string;
-  color?: string;
-  margin?: string;
-  width?: string;
-}>`
-  font-weight: ${({ fontWeight }) => fontWeight || "normal"};
-  font-size: ${({ fontSize }) => fontSize || "20px"};
-  color: ${({ color }) => color || "black"};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: ${({ margin }) => margin || "0 10px"};
-  ${({ width }) =>
-    width &&
-    css`
-      width: ${width};
-    `}
-`;
-
-export const SaleHistoryItem = styled.div<{ isMobile: boolean }>`
-  display: grid;
-  grid-template-columns: ${({ isMobile }) =>
-    isMobile ? "1fr 1fr 1fr 1fr" : "60px 1fr 1fr 1fr 1fr"};
-  align-items: center;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  min-width: 460px;
-  margin: ${({ isMobile }) => (isMobile ? "5px" : "10px")} 0;
-  scroll-snap-align: start;
-  ${({ isMobile }) =>
-    isMobile &&
-    css`
-      ${HistoryItemText} {
-        font-size: 16px;
-        margin: 0 5px;
-      }
-    `}
 `;
 
 const MIN_FILTER_CONTAINER_WIDTH = "50px";

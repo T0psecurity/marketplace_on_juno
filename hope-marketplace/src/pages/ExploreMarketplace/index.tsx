@@ -13,6 +13,7 @@ import {
   Flex,
   FilterWrapper,
   FilterItem,
+  ActivityButton,
 } from "./styled";
 import {
   NewIcon,
@@ -22,10 +23,12 @@ import {
   UtilityIcon,
   ArtIcon,
   NFTIcon,
+  ActivityIcon,
 } from "./SvgIcons";
 import { useAppSelector } from "../../app/hooks";
 import { TotalStateType } from "../../features/collections/collectionsSlice";
 import { TokenType } from "../../types/tokens";
+import { useHistory } from "react-router-dom";
 
 type FilterOptionsType = {
   title: string;
@@ -37,6 +40,7 @@ const ExploreMarketplace: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [orderValue, setOrderValue] = useState<CollectionIds[]>([]);
   const [selectedFilterOption, setSelectedFilterOption] = useState<string>("");
+  const history = useHistory();
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
   const collectionStates: TotalStateType = useAppSelector(
     (state) => state.collectionStates
@@ -195,6 +199,9 @@ const ExploreMarketplace: React.FC = () => {
       </FilterWrapper>
       <SearchWrapper>
         <SearchInputer onChange={handleChangeSearchValue} />
+        <ActivityButton onClick={() => history.push("/activity")}>
+          <ActivityIcon /> Activity
+        </ActivityButton>
       </SearchWrapper>
       <Flex>
         {displayCollections.map((item: MarketplaceBasicInfo, index: number) => (
