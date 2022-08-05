@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
+import PriceStatistic from "../../components/PriceStatistic";
 
 import Collections, { MarketplaceInfo } from "../../constants/Collections";
 import {
@@ -78,47 +79,50 @@ const Home: React.FC = () => {
   };
 
   return (
-    <Wrapper isMobile={isMobile}>
-      {isMobile && (
-        <>
-          <HomeImage />
-          <Tokens />
-        </>
-      )}
-      <SubWrapper>
-        <MainContent isMobile={isMobile}>
-          Hopers.io NFT marketplace $JUNO
-        </MainContent>
-        <SubContent isMobile={isMobile}>
-          The DAO governs the marketplace and earns rewards through the staking
-          system of the token $HOPE.
-        </SubContent>
-        <StyledButton onClick={() => history.push("/collections/explore")}>
-          Explore
-        </StyledButton>
-      </SubWrapper>
-      {!isMobile && <HomeImage />}
-      <StatisticContainer>
-        <StatisticItem>
-          <StatisticContent bold>
-            <CoinIcon alt="" src="/coin-images/ujuno.png" />
-            {addSuffix(tradesVolume)}
-          </StatisticContent>
-          <StatisticContent>Trades Volume</StatisticContent>
-        </StatisticItem>
-        <StatisticItem>
-          <StatisticContent bold>
-            {addSuffix(totalItemsOnSale)}
-          </StatisticContent>
-          <StatisticContent>Items on Sale</StatisticContent>
-        </StatisticItem>
-        {/* <StatisticItem>
+    <>
+      <Wrapper isMobile={isMobile}>
+        {isMobile && (
+          <>
+            <HomeImage />
+            <Tokens />
+          </>
+        )}
+        <SubWrapper>
+          <MainContent isMobile={isMobile}>
+            Hopers.io NFT marketplace $JUNO
+          </MainContent>
+          <SubContent isMobile={isMobile}>
+            The DAO governs the marketplace and earns rewards through the
+            staking system of the token $HOPE.
+          </SubContent>
+          <StyledButton onClick={() => history.push("/collections/explore")}>
+            Explore
+          </StyledButton>
+        </SubWrapper>
+        {!isMobile && <HomeImage />}
+        <StatisticContainer>
+          <StatisticItem>
+            <StatisticContent bold>
+              <CoinIcon alt="" src="/coin-images/ujuno.png" />
+              {addSuffix(tradesVolume)}
+            </StatisticContent>
+            <StatisticContent>Trades Volume</StatisticContent>
+          </StatisticItem>
+          <StatisticItem>
+            <StatisticContent bold>
+              {addSuffix(totalItemsOnSale)}
+            </StatisticContent>
+            <StatisticContent>Items on Sale</StatisticContent>
+          </StatisticItem>
+          {/* <StatisticItem>
           <StatisticContent bold>2,95K</StatisticContent>
           <StatisticContent>Transaction</StatisticContent>
         </StatisticItem> */}
-      </StatisticContainer>
-      {!isMobile && <Tokens />}
-    </Wrapper>
+        </StatisticContainer>
+        {!isMobile && <Tokens />}
+      </Wrapper>
+      <PriceStatistic />
+    </>
   );
 };
 
