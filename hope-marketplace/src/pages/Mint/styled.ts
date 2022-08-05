@@ -73,7 +73,8 @@ export const DetailBlock = styled.div<{ width?: string }>`
   font-size: 22px;
   padding: 10px;
   width: ${({ width }) => width ?? "275px"};
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  border: 1px solid
+    ${({ theme }) => (theme.isDark ? "white" : "rgba(0, 0, 0, 0.4)")};
   border-radius: 4px;
 `;
 

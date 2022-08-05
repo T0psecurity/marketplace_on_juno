@@ -100,7 +100,7 @@ export const StyledSvg = styled.svg`
   width: 1.1015625em;
   height: 1em;
   vertical-align: middle;
-  fill: black;
+  fill: ${({ theme }) => theme.colors.fontColor};
   overflow: hidden;
   position: absolute;
   right: 0;
