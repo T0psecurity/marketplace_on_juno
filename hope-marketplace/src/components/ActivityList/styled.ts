@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 
-export const SaleHistoryWrapper = styled.div``;
+export const SaleHistoryWrapper = styled.div`
+  overflow: auto;
+`;
 
 export const HistoryItemBlock = styled.div<{ isMobile: boolean }>`
   display: flex;

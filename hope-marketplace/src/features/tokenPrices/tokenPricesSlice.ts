@@ -43,7 +43,6 @@ export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
     queryResults.forEach((result: any, index: number) => {
       tokenPrices[keys[index]] = { market_data: result.market_data };
     });
-    console.log("token prices", tokenPrices);
     return tokenPrices;
   } catch (err) {
     return initialState;

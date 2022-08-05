@@ -75,6 +75,9 @@ export const SearchContainer = styled.div`
 
 export const HistoryContainer = styled.div`
   margin: 20px 50px;
+  @media (max-width: 400px) {
+    margin: 20px 0;
+  }
 `;
 
 export const LoadMoreButton = styled.div`
