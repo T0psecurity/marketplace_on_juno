@@ -83,6 +83,7 @@ export const Card = styled.div`
   border-radius: 10px;
   border: 1px solid black;
   width: ${CardWidth};
+  max-width: 95%;
   height: 220px;
   position: relative;
   overflow: hidden;
