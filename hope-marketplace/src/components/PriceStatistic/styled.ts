@@ -17,7 +17,7 @@ export const ContentContainer = styled.div`
 
 export const ChartArea = styled.div`
   width: 50%;
-  min-width: 350px;
+  min-width: 500px;
   height: 350px;
   position: relative;
 `;
@@ -40,6 +40,11 @@ export const PriceStatisticItem = styled.div`
   grid-template-columns: 70px auto 50px 50px 50px 50px;
   grid-gap: 20px;
   align-items: center;
+  border-top: 1px solid ${({ theme }) => theme.colors.fontColor};
+  padding: 10px;
+  &:last-child {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.fontColor};
+  }
   @media (max-width: 450px) {
     grid-template-columns: 60px auto 50px 50px 50px 50px;
     grid-gap: 5px;

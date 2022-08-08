@@ -104,10 +104,11 @@ export const Tabs = styled.div<{ margin?: string }>`
 export const Tab = styled.div<{ selected: boolean; fontSize?: string }>`
   cursor: pointer;
   margin-right: 20px;
-  ${({ selected }) =>
+  ${({ selected, theme }) =>
     selected &&
     css`
       font-weight: bold;
+      border-bottom: 2px solid ${theme.colors.fontColor};
     `}
 
   ${({ fontSize }) =>
