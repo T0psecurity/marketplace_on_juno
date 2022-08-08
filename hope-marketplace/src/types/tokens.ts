@@ -8,6 +8,14 @@ export enum TokenType {
   ATOM = "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
 }
 
+export const TokenFullName: { [key in TokenType]: string } = {
+  [TokenType.JUNO]: "JUNO",
+  [TokenType.HOPE]: "HOPE GALAXY",
+  [TokenType.RAW]: "JunoSwap Raw Dao",
+  [TokenType.NETA]: "NETA",
+  [TokenType.ATOM]: "COSMOS HUB",
+};
+
 export type TokenStatusType = {
   isNativeCoin: boolean;
   isIBCCOin: boolean;

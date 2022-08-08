@@ -1,19 +1,17 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import ReactSelect from "react-select";
 import { useAppSelector } from "../../app/hooks";
 import ActivityList from "../../components/ActivityList";
 import SearchInputer from "../../components/SearchInputer";
-import Collections from "../../constants/Collections";
 import { ThemeContext } from "../../context/ThemeContext";
-import { TotalStateType } from "../../features/collections/collectionsSlice";
 import { getCustomTokenId } from "../../hook/useFetch";
 import { TokenType } from "../../types/tokens";
 import { SortDirectionType } from "../Marketplace/types";
+import { getCollectionById, CollectionIds } from "../../constants/Collections";
 import {
   CoinIcon,
   FilterContainer,
   HistoryContainer,
-  LoadMoreButton,
   Logo,
   SearchContainer,
   SearchWrapper,
@@ -37,8 +35,6 @@ const SortDirectionSelectOptions = [
   },
 ];
 
-const INITIAL_RENDER_COUNT = 50;
-
 const Activity: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<
@@ -47,76 +43,66 @@ const Activity: React.FC = () => {
   const [selectedTokenType, setSelectedTokenType] = useState<
     TokenType | undefined
   >();
-  const [renderCount, setRenderCount] = useState<number>(INITIAL_RENDER_COUNT);
   const { isDark } = useContext(ThemeContext);
 
-  const collectionStates: TotalStateType = useAppSelector(
-    (state) => state.collectionStates
-  );
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
 
-  const filteredSaleHistory = useMemo(() => {
-    let filteredResult: any = [];
-    Collections.forEach((collection) => {
-      const saleHistory =
-        collectionStates[collection.collectionId]?.saleHistory;
-      if (saleHistory?.length) {
-        if (searchValue || selectedTokenType) {
-          saleHistory.forEach((historyItem: any) => {
-            let filtered = true;
-            if (searchValue) {
-              const tokenId = collection.customTokenId
-                ? getCustomTokenId(
-                    historyItem.token_id,
-                    collection.customTokenId
-                  )
-                : historyItem.token_id;
-              filtered =
-                filtered &&
-                tokenId.toLowerCase().includes(searchValue.toLowerCase());
-            }
-            if (selectedTokenType) {
-              filtered =
-                filtered && historyItem.denom === (selectedTokenType as string);
-            }
-            if (filtered) {
-              filteredResult = [...filteredResult, historyItem];
-            }
-          });
-        } else {
-          filteredResult = [...filteredResult, ...saleHistory];
-        }
+  const filterActivitiesFunc = useCallback(
+    (activities: any[]) => {
+      let result: any[] = [];
+      if (searchValue || selectedTokenType) {
+        activities.forEach((activityItem: any) => {
+          let filtered = true;
+          if (searchValue) {
+            const targetCollection = getCollectionById(
+              activityItem.collectionId as CollectionIds
+            );
+            const tokenId = targetCollection.customTokenId
+              ? getCustomTokenId(
+                  activityItem.token_id,
+                  targetCollection.customTokenId
+                )
+              : activityItem.token_id;
+            filtered =
+              filtered &&
+              tokenId.toLowerCase().includes(searchValue.toLowerCase());
+          }
+          if (selectedTokenType) {
+            filtered =
+              filtered && activityItem.denom === (selectedTokenType as string);
+          }
+          if (filtered) {
+            result = [...result, activityItem];
+          }
+        });
+      } else {
+        result = activities;
       }
-    });
-    return filteredResult.sort((history1: any, history2: any) => {
-      if (
-        sortDirection === SortDirectionType.asc ||
-        sortDirection === SortDirectionType.desc
-      ) {
-        const tokenPrice1 =
-          tokenPrices[history1.denom as TokenType]?.market_data.current_price
-            ?.usd || 0;
-        const tokenPrice2 =
-          tokenPrices[history2.denom as TokenType]?.market_data.current_price
-            ?.usd || 0;
+      return result.sort((item1: any, item2: any) => {
+        if (
+          sortDirection === SortDirectionType.asc ||
+          sortDirection === SortDirectionType.desc
+        ) {
+          const tokenPrice1 =
+            tokenPrices[item1.denom as TokenType]?.market_data.current_price
+              ?.usd || 0;
+          const tokenPrice2 =
+            tokenPrices[item2.denom as TokenType]?.market_data.current_price
+              ?.usd || 0;
 
-        const price1 = tokenPrice1 * Number(history1.amount);
-        const price2 = tokenPrice2 * Number(history2.amount);
-        if (sortDirection === SortDirectionType.asc) {
-          return price1 < price2 ? -1 : 1;
-        } else {
-          return price1 < price2 ? 1 : -1;
+          const price1 = tokenPrice1 * Number(item1.amount);
+          const price2 = tokenPrice2 * Number(item2.amount);
+          if (sortDirection === SortDirectionType.asc) {
+            return price1 < price2 ? -1 : 1;
+          } else {
+            return price1 < price2 ? 1 : -1;
+          }
         }
-      }
-      return history1?.time < history2.time ? 1 : -1;
-    });
-  }, [
-    collectionStates,
-    searchValue,
-    selectedTokenType,
-    sortDirection,
-    tokenPrices,
-  ]);
+        return item1?.time < item2.time ? 1 : -1;
+      });
+    },
+    [searchValue, selectedTokenType, sortDirection, tokenPrices]
+  );
 
   const handleChangeSearchValue = (e: any) => {
     const { value } = e.target;
@@ -142,7 +128,6 @@ const Activity: React.FC = () => {
                 alt=""
                 src={`/coin-images/${TokenType[key].replace(/\//g, "")}.png`}
                 onClick={() => {
-                  setRenderCount(INITIAL_RENDER_COUNT);
                   setSelectedTokenType((prev) =>
                     prev === TokenType[key] ? undefined : TokenType[key]
                   );
@@ -178,13 +163,8 @@ const Activity: React.FC = () => {
         </SearchContainer>
       </FilterContainer>
       <HistoryContainer>
-        <ActivityList history={filteredSaleHistory.slice(0, renderCount)} />
+        <ActivityList filterFunc={filterActivitiesFunc} />
       </HistoryContainer>
-      <LoadMoreButton
-        onClick={() => setRenderCount((prev) => Math.min(prev + 15))}
-      >
-        Load More Activities...
-      </LoadMoreButton>
     </Wrapper>
   );
 };

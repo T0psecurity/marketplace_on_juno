@@ -39,6 +39,8 @@
     "react-select": "^5.4.0",
     "react-simple-code-editor": "^0.11.0",
     "react-toastify": "^8.2.0",
+    "rechart": "0.0.1",
+    "recharts": "^2.1.13",
     "redux-persist": "^6.0.0",
     "stream-browserify": "^3.0.0",
     "styled-components": "^5.3.3",

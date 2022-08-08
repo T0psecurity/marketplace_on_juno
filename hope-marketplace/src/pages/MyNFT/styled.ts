@@ -70,10 +70,11 @@ export const CoinIconWrapper = styled.div`
   align-items: center;
 `;
 
-export const CoinIcon = styled.img`
-  width: 35px;
-  height: 35px;
+export const CoinIcon = styled.img<{ size?: string }>`
+  width: ${({ size }) => size || "35px"};
+  height: ${({ size }) => size || "35px"};
   margin-right: 5px;
+  cursor: pointer;
 `;
 
 export const TokenBalance = styled.div`
@@ -85,25 +86,36 @@ export const MyNftsHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-top: 20px;
 `;
 
-export const MyNftsTabs = styled.div`
+export const Tabs = styled.div<{ margin?: string }>`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 10px;
-  /* width: 100%; */
+  ${({ margin }) =>
+    margin &&
+    css`
+      margin: ${margin};
+    `}/* width: 100%; */
 `;
 
-export const MyNftsTab = styled.div<{ selected: boolean }>`
+export const Tab = styled.div<{ selected: boolean; fontSize?: string }>`
   cursor: pointer;
   margin-right: 20px;
-  ${({ selected }) =>
+  ${({ selected, theme }) =>
     selected &&
     css`
       font-weight: bold;
+      border-bottom: 2px solid ${theme.colors.fontColor};
     `}
 
+  ${({ fontSize }) =>
+    fontSize &&
+    css`
+      font-size: ${fontSize};
+    `}
   &:last-child {
     margin-right: 0;
   }
@@ -115,4 +127,19 @@ export const SearchWrapper = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 550px;
+`;
+
+export const ActivityHeader = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0;
+`;
+
+export const TokenContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
 `;

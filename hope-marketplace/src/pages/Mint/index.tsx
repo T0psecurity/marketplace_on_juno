@@ -17,7 +17,11 @@ enum FILTER_TYPE {
 }
 
 const FilterButtonOptions: {
-  [key in FILTER_TYPE]: { title: string; backgroundColor?: string };
+  [key in FILTER_TYPE]: {
+    title: string;
+    backgroundColor?: string;
+    color?: string;
+  };
 } = {
   [FILTER_TYPE.LIVE]: {
     title: "Live",
@@ -25,6 +29,7 @@ const FilterButtonOptions: {
   [FILTER_TYPE.SOLDOUT]: {
     title: "Sold out",
     backgroundColor: "#C63939",
+    color: "white",
   },
   [FILTER_TYPE.SCHEDULED]: {
     title: "Scheduled",
@@ -112,6 +117,7 @@ const Mint: React.FC = () => {
                 checked={filterType === FILTER_TYPE[key]}
                 onClick={() => setFilterType(FILTER_TYPE[key])}
                 backgroundColor={crrOption.backgroundColor}
+                color={crrOption.color}
               >
                 {`${crrOption.title} (${count})`}
               </StyledButton>

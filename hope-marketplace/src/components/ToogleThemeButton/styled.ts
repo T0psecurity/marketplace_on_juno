@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { MoonIcon, SunIcon } from "../../pages/ExploreMarketplace/SvgIcons";
+import { MoonIcon, SunIcon } from "../SvgIcons";
 
 export const Wrapper = styled.div`
   display: flex;

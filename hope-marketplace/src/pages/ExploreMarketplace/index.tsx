@@ -24,7 +24,7 @@ import {
   ArtIcon,
   NFTIcon,
   ActivityIcon,
-} from "./SvgIcons";
+} from "../../components/SvgIcons";
 import { useAppSelector } from "../../app/hooks";
 import { TotalStateType } from "../../features/collections/collectionsSlice";
 import { TokenType } from "../../types/tokens";
@@ -97,6 +97,7 @@ const ExploreMarketplace: React.FC = () => {
       title: "New",
       Icon: () => <NewIcon />,
       order: [
+        CollectionIds.LUNATICS,
         CollectionIds.GORILLA,
         CollectionIds.BORED3D,
         CollectionIds.JUNOPUNKS2,
@@ -133,6 +134,7 @@ const ExploreMarketplace: React.FC = () => {
       title: "Community",
       Icon: () => <CommunityIcon />,
       order: [
+        CollectionIds.LUNATICS,
         CollectionIds.BORED,
         CollectionIds.GORILLA,
         CollectionIds.BORED3D,

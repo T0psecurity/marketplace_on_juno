@@ -1,13 +1,18 @@
+# CosmWasm721 Standard
+
 import json
 import asyncio
 import aiohttp
 import ssl
 import certifi
+
 from functools import cmp_to_key
 import time
+import os
 
 SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 
+limit = 0
 metadata = []
 weights = []
 aggregate = {}
@@ -15,43 +20,34 @@ invalids = []
 composed = []
 
 
-async def count(token_id, session, suffix, retry_limit):
-    for attempt in range(retry_limit):  # Until I can get around rate limits >:(
-        try:
-            decoded_res = metadata[token_id]
-            attributes = decoded_res["attributes"]
-            for i in range(len(attributes)):
-                if attributes[i]['trait_type'] == "Birthday":
-                    del attributes[i]
-                    break
+async def count(token_id):
+    decoded_res = metadata[token_id]
+    attributes = decoded_res["attributes"]
 
-            attributes.append({
-                'trait_type': 'num_traits',
-                'value': len([attrib for attrib in attributes if attrib['value']])
-            })
+    attributes.append({
+        'trait_type': 'num_traits',
+        'value': len([attrib for attrib in attributes if attrib['value']])
+    })
 
-            weights.append({
-                "token_id": token_id,
-                "attributes": attributes
-            })
+    weights.append({
+        "token_id": decoded_res['edition'],
+        "attributes": attributes
+    })
 
-            for i in attributes:
-                if not i["trait_type"] in aggregate:
-                    aggregate[i["trait_type"]] = {}
+    for i in attributes:
+        if not i["trait_type"] in aggregate:
+            aggregate[i["trait_type"]] = {}
 
-                if not i["value"] in aggregate[i["trait_type"]]:
-                    aggregate[i["trait_type"]][i["value"]] = {
-                        "count": 0,
-                        "weight": 0
-                    }
+        if not i["value"] in aggregate[i["trait_type"]]:
+            aggregate[i["trait_type"]][i["value"]] = {
+                "count": 0,
+                "weight": 0
+            }
 
-                aggregate[i["trait_type"]][i["value"]]["count"] += 1
-            return
-        except Exception as e:
-            continue
+        aggregate[i["trait_type"]][i["value"]]["count"] += 1
 
-    invalids.append(token_id)
-    print("❌:", token_id)
+    """invalids.append(token_id)
+    print("❌:", token_id)"""
 
 
 async def assign(attribute, limit):
@@ -75,8 +71,8 @@ def compare(a, b):
     return weigh(a) - weigh(b)
 
 
-async def main(project_name, metadata_uri, starting_index=0, suffix="", retry_limit=500):
-    global metadata
+async def main(project_name, metadata_uri):
+    global metadata, limit
     metadata = []
     global weights
     weights = []
@@ -84,15 +80,15 @@ async def main(project_name, metadata_uri, starting_index=0, suffix="", retry_li
     aggregate = {}
     global composed
     composed = []
-
     start_time = time.time()
     async with aiohttp.ClientSession(trust_env=True) as session:
         async with session.get(url=metadata_uri, ssl=SSL_CONTEXT) as response:
             res = await response.read()
             metadata = json.loads(res.decode("utf8"))
             limit = len(metadata)
+            print(limit)
 
-            await asyncio.gather(*[count(num, session, suffix, retry_limit) for num in range(starting_index, starting_index + limit)])
+            await asyncio.gather(*[count(num) for num in range(limit)])
 
             for attributes in aggregate.values():
                 for attribute in attributes.values():
@@ -117,10 +113,8 @@ async def main(project_name, metadata_uri, starting_index=0, suffix="", retry_li
     with open("%s.json" % (project_name.lower().replace(" ", "")), "w") as dumped:
         dumped.write(json.dumps({
             "project_name": project_name,
-            "token_uri": '',
+            "token_uri": metadata_uri,
             "limit": limit,
-            "suffix": suffix,
-            "starting_index": starting_index,
             "aggregate": aggregate,
             "weights": weights,
             "time_to_sync": finalized_time
@@ -139,10 +133,6 @@ with open ('collections.txt', 'r') as collectionsFile:
         main(
             project_name,
             metadata_uri,
-            # limit=len(metadata),
-            starting_index=0,
-            suffix='',
-            retry_limit=100
         )
     )
 

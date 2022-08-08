@@ -72,6 +72,7 @@ export enum CollectionIds {
   JUNOPUNKS2 = "junopunks2",
   BORED3D = "bored3d",
   GORILLA = "gorilla",
+  LUNATICS = "lunatic",
 }
 
 const Collections: MarketplaceInfo[] = [
@@ -519,6 +520,38 @@ const Collections: MarketplaceInfo[] = [
       royalties: "5% + 3%",
       price: "Private Sale: 0.1 $JUNO",
       mintImage: "/mint-images/gorilla.gif",
+      mintDate: "TBA",
+      mintLogic: MintLogics.logic1,
+      isWhiteListMint: true,
+    },
+    isLaunched: true,
+  },
+  {
+    title: "Lunatics Loser Club",
+    creator: "Rohit",
+    imageUrl: "/backgrounds/lunatic.jpg",
+    backgroundUrl: "/marketplace-backgrounds/lunatic.jpg",
+    logoUrl: "/logos/lunatic.gif",
+    collectionId: CollectionIds.LUNATICS,
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmdFPNR6uWtT6KHM4cmTjEM2L4J5HtbTjH2ugo9KoJK1rm",
+    nftContract:
+      "juno17v8uc3cqq3jqd4q9gl2qxd5zqmug4m9phnzj7ak6k70ttf2g374q3a6ew3",
+    mintContract:
+      "juno1wfkxqwdhd7xx7ehzh0tdexr2s74kkj79jrndlywn4lpzja32h6zqpnt66q",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/VEQtM2Hc",
+      website: "",
+      twitter: "https://twitter.com/LunaticsLoser",
+    },
+    description:
+      "Funny NFT collection showing a depressed $LUNA holder represented by DoKwon.",
+    mintInfo: {
+      totalNfts: 1000,
+      royalties: "2% + 3%",
+      price: "FREE",
+      mintImage: "/mint-images/lunatic.gif",
       mintDate: "TBA",
       mintLogic: MintLogics.logic1,
       isWhiteListMint: true,

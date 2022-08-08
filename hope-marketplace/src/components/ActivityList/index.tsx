@@ -1,8 +1,11 @@
 import moment from "moment";
-import React from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useAppSelector } from "../../app/hooks";
 import Image from "../../components/Image";
-import { CollectionIds, getCollectionById } from "../../constants/Collections";
+import Collections, {
+  CollectionIds,
+  getCollectionById,
+} from "../../constants/Collections";
 import { getCustomTokenId, getTokenIdNumber } from "../../hook/useFetch";
 import { TokenType } from "../../types/tokens";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
@@ -19,11 +22,18 @@ import {
   HistoryItemTokenName,
   HistoryItemAddress,
   StyledSvg,
+  LoadMoreButton,
+  NoHistoryWrapper,
 } from "./styled";
+import { HistoryIcon } from "../SvgIcons";
 
 interface ActivityListProps {
-  history: any[];
+  filterFunc?: any;
+  collectionId?: CollectionIds;
+  user?: string;
 }
+
+const INITIAL_RENDER_COUNT = 50;
 
 const CartIcon = () => (
   <StyledSvg
@@ -40,12 +50,78 @@ const CartIcon = () => (
   </StyledSvg>
 );
 
-const ActivityList: React.FC<ActivityListProps> = ({ history }) => {
+const filterActivitiesByUser = (activities: any[], user?: string) => {
+  if (!user) return activities;
+  const result: any = [];
+  activities.forEach((activity) => {
+    if (activity.from === user || activity.to === user) {
+      result.push(activity);
+    }
+  });
+  return result;
+};
+
+const ActivityList: React.FC<ActivityListProps> = ({
+  filterFunc,
+  collectionId,
+  user,
+}) => {
+  const [renderCount, setRenderCount] = useState<number>(INITIAL_RENDER_COUNT);
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const isMobile = isXs || isSm || isMd;
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
   const collectionStates = useAppSelector((state) => state.collectionStates);
   const totalTokenRarityRanks = useAppSelector((state) => state.rarityRank);
+
+  useEffect(() => {
+    setRenderCount(INITIAL_RENDER_COUNT);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterFunc]);
+
+  const history = useMemo(() => {
+    let result: any = [];
+    if (collectionId) {
+      result = filterActivitiesByUser(
+        (collectionStates[collectionId]?.saleHistory || []).map(
+          (item: any) => ({ ...item, collectionId })
+        ),
+        user
+      );
+    } else {
+      Collections.forEach((collection) => {
+        const saleHistory =
+          collectionStates[collection.collectionId]?.saleHistory;
+        result = [
+          ...result,
+          ...filterActivitiesByUser(
+            (saleHistory || []).map((item: any) => ({
+              ...item,
+              collectionId: collection.collectionId,
+            })),
+            user
+          ),
+        ];
+      });
+    }
+    if (filterFunc) {
+      result = filterFunc(result);
+    } else {
+      result = result
+        .slice()
+        .sort((history1: any, history2: any) =>
+          history1?.time < history2.time ? 1 : -1
+        );
+    }
+    return result.slice(0, renderCount);
+  }, [collectionId, collectionStates, filterFunc, renderCount, user]);
+
+  if (!history || !history.length) {
+    return (
+      <NoHistoryWrapper>
+        <HistoryIcon width={50} height={50} /> No Activities
+      </NoHistoryWrapper>
+    );
+  }
 
   return (
     <>
@@ -81,7 +157,12 @@ const ActivityList: React.FC<ActivityListProps> = ({ history }) => {
           );
           const tokenRarityRank = tokenRarityRanks[tokenIdNumber];
           return (
-            <SaleHistoryItem key={index} isMobile={isMobile}>
+            <SaleHistoryItem key={index} isMobile={isMobile} forUser={!!user}>
+              {!!user && (
+                <HistoryItemText minWidth="" fontSize="16px" textAlign="end">
+                  {historyItem.from === user ? "Sell" : "Buy"}
+                </HistoryItemText>
+              )}
               {!isMobile && <CartIcon />}
               <HistoryItemBlock isMobile={isMobile}>
                 <HistoryItemImage>
@@ -114,28 +195,29 @@ const ActivityList: React.FC<ActivityListProps> = ({ history }) => {
                 />
                 <div>
                   <HistoryItemText>
-                    {(+historyItem.amount / 1e6).toFixed(2)}
+                    {(+historyItem.amount / 1e6).toLocaleString("en-Us", {
+                      maximumFractionDigits: 2,
+                    })}
                   </HistoryItemText>
                   <HistoryItemText>
-                    {tokenPrice &&
-                      `(${addSuffix(
-                        Number(
-                          (
-                            (+(historyItem?.amount || 0) / 1e6) *
-                            tokenPrice
-                          ).toFixed(2)
-                        ),
-                        1
-                      )}$)`}
+                    {`(${addSuffix(
+                      Number(
+                        (
+                          (+(historyItem?.amount || 0) / 1e6) *
+                          (tokenPrice || 0)
+                        ).toLocaleString("en-Us", { maximumFractionDigits: 2 })
+                      ),
+                      1
+                    )}$)`}
                   </HistoryItemText>
                 </div>
               </HistoryItemToken>
               <HistoryItemBlock isMobile={isMobile}>
                 <HistoryItemAddress title={historyItem.from}>
-                  {historyItem.from}
+                  {historyItem.from === user ? "You" : historyItem.from}
                 </HistoryItemAddress>
                 <HistoryItemAddress title={historyItem.to}>
-                  {historyItem.to}
+                  {historyItem.to === user ? "You" : historyItem.to}
                 </HistoryItemAddress>
               </HistoryItemBlock>
               <HistoryItemText>
@@ -144,6 +226,11 @@ const ActivityList: React.FC<ActivityListProps> = ({ history }) => {
             </SaleHistoryItem>
           );
         })}
+        <LoadMoreButton
+          onClick={() => setRenderCount((prev) => Math.min(prev + 15))}
+        >
+          Load More Activities...
+        </LoadMoreButton>
       </SaleHistoryWrapper>
     </>
   );
