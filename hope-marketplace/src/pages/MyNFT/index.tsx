@@ -28,6 +28,7 @@ import usePopoutQuickSwap, { SwapType } from "../../components/Popout";
 import { ChainTypes } from "../../constants/ChainTypes";
 import { Tabs } from "./styled";
 import SearchInputer from "../../components/SearchInputer";
+import ActivityList from "../../components/ActivityList";
 // import { getCustomTokenId } from "../../hook/useFetch";
 
 enum TAB_TYPE {
@@ -63,6 +64,7 @@ const MyNFT: React.FC = () => {
   const isMobile = isXs || isSm || isMd;
   const nfts = useAppSelector((state) => state.nfts);
   const balances = useAppSelector((state) => state.balances);
+  const account = useAppSelector((state) => state.accounts.keplrAccount);
 
   const myNfts: { [key in NFT_TYPE]: any } = useMemo(() => {
     let unlistedNFTs: any = [],
@@ -248,6 +250,11 @@ const MyNFT: React.FC = () => {
             status={NFTItemStatus.SELL}
             emptyMsg="No NFTs in your wallet"
           />
+        </>
+      )}
+      {selectedPageTab === TAB_TYPE.ACTIVITY && (
+        <>
+          <ActivityList user={account?.address || "zzz"} />
         </>
       )}
       {/* <HorizontalDivider />

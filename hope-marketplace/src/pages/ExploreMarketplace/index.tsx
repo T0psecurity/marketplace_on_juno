@@ -24,7 +24,7 @@ import {
   ArtIcon,
   NFTIcon,
   ActivityIcon,
-} from "./SvgIcons";
+} from "../../components/SvgIcons";
 import { useAppSelector } from "../../app/hooks";
 import { TotalStateType } from "../../features/collections/collectionsSlice";
 import { TokenType } from "../../types/tokens";

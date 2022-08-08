@@ -23,7 +23,9 @@ import {
   HistoryItemAddress,
   StyledSvg,
   LoadMoreButton,
+  NoHistoryWrapper,
 } from "./styled";
+import { HistoryIcon } from "../SvgIcons";
 
 interface ActivityListProps {
   filterFunc?: any;
@@ -103,9 +105,23 @@ const ActivityList: React.FC<ActivityListProps> = ({
     }
     if (filterFunc) {
       result = filterFunc(result);
+    } else {
+      result = result
+        .slice()
+        .sort((history1: any, history2: any) =>
+          history1?.time < history2.time ? 1 : -1
+        );
     }
     return result.slice(0, renderCount);
   }, [collectionId, collectionStates, filterFunc, renderCount, user]);
+
+  if (!history || !history.length) {
+    return (
+      <NoHistoryWrapper>
+        <HistoryIcon width={50} height={50} /> No Activities
+      </NoHistoryWrapper>
+    );
+  }
 
   return (
     <>
@@ -141,7 +157,12 @@ const ActivityList: React.FC<ActivityListProps> = ({
           );
           const tokenRarityRank = tokenRarityRanks[tokenIdNumber];
           return (
-            <SaleHistoryItem key={index} isMobile={isMobile}>
+            <SaleHistoryItem key={index} isMobile={isMobile} forUser={!!user}>
+              {!!user && (
+                <HistoryItemText minWidth="" fontSize="16px" textAlign="end">
+                  {historyItem.from === user ? "Sell" : "Buy"}
+                </HistoryItemText>
+              )}
               {!isMobile && <CartIcon />}
               <HistoryItemBlock isMobile={isMobile}>
                 <HistoryItemImage>
@@ -174,28 +195,29 @@ const ActivityList: React.FC<ActivityListProps> = ({
                 />
                 <div>
                   <HistoryItemText>
-                    {(+historyItem.amount / 1e6).toFixed(2)}
+                    {(+historyItem.amount / 1e6).toLocaleString("en-Us", {
+                      maximumFractionDigits: 2,
+                    })}
                   </HistoryItemText>
                   <HistoryItemText>
-                    {tokenPrice &&
-                      `(${addSuffix(
-                        Number(
-                          (
-                            (+(historyItem?.amount || 0) / 1e6) *
-                            tokenPrice
-                          ).toFixed(2)
-                        ),
-                        1
-                      )}$)`}
+                    {`(${addSuffix(
+                      Number(
+                        (
+                          (+(historyItem?.amount || 0) / 1e6) *
+                          (tokenPrice || 0)
+                        ).toLocaleString("en-Us", { maximumFractionDigits: 2 })
+                      ),
+                      1
+                    )}$)`}
                   </HistoryItemText>
                 </div>
               </HistoryItemToken>
               <HistoryItemBlock isMobile={isMobile}>
                 <HistoryItemAddress title={historyItem.from}>
-                  {historyItem.from}
+                  {historyItem.from === user ? "You" : historyItem.from}
                 </HistoryItemAddress>
                 <HistoryItemAddress title={historyItem.to}>
-                  {historyItem.to}
+                  {historyItem.to === user ? "You" : historyItem.to}
                 </HistoryItemAddress>
               </HistoryItemBlock>
               <HistoryItemText>

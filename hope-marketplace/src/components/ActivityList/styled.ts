@@ -1,5 +1,13 @@
 import styled, { css } from "styled-components";
 
+export const NoHistoryWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  gap: 20px;
+`;
+
 export const SaleHistoryWrapper = styled.div`
   overflow: auto;
 `;
@@ -49,9 +57,12 @@ export const StyledSvg = styled.svg`
 export const HistoryItemText = styled.div<{
   fontWeight?: string;
   fontSize?: string;
+  textAlign?: string;
   color?: string;
   margin?: string;
   width?: string;
+  minWidth?: string;
+  maxWidth?: string;
 }>`
   font-weight: ${({ fontWeight }) => fontWeight || "normal"};
   font-size: ${({ fontSize }) => fontSize || "20px"};
@@ -60,13 +71,18 @@ export const HistoryItemText = styled.div<{
   overflow: hidden;
   text-overflow: ellipsis;
   margin: ${({ margin }) => margin || "0 10px"};
+  ${({ textAlign }) =>
+    textAlign &&
+    css`
+      text-align: ${textAlign};
+    `}
   ${({ width }) =>
     width &&
     css`
       width: ${width};
     `}
-  min-width: 100px;
-  max-width: 200px;
+  min-width: ${({ minWidth }) => minWidth ?? "100px"};
+  max-width: ${({ maxWidth }) => maxWidth ?? "200px"};
 `;
 
 export const HistoryItemAddress = styled(HistoryItemText)`
@@ -79,13 +95,18 @@ export const HistoryItemAddress = styled(HistoryItemText)`
   }
 `;
 
-export const SaleHistoryItem = styled.div<{ isMobile: boolean }>`
+export const SaleHistoryItem = styled.div<{
+  isMobile: boolean;
+  forUser: boolean;
+}>`
   display: grid;
-  grid-template-columns: ${({ isMobile }) =>
-    isMobile ? "1fr 1fr 1fr 1fr" : "60px 1fr 1fr 1fr 1fr"};
+  grid-template-columns: ${({ isMobile, forUser }) =>
+    isMobile
+      ? `${forUser ? "50px" : ""} 1fr 1fr 1fr 1fr`
+      : `${forUser ? "50px" : ""} 60px 1fr 1fr 1fr 1fr`};
   align-items: center;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+  /* justify-content: space-evenly;
+  flex-wrap: wrap; */
   min-width: 460px;
   margin: ${({ isMobile }) => (isMobile ? "5px" : "10px")} 0;
   scroll-snap-align: start;
