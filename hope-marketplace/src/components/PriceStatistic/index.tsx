@@ -87,7 +87,6 @@ const PriceStatistic: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      console.log("fetch token price history");
       let result: any[] = [];
       const tokenHistoryQueryResult = await fetchTokenPriceHistory(
         // historyPeriod.value

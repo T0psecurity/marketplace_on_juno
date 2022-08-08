@@ -64,7 +64,6 @@ export const fetchTokenPriceHistory = async (
   let keys: any = [];
   const from = getUnixTimeStamp(getFromFunctions[period]());
   const to = getUnixTimeStamp(new Date());
-  console.log("fetch token price history", from, to);
 
   const fetchQueries = Object.keys(TokenCoingeckoIds).map((key: string) => {
     keys.push(key as TokenType);
