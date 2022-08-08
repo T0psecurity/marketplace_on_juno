@@ -17,8 +17,8 @@ export const ContentContainer = styled.div`
 
 export const ChartArea = styled.div`
   width: 50%;
-  min-width: 500px;
-  height: 350px;
+  min-width: 350px;
+  height: 500px;
   position: relative;
 `;
 
