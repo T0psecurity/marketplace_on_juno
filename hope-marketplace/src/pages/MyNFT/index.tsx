@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useMemo, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 
 import {
@@ -15,13 +15,19 @@ import {
   MyNftsHeader,
   Tab,
   SearchWrapper,
+  ActivityHeader,
+  TokenContainer,
 } from "./styled";
 
 import { useAppSelector } from "../../app/hooks";
 import { SubTitle, Title } from "../../components/PageTitle";
 import NFTContainer from "../../components/NFTContainer";
 import { NFTItemStatus } from "../../components/NFTItem";
-import Collections, { MarketplaceInfo } from "../../constants/Collections";
+import Collections, {
+  CollectionIds,
+  getCollectionById,
+  MarketplaceInfo,
+} from "../../constants/Collections";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { TokenStatus, TokenType } from "../../types/tokens";
 import usePopoutQuickSwap, { SwapType } from "../../components/Popout";
@@ -29,6 +35,10 @@ import { ChainTypes } from "../../constants/ChainTypes";
 import { Tabs } from "./styled";
 import SearchInputer from "../../components/SearchInputer";
 import ActivityList from "../../components/ActivityList";
+import ReactSelect from "react-select";
+import { ThemeContext } from "../../context/ThemeContext";
+import { SortDirectionType } from "../Marketplace/types";
+import { getCustomTokenId } from "../../hook/useFetch";
 // import { getCustomTokenId } from "../../hook/useFetch";
 
 enum TAB_TYPE {
@@ -53,17 +63,41 @@ enum NFT_TYPE {
 //   return tokenId.includes(searchWord);
 // };
 
+const SortDirectionSelectOptions = [
+  {
+    label: "No Sort",
+    value: undefined,
+  },
+  {
+    label: "Price low to high",
+    value: SortDirectionType.asc,
+  },
+  {
+    label: "Price high to low",
+    value: SortDirectionType.desc,
+  },
+];
+
 const MyNFT: React.FC = () => {
   const [selectedPageTab, setSelectedPageTab] = useState<TAB_TYPE>(
     TAB_TYPE.ITEMS
   );
   const [selectedNftTab, setSelectedNftTab] = useState<NFT_TYPE>(NFT_TYPE.ALL);
   const [searchValue, setSearchValue] = useState<string>("");
+  const [searchActivityValue, setSearhActivityValue] = useState("");
+  const [selectedTokenType, setSelectedTokenType] = useState<
+    TokenType | undefined
+  >();
+  const [sortDirection, setSortDirection] = useState<
+    SortDirectionType | undefined
+  >(SortDirectionSelectOptions[0].value);
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const popoutQuickSwap = usePopoutQuickSwap();
+  const { isDark } = useContext(ThemeContext);
   const isMobile = isXs || isSm || isMd;
   const nfts = useAppSelector((state) => state.nfts);
   const balances = useAppSelector((state) => state.balances);
+  const tokenPrices = useAppSelector((state) => state.tokenPrices);
   const account = useAppSelector((state) => state.accounts.keplrAccount);
 
   const myNfts: { [key in NFT_TYPE]: any } = useMemo(() => {
@@ -142,6 +176,72 @@ const MyNFT: React.FC = () => {
     const { value } = e.target;
     setSearchValue(value);
   };
+
+  const handleChangeActivitySearchValue = (e: any) => {
+    const { value } = e.target;
+    setSearhActivityValue(value);
+  };
+
+  const handleChangeSortDirection = (item: any) => {
+    setSortDirection(item.value);
+  };
+
+  const filterActivitiesFunc = useCallback(
+    (activities: any[]) => {
+      let result: any[] = [];
+      if (searchActivityValue || selectedTokenType) {
+        activities.forEach((activityItem: any) => {
+          let filtered = true;
+          if (searchActivityValue) {
+            const targetCollection = getCollectionById(
+              activityItem.collectionId as CollectionIds
+            );
+            const tokenId = targetCollection.customTokenId
+              ? getCustomTokenId(
+                  activityItem.token_id,
+                  targetCollection.customTokenId
+                )
+              : activityItem.token_id;
+            filtered =
+              filtered &&
+              tokenId.toLowerCase().includes(searchActivityValue.toLowerCase());
+          }
+          if (selectedTokenType) {
+            filtered =
+              filtered && activityItem.denom === (selectedTokenType as string);
+          }
+          if (filtered) {
+            result = [...result, activityItem];
+          }
+        });
+      } else {
+        result = activities;
+      }
+      return result.sort((item1: any, item2: any) => {
+        if (
+          sortDirection === SortDirectionType.asc ||
+          sortDirection === SortDirectionType.desc
+        ) {
+          const tokenPrice1 =
+            tokenPrices[item1.denom as TokenType]?.market_data.current_price
+              ?.usd || 0;
+          const tokenPrice2 =
+            tokenPrices[item2.denom as TokenType]?.market_data.current_price
+              ?.usd || 0;
+
+          const price1 = tokenPrice1 * Number(item1.amount);
+          const price2 = tokenPrice2 * Number(item2.amount);
+          if (sortDirection === SortDirectionType.asc) {
+            return price1 < price2 ? -1 : 1;
+          } else {
+            return price1 < price2 ? 1 : -1;
+          }
+        }
+        return item1?.time < item2.time ? 1 : -1;
+      });
+    },
+    [searchActivityValue, selectedTokenType, sortDirection, tokenPrices]
+  );
 
   return (
     <Wrapper isMobile={isMobile}>
@@ -254,7 +354,57 @@ const MyNFT: React.FC = () => {
       )}
       {selectedPageTab === TAB_TYPE.ACTIVITY && (
         <>
-          <ActivityList user={account?.address || "zzz"} />
+          <ActivityHeader>
+            <TokenContainer>
+              {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
+                (key) => (
+                  <CoinIcon
+                    alt=""
+                    src={`/coin-images/${TokenType[key].replace(
+                      /\//g,
+                      ""
+                    )}.png`}
+                    size="50px"
+                    onClick={() => {
+                      setSelectedTokenType((prev) =>
+                        prev === TokenType[key] ? undefined : TokenType[key]
+                      );
+                    }}
+                  />
+                )
+              )}
+            </TokenContainer>
+            <ReactSelect
+              defaultValue={SortDirectionSelectOptions[0]}
+              onChange={handleChangeSortDirection}
+              options={SortDirectionSelectOptions}
+              styles={{
+                menu: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: isDark ? "#838383" : "white",
+                }),
+                control: (provided, state) => ({
+                  ...provided,
+                  ...(isDark && {
+                    backgroundColor: "#838383",
+                  }),
+                }),
+                singleValue: (provided, state) => ({
+                  ...provided,
+                  ...(isDark && {
+                    color: "white",
+                  }),
+                }),
+              }}
+            />
+            <SearchWrapper>
+              <SearchInputer onChange={handleChangeActivitySearchValue} />
+            </SearchWrapper>
+          </ActivityHeader>
+          <ActivityList
+            user={account?.address || "zzz"}
+            filterFunc={filterActivitiesFunc}
+          />
         </>
       )}
       {/* <HorizontalDivider />

@@ -70,10 +70,11 @@ export const CoinIconWrapper = styled.div`
   align-items: center;
 `;
 
-export const CoinIcon = styled.img`
-  width: 35px;
-  height: 35px;
+export const CoinIcon = styled.img<{ size?: string }>`
+  width: ${({ size }) => size || "35px"};
+  height: ${({ size }) => size || "35px"};
   margin-right: 5px;
+  cursor: pointer;
 `;
 
 export const TokenBalance = styled.div`
@@ -125,4 +126,19 @@ export const SearchWrapper = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 550px;
+`;
+
+export const ActivityHeader = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0;
+`;
+
+export const TokenContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
 `;
