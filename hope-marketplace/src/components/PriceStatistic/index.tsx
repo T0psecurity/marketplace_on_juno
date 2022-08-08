@@ -243,7 +243,9 @@ const PriceStatistic: React.FC = () => {
                 ).map((key) => ({
                   dataKey: key,
                   value: key,
-                  color: LineColors[TokenType[key]],
+                  color: lineDisplay[TokenType[key]]
+                    ? LineColors[TokenType[key]]
+                    : "#ccc",
                 }))}
               />
               {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
