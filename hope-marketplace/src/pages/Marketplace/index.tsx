@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import NFTAdvertise from "../../components/NFTAdvertise";
@@ -45,10 +45,6 @@ const Marketplace: React.FC = () => {
       (state.nfts as any)[`${targetCollection.collectionId}_marketplace`] || []
     );
   });
-  const saleHistory = useAppSelector(
-    (state) =>
-      state.collectionStates[collectionId as CollectionIds]?.saleHistory
-  );
 
   const metaDataOptions = useMemo(() => {
     let result: { [key: string]: string[] } = {};
@@ -77,27 +73,31 @@ const Marketplace: React.FC = () => {
     filterOption,
     collectionId as CollectionIds
   );
-  const filteredHistory = useMemo(() => {
-    const sortedSaleHistory = saleHistory
-      ? saleHistory
-          .slice()
-          .sort((history1: any, history2: any) =>
-            history1?.time < history2.time ? 1 : -1
-          )
-      : [];
-    if (filterOption?.searchWord) {
-      const result: any[] = [];
-      sortedSaleHistory.forEach((item: any) => {
-        const tokenId = targetCollection.customTokenId
-          ? getCustomTokenId(item.token_id, targetCollection.customTokenId)
-          : item.token_id;
-        if (tokenId.includes(filterOption.searchWord)) result.push(item);
-      });
-      return result;
-    } else {
-      return sortedSaleHistory;
-    }
-  }, [filterOption, saleHistory, targetCollection]);
+
+  const filterActivitiesFunc = useCallback(
+    (activities: any[]) => {
+      const sortedSaleHistory = activities
+        ? activities
+            .slice()
+            .sort((history1: any, history2: any) =>
+              history1?.time < history2.time ? 1 : -1
+            )
+        : [];
+      if (filterOption?.searchWord) {
+        const result: any[] = [];
+        sortedSaleHistory.forEach((item: any) => {
+          const tokenId = targetCollection.customTokenId
+            ? getCustomTokenId(item.token_id, targetCollection.customTokenId)
+            : item.token_id;
+          if (tokenId.includes(filterOption.searchWord)) result.push(item);
+        });
+        return result;
+      } else {
+        return sortedSaleHistory;
+      }
+    },
+    [filterOption, targetCollection.customTokenId]
+  );
 
   const handleChangeNftListTab = (selected: MarketplaceTabs) => {
     setSelectedTab(selected);
@@ -128,7 +128,10 @@ const Marketplace: React.FC = () => {
               />
             )}
             {selectedTab === MarketplaceTabs.ACTIVITY && (
-              <ActivityList history={filteredHistory} />
+              <ActivityList
+                filterFunc={filterActivitiesFunc}
+                collectionId={targetCollection.collectionId}
+              />
             )}
           </NftList>
         </FilterPanel>

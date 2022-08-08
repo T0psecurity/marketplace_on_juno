@@ -85,17 +85,22 @@ export const MyNftsHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-top: 20px;
 `;
 
-export const MyNftsTabs = styled.div`
+export const Tabs = styled.div<{ margin?: string }>`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: 10px;
-  /* width: 100%; */
+  ${({ margin }) =>
+    margin &&
+    css`
+      margin: ${margin};
+    `}/* width: 100%; */
 `;
 
-export const MyNftsTab = styled.div<{ selected: boolean }>`
+export const Tab = styled.div<{ selected: boolean; fontSize?: string }>`
   cursor: pointer;
   margin-right: 20px;
   ${({ selected }) =>
@@ -104,6 +109,11 @@ export const MyNftsTab = styled.div<{ selected: boolean }>`
       font-weight: bold;
     `}
 
+  ${({ fontSize }) =>
+    fontSize &&
+    css`
+      font-size: ${fontSize};
+    `}
   &:last-child {
     margin-right: 0;
   }

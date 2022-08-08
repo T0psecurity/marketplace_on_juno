@@ -50,9 +50,12 @@ setBasePath(
 );
 
 const GlobalStyle = createGlobalStyle<{ isMobile: boolean }>`
-* {
-  transition: color 0.5s, background-color 0.5s;
-}
+  html {
+    overflow-x: hidden;
+  }
+  * {
+    transition: color 0.5s, background-color 0.5s;
+  }
   ${({ isMobile }) =>
     !isMobile &&
     css`

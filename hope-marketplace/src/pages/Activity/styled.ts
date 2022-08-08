@@ -79,13 +79,3 @@ export const HistoryContainer = styled.div`
     margin: 20px 0;
   }
 `;
-
-export const LoadMoreButton = styled.div`
-  margin: 10px auto;
-  cursor: pointer;
-  border: 1px solid ${({ theme }) => theme.colors.fontColor};
-  border-radius: 10px;
-  padding: 10px 30px;
-  width: max-content;
-  color: ${({ theme }) => theme.colors.fontColor};
-`;
