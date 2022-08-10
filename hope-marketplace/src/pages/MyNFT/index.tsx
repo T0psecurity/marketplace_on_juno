@@ -304,7 +304,7 @@ const MyNFT: React.FC = () => {
                   )}
                 </TokenBalance>
                 <WithdrawButton onClick={() => handleClickBalanceItem(denom)}>
-                  Withdraw
+                  Withdraw / Deposit
                 </WithdrawButton>
               </TokenBalanceItem>
             );

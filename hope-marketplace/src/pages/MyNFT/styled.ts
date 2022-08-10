@@ -61,6 +61,7 @@ export const WithdrawButton = styled.div`
   position: absolute;
   cursor: pointer;
   bottom: -25px;
+  width: max-content;
   left: 50%;
   transform: translateX(-50%);
 `;

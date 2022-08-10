@@ -30,14 +30,14 @@ const copyStyles = (src: any, dest: any) => {
 };
 
 const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
-  const [container, setContainer] = useState<any>(null);
+  const [container] = useState<any>(document.createElement("div"));
   const { isDark } = useContext(ThemeContext);
-  const newWindow: any = useRef(null);
+  const newWindow: any = useRef(window);
 
-  useEffect(() => {
-    // Create container element on client-side
-    setContainer(document.createElement("div"));
-  }, []);
+  // useEffect(() => {
+  //   // Create container element on client-side
+  //   setContainer(document.createElement("div"));
+  // }, []);
 
   useEffect(() => {
     // When container is ready
