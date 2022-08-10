@@ -12,7 +12,7 @@ interface NFTContainerProps {
   sort?: string;
 }
 
-const INITIAL_RENDER_COUNT = 50;
+const INITIAL_RENDER_COUNT = 20;
 
 const NFTContainer: React.FC<NFTContainerProps> = ({
   nfts,

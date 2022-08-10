@@ -65,6 +65,14 @@ const getQueryClient = async (
   return queryingClientConnection.client;
 };
 
+const getOfflineSigner = async (chainId: string) => {
+  if (window.keplr) {
+    await window.keplr.enable(chainId);
+    const signer = await window.keplr.getOfflineSigner(chainId);
+    return signer;
+  }
+};
+
 const useContract = () => {
   // const contracts = useAppSelector(contractAccounts);
   // const { connect } = useWalletManager();
@@ -151,41 +159,24 @@ const useContract = () => {
         denom?: string;
       }
     ) => {
+      const config = ChainConfigs[ChainTypes.JUNO];
+      let signer = offlineSigner;
+      console.log("offline signer", offlineSigner);
       if (!offlineSigner) {
-        // connect();
-        // setTimeout(() => {
-        //   runExecute(contractAddress, executeMsg, option);
-        // }, 500);
+        signer = await getOfflineSigner(config.chainId);
+      }
+      if (!signer) {
         throw new Error("No account selected");
       }
-      // const contract = state.accounts.accountList[contractAddress];
       const account = state.accounts.keplrAccount;
-      // if (!contract) {
-      //   if (contractAddress) dispatch(importContract([contractAddress]));
-      //   console.error("contract selection error");
-      //   throw new Error("No contract selected");
-      // }
-
-      // const client = await connectionManager.getSigningClient(
-      //   account,
-      //   state.connection.config
-      // );
 
       const executeMemo = option?.memo || "";
       const executeFunds = option?.funds || "";
       const executeDenom = option?.denom || "";
 
-      // --mobile connection
-      // const { client } = connectedWallet;
-      // const offlineSigner =
-      //   client instanceof KeplrWalletConnectV1
-      //     ? await client.getOfflineSignerOnlyAmino(config.chainId)
-      //     : await client.getOfflineSignerAuto(config.chainId);
-      const config = ChainConfigs[ChainTypes.JUNO];
-
       const cwClient = await SigningCosmWasmClient.connectWithSigner(
         config["rpcEndpoint"],
-        offlineSigner,
+        signer,
         {
           gasPrice: GasPrice.fromString(
             `${config["gasPrice"]}${config["microDenom"]}`

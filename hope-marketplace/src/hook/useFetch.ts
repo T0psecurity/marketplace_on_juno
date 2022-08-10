@@ -48,9 +48,6 @@ const buildNFTItem = (
   metaData: any
 ) => {
   const customTokenId = collection.customTokenId;
-  const sortedMetaData = metaData?.sort((item1: any, item2: any) =>
-    item1.edition > item2.edition ? 1 : -1
-  );
 
   const tokenNumberStr = Number(getTokenIdNumber(item.token_id));
   const tokenNumber: number = isNaN(tokenNumberStr) ? 0 : tokenNumberStr;
@@ -61,9 +58,9 @@ const buildNFTItem = (
     }),
     contractAddress,
     collectionId: collection.collectionId,
-    ...(sortedMetaData &&
-      sortedMetaData[tokenNumber - 1] && {
-        metaData: sortedMetaData[tokenNumber - 1],
+    ...(metaData &&
+      metaData[tokenNumber - 1] && {
+        metaData: metaData[tokenNumber - 1],
       }),
   };
   return crrItem;
@@ -334,9 +331,21 @@ const useFetch = () => {
             }
           );
         }
-        const metaData = collection.metaDataUrl
+        let metaData = collection.metaDataUrl
           ? await getQuery(collection.metaDataUrl)
           : null;
+        if (metaData) {
+          metaData = metaData?.sort((item1: any, item2: any) => {
+            if (item1.edition) {
+              return item1.edition > item2.edition ? 1 : -1;
+            } else {
+              return Number(item1.image.split(".")[0]) >
+                Number(item2.image.split(".")[0])
+                ? 1
+                : -1;
+            }
+          });
+        }
         if (metaData) {
           dispatch(
             setCollectionTraitStates([
