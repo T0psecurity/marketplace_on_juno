@@ -294,6 +294,11 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
     }
   };
 
+  const handleCancel = () => {
+    if (sendingTx) return;
+    closeNewWindow(false);
+  };
+
   const handleChangeSwapAmount = (e: any) => {
     if (sendingTx) return;
     const { value } = e.target;
@@ -398,8 +403,13 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
           value={swapAmount}
         />
         <div className="errMsgContainer">{errMsg}</div>
-        <div className="operationButton" onClick={handleAccept}>
-          {sendingTx ? "..." : "Accept"}
+        <div className="operationButtonContainer">
+          <div className="operationButton" onClick={handleAccept}>
+            {sendingTx ? "..." : "Accept"}
+          </div>
+          <div className="operationButton cancelButton" onClick={handleCancel}>
+            Cancel
+          </div>
         </div>
       </div>
     </div>
