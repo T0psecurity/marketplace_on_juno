@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const SearchContainer = styled.div`
   width: 100%;
-  height: fit-content;
+  // height: fit-content;
+  height: 50px;
   position: relative;
 `;
 

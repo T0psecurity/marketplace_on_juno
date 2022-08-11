@@ -36,7 +36,9 @@ const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
 
   // useEffect(() => {
   //   // Create container element on client-side
-  //   setContainer(document.createElement("div"));
+  //   const divElement = document.createElement("div");
+  //   divElement.innerHTML = "Hello world";
+  //   setContainer(divElement);
   // }, []);
 
   useEffect(() => {
@@ -46,11 +48,13 @@ const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
       newWindow.current = window.open(
         "",
         option?.title || "",
-        "width=300,height=500,left=200,top=200,resizable=0"
+        "popup=1,width=300,height=500,left=20,top=20,resizable=0,channelmode=no,directories=no,fullscreen=no,location=no,dependent=yes,menubar=no,scrollbars=yes,status=no,toolbar=no,titlebar=no"
       );
       // Append container
-      newWindow?.current.document.body.appendChild(container);
-      if (isDark && newWindow?.current?.document?.body) {
+      console.log("new window", newWindow);
+      console.log("original window", window);
+      newWindow.current?.document?.body?.appendChild(container);
+      if (isDark && newWindow.current?.document?.body) {
         newWindow.current.document.body.style.backgroundColor = "#313131";
       }
       newWindow.current.addEventListener("beforeunload", () => {
