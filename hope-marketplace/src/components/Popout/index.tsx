@@ -395,14 +395,13 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
             </div>
           </>
         )}
-        {swapInfo.swapType === SwapType.DEPOSIT &&
-          ibcNativeTokenBalance?.amount && (
-            <span>{`Balance: ${(
-              Number(ibcNativeTokenBalance.amount) / 1e6
-            ).toLocaleString("en-Us", {
-              maximumFractionDigits: 2,
-            })} ${foreignTokenSymbol}`}</span>
-          )}
+        {swapInfo.swapType === SwapType.DEPOSIT && (
+          <span>{`Balance: ${(
+            Number(ibcNativeTokenBalance?.amount || 0) / 1e6
+          ).toLocaleString("en-Us", {
+            maximumFractionDigits: 2,
+          })} ${foreignTokenSymbol}`}</span>
+        )}
         <input
           className="amountInputer"
           onChange={handleChangeSwapAmount}

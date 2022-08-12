@@ -68,7 +68,13 @@ const getQueryClient = async (
 const getOfflineSigner = async (chainId: string) => {
   if (window.keplr) {
     await window.keplr.enable(chainId);
-    const signer = await window.keplr.getOfflineSigner(chainId);
+    let signer: any = await window.keplr.getOfflineSigner(chainId);
+    if (!signer) {
+      signer = await window.keplr.getOfflineSignerOnlyAmino(chainId);
+    }
+    if (!signer) {
+      signer = await window.keplr.getOfflineSignerAuto(chainId);
+    }
     return signer;
   }
 };
@@ -161,7 +167,6 @@ const useContract = () => {
     ) => {
       const config = ChainConfigs[ChainTypes.JUNO];
       let signer = offlineSigner;
-      console.log("offline signer", offlineSigner);
       if (!offlineSigner) {
         signer = await getOfflineSigner(config.chainId);
       }

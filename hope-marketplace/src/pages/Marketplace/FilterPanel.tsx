@@ -232,6 +232,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                     const denom = TokenType[key];
                     return (
                       <CoinImage
+                        title={key}
                         key={index}
                         coinType={denom}
                         onClick={() => handleClickPriceType(denom)}

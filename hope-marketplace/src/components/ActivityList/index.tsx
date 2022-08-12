@@ -9,7 +9,7 @@ import Collections, {
 import { getCustomTokenId, getTokenIdNumber } from "../../hook/useFetch";
 import { TokenType } from "../../types/tokens";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import { addSuffix, escapeSpecialForUrl } from "../../util/string";
+import { addSuffix } from "../../util/string";
 
 import {
   SaleHistoryWrapper,
