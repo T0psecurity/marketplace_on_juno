@@ -83,6 +83,12 @@ export const HistoryItemText = styled.div<{
     `}
   min-width: ${({ minWidth }) => minWidth ?? "100px"};
   max-width: ${({ maxWidth }) => maxWidth ?? "200px"};
+  cursor: pointer;
+  transition: 0.3s all;
+
+  &:hover {
+    opacity: 0.6;
+  }
 `;
 
 export const HistoryItemAddress = styled(HistoryItemText)`

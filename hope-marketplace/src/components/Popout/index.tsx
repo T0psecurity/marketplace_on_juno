@@ -152,13 +152,11 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
       const tokenStatus = TokenStatus[swapInfo.denom];
       const chainConfig = ChainConfigs[tokenStatus.chain];
       const { client, account } = await getClient(tokenStatus.chain);
-      console.log("ibc balance", tokenStatus);
       if (client && account) {
         const balance = await client.getBalance(
           account.address,
           chainConfig.microDenom
         );
-        console.log("ibc balance", balance);
         setIBCNativeTokenBalance(balance);
       }
     })();
