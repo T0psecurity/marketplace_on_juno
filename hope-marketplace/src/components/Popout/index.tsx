@@ -30,6 +30,7 @@ import "./style.scss";
 import { useAppSelector } from "../../app/hooks";
 import useFetch from "../../hook/useFetch";
 import { ThemeContext } from "../../context/ThemeContext";
+import { getOfflineSigner } from "../../hook/useContract";
 
 // import {
 //   Wrapper,
@@ -69,10 +70,7 @@ interface QuickSwapProps {
 
 const getClient = async (chainType: ChainTypes) => {
   const chainConfig = ChainConfigs[chainType];
-  await window.keplr?.enable(chainConfig.chainId);
-  const offlineSigner = await window.getOfflineSignerAuto?.(
-    chainConfig.chainId
-  );
+  const offlineSigner = await getOfflineSigner(chainConfig.chainId);
   const account = await offlineSigner?.getAccounts();
   let wasmChainClient = null;
   if (offlineSigner) {
@@ -151,12 +149,15 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
     (async () => {
       const tokenStatus = TokenStatus[swapInfo.denom];
       const chainConfig = ChainConfigs[tokenStatus.chain];
+      console.log("popout start", chainConfig);
       const { client, account } = await getClient(tokenStatus.chain);
+      console.log("popout1", client, account);
       if (client && account) {
         const balance = await client.getBalance(
           account.address,
           chainConfig.microDenom
         );
+        console.log("popout", balance);
         setIBCNativeTokenBalance(balance);
       }
     })();

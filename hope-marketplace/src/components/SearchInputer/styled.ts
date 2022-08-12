@@ -8,10 +8,11 @@ export const SearchContainer = styled.div`
 `;
 
 export const SearchInput = styled.input`
-  height: 50px;
+  height: 100%;
   width: calc(100% - 50px);
   border-style: none;
   /* padding: 10px; */
+  padding: 0;
   padding-left: 25px;
   font-size: 18px;
   letter-spacing: 2px;
@@ -37,7 +38,7 @@ export const SearchInput = styled.input`
 
 export const SearchIcon = styled.button`
   width: 50px;
-  height: 52px;
+  height: 50px;
   border-style: none;
   font-size: 20px;
   font-weight: bold;

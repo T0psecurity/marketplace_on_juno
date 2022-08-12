@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 import { toMicroAmount } from "../util/coins";
 import { TokenStatus, TokenType } from "../types/tokens";
 import { ChainConfigs, ChainTypes } from "../constants/ChainTypes";
+import { getKeplr } from "../features/accounts/useKeplr";
 
 // type TokenContractType = {
 //   [key in TokenType]: string;
@@ -65,17 +66,15 @@ const getQueryClient = async (
   return queryingClientConnection.client;
 };
 
-const getOfflineSigner = async (chainId: string) => {
-  if (window.keplr) {
-    await window.keplr.enable(chainId);
-    let signer: any = await window.keplr.getOfflineSigner(chainId);
-    if (!signer) {
-      signer = await window.keplr.getOfflineSignerOnlyAmino(chainId);
-    }
-    if (!signer) {
-      signer = await window.keplr.getOfflineSignerAuto(chainId);
-    }
-    return signer;
+export const getOfflineSigner = async (chainId: string) => {
+  const keplr = await getKeplr();
+  if (keplr) {
+    await keplr.enable(chainId);
+    const signer: any = await keplr.getOfflineSigner(chainId);
+    const signer1 = await keplr.getOfflineSignerOnlyAmino(chainId);
+    const signer2 = await keplr.getOfflineSignerAuto(chainId);
+    console.log("signers", signer, signer1, signer2);
+    return signer || signer1 || signer2;
   }
 };
 
