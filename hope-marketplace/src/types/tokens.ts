@@ -20,6 +20,7 @@ export type TokenStatusType = {
   isNativeCoin: boolean;
   isIBCCOin: boolean;
   contractAddress?: string;
+  originChain?: ChainTypes;
   chain: ChainTypes;
 };
 
@@ -54,5 +55,6 @@ export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
     isNativeCoin: true,
     isIBCCOin: true,
     chain: ChainTypes.COSMOS,
+    originChain: ChainTypes.COSMOS,
   },
 };
