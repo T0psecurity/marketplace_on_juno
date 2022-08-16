@@ -67,12 +67,11 @@ const getQueryClient = async (
 };
 
 export const getOfflineSigner = async (chainId: string) => {
-  const keplr = await getKeplr();
-  if (keplr) {
-    await keplr.enable(chainId);
-    const signer: any = await keplr.getOfflineSigner(chainId);
-    const signer1 = await keplr.getOfflineSignerOnlyAmino(chainId);
-    const signer2 = await keplr.getOfflineSignerAuto(chainId);
+  if (window.keplr) {
+    await window.keplr.enable(chainId);
+    const signer: any = await window.keplr.getOfflineSigner(chainId);
+    const signer1 = await window.keplr.getOfflineSignerOnlyAmino(chainId);
+    const signer2 = await window.keplr.getOfflineSignerAuto(chainId);
     console.log("signers", signer, signer1, signer2);
     return signer || signer1 || signer2;
   }

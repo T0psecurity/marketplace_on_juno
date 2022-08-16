@@ -13,7 +13,10 @@ import {
   GasPrice,
   MsgTransferEncodeObject,
 } from "@cosmjs/stargate";
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import {
+  // CosmWasmClient,
+  SigningCosmWasmClient,
+} from "@cosmjs/cosmwasm-stargate";
 import { MsgTransfer } from "cosmjs-types/ibc/applications/transfer/v1/tx";
 // import { Height } from "cosmjs-types/ibc/core/client/v1/client";
 import Long from "long";
@@ -30,7 +33,8 @@ import "./style.scss";
 import { useAppSelector } from "../../app/hooks";
 import useFetch from "../../hook/useFetch";
 import { ThemeContext } from "../../context/ThemeContext";
-import { getOfflineSigner } from "../../hook/useContract";
+// import { getOfflineSigner } from "../../hook/useContract";
+import { useWalletManager } from "@noahsaso/cosmodal";
 
 // import {
 //   Wrapper,
@@ -68,47 +72,6 @@ interface QuickSwapProps {
   closeNewWindow: (params: any) => void;
 }
 
-const getClient = async (chainType: ChainTypes) => {
-  const chainConfig = ChainConfigs[chainType];
-  const offlineSigner = await getOfflineSigner(chainConfig.chainId);
-  const account = await offlineSigner?.getAccounts();
-  let wasmChainClient = null;
-  if (offlineSigner) {
-    try {
-      wasmChainClient = await SigningCosmWasmClient.connectWithSigner(
-        chainConfig.rpcEndpoint,
-        offlineSigner,
-        {
-          gasPrice: GasPrice.fromString(
-            `${chainConfig.gasPrice}${chainConfig.microDenom}`
-          ),
-        }
-      );
-      return {
-        account: account?.[0],
-        client: wasmChainClient,
-      };
-    } catch (e) {
-      console.error("wallets", e);
-      return { account: account?.[0], client: null };
-    }
-  }
-  return { account: null, client: null };
-};
-
-const getWallets = async ({
-  origin,
-  foreign,
-}: {
-  origin: ChainTypes;
-  foreign: ChainTypes;
-}) => {
-  const originResult = await getClient(origin);
-  const foreignResult = await getClient(foreign);
-
-  return { origin: originResult, foreign: foreignResult };
-};
-
 const ArrowIcon = ({ ...props }) => (
   <svg
     className="styledSvg"
@@ -140,6 +103,60 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
   const { isDark } = useContext(ThemeContext);
   const balances = useAppSelector((state) => state.balances);
   const { getTokenBalances } = useFetch();
+  const { connectedWallet } = useWalletManager();
+
+  const getClient = useCallback(
+    async (chainType: ChainTypes) => {
+      if (connectedWallet) {
+        const chainConfig = ChainConfigs[chainType];
+        // const offlineSigner = await getOfflineSigner(chainConfig.chainId);
+        const { wallet, walletClient } = connectedWallet;
+        const offlineSigner = await wallet.getOfflineSignerFunction(
+          walletClient
+        )(chainConfig.chainId);
+        const account = await offlineSigner?.getAccounts();
+        let wasmChainClient = null;
+        if (offlineSigner) {
+          try {
+            wasmChainClient = await SigningCosmWasmClient.connectWithSigner(
+              chainConfig.rpcEndpoint,
+              offlineSigner,
+              {
+                gasPrice: GasPrice.fromString(
+                  `${chainConfig.gasPrice}${chainConfig.microDenom}`
+                ),
+              }
+            );
+            return {
+              account: account?.[0],
+              client: wasmChainClient,
+            };
+          } catch (e) {
+            console.error("wallets", e);
+            return { account: account?.[0], client: null };
+          }
+        }
+      }
+      return { account: null, client: null };
+    },
+    [connectedWallet]
+  );
+
+  const getWallets = useCallback(
+    async ({
+      origin,
+      foreign,
+    }: {
+      origin: ChainTypes;
+      foreign: ChainTypes;
+    }) => {
+      const originResult = await getClient(origin);
+      const foreignResult = await getClient(foreign);
+
+      return { origin: originResult, foreign: foreignResult };
+    },
+    [getClient]
+  );
 
   useEffect(() => {
     setSwapInfo(swapInfoProps);
@@ -149,19 +166,18 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
     (async () => {
       const tokenStatus = TokenStatus[swapInfo.denom];
       const chainConfig = ChainConfigs[tokenStatus.chain];
-      console.log("popout start", chainConfig);
-      const { client, account } = await getClient(tokenStatus.chain);
-      console.log("popout1", client, account);
-      if (client && account) {
-        const balance = await client.getBalance(
-          account.address,
-          chainConfig.microDenom
-        );
-        console.log("popout", balance);
-        setIBCNativeTokenBalance(balance);
+      if (connectedWallet) {
+        const { client, account } = await getClient(tokenStatus.chain);
+        if (client && account) {
+          const balance = await client.getBalance(
+            account.address,
+            chainConfig.microDenom
+          );
+          setIBCNativeTokenBalance(balance);
+        }
       }
     })();
-  }, [swapInfo.denom]);
+  }, [connectedWallet, getClient, swapInfo.denom]);
 
   const { fromChain, toChain } = useMemo(() => {
     const denom = swapInfo.denom;

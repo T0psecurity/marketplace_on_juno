@@ -433,7 +433,7 @@ const Collections: MarketplaceInfo[] = [
   },
   {
     title: "The Romans NFT",
-    creator: "The Rmomans NFT",
+    creator: "The Romans NFT",
     imageUrl: "/backgrounds/romans.png",
     backgroundUrl: "/marketplace-backgrounds/romans.png",
     logoUrl: "/logos/romans.gif",
