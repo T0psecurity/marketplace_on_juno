@@ -26,7 +26,6 @@ import { useSelector } from "react-redux";
 import { toMicroAmount } from "../util/coins";
 import { TokenStatus, TokenType } from "../types/tokens";
 import { ChainConfigs, ChainTypes } from "../constants/ChainTypes";
-import { getKeplr } from "../features/accounts/useKeplr";
 
 // type TokenContractType = {
 //   [key in TokenType]: string;

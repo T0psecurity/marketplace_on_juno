@@ -20,3 +20,17 @@ export function isMobileDevice() {
     check = true;
   return check;
 }
+
+export function getRandomIndex(
+  { min, max }: { min?: number; max: number },
+  count?: number
+): number[] {
+  const result: number[] = [];
+  const array: number[] = [];
+  for (let i = min || 0; i <= max; i++) array.push(i);
+  for (let i = 0; i < (count || 1); i++) {
+    if (array.length === 0) break;
+    result.push(array.sort(() => 0.5 - Math.random()).pop() || 0);
+  }
+  return result;
+}

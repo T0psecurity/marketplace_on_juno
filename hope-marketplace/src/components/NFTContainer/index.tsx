@@ -51,7 +51,7 @@ const NFTContainer: React.FC<NFTContainerProps> = ({
             setRenderCount((prev) => Math.min(prev + 15, nfts.length))
           }
         >
-          Load More Activities...
+          Load More NFTs...
         </LoadMoreButton>
       )}
     </>

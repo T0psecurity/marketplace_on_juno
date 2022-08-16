@@ -10,7 +10,13 @@ import { CollectionStateType } from "../../../features/collections/collectionsSl
 import { TokenType } from "../../../types/tokens";
 import { addSuffix, convertNumberToString } from "../../../util/string";
 
-const useStatistic = (collectionId: string, items: any) => {
+const useStatistic = (collectionId: string) => {
+  const items = useAppSelector((state) => {
+    // console.log("nfts", state.nfts);
+    return (
+      (state.nfts as any)[`${collectionId}_marketplace`] || []
+    );
+  });
   const targetCollection: MarketplaceInfo = useMemo(
     () => getCollectionById(collectionId || ""),
     [collectionId]
