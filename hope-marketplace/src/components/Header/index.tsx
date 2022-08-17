@@ -12,7 +12,7 @@ import {
 // import useContract from "../../hook/useContract";
 import useOnClickOutside from "../../hook/useOnClickOutside";
 import useWindowSize from "../../hook/useWindowSize";
-import { ListIcon } from "../Icons";
+import { DiscordIcon, ListIcon, MediumIcon, TwitterIcon } from "../Icons";
 import { MarketplaceInfo } from "../../constants/Collections";
 import {
   HeaderWrapper,
@@ -28,20 +28,47 @@ import {
   MenuIconContainer,
   MenuContainer,
   MenuItem,
+  MenuHeader,
+  MenuFooter,
+  MenuFooterLinkItem,
 } from "./styled";
 import { coin } from "@cosmjs/proto-signing";
 import useRefresh from "../../hook/useRefresh";
 import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 import ToggleThemeButton from "../ToogleThemeButton";
+import {
+  ExploreIcon,
+  HomeIcon,
+  LaunchpadIcon,
+  MintIcon,
+  ProfileIcon as ProfileMenuIcon,
+} from "../SvgIcons";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
   {
     title: "Explore",
     url: "/collections/explore",
+    icon: ExploreIcon,
   },
-  { title: "Launchpad", url: "http://launchpad.hopers.io/" },
-  { title: "Mint", url: "/collections/mint" },
+  {
+    title: "Launchpad",
+    url: "http://launchpad.hopers.io/",
+    icon: LaunchpadIcon,
+  },
+  { title: "Mint", url: "/collections/mint", icon: MintIcon },
+];
+
+const SocialIcons = [
+  { Icon: MediumIcon, link: "https://hopegalaxy.medium.com/" },
+  {
+    Icon: TwitterIcon,
+    link: "https://twitter.com/Hopers_io",
+  },
+  {
+    Icon: DiscordIcon,
+    link: "https://discord.com/invite/BfKPacc5jF",
+  },
 ];
 
 const Header: React.FC = () => {
@@ -121,7 +148,27 @@ const Header: React.FC = () => {
     setIsOpenMenu(false);
   };
 
+  const openNewUrl = (url: string) => {
+    window.open(url);
+  };
+
   useOnClickOutside(ref, handleClickOutsideMenuIcon);
+
+  const ConnectButton = () => (
+    <ConnectWalletButton
+      onClick={clickWalletButton}
+      title={account?.label || ""}
+    >
+      {account ? (
+        <>
+          <span>{account.label}</span>
+          <DisconnectIcon alt="" src="/others/logout.png" />
+        </>
+      ) : (
+        "Connect"
+      )}
+    </ConnectWalletButton>
+  );
 
   return (
     <HeaderWrapper>
@@ -131,31 +178,40 @@ const Header: React.FC = () => {
       </LogoContainer>
       {isMobile ? (
         <MenuIconContainer ref={(node) => setRef(node)}>
-          <ToggleThemeButton />
           <MenuIcon onClick={handleOpenMenu}>{ListIcon}</MenuIcon>
           {isOpenMenu && (
             <MenuContainer onClick={(e) => e.preventDefault()}>
+              <MenuHeader>
+                <ConnectButton />
+                <ToggleThemeButton />
+              </MenuHeader>
+              <MenuItem onClick={() => handleClickLink("/")}>
+                <HomeIcon width={20} height={20} />
+                Home
+              </MenuItem>
               {HeaderLinks.map((linkItem, linkIndex) => (
                 <MenuItem
                   key={linkIndex}
                   onClick={() => handleClickLink(linkItem.url)}
                 >
+                  <linkItem.icon width={20} height={20} />
                   {linkItem.title}
                 </MenuItem>
               ))}
-              <MenuItem onClick={() => handleClickLink("/profile")}>
+              <MenuItem onClick={() => handleClickLink("/profile")} lastElement>
+                <ProfileMenuIcon width={20} height={20} />
                 My Profile
               </MenuItem>
-              <MenuItem onClick={clickWalletButton}>
-                {account ? (
-                  <>
-                    {account.label}
-                    <DisconnectIcon alt="" src="/others/logout.png" />
-                  </>
-                ) : (
-                  "Connect"
-                )}
-              </MenuItem>
+              <MenuFooter>
+                {SocialIcons.map((icon, index) => (
+                  <MenuFooterLinkItem
+                    key={index}
+                    onClick={() => openNewUrl(icon.link)}
+                  >
+                    {icon.Icon}
+                  </MenuFooterLinkItem>
+                ))}
+              </MenuFooter>
             </MenuContainer>
           )}
         </MenuIconContainer>
@@ -171,16 +227,7 @@ const Header: React.FC = () => {
           ))}
           <ProfileIcon onClick={() => handleClickLink("/profile")} />
           <ToggleThemeButton />
-          <ConnectWalletButton onClick={clickWalletButton}>
-            {account ? (
-              <>
-                {account.label}
-                <DisconnectIcon alt="" src="/others/logout.png" />
-              </>
-            ) : (
-              "Connect"
-            )}
-          </ConnectWalletButton>
+          <ConnectButton />
         </ButtonContainer>
       )}
     </HeaderWrapper>
