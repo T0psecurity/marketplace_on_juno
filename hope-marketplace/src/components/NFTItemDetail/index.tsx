@@ -45,6 +45,7 @@ import {
   WalletIcon,
 } from "../SvgIcons";
 import useStatistic from "../../pages/Marketplace/hook/useStatistic";
+import { useHistory } from "react-router-dom";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -84,6 +85,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   });
   const [selectValue, setSelectValue] = useState(SelectOptions[0]);
   const statistics: any = useStatistic(item.collectionId);
+  const history = useHistory();
 
   const targetCollection = getCollectionById(item.collectionId);
   const owner = item.seller || account?.address || "";
@@ -228,7 +230,14 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
         </NFTItemDescription>
       </MintVideoContainer>
       <NFTDetailContainer>
-        <Text fontSize="28px" bold>
+        <Text
+          fontSize="28px"
+          bold
+          cursor="pointer"
+          onClick={() =>
+            history.push(`/collections/marketplace?id=${item.collectionId}`)
+          }
+        >
           {targetCollection.title}
         </Text>
         <Text margin="10px 0 15px">

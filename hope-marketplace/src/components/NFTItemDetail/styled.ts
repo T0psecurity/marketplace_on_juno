@@ -200,6 +200,7 @@ export const Text = styled.div<{
   color?: string;
   margin?: string;
   overflowWrap?: string;
+  cursor?: string;
 }>`
   display: flex;
   align-items: center;
@@ -223,6 +224,11 @@ export const Text = styled.div<{
     margin &&
     css`
       margin: ${margin};
+    `}
+    ${({ cursor }) =>
+    cursor &&
+    css`
+      cursor: ${cursor};
     `}
 `;
 

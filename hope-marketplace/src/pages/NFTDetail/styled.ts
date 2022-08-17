@@ -67,7 +67,7 @@ export const AttributeOfferPanel = styled.div<{ isMobile: boolean }>`
   ${({ isMobile }) =>
     isMobile &&
     css`
-      grid-template-columns: auto;
+      grid-template-columns: 1fr;
       justify-items: center;
     `}
 `;
@@ -99,6 +99,7 @@ export const NFTItemDescriptionContent = styled.div<{ maxHeight?: string }>`
   padding: 10px;
   max-height: ${({ maxHeight }) => maxHeight ?? "300px"};
   overflow: auto;
+  min-height: 50px;
 `;
 
 export const ViewCollectionButton = styled.span`
