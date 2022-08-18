@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import NFTItemDetail from "../../components/NFTItemDetail";
@@ -34,6 +34,7 @@ import { NFTItemStatus } from "../../components/NFTItem";
 
 const NFTDetail: React.FC = () => {
   // const selectedNFT = useAppSelector((state) => state.nfts.selectedNFT);
+  const [randomNftsInterval, setRandomNftsInterval] = useState(0);
   const { search } = useLocation();
   const token_id = addSpecialForUrl(
     new URLSearchParams(search).get("token_id")
@@ -43,6 +44,13 @@ const NFTDetail: React.FC = () => {
   const { pickNFTByTokenId } = usePickNFT();
   const selectedNFT: any = pickNFTByTokenId(token_id || "");
   const history = useHistory();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRandomNftsInterval((prev) => prev + 1);
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const collectionTraitsState: CollectionTraitsStateType = useAppSelector(
     (state: any) => state.collectionTraitsStates[selectedNFT.collectionId]
@@ -55,7 +63,8 @@ const NFTDetail: React.FC = () => {
     if (!marketplaceNFTs?.length) return [];
     const randomIndex = getRandomIndex({ max: marketplaceNFTs.length - 1 }, 4);
     return randomIndex.map((index) => marketplaceNFTs[index]);
-  }, [marketplaceNFTs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [randomNftsInterval]);
 
   const filterActivitiesFunc = useCallback(
     (activities: any[]) => {

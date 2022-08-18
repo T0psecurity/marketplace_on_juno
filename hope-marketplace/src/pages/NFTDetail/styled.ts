@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   align-items: center;
   padding: 50px;
   @media (max-width: 450px) {
-    padding: 20px;
+    padding: 10px;
   }
 `;
 
@@ -21,7 +21,7 @@ export const NFTItemAttributesContainer = styled.div`
 
 export const NFTItemAttributeItem = styled.div`
   font-size: 14px;
-  padding: 10px;
+  padding: 5px;
   border: 1px solid #61b357;
   border-radius: 10px;
   width: 150px;

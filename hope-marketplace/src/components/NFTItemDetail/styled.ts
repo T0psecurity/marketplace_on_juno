@@ -26,6 +26,7 @@ export const NFTDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
 `;
 
 export const DetailTitle = styled.div`
@@ -186,6 +187,35 @@ export const CoinIcon = styled.img`
   width: 35px;
   height: 35px;
   margin-right: 5px;
+`;
+
+export const RarityRankContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const SocialLinkContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const SocialLinkIcon = styled.div<{ backgroundColor?: string }>`
+  background-color: ${({ backgroundColor }) =>
+    backgroundColor || "transparent"};
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  cursor: pointer;
+  & > svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
 `;
 
 export const NFTItemPricePanel = styled.div`

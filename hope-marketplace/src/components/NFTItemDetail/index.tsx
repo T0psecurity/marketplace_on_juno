@@ -32,6 +32,9 @@ import {
   CustomControl,
   FloorPriceContainer,
   TokenImageWrapper,
+  RarityRankContainer,
+  SocialLinkContainer,
+  SocialLinkIcon,
 } from "./styled";
 import ReactSelect, { ControlProps } from "react-select";
 import { TokenType } from "../../types/tokens";
@@ -47,6 +50,7 @@ import {
 import useStatistic from "../../pages/Marketplace/hook/useStatistic";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { DiscordIcon, MediumIcon, ShareIcon, TwitterIcon } from "../Icons";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -56,6 +60,25 @@ const getTokenIdNumber = (id: string): string => {
   if (!id) return "";
   return id.split(".").pop() || "";
 };
+
+const SocialIcons = [
+  { Icon: ShareIcon, link: "" },
+  {
+    Icon: MediumIcon,
+    link: "https://hopegalaxy.medium.com/",
+    backgroundColor: "#00ff00",
+  },
+  {
+    Icon: TwitterIcon,
+    link: "https://twitter.com/Hopers_io",
+    backgroundColor: "#1da1f2",
+  },
+  {
+    Icon: DiscordIcon,
+    link: "https://discord.com/invite/BfKPacc5jF",
+    backgroundColor: "#7591ff",
+  },
+];
 
 const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const { isDark } = useContext(ThemeContext);
@@ -258,12 +281,27 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
           account?.address === owner ? " (YOU)" : ""
         }`}</Text>
 
-        {rarityRanks && (
+        <RarityRankContainer>
           <Text margin="30px 0">
             <Text>Rarity Rank:</Text>
-            <Text margin="0 5px" color="#2E7B31">{`#${rarityRanks.rank}`}</Text>
+            {rarityRanks && (
+              <Text
+                margin="0 5px"
+                color="#2E7B31"
+              >{`#${rarityRanks.rank}`}</Text>
+            )}
           </Text>
-        )}
+          <SocialLinkContainer>
+            {SocialIcons.map((socialIcon, index) => (
+              <SocialLinkIcon
+                key={index}
+                backgroundColor={socialIcon.backgroundColor}
+              >
+                {socialIcon.Icon}
+              </SocialLinkIcon>
+            ))}
+          </SocialLinkContainer>
+        </RarityRankContainer>
         <NFTItemPricePanel>
           {status !== "Sell" && (
             <>
