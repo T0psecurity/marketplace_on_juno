@@ -99,6 +99,8 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
     },
   });
   const [errMsg, setErrorMsg] = useState("");
+  const [hasErrorOnMobileConnection, setHasErrorOnMobileConnection] =
+    useState(false);
   const [ibcNativeTokenBalance, setIBCNativeTokenBalance] = useState<any>();
   const { isDark } = useContext(ThemeContext);
   const balances = useAppSelector((state) => state.balances);
@@ -169,11 +171,14 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
       if (connectedWallet) {
         const { client, account } = await getClient(tokenStatus.chain);
         if (client && account) {
+          setHasErrorOnMobileConnection(false);
           const balance = await client.getBalance(
             account.address,
             chainConfig.microDenom
           );
           setIBCNativeTokenBalance(balance);
+        } else {
+          setHasErrorOnMobileConnection(true);
         }
       }
     })();
@@ -412,13 +417,20 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
             </div>
           </>
         )}
-        {swapInfo.swapType === SwapType.DEPOSIT && (
-          <span>{`Balance: ${(
-            Number(ibcNativeTokenBalance?.amount || 0) / 1e6
-          ).toLocaleString("en-Us", {
-            maximumFractionDigits: 2,
-          })} ${foreignTokenSymbol}`}</span>
-        )}
+        {swapInfo.swapType === SwapType.DEPOSIT &&
+          (!connectedWallet ? (
+            <span>Please connect the wallet.</span>
+          ) : hasErrorOnMobileConnection ? (
+            <span>
+              Please switch to your Keplr Wallet App and approve the action.
+            </span>
+          ) : (
+            <span>{`Balance: ${(
+              Number(ibcNativeTokenBalance?.amount || 0) / 1e6
+            ).toLocaleString("en-Us", {
+              maximumFractionDigits: 2,
+            })} ${foreignTokenSymbol}`}</span>
+          ))}
         <input
           className="amountInputer"
           onChange={handleChangeSwapAmount}

@@ -18,6 +18,7 @@ import { TokenType } from "../types/tokens";
 import { setRarityRankState } from "../features/rarityRanks/rarityRanksSlice";
 import {
   BalancesType,
+  clearBalances,
   setTokenBalances,
 } from "../features/balances/balancesSlice";
 
@@ -425,11 +426,20 @@ const useFetch = () => {
     (account) => {
       fetchMarketplaceNFTs(account);
       fetchCollectionInfo(account);
-      if (!account) return;
+      if (!account) {
+        dispatch(clearBalances());
+        return;
+      }
       fetchMyNFTs(account);
       getTokenBalances();
     },
-    [fetchCollectionInfo, fetchMarketplaceNFTs, fetchMyNFTs, getTokenBalances]
+    [
+      dispatch,
+      fetchCollectionInfo,
+      fetchMarketplaceNFTs,
+      fetchMyNFTs,
+      getTokenBalances,
+    ]
   );
 
   const clearAllNFTs = useCallback(() => {

@@ -46,6 +46,7 @@ import {
 } from "../SvgIcons";
 import useStatistic from "../../pages/Marketplace/hook/useStatistic";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -148,6 +149,10 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
   const handleTransferNFT = async () => {
     await transferNft(transferAdd, item, "/profile");
+  };
+
+  const handleMakeOffer = () => {
+    toast.info("Function available soon!");
   };
 
   const CustomSelectItem = ({ ...props }) => {
@@ -334,7 +339,10 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                       }),
                     }}
                     onChange={handleChangePriceType}
-                    options={SelectOptions}
+                    options={SelectOptions.map((option) => ({
+                      ...option,
+                      label: option.text,
+                    }))}
                   />
                 </NFTItemPriceType>
               </div>
@@ -342,6 +350,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
             {status === "Buy" && (
               <NFTItemOperationButton
                 style={{ background: "#FFFFFF", color: "#2e7b31" }}
+                onClick={handleMakeOffer}
               >
                 <OfferIcon width={30} height={30} /> Make Offer
               </NFTItemOperationButton>
