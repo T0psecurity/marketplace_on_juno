@@ -561,9 +561,11 @@ const Collections: MarketplaceInfo[] = [
 ];
 
 export const getCollectionById = (id: string): MarketplaceInfo => {
-  return Collections.filter(
-    (collection: MarketplaceInfo) => collection.collectionId === id
-  )[0];
+  return (
+    Collections.filter(
+      (collection: MarketplaceInfo) => collection.collectionId === id
+    )[0] || {}
+  );
 };
 
 export const MarketplaceContracts: string[] = [

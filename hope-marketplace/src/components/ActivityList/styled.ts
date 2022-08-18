@@ -12,16 +12,6 @@ export const SaleHistoryWrapper = styled.div`
   overflow: auto;
 `;
 
-export const HistoryItemBlock = styled.div<{ isMobile: boolean }>`
-  display: flex;
-  align-items: center;
-  ${({ isMobile }) =>
-    isMobile &&
-    css`
-      flex-direction: column;
-    `}
-`;
-
 export const HistoryItemImage = styled.div`
   width: 60px;
   height: 60px;
@@ -39,6 +29,19 @@ export const HistoryItemTokenName = styled.div`
 export const HistoryItemToken = styled.div`
   display: flex;
   align-items: center;
+`;
+
+export const HistoryItemBlock = styled.div<{ isMobile: boolean }>`
+  display: flex;
+  align-items: center;
+  ${({ isMobile }) =>
+    isMobile &&
+    css`
+      flex-direction: column;
+      ${HistoryItemTokenName} {
+        width: 200px;
+      }
+    `}
 `;
 
 export const CoinIcon = styled.img`

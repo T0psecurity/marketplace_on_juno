@@ -6,10 +6,12 @@ export const MintVideoContainer = styled.div`
   /* height: 300px; */
   /* margin-right: 30px; */
   position: relative;
+  width: 100%;
 `;
 
 export const TokenImageWrapper = styled.div`
   max-width: 500px;
+  min-height: 200px;
   position: relative;
 `;
 
@@ -134,6 +136,7 @@ export const NFTItemDescription = styled.div`
   border: 1px solid #cecece;
   border-radius: 10px;
   margin-top: 20px;
+  width: 100%;
 `;
 
 export const NFTItemDescriptionHeader = styled.div`
@@ -154,6 +157,7 @@ export const NFTItemDescriptionHeader = styled.div`
 export const NFTItemDescriptionContent = styled.div`
   color: #a4a5a6;
   padding: 10px;
+  min-height: 50px;
 `;
 
 export const NFTItemOperationContainer = styled.div<{

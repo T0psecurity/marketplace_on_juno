@@ -52,7 +52,7 @@ const NFTDetail: React.FC = () => {
   );
 
   const randomNfts = useMemo(() => {
-    if (!marketplaceNFTs.length) return [];
+    if (!marketplaceNFTs?.length) return [];
     const randomIndex = getRandomIndex({ max: marketplaceNFTs.length - 1 }, 4);
     return randomIndex.map((index) => marketplaceNFTs[index]);
   }, [marketplaceNFTs]);
