@@ -20,6 +20,7 @@ export const ChartArea = styled.div`
   min-width: 350px;
   height: 500px;
   position: relative;
+  overflow: hidden;
 `;
 
 export const Title = styled.div`

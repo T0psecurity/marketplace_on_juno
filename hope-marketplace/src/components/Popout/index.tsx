@@ -13,7 +13,10 @@ import {
   GasPrice,
   MsgTransferEncodeObject,
 } from "@cosmjs/stargate";
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import {
+  // CosmWasmClient,
+  SigningCosmWasmClient,
+} from "@cosmjs/cosmwasm-stargate";
 import { MsgTransfer } from "cosmjs-types/ibc/applications/transfer/v1/tx";
 // import { Height } from "cosmjs-types/ibc/core/client/v1/client";
 import Long from "long";
@@ -30,6 +33,8 @@ import "./style.scss";
 import { useAppSelector } from "../../app/hooks";
 import useFetch from "../../hook/useFetch";
 import { ThemeContext } from "../../context/ThemeContext";
+// import { getOfflineSigner } from "../../hook/useContract";
+import { useWalletManager } from "@noahsaso/cosmodal";
 
 // import {
 //   Wrapper,
@@ -67,68 +72,6 @@ interface QuickSwapProps {
   closeNewWindow: (params: any) => void;
 }
 
-const getWallets = async ({
-  origin,
-  foreign,
-}: {
-  origin: ChainTypes;
-  foreign: ChainTypes;
-}) => {
-  const originChainConfig = ChainConfigs[origin];
-  await window.keplr?.enable(originChainConfig.chainId);
-  const originOfflineSigner = await window.getOfflineSignerAuto?.(
-    originChainConfig.chainId
-  );
-  const originAccount = await originOfflineSigner?.getAccounts();
-  let originWasmChainClient = null;
-  if (originOfflineSigner) {
-    try {
-      originWasmChainClient = await SigningCosmWasmClient.connectWithSigner(
-        originChainConfig.rpcEndpoint,
-        originOfflineSigner,
-        {
-          gasPrice: GasPrice.fromString(
-            `${originChainConfig.gasPrice}${originChainConfig.microDenom}`
-          ),
-        }
-      );
-    } catch (e) {}
-  }
-  const originResult = {
-    account: originAccount?.[0],
-    client: originWasmChainClient,
-  };
-
-  const foreignChainConfig = ChainConfigs[foreign];
-  await window.keplr?.enable(foreignChainConfig.chainId);
-  const foreignOfflineSigner = await window.getOfflineSignerAuto?.(
-    foreignChainConfig.chainId
-  );
-  const foreignAccount = await foreignOfflineSigner?.getAccounts();
-  let foreignWasmChainClient = null;
-  if (foreignOfflineSigner) {
-    try {
-      foreignWasmChainClient = await SigningCosmWasmClient.connectWithSigner(
-        foreignChainConfig.rpcEndpoint,
-        foreignOfflineSigner,
-        {
-          gasPrice: GasPrice.fromString(
-            `${foreignChainConfig.gasPrice}${foreignChainConfig.microDenom}`
-          ),
-        }
-      );
-    } catch (e) {
-      console.error("wallets", e);
-    }
-  }
-  const foreignResult = {
-    account: foreignAccount?.[0],
-    client: foreignWasmChainClient,
-  };
-
-  return { origin: originResult, foreign: foreignResult };
-};
-
 const ArrowIcon = ({ ...props }) => (
   <svg
     className="styledSvg"
@@ -156,13 +99,90 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
     },
   });
   const [errMsg, setErrorMsg] = useState("");
+  const [hasErrorOnMobileConnection, setHasErrorOnMobileConnection] =
+    useState(false);
+  const [ibcNativeTokenBalance, setIBCNativeTokenBalance] = useState<any>();
   const { isDark } = useContext(ThemeContext);
   const balances = useAppSelector((state) => state.balances);
   const { getTokenBalances } = useFetch();
+  const { connectedWallet } = useWalletManager();
+
+  const getClient = useCallback(
+    async (chainType: ChainTypes) => {
+      if (connectedWallet) {
+        const chainConfig = ChainConfigs[chainType];
+        // const offlineSigner = await getOfflineSigner(chainConfig.chainId);
+        const { wallet, walletClient } = connectedWallet;
+        const offlineSigner = await wallet.getOfflineSignerFunction(
+          walletClient
+        )(chainConfig.chainId);
+        const account = await offlineSigner?.getAccounts();
+        let wasmChainClient = null;
+        if (offlineSigner) {
+          try {
+            wasmChainClient = await SigningCosmWasmClient.connectWithSigner(
+              chainConfig.rpcEndpoint,
+              offlineSigner,
+              {
+                gasPrice: GasPrice.fromString(
+                  `${chainConfig.gasPrice}${chainConfig.microDenom}`
+                ),
+              }
+            );
+            return {
+              account: account?.[0],
+              client: wasmChainClient,
+            };
+          } catch (e) {
+            console.error("wallets", e);
+            return { account: account?.[0], client: null };
+          }
+        }
+      }
+      return { account: null, client: null };
+    },
+    [connectedWallet]
+  );
+
+  const getWallets = useCallback(
+    async ({
+      origin,
+      foreign,
+    }: {
+      origin: ChainTypes;
+      foreign: ChainTypes;
+    }) => {
+      const originResult = await getClient(origin);
+      const foreignResult = await getClient(foreign);
+
+      return { origin: originResult, foreign: foreignResult };
+    },
+    [getClient]
+  );
 
   useEffect(() => {
     setSwapInfo(swapInfoProps);
   }, [swapInfoProps]);
+
+  useEffect(() => {
+    (async () => {
+      const tokenStatus = TokenStatus[swapInfo.denom];
+      const chainConfig = ChainConfigs[tokenStatus.chain];
+      if (connectedWallet) {
+        const { client, account } = await getClient(tokenStatus.chain);
+        if (client && account) {
+          setHasErrorOnMobileConnection(false);
+          const balance = await client.getBalance(
+            account.address,
+            chainConfig.microDenom
+          );
+          setIBCNativeTokenBalance(balance);
+        } else {
+          setHasErrorOnMobileConnection(true);
+        }
+      }
+    })();
+  }, [connectedWallet, getClient, swapInfo.denom]);
 
   const { fromChain, toChain } = useMemo(() => {
     const denom = swapInfo.denom;
@@ -235,12 +255,8 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
 
     const client = wallets.foreign.client;
     if (swapInfo.swapType === SwapType.DEPOSIT && senderAddress && client) {
-      const balance = await client.getBalance(
-        senderAddress,
-        foreignChainConfig.microDenom
-      );
-      let balanceWithoutFee = Number(balance.amount);
-      if (isNaN(Number(balance?.amount))) {
+      let balanceWithoutFee = Number(ibcNativeTokenBalance.amount);
+      if (isNaN(Number(ibcNativeTokenBalance?.amount))) {
         setErrMsg("Can't fetch balance.");
         setSendingTx(false);
         return;
@@ -294,6 +310,11 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
     }
   };
 
+  const handleCancel = () => {
+    if (sendingTx) return;
+    closeNewWindow(false);
+  };
+
   const handleChangeSwapAmount = (e: any) => {
     if (sendingTx) return;
     const { value } = e.target;
@@ -318,6 +339,10 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
       denom,
     }));
   };
+
+  const foreignTokenSymbol = (
+    Object.keys(TokenType) as Array<keyof typeof TokenType>
+  ).filter((key) => TokenType[key] === swapInfo.denom)[0];
 
   return (
     <div
@@ -392,14 +417,33 @@ const QuickSwap: React.FC<QuickSwapProps> = ({
             </div>
           </>
         )}
+        {swapInfo.swapType === SwapType.DEPOSIT &&
+          (!connectedWallet ? (
+            <span>Please connect the wallet.</span>
+          ) : hasErrorOnMobileConnection ? (
+            <span>
+              Please switch to your Keplr Wallet App and approve the action.
+            </span>
+          ) : (
+            <span>{`Balance: ${(
+              Number(ibcNativeTokenBalance?.amount || 0) / 1e6
+            ).toLocaleString("en-Us", {
+              maximumFractionDigits: 2,
+            })} ${foreignTokenSymbol}`}</span>
+          ))}
         <input
           className="amountInputer"
           onChange={handleChangeSwapAmount}
           value={swapAmount}
         />
         <div className="errMsgContainer">{errMsg}</div>
-        <div className="operationButton" onClick={handleAccept}>
-          {sendingTx ? "..." : "Accept"}
+        <div className="operationButtonContainer">
+          <div className="operationButton" onClick={handleAccept}>
+            {sendingTx ? "..." : "Accept"}
+          </div>
+          <div className="operationButton cancelButton" onClick={handleCancel}>
+            Cancel
+          </div>
         </div>
       </div>
     </div>

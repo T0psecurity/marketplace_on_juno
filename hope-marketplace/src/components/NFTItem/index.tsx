@@ -44,6 +44,7 @@ export const NFTItemStatus = {
 };
 
 export default function NFTItem({ item, status }: NFTItemProps) {
+  const [isPendingTx, setIsPendingTx] = useState(false);
   const [nftPrice, setNftPrice] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
   const { isDark } = useContext(ThemeContext);
@@ -84,12 +85,17 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   // console.log(item.collectionId, collectionState, url);
 
   const handleNFTItem = async () => {
-    if (status === NFTItemStatus.SELL) {
-      await sellNft(item, nftPrice, nftPriceType);
-    } else if (status === NFTItemStatus.WITHDRAW) {
-      await withdrawNft(item);
-    } else if (status === NFTItemStatus.BUY) {
-      await buyNft(item);
+    setIsPendingTx(true);
+    try {
+      if (status === NFTItemStatus.SELL) {
+        await sellNft(item, nftPrice, nftPriceType);
+      } else if (status === NFTItemStatus.WITHDRAW) {
+        await withdrawNft(item);
+      } else if (status === NFTItemStatus.BUY) {
+        await buyNft(item);
+      }
+    } finally {
+      setIsPendingTx(false);
     }
   };
 
@@ -143,8 +149,8 @@ export default function NFTItem({ item, status }: NFTItemProps) {
     ) : null;
 
   const NFTItemOperationButtonItem = () => (
-    <NFTItemOperationButton onClick={handleNFTItem}>
-      {status} Now
+    <NFTItemOperationButton onClick={handleNFTItem} disabled={isPendingTx}>
+      {`${status}${isPendingTx ? "ing" : " Now"}`}
     </NFTItemOperationButton>
   );
 

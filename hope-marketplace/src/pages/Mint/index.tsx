@@ -114,6 +114,7 @@ const Mint: React.FC = () => {
             );
             return (
               <StyledButton
+                key={key}
                 checked={filterType === FILTER_TYPE[key]}
                 onClick={() => setFilterType(FILTER_TYPE[key])}
                 backgroundColor={crrOption.backgroundColor}
@@ -155,7 +156,7 @@ const Mint: React.FC = () => {
       </ButtonContainer>
       {filteredCollections?.map((collection: MarketplaceInfo, index: number) =>
         collection.mintInfo ? (
-          <MintItem key={index} mintItem={collection} />
+          <MintItem key={collection.collectionId} mintItem={collection} />
         ) : null
       )}
     </Wrapper>

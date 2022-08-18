@@ -102,7 +102,7 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
   // const { isXs, isSm } = useMatchBreakpoints();
   // const isMobile = isXs || isSm;
 
-  const statistics: any = useStatistic(collectionId, items);
+  const statistics: any = useStatistic(collectionId);
   // const targetCollection: MarketplaceInfo = getCollectionById(
   //   collectionId || ""
   // );

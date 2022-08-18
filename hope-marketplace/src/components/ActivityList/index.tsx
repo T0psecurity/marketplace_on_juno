@@ -26,6 +26,7 @@ import {
   NoHistoryWrapper,
 } from "./styled";
 import { HistoryIcon } from "../SvgIcons";
+import { useHistory } from "react-router-dom";
 
 interface ActivityListProps {
   filterFunc?: any;
@@ -72,13 +73,14 @@ const ActivityList: React.FC<ActivityListProps> = ({
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
   const collectionStates = useAppSelector((state) => state.collectionStates);
   const totalTokenRarityRanks = useAppSelector((state) => state.rarityRank);
+  const history = useHistory();
 
   useEffect(() => {
     setRenderCount(INITIAL_RENDER_COUNT);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterFunc]);
 
-  const history = useMemo(() => {
+  const activityHistory = useMemo(() => {
     let result: any = [];
     if (collectionId) {
       result = filterActivitiesByUser(
@@ -115,7 +117,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
     return result.slice(0, renderCount);
   }, [collectionId, collectionStates, filterFunc, renderCount, user]);
 
-  if (!history || !history.length) {
+  if (!activityHistory || !activityHistory.length) {
     return (
       <NoHistoryWrapper>
         <HistoryIcon width={50} height={50} /> No Activities
@@ -126,7 +128,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
   return (
     <>
       <SaleHistoryWrapper>
-        {history.map((historyItem: any, index: number) => {
+        {activityHistory.map((historyItem: any, index: number) => {
           const collectionState =
             collectionStates[historyItem.collectionId as CollectionIds] || {};
           const tokenRarityRanks =
@@ -169,7 +171,26 @@ const ActivityList: React.FC<ActivityListProps> = ({
                   <Image alt="" src={url} />
                 </HistoryItemImage>
                 <HistoryItemTokenName>
-                  <HistoryItemText>
+                  <HistoryItemText
+                    fontSize="18px"
+                    fontWeight="bold"
+                    onClick={() => {
+                      history.push(
+                        `/collections/marketplace?id=${targetCollection.collectionId}`
+                      );
+                    }}
+                  >
+                    {targetCollection.title}
+                  </HistoryItemText>
+                  <HistoryItemText
+                  // onClick={() =>
+                  //   history.push(
+                  //     `/detail?token_id=${escapeSpecialForUrl(
+                  //       historyItem.token_id
+                  //     )}`
+                  //   )
+                  // }
+                  >
                     {targetCollection.customTokenId
                       ? getCustomTokenId(
                           historyItem.token_id,

@@ -45,7 +45,7 @@ export const NFTItemPriceContainer = styled.div<{ isMobile: boolean }>`
     `}
 `;
 
-export const NFTItemOperationButton = styled.div`
+export const NFTItemOperationButton = styled.button`
   text-transform: uppercase;
   display: inline-flex;
   align-items: center;

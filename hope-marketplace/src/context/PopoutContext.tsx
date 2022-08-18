@@ -6,8 +6,11 @@ import React, {
   useCallback,
   ReactElement,
   useContext,
+  useMemo,
 } from "react";
+import styled from "styled-components";
 import { ThemeContext } from "./ThemeContext";
+import { isMobileDevice } from "../util/basic";
 
 type WindowOption = {
   title?: string;
@@ -29,15 +32,26 @@ const copyStyles = (src: any, dest: any) => {
   Array.from(src.fonts).forEach((font) => dest.fonts.add(font));
 };
 
-const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
-  const [container, setContainer] = useState<any>(null);
-  const { isDark } = useContext(ThemeContext);
-  const newWindow: any = useRef(null);
+const NewWindowOnMobile = styled.div`
+  background-color: ${({ theme }) => theme.colors.backgroundColor};
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+`;
 
-  useEffect(() => {
-    // Create container element on client-side
-    setContainer(document.createElement("div"));
-  }, []);
+const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
+  const [container] = useState<any>(document.createElement("div"));
+  const { isDark } = useContext(ThemeContext);
+  const newWindow: any = useRef(window);
+
+  // useEffect(() => {
+  //   // Create container element on client-side
+  //   const divElement = document.createElement("div");
+  //   divElement.innerHTML = "Hello world";
+  //   setContainer(divElement);
+  // }, []);
 
   useEffect(() => {
     // When container is ready
@@ -46,11 +60,13 @@ const RenderInWindow = ({ option, onClose, children }: RenderInWindowProps) => {
       newWindow.current = window.open(
         "",
         option?.title || "",
-        "width=300,height=500,left=200,top=200,resizable=0"
+        "popup=1,width=300,height=500,left=20,top=20,resizable=0,channelmode=no,directories=no,fullscreen=no,location=no,dependent=yes,menubar=no,scrollbars=yes,status=no,toolbar=no,titlebar=no"
       );
       // Append container
-      newWindow?.current.document.body.appendChild(container);
-      if (isDark && newWindow?.current?.document?.body) {
+
+      // the problem is that newWindow.current is NULL.
+      newWindow.current?.document?.body?.appendChild(container);
+      if (isDark && newWindow.current?.document?.body) {
         newWindow.current.document.body.style.backgroundColor = "#313131";
       }
       newWindow.current.addEventListener("beforeunload", () => {
@@ -91,6 +107,8 @@ const PopoutContextProvider = ({ children }: { children: any }) => {
   const [windowOption, setWindowOption] = useState<WindowOption>();
   const [windowChildren, setWindowChildren] = useState<WindowChildren>();
 
+  const isMobile = useMemo(() => isMobileDevice(), []);
+
   const closeNewWindow = useCallback((params?: any) => {
     setShowWindow(false);
     // if (windowOption?.onClose && !window.promptedClosing) {
@@ -117,10 +135,13 @@ const PopoutContextProvider = ({ children }: { children: any }) => {
   return (
     <PopoutContext.Provider value={{ showNewWindow, closeNewWindow }}>
       {children}
-      {showWindow && (
+      {!isMobile && showWindow && (
         <RenderInWindow onClose={closeNewWindow} option={windowOption}>
           {windowChildren}
         </RenderInWindow>
+      )}
+      {isMobile && showWindow && (
+        <NewWindowOnMobile>{windowChildren}</NewWindowOnMobile>
       )}
     </PopoutContext.Provider>
   );

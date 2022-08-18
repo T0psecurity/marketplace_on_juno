@@ -2,15 +2,17 @@ import styled from "styled-components";
 
 export const SearchContainer = styled.div`
   width: 100%;
-  height: fit-content;
+  // height: fit-content;
+  height: 50px;
   position: relative;
 `;
 
 export const SearchInput = styled.input`
-  height: 50px;
+  height: 100%;
   width: calc(100% - 50px);
   border-style: none;
   /* padding: 10px; */
+  padding: 0;
   padding-left: 25px;
   font-size: 18px;
   letter-spacing: 2px;
@@ -36,7 +38,7 @@ export const SearchInput = styled.input`
 
 export const SearchIcon = styled.button`
   width: 50px;
-  height: 52px;
+  height: 50px;
   border-style: none;
   font-size: 20px;
   font-weight: bold;

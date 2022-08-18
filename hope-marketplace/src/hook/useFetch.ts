@@ -18,6 +18,7 @@ import { TokenType } from "../types/tokens";
 import { setRarityRankState } from "../features/rarityRanks/rarityRanksSlice";
 import {
   BalancesType,
+  clearBalances,
   setTokenBalances,
 } from "../features/balances/balancesSlice";
 
@@ -48,9 +49,6 @@ const buildNFTItem = (
   metaData: any
 ) => {
   const customTokenId = collection.customTokenId;
-  const sortedMetaData = metaData?.sort((item1: any, item2: any) =>
-    item1.edition > item2.edition ? 1 : -1
-  );
 
   const tokenNumberStr = Number(getTokenIdNumber(item.token_id));
   const tokenNumber: number = isNaN(tokenNumberStr) ? 0 : tokenNumberStr;
@@ -61,9 +59,9 @@ const buildNFTItem = (
     }),
     contractAddress,
     collectionId: collection.collectionId,
-    ...(sortedMetaData &&
-      sortedMetaData[tokenNumber - 1] && {
-        metaData: sortedMetaData[tokenNumber - 1],
+    ...(metaData &&
+      metaData[tokenNumber - 1] && {
+        metaData: metaData[tokenNumber - 1],
       }),
   };
   return crrItem;
@@ -129,7 +127,7 @@ const useFetch = () => {
           myMintedNfts: null,
         };
         if (collection.mintContract) {
-          if (collection.mintInfo?.mintLogic) {
+          if (collection.mintInfo?.mintLogic?.fetchInfo) {
             storeObject = await collection.mintInfo.mintLogic.fetchInfo({
               collection,
               runQuery,
@@ -334,9 +332,21 @@ const useFetch = () => {
             }
           );
         }
-        const metaData = collection.metaDataUrl
+        let metaData = collection.metaDataUrl
           ? await getQuery(collection.metaDataUrl)
           : null;
+        if (metaData) {
+          metaData = metaData?.sort((item1: any, item2: any) => {
+            if (item1.edition) {
+              return item1.edition > item2.edition ? 1 : -1;
+            } else {
+              return Number(item1.image.split(".")[0]) >
+                Number(item2.image.split(".")[0])
+                ? 1
+                : -1;
+            }
+          });
+        }
         if (metaData) {
           dispatch(
             setCollectionTraitStates([
@@ -416,11 +426,20 @@ const useFetch = () => {
     (account) => {
       fetchMarketplaceNFTs(account);
       fetchCollectionInfo(account);
-      if (!account) return;
+      if (!account) {
+        dispatch(clearBalances());
+        return;
+      }
       fetchMyNFTs(account);
       getTokenBalances();
     },
-    [fetchCollectionInfo, fetchMarketplaceNFTs, fetchMyNFTs, getTokenBalances]
+    [
+      dispatch,
+      fetchCollectionInfo,
+      fetchMarketplaceNFTs,
+      fetchMyNFTs,
+      getTokenBalances,
+    ]
   );
 
   const clearAllNFTs = useCallback(() => {
