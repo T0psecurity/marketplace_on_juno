@@ -340,7 +340,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
               </DetailContent>
             </>
           )}
-          <NFTItemOperationContainer justifyContent="space-between">
+          <NFTItemOperationContainer>
             <NFTItemOperationButton onClick={handleNFTItem}>
               <WalletIcon width={30} height={30} /> {status} Now
             </NFTItemOperationButton>

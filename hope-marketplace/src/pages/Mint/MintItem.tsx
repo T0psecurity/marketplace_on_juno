@@ -99,11 +99,12 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   );
   const [crrTime, setCrrTime] = useState(new Date());
   const { isXl } = useMatchBreakpoints();
-  const { runExecute } = useContract();
+  const { runQuery, runExecute } = useContract();
   const history = useHistory();
   const { refresh } = useRefresh();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
-  const junoBalance = useAppSelector((state) => state.balances[TokenType.JUNO]);
+  const tokenBalances = useAppSelector((state) => state.balances);
+  const globalState = useAppSelector((state) => state);
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[mintItem.collectionId]
   );
@@ -167,6 +168,14 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collectionState, crrTime]);
 
+  const mintPriceDenom = (
+    Object.keys(TokenType) as Array<keyof typeof TokenType>
+  ).filter((key) => {
+    return (
+      TokenType[key] === (targetCollection.mintInfo?.denom || TokenType.JUNO)
+    );
+  })[0];
+
   const handleMintNft = async () => {
     if (!account) {
       toast.error("Connect wallet!");
@@ -184,11 +193,13 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       toast.error(`Mint is not started. ${timeLeft} left!`);
       return;
     }
-    if ((junoBalance.amount || 0) / 1e6 < collectionState.price) {
+    const targetBalances =
+      tokenBalances[targetCollection.mintInfo?.denom || TokenType.JUNO] || {};
+    if ((targetBalances.amount || 0) / 1e6 < collectionState.price) {
       toast.error(
         `Insufficient balance! You have only ${
-          (junoBalance.amount || 0) / 1e6
-        } JUNO.`
+          (targetBalances.amount || 0) / 1e6
+        } ${mintPriceDenom}.`
       );
       return;
     }
@@ -209,26 +220,47 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       return;
     }
     let mintIndexArray: number[] = [];
-    collectionState.mintCheck.forEach((item: boolean, index: number) => {
+    collectionState.mintCheck?.forEach((item: boolean, index: number) => {
       if (item) mintIndexArray.push(index);
     });
     const selectedIndex = mintIndexArray.sort(() => 0.5 - Math.random()).pop();
-    const message = targetCollection.mintInfo?.mintLogic?.getMintMessage
-      ? targetCollection.mintInfo?.mintLogic.getMintMessage({
-          collection: targetCollection,
-        })
-      : mintItem.mintContract
+    let mintAddress = "",
+      funds = null;
+    let message = mintItem.mintContract
       ? {
           mint: { rand: `${(selectedIndex || 0) + 1}` },
         }
       : {
           mint: { address: targetCollection.nftContract },
         };
-    // console.log(mintItem.mintContract, "message", message);
+    if (targetCollection.mintInfo?.mintLogic?.getMintMessage) {
+      const customResult =
+        await targetCollection.mintInfo?.mintLogic.getMintMessage({
+          collection: targetCollection,
+          account: account.address,
+          runQuery,
+          runExecute,
+          state: globalState,
+        });
+      message = customResult.message;
+      mintAddress = customResult.address || "";
+      funds = customResult.funds;
+    }
+    if (!message) return;
     try {
-      await runExecute(mintItem.mintContract || MintContracts[0], message, {
-        funds: `${collectionState.price > 0 ? collectionState.price : ""}`,
-      });
+      await runExecute(
+        mintAddress || mintItem.mintContract || MintContracts[0],
+        message,
+        funds ||
+          (!targetCollection.mintInfo?.denom ||
+          targetCollection.mintInfo?.denom === TokenType.JUNO
+            ? {
+                funds: `${
+                  collectionState.price > 0 ? collectionState.price : ""
+                }`,
+              }
+            : undefined)
+      );
       toast.success("Success!");
       refresh();
     } catch (err) {
@@ -305,7 +337,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
         <DetailTitle>Public Sale</DetailTitle>
         <DetailInfo>{`Price ${
           collectionState.price
-            ? `${collectionState.price} $JUNO`
+            ? `${collectionState.price} $${mintPriceDenom}`
             : mintItem.mintInfo?.price
         }`}</DetailInfo>
         <OperationContainer isMobile={!isXl}>

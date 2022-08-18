@@ -71,7 +71,6 @@ export const getOfflineSigner = async (chainId: string) => {
     const signer: any = await window.keplr.getOfflineSigner(chainId);
     const signer1 = await window.keplr.getOfflineSignerOnlyAmino(chainId);
     const signer2 = await window.keplr.getOfflineSignerAuto(chainId);
-    console.log("signers", signer, signer1, signer2);
     return signer || signer1 || signer2;
   }
 };

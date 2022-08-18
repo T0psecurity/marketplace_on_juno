@@ -127,7 +127,7 @@ const useFetch = () => {
           myMintedNfts: null,
         };
         if (collection.mintContract) {
-          if (collection.mintInfo?.mintLogic) {
+          if (collection.mintInfo?.mintLogic?.fetchInfo) {
             storeObject = await collection.mintInfo.mintLogic.fetchInfo({
               collection,
               runQuery,
