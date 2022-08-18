@@ -38,7 +38,11 @@ import {
 } from "./styled";
 import ReactSelect, { ControlProps } from "react-select";
 import { TokenType } from "../../types/tokens";
-import { CollectionIds, getCollectionById } from "../../constants/Collections";
+import {
+  CollectionIds,
+  getCollectionById,
+  SocialLinks,
+} from "../../constants/Collections";
 import { ThemeContext } from "../../context/ThemeContext";
 import { NFTItemPricePanel } from "./styled";
 import {
@@ -50,7 +54,7 @@ import {
 import useStatistic from "../../pages/Marketplace/hook/useStatistic";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import { DiscordIcon, MediumIcon, ShareIcon, TwitterIcon } from "../Icons";
+import { DiscordIcon, GlobeIcon, ShareIcon, TwitterIcon } from "../Icons";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -64,18 +68,18 @@ const getTokenIdNumber = (id: string): string => {
 const SocialIcons = [
   { Icon: ShareIcon, link: "" },
   {
-    Icon: MediumIcon,
-    link: "https://hopegalaxy.medium.com/",
+    Icon: GlobeIcon,
+    link: "website",
     backgroundColor: "#00ff00",
   },
   {
     Icon: TwitterIcon,
-    link: "https://twitter.com/Hopers_io",
+    link: "twitter",
     backgroundColor: "#1da1f2",
   },
   {
     Icon: DiscordIcon,
-    link: "https://discord.com/invite/BfKPacc5jF",
+    link: "discord",
     backgroundColor: "#7591ff",
   },
 ];
@@ -296,6 +300,13 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
               <SocialLinkIcon
                 key={index}
                 backgroundColor={socialIcon.backgroundColor}
+                onClick={() =>
+                  window.open(
+                    targetCollection.socialLinks[
+                      socialIcon.link as keyof SocialLinks
+                    ]
+                  )
+                }
               >
                 {socialIcon.Icon}
               </SocialLinkIcon>
