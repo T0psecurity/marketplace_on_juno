@@ -110,7 +110,7 @@ export const NFTItemOperationButton = styled.div`
   letter-spacing: 0.02857em;
   height: 50px;
   border-radius: 10px;
-  width: 200px;
+  min-width: 200px;
   margin: 10px 0;
   padding: 6px 16px;
   color: #fff;
@@ -167,6 +167,7 @@ export const NFTItemOperationContainer = styled.div<{
   display: flex;
   justify-content: ${({ justifyContent }) => justifyContent ?? "flex-start"};
   align-items: center;
+  gap: 20px;
   @media (max-width: 650px) {
     flex-direction: column-reverse;
   }
