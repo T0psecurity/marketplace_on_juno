@@ -153,7 +153,8 @@ export const MintImageWrapper = styled.div`
 `;
 
 export const MintImage = styled.img<{ isMobile?: boolean }>`
-  width: 100%;
+  /* width: 100%; */
+  margin: auto;
   margin-left: ${({ isMobile }) => !isMobile && "20px"};
   max-width: 500px;
 `;
