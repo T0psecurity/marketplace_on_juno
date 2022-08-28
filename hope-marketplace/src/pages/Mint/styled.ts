@@ -15,6 +15,7 @@ export const ButtonContainer = styled.div`
 export const MintDetailContainer = styled.div<{ isMobile?: boolean }>`
   display: grid;
   grid-template-columns: ${({ isMobile }) => (isMobile ? "auto" : "auto 30%")};
+  grid-gap: 20px;
   padding: 30px;
   margin-top: ${({ isMobile }) => (isMobile ? "50px" : "110px")};
   margin-bottom: 90px;

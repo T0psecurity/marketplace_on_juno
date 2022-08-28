@@ -97,6 +97,7 @@ const ExploreMarketplace: React.FC = () => {
       title: "New",
       Icon: () => <NewIcon />,
       order: [
+        CollectionIds.BEARS,
         CollectionIds.LUNATICS,
         CollectionIds.GORILLA,
         CollectionIds.BORED3D,
@@ -134,6 +135,7 @@ const ExploreMarketplace: React.FC = () => {
       title: "Community",
       Icon: () => <CommunityIcon />,
       order: [
+        CollectionIds.BEARS,
         CollectionIds.LUNATICS,
         CollectionIds.BORED,
         CollectionIds.GORILLA,
@@ -148,6 +150,7 @@ const ExploreMarketplace: React.FC = () => {
       title: "Utility",
       Icon: () => <UtilityIcon />,
       order: [
+        CollectionIds.BEARS,
         CollectionIds.HOPEGALAXYI,
         CollectionIds.JUNOPUNKS2,
         CollectionIds.JUNOPUNKS,

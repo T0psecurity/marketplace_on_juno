@@ -74,6 +74,7 @@ export enum CollectionIds {
   BORED3D = "bored3d",
   GORILLA = "gorilla",
   LUNATICS = "lunatic",
+  BEARS = "bears",
 }
 
 const Collections: MarketplaceInfo[] = [
@@ -574,6 +575,37 @@ const Collections: MarketplaceInfo[] = [
       price: "FREE",
       mintImage: "/mint-images/lunatic.gif",
       mintDate: "TBA",
+      mintLogic: MintLogics.logic1,
+      isWhiteListMint: true,
+    },
+    isLaunched: true,
+  },
+  {
+    title: "Juno Bear Society",
+    creator: "Juno Bear Society",
+    imageUrl: "/backgrounds/bear.png",
+    backgroundUrl: "/marketplace-backgrounds/bear.png",
+    logoUrl: "/logos/bear.gif",
+    collectionId: CollectionIds.BEARS,
+    metaDataUrl: "",
+    nftContract:
+      "juno1en3rtdm2c8yymyvkwjv0ahvrxpmvsskefp0f68p56c4xjeygs0zs9d29v8",
+    mintContract:
+      "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/udgbqQnK9b",
+      website: "https://hopers.io/",
+      twitter: "https://twitter.com/JunoBearSociety",
+    },
+    description:
+      "Juno Bear Society is a Private NFT Investment DAO. All mint proceeds will be used to trade NFTs. Holders will discuss and make a decision on where the mint proceeds will be spent. Which NFTs will we buy and when will we sell. 70% of trade profits will be redistributed back to the JBS holders (every Sunday). Minting an JBS NFT will act as your entry ticket to the JBS NFT Investment DAO.",
+    mintInfo: {
+      totalNfts: 555,
+      royalties: "8%",
+      price: "5 $JUNO",
+      mintImage: "/mint-images/bear.gif",
+      mintDate: "2022-08-28",
       mintLogic: MintLogics.logic1,
       isWhiteListMint: true,
     },
