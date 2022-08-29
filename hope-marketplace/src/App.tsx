@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import {
   // HashRouter,
   Router,
+  useLocation,
 } from "react-router-dom";
 // import { ChainInfo } from "@keplr-wallet/types";
 // import { coin } from "@cosmjs/proto-signing";
@@ -79,6 +80,14 @@ const GlobalStyle = createGlobalStyle<{ isMobile: boolean }>`
 const MainWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.backgroundColor};
 `;
+
+const ScrollToTopOnRouting = () => {
+  const { pathname } = useLocation(); // consider about the key when you want to trigger on change params
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
 
 function App() {
   const dispatch = useAppDispatch();
@@ -163,6 +172,7 @@ function App() {
             <Updater />
             <MainWrapper className="main">
               <Router history={history}>
+                <ScrollToTopOnRouting />
                 <Header />
                 <Main />
                 <Footer />
