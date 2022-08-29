@@ -31,6 +31,9 @@ import {
   MenuHeader,
   MenuFooter,
   MenuFooterLinkItem,
+  HeaderBackground,
+  HorizontalDivider,
+  LinkContainer,
 } from "./styled";
 import { coin } from "@cosmjs/proto-signing";
 import useRefresh from "../../hook/useRefresh";
@@ -39,24 +42,43 @@ import ToggleThemeButton from "../ToogleThemeButton";
 import {
   ExploreIcon,
   HomeIcon,
-  LaunchpadIcon,
+  // LaunchpadIcon,
   MintIcon,
   ProfileIcon as ProfileMenuIcon,
 } from "../SvgIcons";
+import HopePriceDisplay from "../HopePriceDisplay";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
   {
-    title: "Explore",
-    url: "/collections/explore",
+    title: "Swap",
+    url: "/",
     icon: ExploreIcon,
   },
   {
-    title: "Launchpad",
-    url: "http://launchpad.hopers.io/",
-    icon: LaunchpadIcon,
+    title: "NFT",
+    url: "/",
+    icon: ExploreIcon,
+  },
+  {
+    title: "Earn",
+    url: "/",
+    icon: ExploreIcon,
+  },
+  {
+    isDivider: true,
   },
   { title: "Mint", url: "/collections/mint", icon: MintIcon },
+  {
+    title: "IDO",
+    url: "/",
+    icon: ExploreIcon,
+  },
+  // {
+  //   title: "Launchpad",
+  //   url: "http://launchpad.hopers.io/",
+  //   icon: LaunchpadIcon,
+  // },
 ];
 
 const SocialIcons = [
@@ -72,6 +94,7 @@ const SocialIcons = [
 ];
 
 const Header: React.FC = () => {
+  const [headerHeight, setHeaderHeight] = useState(0);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   // const [runningFetch, setRunningFetch] = useState(false);
   const [ref, setRef] = useState<HTMLDivElement | null>(null); // TODO: must use useRef
@@ -117,6 +140,13 @@ const Header: React.FC = () => {
       );
     }
   }, [connectedWallet, dispatch, config, refresh]);
+
+  useEffect(() => {
+    const headerElement = document.getElementById("header");
+    const headerElementHeight = headerElement?.clientHeight || 0;
+    if (headerElementHeight !== headerHeight)
+      setHeaderHeight(headerElementHeight);
+  });
 
   const clickWalletButton = () => {
     if (!account) {
@@ -165,72 +195,96 @@ const Header: React.FC = () => {
           <DisconnectIcon alt="" src="/others/logout.png" />
         </>
       ) : (
-        "Connect"
+        "Connect Wallet"
       )}
     </ConnectWalletButton>
   );
 
   return (
-    <HeaderWrapper>
-      <LogoContainer>
-        <HeaderLogo isMobile={isMobile} onClick={() => handleClickLink("/")} />
-        {/* Hopers.io */}
-      </LogoContainer>
-      {isMobile ? (
-        <MenuIconContainer ref={(node) => setRef(node)}>
-          <MenuIcon onClick={handleOpenMenu}>{ListIcon}</MenuIcon>
-          {isOpenMenu && (
-            <MenuContainer onClick={(e) => e.preventDefault()}>
-              <MenuHeader>
-                <ConnectButton />
-                <ToggleThemeButton />
-              </MenuHeader>
-              <MenuItem onClick={() => handleClickLink("/")}>
-                <HomeIcon width={20} height={20} />
-                Home
-              </MenuItem>
-              {HeaderLinks.map((linkItem, linkIndex) => (
-                <MenuItem
-                  key={linkIndex}
-                  onClick={() => handleClickLink(linkItem.url)}
-                >
-                  <linkItem.icon width={20} height={20} />
-                  {linkItem.title}
+    <>
+      <HeaderBackground height={headerHeight} />
+      <HeaderWrapper id="header">
+        <LogoContainer>
+          <HeaderLogo
+            isMobile={isMobile}
+            onClick={() => handleClickLink("/")}
+          />
+          {/* Hopers.io */}
+        </LogoContainer>
+        {isMobile ? (
+          <MenuIconContainer ref={(node) => setRef(node)}>
+            <MenuIcon onClick={handleOpenMenu}>{ListIcon}</MenuIcon>
+            {isOpenMenu && (
+              <MenuContainer onClick={(e) => e.preventDefault()}>
+                <MenuHeader>
+                  <ConnectButton />
+                  <ToggleThemeButton />
+                </MenuHeader>
+                <MenuItem onClick={() => handleClickLink("/")}>
+                  <HomeIcon width={20} height={20} />
+                  Home
                 </MenuItem>
-              ))}
-              <MenuItem onClick={() => handleClickLink("/profile")} lastElement>
-                <ProfileMenuIcon width={20} height={20} />
-                My Profile
-              </MenuItem>
-              <MenuFooter>
-                {SocialIcons.map((icon, index) => (
-                  <MenuFooterLinkItem
-                    key={index}
-                    onClick={() => openNewUrl(icon.link)}
+                {HeaderLinks.map((linkItem, linkIndex) =>
+                  linkItem.isDivider ? null : (
+                    <MenuItem
+                      key={linkIndex}
+                      onClick={() => handleClickLink(linkItem.url || "/")}
+                    >
+                      {linkItem.icon && (
+                        <linkItem.icon width={20} height={20} />
+                      )}
+                      {linkItem.title}
+                    </MenuItem>
+                  )
+                )}
+                <MenuItem
+                  onClick={() => handleClickLink("/profile")}
+                  lastElement
+                >
+                  <ProfileMenuIcon width={20} height={20} />
+                  My Profile
+                </MenuItem>
+                <MenuFooter>
+                  {SocialIcons.map((icon, index) => (
+                    <MenuFooterLinkItem
+                      key={index}
+                      onClick={() => openNewUrl(icon.link)}
+                    >
+                      {icon.Icon}
+                    </MenuFooterLinkItem>
+                  ))}
+                </MenuFooter>
+              </MenuContainer>
+            )}
+          </MenuIconContainer>
+        ) : (
+          <ButtonContainer isMobile={isMobile}>
+            <LinkContainer>
+              {HeaderLinks.map((linkItem, linkIndex) =>
+                linkItem.isDivider ? (
+                  <HorizontalDivider />
+                ) : (
+                  <LinkButton
+                    key={linkIndex}
+                    onClick={() => handleClickLink(linkItem.url || "/")}
                   >
-                    {icon.Icon}
-                  </MenuFooterLinkItem>
-                ))}
-              </MenuFooter>
-            </MenuContainer>
-          )}
-        </MenuIconContainer>
-      ) : (
-        <ButtonContainer>
-          {HeaderLinks.map((linkItem, linkIndex) => (
-            <LinkButton
-              key={linkIndex}
-              onClick={() => handleClickLink(linkItem.url)}
-            >
-              {linkItem.title}
-            </LinkButton>
-          ))}
-          <ProfileIcon onClick={() => handleClickLink("/profile")} />
-          <ToggleThemeButton />
-          <ConnectButton />
-        </ButtonContainer>
-      )}
-    </HeaderWrapper>
+                    {linkItem.title}
+                  </LinkButton>
+                )
+              )}
+            </LinkContainer>
+            <LinkContainer>
+              <HopePriceDisplay />
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <ProfileIcon onClick={() => handleClickLink("/profile")} />
+                <ToggleThemeButton />
+                <ConnectButton />
+              </div>
+            </LinkContainer>
+          </ButtonContainer>
+        )}
+      </HeaderWrapper>
+    </>
   );
 };
 

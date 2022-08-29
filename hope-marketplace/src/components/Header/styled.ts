@@ -1,17 +1,27 @@
 import styled, { css } from "styled-components";
 
+export const HeaderBackground = styled.div<{ height: number }>`
+  height: ${({ height }) => height}px;
+  width: 100vw;
+`;
+
 export const HeaderWrapper = styled.div`
   /* width: 100vw; */
-  height: 70px;
-  padding-left: 24px;
-  padding-right: 24px;
+  min-height: 70px;
+  padding: 0 24px;
   background-color: ${({ theme }) => theme.colors.backgroundColor};
   box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
     0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
   display: flex;
+  grid-template-columns: auto auto;
   align-items: center;
   justify-content: space-between;
-  position: static;
+  gap: 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100vw - 48px);
+  z-index: 1;
 
   /* @media (min-width: 600px) {
     min-height: 64px;
@@ -55,9 +65,23 @@ export const ProfileIcon = styled.div`
   cursor: pointer;
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div<{ isMobile: boolean }>`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 10px 0;
+  gap: 10px;
+`;
+
+export const LinkContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 40px;
+  &: last-child {
+    justify-content: space-between;
+  }
 `;
 
 export const LinkButton = styled.div`
@@ -69,6 +93,13 @@ export const LinkButton = styled.div`
   color: ${({ theme }) => theme.colors.fontColor};
 `;
 
+export const HorizontalDivider = styled.div`
+  width: 2px;
+  height: 23px;
+  margin: 0 5px;
+  background-color: ${({ theme }) => theme.colors.fontColor};
+`;
+
 export const ConnectWalletButton = styled.div`
   display: inline-flex;
   align-items: center;
@@ -76,21 +107,23 @@ export const ConnectWalletButton = styled.div`
   position: relative;
   box-sizing: border-box;
   outline: 0;
-  border: 0;
-  border-radius: 10px;
+  border: 1px solid black;
+  border-radius: 15px;
   cursor: pointer;
   user-select: none;
   vertical-align: middle;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: bold;
   font-size: 0.875rem;
   line-height: 1.75;
   letter-spacing: 0.02857em;
   text-transform: uppercase;
-  width: 150px;
+  width: 200px;
   padding: 6px 16px;
-  color: #fff;
-  background-color: #2e7d32;
+  color: black;
+  /* background-color: #2e7d32; */
+  background: linear-gradient(90deg, #02e296 0%, rgba(2, 226, 150, 0) 114.55%);
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
@@ -104,7 +137,7 @@ export const ConnectWalletButton = styled.div`
   }
   &:hover {
     text-decoration: none;
-    background-color: #1b5e20;
+    /* background-color: #1b5e20; */
     box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
       0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
   }
