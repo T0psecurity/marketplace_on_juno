@@ -45,6 +45,7 @@ import {
   // LaunchpadIcon,
   MintIcon,
   ProfileIcon as ProfileMenuIcon,
+  WalletIcon,
 } from "../SvgIcons";
 import HopePriceDisplay from "../HopePriceDisplay";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
@@ -195,7 +196,10 @@ const Header: React.FC = () => {
           <DisconnectIcon alt="" src="/others/logout.png" />
         </>
       ) : (
-        "Connect Wallet"
+        <>
+          <WalletIcon width={20} height={15} />
+          <span style={{ marginLeft: 5 }}>Connect Wallet</span>
+        </>
       )}
     </ConnectWalletButton>
   );

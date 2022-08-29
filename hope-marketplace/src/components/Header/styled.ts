@@ -118,7 +118,9 @@ export const ConnectWalletButton = styled.div`
   line-height: 1.75;
   letter-spacing: 0.02857em;
   text-transform: uppercase;
-  width: 200px;
+  /* width: 200px; */
+  width: max-content;
+  max-width: 200px;
   padding: 6px 16px;
   color: black;
   /* background-color: #2e7d32; */
@@ -171,9 +173,14 @@ export const MenuContainer = styled.div`
   position: absolute;
   top: 50px;
   right: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 226, 150, 0.5) 0%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
   background-color: ${({ theme }) => theme.colors.backgroundColor};
-  /* color: ${({ theme }) => theme.colors.fontColor}; */
-  color: ${({ theme }) => (theme.isDark ? "white" : "#686868")};
+  color: ${({ theme }) => theme.colors.fontColor};
+  /* color: ${({ theme }) => (theme.isDark ? "white" : "#686868")}; */
   border-radius: 4px;
   box-shadow: 0px 5px 5px -3px rgb(${({ theme }) =>
             theme.isDark ? "255 255 255" : "0 0 0"} / 20%),
