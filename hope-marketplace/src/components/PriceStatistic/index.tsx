@@ -17,12 +17,17 @@ import {
 import { TokenFullName, TokenType } from "../../types/tokens";
 // import { ThemeContext } from "../../context/ThemeContext";
 import {
+  AllButton,
   ChartArea,
   CoinImage,
   ContentContainer,
   PriceStatisticContainer,
   PriceStatisticContent,
   PriceStatisticItem,
+  SearchContainer,
+  SearchIcon,
+  SearchInput,
+  SearchInputWrapper,
   Span,
   Title,
   TokenName,
@@ -73,7 +78,9 @@ const PriceStatistic: React.FC = () => {
   const [lineDisplay, setLineDisplay] = useState<LineDisplay>(
     {} as LineDisplay
   );
+  const [searchedToken, setSearchedToken] = useState("");
   const [tokenPriceHistory, setTokenPriceHistory] = useState<any[]>([]);
+
   // const { isDark } = useContext(ThemeContext);
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
 
@@ -92,7 +99,7 @@ const PriceStatistic: React.FC = () => {
         // historyPeriod.value
         TokenHistoryPeriod.MONTHLY
       );
-      Object.keys(tokenHistoryQueryResult[TokenType.JUNO]).forEach(
+      Object.keys(tokenHistoryQueryResult?.[TokenType.JUNO] || {}).forEach(
         (date: string) => {
           let resultItem: any = { date };
           (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach(
@@ -117,6 +124,11 @@ const PriceStatistic: React.FC = () => {
     }));
   };
 
+  const handleChangeSearchToken = (e: any) => {
+    const { value } = e.target;
+    setSearchedToken(value);
+  };
+
   // const handleChangePeriodOption = (option: any) => {
   //   setHistoryPeriod(option);
   // };
@@ -126,7 +138,18 @@ const PriceStatistic: React.FC = () => {
       <Title>ECOSYSTEM PRICE CHARTS</Title>
       <ContentContainer>
         <PriceStatisticContainer>
-          <PriceStatisticItem>
+          <SearchContainer>
+            <AllButton onClick={() => setSearchedToken("")}>All</AllButton>
+            <SearchInputWrapper>
+              <SearchInput
+                placeholder="Search Vault"
+                value={searchedToken}
+                onChange={handleChangeSearchToken}
+              />
+              <SearchIcon className="fa fa-search" />
+            </SearchInputWrapper>
+          </SearchContainer>
+          <PriceStatisticItem first>
             <PriceStatisticContent>
               <Span>#</Span>
             </PriceStatisticContent>
@@ -147,54 +170,66 @@ const PriceStatistic: React.FC = () => {
             </PriceStatisticContent>
           </PriceStatisticItem>
           {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
-            (key) => {
+            (key, index, arr) => {
               const denom = TokenType[key];
               const tokenPrice = tokenPrices[denom];
-              const currentPrice =
-                tokenPrice?.market_data?.current_price?.usd || 0;
-              const priceChange1h =
-                tokenPrice?.market_data?.price_change_percentage_1h_in_currency?.usd?.toFixed(
-                  2
-                ) || 0;
-              const priceChange24h =
-                tokenPrice?.market_data?.price_change_percentage_24h_in_currency?.usd?.toFixed(
-                  2
-                ) || 0;
-              const priceChange7d =
-                tokenPrice?.market_data?.price_change_percentage_7d_in_currency?.usd?.toFixed(
-                  2
-                ) || 0;
-              return (
-                <PriceStatisticItem key={denom}>
-                  <PriceStatisticContent>
-                    <CoinImage coinType={denom} />
-                  </PriceStatisticContent>
-                  <PriceStatisticContent>
-                    <TokenName>
-                      <Span>{TokenFullName[denom]}</Span>
-                      <Span>{`(${key})`}</Span>
-                    </TokenName>
-                  </PriceStatisticContent>
-                  <PriceStatisticContent>
-                    <Span>{`$${currentPrice}`}</Span>
-                  </PriceStatisticContent>
-                  <PriceStatisticContent>
-                    <Span
-                      color={priceChange1h < 0 ? "#FF4842" : "#35cb00"}
-                    >{`${priceChange1h}%`}</Span>
-                  </PriceStatisticContent>
-                  <PriceStatisticContent>
-                    <Span
-                      color={priceChange24h < 0 ? "#FF4842" : "#35cb00"}
-                    >{`${priceChange24h}%`}</Span>
-                  </PriceStatisticContent>
-                  <PriceStatisticContent>
-                    <Span
-                      color={priceChange7d < 0 ? "#FF4842" : "#35cb00"}
-                    >{`${priceChange7d}%`}</Span>
-                  </PriceStatisticContent>
-                </PriceStatisticItem>
-              );
+              if (
+                !searchedToken ||
+                `${key} ${TokenFullName[denom]}`
+                  .toLowerCase()
+                  .indexOf(searchedToken) > -1
+              ) {
+                const currentPrice =
+                  tokenPrice?.market_data?.current_price?.usd || 0;
+                const priceChange1h =
+                  tokenPrice?.market_data?.price_change_percentage_1h_in_currency?.usd?.toFixed(
+                    2
+                  ) || 0;
+                const priceChange24h =
+                  tokenPrice?.market_data?.price_change_percentage_24h_in_currency?.usd?.toFixed(
+                    2
+                  ) || 0;
+                const priceChange7d =
+                  tokenPrice?.market_data?.price_change_percentage_7d_in_currency?.usd?.toFixed(
+                    2
+                  ) || 0;
+                return (
+                  <PriceStatisticItem
+                    key={denom}
+                    last={index === arr.length - 1}
+                  >
+                    <PriceStatisticContent>
+                      <CoinImage coinType={denom} />
+                    </PriceStatisticContent>
+                    <PriceStatisticContent>
+                      <TokenName>
+                        <Span>{`(${key})`}</Span>
+                        <Span>{TokenFullName[denom]}</Span>
+                      </TokenName>
+                    </PriceStatisticContent>
+                    <PriceStatisticContent>
+                      <Span>{`$${currentPrice}`}</Span>
+                    </PriceStatisticContent>
+                    <PriceStatisticContent>
+                      <Span
+                        color={priceChange1h < 0 ? "#FF4842" : "#35cb00"}
+                      >{`${priceChange1h}%`}</Span>
+                    </PriceStatisticContent>
+                    <PriceStatisticContent>
+                      <Span
+                        color={priceChange24h < 0 ? "#FF4842" : "#35cb00"}
+                      >{`${priceChange24h}%`}</Span>
+                    </PriceStatisticContent>
+                    <PriceStatisticContent>
+                      <Span
+                        color={priceChange7d < 0 ? "#FF4842" : "#35cb00"}
+                      >{`${priceChange7d}%`}</Span>
+                    </PriceStatisticContent>
+                  </PriceStatisticItem>
+                );
+              } else {
+                return null;
+              }
             }
           )}
         </PriceStatisticContainer>

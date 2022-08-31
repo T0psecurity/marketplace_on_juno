@@ -2,16 +2,24 @@ import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div<{ isMobile?: boolean }>`
   padding: 10px 0;
-  display: grid;
+  /* display: grid;
   grid-template-columns: ${({ isMobile }) => (isMobile ? "1fr" : "1fr 1fr")};
-  width: 80%;
+  justify-content: center; */
+  /* width: 80%; */
   height: 100%;
-  justify-content: center;
-  margin: auto;
+  /* margin: auto; */
   @media (max-width: 650px) {
     width: 100%;
     grid-template-columns: 1fr;
   }
+`;
+
+export const HorizontalDivider = styled.div`
+  width: 100vw;
+  height: 10px;
+  margin: 30px 0;
+  margin-left: -10px;
+  background-color: #02e296;
 `;
 
 export const SubWrapper = styled.div`
@@ -105,26 +113,342 @@ export const StatisticContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  gap: 20px;
   color: ${({ theme }) => theme.colors.fontColor};
+  width: 100%;
+  margin-top: 30px;
 `;
 
 export const StatisticItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 1px solid #02e296;
+  border-radius: 15px;
+  overflow: hidden;
 `;
 
 export const StatisticContent = styled.div<{ bold?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  padding: 20px;
   font-weight: ${({ bold }) => (bold ? 700 : 500)};
   font-size: ${({ bold }) => (bold ? "2em" : "20px")};
   line-height: ${({ bold }) => (bold ? "39px" : "29px")};
+  &:first-child {
+    background: url("/others/home_background_04.png");
+    background-size: 100% 100%;
+    color: black;
+  }
 `;
 
 export const CoinIcon = styled.img`
   width: 35px;
   height: 35px;
   margin-right: 5px;
+`;
+
+export const AdvertiseWrapper = styled.div`
+  padding: 20px 0;
+`;
+
+export const AdvertiseItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const AdvertiseImage = styled.img`
+  // width: 100%;
+  max-height: 200px;
+  max-width: 80vw;
+  /* background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center; */
+`;
+
+export const AdvertiseFooter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: auto;
+  color: ${({ theme }) => theme.colors.fontColor};
+`;
+
+export const AdvertiseDescriptionContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+`;
+
+export const AdvertiseDescription = styled.div``;
+
+const Panel = styled.div<{ background?: string }>`
+  position: relative;
+  padding: 10px;
+  width: calc(100% - 20px);
+  margin-top: 50px;
+  ${({ background }) =>
+    background &&
+    css`
+      background: url(${background}) no-repeat left bottom;
+    `}
+  &:first-child {
+    margin: 0;
+  }
+  & > div {
+    margin: 20px 0;
+  }
+`;
+
+export const FirstPanel = styled(Panel)`
+  background-size: 100% 55%;
+  min-height: 45vw;
+  padding-bottom: 50px;
+`;
+
+export const SecondPanel = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0 20px 0 85px;
+  @media (max-width: 500px) {
+    margin-top: -60px;
+    padding: 0 20px;
+  }
+`;
+
+export const ThirdPanel = styled(Panel)`
+  background-size: 100% 100%;
+  background-position: left top;
+  margin-top: -70px;
+  & > div {
+    &:first-child {
+      margin-top: 14vw;
+    }
+  }
+`;
+
+export const FourthPanel = styled(Panel)`
+  display: table;
+`;
+
+export const ButtonContainer = styled.div<{ width?: string }>`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 20px;
+  ${({ width }) =>
+    width &&
+    css`
+      width: ${width};
+    `}
+`;
+
+export const Button = styled.div<{ colored?: boolean }>`
+  background: ${({ colored }) =>
+    colored
+      ? "linear-gradient(0deg, rgba(2, 226, 150, 0.26), rgba(2, 226, 150, 0.26)), #02E296;"
+      : "white"};
+  border: 1px solid ${({ colored }) => (colored ? "black" : "#02e296")};
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.5s;
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+export const NFTStatsItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 25%;
+  min-width: 210px;
+  font-size: 20px;
+  border-top: 1px solid #02e296;
+  border-right: 1px solid #02e296;
+  border-bottom: 1px solid #02e296;
+  padding-bottom: 10px;
+  overflow: hidden;
+  &:first-child {
+    border-left: 1px solid #02e296;
+    border-top-left-radius: 15px;
+  }
+  &:last-child {
+    border-top-right-radius: 15px;
+  }
+  & > div {
+    &:first-child {
+      background-color: #02e296;
+      width: 100%;
+      padding: 5px 0;
+    }
+  }
+  & > img {
+    width: 80%;
+  }
+`;
+
+export const PanelContent = styled.div<{
+  width?: string;
+  margin?: string;
+  alignItems?: string;
+  gap?: string;
+}>`
+  display: flex;
+  flex-direction: column;
+  align-items: ${({ alignItems }) => alignItems ?? "center"};
+  gap: ${({ gap }) => gap ?? "20px"};
+  ${({ margin }) =>
+    margin &&
+    css`
+      margin: ${margin};
+    `}
+  margin-top: 50px;
+  ${({ width }) =>
+    width &&
+    css`
+      width: ${width};
+    `}
+`;
+
+export const StyledImg = styled.img<{
+  width?: string;
+  height?: string;
+  minWidth?: string;
+  margin?: string;
+  left?: string;
+  top?: string;
+  absolute?: boolean;
+  float?: string;
+}>`
+  ${({ float }) =>
+    float &&
+    css`
+      float: ${float};
+    `};
+  ${({ width }) =>
+    width &&
+    css`
+      width: ${width};
+    `};
+  ${({ minWidth }) =>
+    minWidth &&
+    css`
+      min-width: ${minWidth};
+    `};
+  ${({ height }) =>
+    height &&
+    css`
+      height: ${height};
+    `};
+  ${({ margin }) =>
+    margin &&
+    css`
+      margin: ${margin};
+    `};
+  ${({ absolute }) =>
+    absolute &&
+    css`
+      position: absolute;
+    `};
+  ${({ left }) =>
+    left &&
+    css`
+      left: ${left};
+    `};
+  ${({ top }) =>
+    top &&
+    css`
+      top: ${top};
+    `};
+`;
+
+export const Text = styled.div<{
+  fontSize?: string;
+  bold?: boolean;
+  color?: string;
+  margin?: string;
+  overflowWrap?: string;
+  cursor?: string;
+  width?: string;
+  justifyContent?: string;
+}>`
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: ${({ justifyContent }) => justifyContent ?? "center"};
+  gap: 0.5ex;
+  overflow-wrap: ${({ overflowWrap }) => overflowWrap ?? "break-word"};
+  ${({ fontSize }) =>
+    fontSize &&
+    css`
+      font-size: max(${fontSize}, 18px);
+    `}
+  ${({ bold }) =>
+    bold &&
+    css`
+      font-weight: bold;
+    `}
+  color: ${({ color, theme }) => color ?? theme.colors.fontColor};
+  ${({ margin }) =>
+    margin &&
+    css`
+      margin: ${margin};
+    `};
+  ${({ width }) =>
+    width &&
+    css`
+      width: ${width};
+    `}
+  ${({ cursor }) =>
+    cursor &&
+    css`
+      cursor: ${cursor};
+    `}
+`;
+
+export const Flex = styled.div<{
+  justifyContent?: string;
+  alignItems?: string;
+  flexWrap?: string;
+  gap?: string;
+  width?: string;
+}>`
+  display: flex;
+  gap: ${({ gap }) => gap ?? "10px"};
+  overflow: auto;
+  ${({ justifyContent }) =>
+    justifyContent &&
+    css`
+      justify-content: ${justifyContent};
+    `}
+  ${({ width }) =>
+    width &&
+    css`
+      width: ${width};
+    `}
+  ${({ alignItems }) =>
+    alignItems &&
+    css`
+      align-items: ${alignItems};
+    `}
+  ${({ flexWrap }) =>
+    flexWrap &&
+    css`
+      flex-wrap: ${flexWrap};
+    `}
 `;

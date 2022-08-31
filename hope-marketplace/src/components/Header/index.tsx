@@ -266,7 +266,7 @@ const Header: React.FC = () => {
             <LinkContainer>
               {HeaderLinks.map((linkItem, linkIndex) =>
                 linkItem.isDivider ? (
-                  <HorizontalDivider />
+                  <HorizontalDivider key={linkIndex} />
                 ) : (
                   <LinkButton
                     key={linkIndex}

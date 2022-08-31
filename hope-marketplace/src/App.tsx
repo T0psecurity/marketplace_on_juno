@@ -37,12 +37,14 @@ import { useAppDispatch } from "./app/hooks";
 // import useContract from "./hook/useContract";
 // import useFetch from "./hook/useFetch";
 
-import "./App.css";
-import "react-toastify/dist/ReactToastify.css";
 import { fetchTokenPrices } from "./features/tokenPrices/tokenPricesSlice";
 import { ChainConfigs, ChainTypes } from "./constants/ChainTypes";
 import { PopoutContextProvider } from "./context/PopoutContext";
 import { ThemeContextProvider } from "./context/ThemeContext";
+
+import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
+import "react-slideshow-image/dist/styles.css";
 
 const history = createBrowserHistory();
 

@@ -36,6 +36,29 @@ type FilterOptionsType = {
   order: CollectionIds[];
 };
 
+export const NEW_COLLECTIONS: FilterOptionsType = {
+  title: "New",
+  Icon: () => <NewIcon />,
+  order: [
+    // CollectionIds.BEARS,
+    CollectionIds.LUNATICS,
+    CollectionIds.GORILLA,
+    CollectionIds.BORED3D,
+    CollectionIds.JUNOPUNKS2,
+    CollectionIds.ROMANS,
+    CollectionIds.WITCHES,
+    CollectionIds.CRYPTOGIRLS,
+    CollectionIds.BORED,
+    CollectionIds.GOBLIN,
+    CollectionIds.NETANOTS,
+    CollectionIds.SUNNYSIDE,
+    CollectionIds.JUNOPUNKS,
+    CollectionIds.MINTPASSI,
+    CollectionIds.MINTPASSII,
+    CollectionIds.HOPEGALAXYI,
+  ],
+};
+
 const ExploreMarketplace: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [orderValue, setOrderValue] = useState<CollectionIds[]>([]);
@@ -93,28 +116,7 @@ const ExploreMarketplace: React.FC = () => {
   }, [collectionStates, tokenPrices]);
 
   const filterOptions: FilterOptionsType[] = [
-    {
-      title: "New",
-      Icon: () => <NewIcon />,
-      order: [
-        // CollectionIds.BEARS,
-        CollectionIds.LUNATICS,
-        CollectionIds.GORILLA,
-        CollectionIds.BORED3D,
-        CollectionIds.JUNOPUNKS2,
-        CollectionIds.ROMANS,
-        CollectionIds.WITCHES,
-        CollectionIds.CRYPTOGIRLS,
-        CollectionIds.BORED,
-        CollectionIds.GOBLIN,
-        CollectionIds.NETANOTS,
-        CollectionIds.SUNNYSIDE,
-        CollectionIds.JUNOPUNKS,
-        CollectionIds.MINTPASSI,
-        CollectionIds.MINTPASSII,
-        CollectionIds.HOPEGALAXYI,
-      ],
-    },
+    NEW_COLLECTIONS,
     {
       title: "Top",
       Icon: () => <TopIcon />,

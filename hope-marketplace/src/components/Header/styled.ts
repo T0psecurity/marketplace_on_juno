@@ -21,7 +21,7 @@ export const HeaderWrapper = styled.div`
   top: 0;
   left: 0;
   width: calc(100vw - 48px);
-  z-index: 1;
+  z-index: 2;
 
   /* @media (min-width: 600px) {
     min-height: 64px;
@@ -126,6 +126,7 @@ export const ConnectWalletButton = styled.div`
   /* background-color: #2e7d32; */
   background: linear-gradient(90deg, #02e296 0%, rgba(2, 226, 150, 0) 114.55%);
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  background-color: white;
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
