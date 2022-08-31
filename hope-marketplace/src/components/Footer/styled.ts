@@ -10,13 +10,13 @@ export const FooterInfo = styled.div<{ flexDirection?: string }>`
   flex-direction: ${({ flexDirection }) => flexDirection ?? "row"};
 `;
 
-export const FooterLinkItemContainer = styled.div`
+export const FooterSocialLinkItemContainer = styled.div`
   margin: 10px 0;
   display: flex;
   align-items: center;
 `;
 
-export const FooterLinkItem = styled.div`
+export const FooterSocialLinkItem = styled.div`
   width: 40px;
   height: 40px;
   display: flex;
@@ -27,6 +27,51 @@ export const FooterLinkItem = styled.div`
   margin: 10px;
   border-radius: 10px;
   cursor: pointer;
+  & > svg {
+    width: 30px;
+    path {
+      fill: white;
+    }
+  }
+`;
+
+export const FooterLinksContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+`;
+
+export const FooterLinksPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+`;
+
+export const FooterLinkItem = styled.div`
+  color: black;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const LaunchpadButton = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+  padding: 10px;
+  color: black;
+  margin: 20px 0;
+`;
+
+export const FooterAdvertiseWrapper = styled.div`
+  width: calc((100vw - 50px) * 2 / 3);
 `;
 
 export const FooterImage = styled.img`
@@ -62,15 +107,16 @@ export const SubContent = styled.div`
 
 export const FooterWrapper = styled.div<{ isMobile?: boolean }>`
   color: white;
-  background-color: #39c639;
+  /* background-color: #39c639; */
+  background: linear-gradient(90deg, #2effc7 0%, #ffffff 96.69%);
   display: grid;
-  grid-template-columns: ${({ isMobile }) =>
-    isMobile ? "1fr" : "1fr 2fr auto"};
+  grid-template-columns: ${({ isMobile }) => (isMobile ? "1fr" : "1fr 2fr")};
   grid-gap: ${({ isMobile }) => (isMobile ? "10px" : "50px")};
   padding: 30px 0;
-  background: #39c639;
+  /* background: #39c639; */
   justify-content: space-between;
   align-items: center;
+  width: 100vw;
   min-height: 100px;
   /* @media only screen and (max-width: 550px) {
     display: flex;
@@ -92,13 +138,16 @@ export const FooterWrapper = styled.div<{ isMobile?: boolean }>`
         height: 30px;
         margin: 0 5px;
       }
-      ${FooterLinkItem} {
+      ${FooterSocialLinkItem} {
         width: 30px;
         height: 30px;
         margin: 0 5px;
         & > svg {
           transform: scale(0.8);
         }
+      }
+      ${FooterAdvertiseWrapper} {
+        width: 90vw;
       }
     `}
 `;

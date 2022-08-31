@@ -16,7 +16,7 @@ import { getCustomTokenId, getTokenIdNumber } from "../../hook/useFetch";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { TokenType } from "../../types/tokens";
 import { addSuffix } from "../../util/string";
-import Advertise from "./Advertise";
+import Advertise from "../../components/Advertise";
 
 import {
   Wrapper,
@@ -240,9 +240,13 @@ const Home: React.FC = () => {
             <Text bold>yield.</Text>
           </Text>
           <ButtonContainer>
-            <Button>Swap</Button>
-            <Button colored>IDO</Button>
-            <Button>NFT</Button>
+            <Button onClick={NotifyComingSoon}>Swap</Button>
+            <Button colored onClick={NotifyComingSoon}>
+              IDO
+            </Button>
+            <Button onClick={() => history.push("/collections/explore")}>
+              NFT
+            </Button>
           </ButtonContainer>
           <Text style={{ marginTop: "10vw" }} fontSize="3vw">
             <Text fontSize="5vw" bold color="#02e296">
@@ -257,7 +261,12 @@ const Home: React.FC = () => {
             Cosmos with the ability to distribute tokens and raise liquidity.
           </Text>
           <ButtonContainer>
-            <Button colored>Explore</Button>
+            <Button
+              colored
+              onClick={() => history.push("/collections/explore")}
+            >
+              Explore
+            </Button>
             <Button>Launchpad</Button>
           </ButtonContainer>
         </FirstPanel>
@@ -352,13 +361,27 @@ const Home: React.FC = () => {
                 <Text>Mint Sold Out</Text>
                 <Text>{mintSoldOutCollection?.title || ""}</Text>
                 <img src={mintSoldOutCollection?.logoUrl || ""} alt="" />
-                <Button colored>View Collection</Button>
+                <Button
+                  colored
+                  onClick={() =>
+                    history.push(
+                      `/collections/marketplace?id=${mintSoldOutCollection.collectionId}`
+                    )
+                  }
+                >
+                  View Collection
+                </Button>
               </NFTStatsItem>
               <NFTStatsItem>
                 <Text>Last Collection</Text>
                 <Text>{lastCollection?.title || ""}</Text>
                 <img src={lastCollection?.logoUrl || ""} alt="" />
-                <Button colored>Mint Now</Button>
+                <Button
+                  colored
+                  onClick={() => history.push("/collections/mint")}
+                >
+                  Mint Now
+                </Button>
               </NFTStatsItem>
             </Flex>
             <StatisticContainer>

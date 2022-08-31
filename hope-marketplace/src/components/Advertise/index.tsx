@@ -1,6 +1,6 @@
 import React from "react";
 import { Fade } from "react-slideshow-image";
-import { MegaPhoneIcon } from "../../components/SvgIcons";
+import { MegaPhoneIcon } from "../SvgIcons";
 import {
   AdvertiseDescription,
   AdvertiseDescriptionContainer,
