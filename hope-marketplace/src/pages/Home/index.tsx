@@ -240,11 +240,20 @@ const Home: React.FC = () => {
             <Text bold>yield.</Text>
           </Text>
           <ButtonContainer>
-            <Button onClick={NotifyComingSoon}>Swap</Button>
-            <Button colored onClick={NotifyComingSoon}>
+            <Button style={{ minWidth: "unset" }} onClick={NotifyComingSoon}>
+              Swap
+            </Button>
+            <Button
+              style={{ minWidth: "unset" }}
+              colored
+              onClick={NotifyComingSoon}
+            >
               IDO
             </Button>
-            <Button onClick={() => history.push("/collections/explore")}>
+            <Button
+              style={{ minWidth: "unset" }}
+              onClick={() => history.push("/collections/explore")}
+            >
               NFT
             </Button>
           </ButtonContainer>
@@ -261,13 +270,12 @@ const Home: React.FC = () => {
             Cosmos with the ability to distribute tokens and raise liquidity.
           </Text>
           <ButtonContainer>
-            <Button
-              colored
-              onClick={() => history.push("/collections/explore")}
-            >
+            <Button colored onClick={NotifyComingSoon}>
               Explore
             </Button>
-            <Button>Launchpad</Button>
+            <Button onClick={() => window.open("https://launchpad.hopers.io/")}>
+              Launchpad
+            </Button>
           </ButtonContainer>
         </FirstPanel>
         <SecondPanel>
@@ -288,8 +296,10 @@ const Home: React.FC = () => {
               wallet.
             </Text>
             <ButtonContainer width="100%">
-              <Button colored>Swap Now</Button>
-              <Button>IDO</Button>
+              <Button colored onClick={NotifyComingSoon}>
+                Swap Now
+              </Button>
+              <Button onClick={NotifyComingSoon}>IDO</Button>
             </ButtonContainer>
           </PanelContent>
           <StyledImg
@@ -407,7 +417,7 @@ const Home: React.FC = () => {
         </ThirdPanel>
         <FourthPanel>
           <StyledImg
-            src="/characters/character_002.png"
+            src="/characters/character_002.gif"
             alt=""
             width="25%"
             left="0px"

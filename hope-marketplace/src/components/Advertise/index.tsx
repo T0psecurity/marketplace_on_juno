@@ -53,7 +53,7 @@ const DescriptionTailIcon = ({ ...props }) => (
 const Advertise: React.FC = () => {
   return (
     <AdvertiseWrapper>
-      <Fade>
+      <Fade arrows={false}>
         {images.map((image, index) => (
           <AdvertiseItem key={index} className="each-fade">
             <AdvertiseImage src={image.url} alt="" />

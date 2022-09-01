@@ -203,8 +203,9 @@ export const FourthPanel = styled(Panel)`
 `;
 
 export const ButtonContainer = styled.div<{ width?: string }>`
+  padding: 10px 0;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   gap: 20px;
   ${({ width }) =>
@@ -215,6 +216,7 @@ export const ButtonContainer = styled.div<{ width?: string }>`
 `;
 
 export const Button = styled.div<{ colored?: boolean }>`
+  min-width: 150px;
   background: ${({ colored }) =>
     colored
       ? "linear-gradient(0deg, rgba(2, 226, 150, 0.26), rgba(2, 226, 150, 0.26)), #02E296;"
@@ -228,6 +230,9 @@ export const Button = styled.div<{ colored?: boolean }>`
   transition: all 0.5s;
   &:hover {
     opacity: 0.8;
+  }
+  @media (max-width: 500px) {
+    min-width: 100px;
   }
 `;
 
