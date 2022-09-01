@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useWalletManager } from "@noahsaso/cosmodal";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -34,37 +34,66 @@ import {
   HeaderBackground,
   HorizontalDivider,
   LinkContainer,
+  SubMenuContainer,
 } from "./styled";
 import { coin } from "@cosmjs/proto-signing";
 import useRefresh from "../../hook/useRefresh";
 import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
 import ToggleThemeButton from "../ToogleThemeButton";
 import {
+  ActivityMenuIcon,
+  EarnIcon,
   ExploreIcon,
   HomeIcon,
   // LaunchpadIcon,
   MintIcon,
+  NFTMenuIcon,
   ProfileIcon as ProfileMenuIcon,
+  SwapIcon,
   WalletIcon,
 } from "../SvgIcons";
 import HopePriceDisplay from "../HopePriceDisplay";
+import { toast } from "react-toastify";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
   {
     title: "Swap",
-    url: "/",
-    icon: ExploreIcon,
+    icon: SwapIcon,
+    children: [
+      {
+        title: "Swap",
+        url: "soon",
+        icon: SwapIcon,
+      },
+      {
+        title: "Liquidity",
+        url: "soon",
+        icon: SwapIcon,
+      },
+    ],
   },
   {
     title: "NFT",
     url: "/",
-    icon: ExploreIcon,
+    icon: NFTMenuIcon,
+    children: [
+      {
+        title: "Explore",
+        url: "/collections/explore",
+        icon: NFTMenuIcon,
+      },
+      {
+        title: "Activity",
+        url: "/activity",
+        icon: ActivityMenuIcon,
+      },
+    ],
   },
   {
     title: "Earn",
-    url: "/",
-    icon: ExploreIcon,
+    url: "soon",
+    icon: EarnIcon,
   },
   {
     isDivider: true,
@@ -72,7 +101,7 @@ const HeaderLinks = [
   { title: "Mint", url: "/collections/mint", icon: MintIcon },
   {
     title: "IDO",
-    url: "/",
+    url: "soon",
     icon: ExploreIcon,
   },
   // {
@@ -97,8 +126,10 @@ const SocialIcons = [
 const Header: React.FC = () => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [openedSubMenu, setOpenedSubMenu] = useState<any>({});
   // const [runningFetch, setRunningFetch] = useState(false);
   const [ref, setRef] = useState<HTMLDivElement | null>(null); // TODO: must use useRef
+  const mobileMenuContainer = useRef(null);
   const dispatch = useAppDispatch();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
   const config = ChainConfigs[ChainTypes.JUNO];
@@ -142,6 +173,7 @@ const Header: React.FC = () => {
     }
   }, [connectedWallet, dispatch, config, refresh]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const headerElement = document.getElementById("header");
     const headerElementHeight = headerElement?.clientHeight || 0;
@@ -164,10 +196,31 @@ const Header: React.FC = () => {
 
   const handleClickLink = (url: string) => {
     if (!url) return;
+    if (url === "soon") {
+      toast.info("Coming Soon!");
+      return;
+    }
+    setIsOpenMenu(false);
+    setOpenedSubMenu({});
     if (url.includes("http:")) {
       window.open(url);
     } else {
       history.push(url);
+    }
+  };
+
+  const handleToggleSubMenu = (title: string) => {
+    setOpenedSubMenu((prev: any) => ({
+      ...prev,
+      [title]: !prev[title],
+    }));
+  };
+
+  const handleClickMenuItem = (menuItem: any) => {
+    if (menuItem.children && menuItem.children.length) {
+      handleToggleSubMenu(menuItem.title);
+    } else {
+      handleClickLink(menuItem.url || "/");
     }
   };
 
@@ -219,7 +272,10 @@ const Header: React.FC = () => {
           <MenuIconContainer ref={(node) => setRef(node)}>
             <MenuIcon onClick={handleOpenMenu}>{ListIcon}</MenuIcon>
             {isOpenMenu && (
-              <MenuContainer onClick={(e) => e.preventDefault()}>
+              <MenuContainer
+                ref={mobileMenuContainer}
+                onClick={(e) => e.preventDefault()}
+              >
                 <MenuHeader>
                   <ConnectButton />
                   <ToggleThemeButton />
@@ -230,15 +286,37 @@ const Header: React.FC = () => {
                 </MenuItem>
                 {HeaderLinks.map((linkItem, linkIndex) =>
                   linkItem.isDivider ? null : (
-                    <MenuItem
-                      key={linkIndex}
-                      onClick={() => handleClickLink(linkItem.url || "/")}
-                    >
-                      {linkItem.icon && (
-                        <linkItem.icon width={20} height={20} />
+                    <>
+                      <MenuItem
+                        key={linkIndex}
+                        onClick={() => handleClickMenuItem(linkItem)}
+                      >
+                        {linkItem.icon && (
+                          <linkItem.icon width={20} height={20} />
+                        )}
+                        {linkItem.title}
+                      </MenuItem>
+                      {linkItem.children && linkItem.children.length > 0 && (
+                        <SubMenuContainer
+                          expanded={openedSubMenu[linkItem.title]}
+                          loaded={!!mobileMenuContainer?.current}
+                        >
+                          {linkItem.children.map(
+                            (subLinkItem, subLinkIndex) => (
+                              <MenuItem
+                                key={`${linkIndex}-${subLinkIndex}`}
+                                onClick={() => handleClickMenuItem(subLinkItem)}
+                              >
+                                {subLinkItem.icon && (
+                                  <subLinkItem.icon width={20} height={20} />
+                                )}
+                                {subLinkItem.title}
+                              </MenuItem>
+                            )
+                          )}
+                        </SubMenuContainer>
                       )}
-                      {linkItem.title}
-                    </MenuItem>
+                    </>
                   )
                 )}
                 <MenuItem

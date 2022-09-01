@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 export const HeaderBackground = styled.div<{ height: number }>`
   height: ${({ height }) => height}px;
@@ -182,7 +182,8 @@ export const MenuContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.backgroundColor};
   color: ${({ theme }) => theme.colors.fontColor};
   /* color: ${({ theme }) => (theme.isDark ? "white" : "#686868")}; */
-  border-radius: 4px;
+  border: 1px solid #02e296;
+  border-radius: 10px;
   box-shadow: 0px 5px 5px -3px rgb(${({ theme }) =>
             theme.isDark ? "255 255 255" : "0 0 0"} / 20%),
     0px 8px 10px 1px
@@ -206,17 +207,85 @@ export const MenuItem = styled.div<{ lastElement?: boolean }>`
   line-height: 1.5;
   /* width: max-content; */
   letter-spacing: 0.00938rem;
-  border-top: 1px solid ${({ theme }) => (theme.isDark ? "white" : "#686868")};
+  border-top: 1px solid #02e296;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 226, 150, 0.1) 0%,
+    rgba(2, 226, 150, 0) 99.99%,
+    rgba(2, 226, 150, 0) 100%
+  );
   ${({ lastElement }) =>
     lastElement &&
     css`
-      border-bottom: 1px solid
-        ${({ theme }) => (theme.isDark ? "white" : "#686868")};
+      border-bottom: 1px solid #02e296;
     `}
-  & > svg {
+  svg {
     path {
-      /* fill: ${({ theme }) => theme.colors.fontColor}; */
-      fill: ${({ theme }) => (theme.isDark ? "white" : "#686868")};
+      fill: ${({ theme }) => theme.colors.fontColor};
+      /* fill: ${({ theme }) => (theme.isDark ? "white" : "#686868")}; */
+    }
+    .black-path {
+      fill: ${({ theme }) => (theme.isDark ? "white" : "black")};
+    }
+    .white-path {
+      fill: ${({ theme }) => (theme.isDark ? "black" : "white")};
+    }
+  }
+`;
+
+const expandSubMenuAnimation = keyframes`
+  from {
+    height: 0;
+    border-top-color: transparent;
+  }
+  to {
+    height: 37px;
+    border-top-color: #02e296;
+  }
+`;
+
+const collapseSubMenuAnimation = keyframes`
+  from {
+    height: 37px;
+    border-top-color: #02e296;
+  }
+  to {
+    height: 0;
+    border-top-color: transparent;
+  }
+`;
+
+export const SubMenuContainer = styled.div<{
+  expanded: boolean;
+  loaded: boolean;
+}>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 226, 150, 0.1) 0%,
+    rgba(2, 226, 150, 0) 99.99%,
+    rgba(2, 226, 150, 0) 100%
+  );
+  border-top: 1px solid #02e296;
+  ${({ expanded, loaded }) =>
+    expanded
+      ? css`
+          animation: ${expandSubMenuAnimation} ${loaded ? "500ms" : "0ms"}
+            linear forwards;
+        `
+      : css`
+          animation: ${collapseSubMenuAnimation} ${loaded ? "500ms" : "0ms"}
+            linear forwards;
+        `};
+  ${MenuItem} {
+    width: 50%;
+    border-top: none;
+    &:first-child {
+      border-right: 1px solid #02e296;
     }
   }
 `;
