@@ -43,11 +43,12 @@ import {
   NFTStatsItem,
   FourthPanel,
 } from "./styled";
+import { getResponsiveSize } from "../../util/basic";
 
 const Home: React.FC = () => {
   const history = useHistory();
-  const { isXs, isSm, isMd } = useMatchBreakpoints();
-  const isMobile = isXs || isSm || isMd;
+  const breakpoints = useMatchBreakpoints();
+  const isMobile = breakpoints.isXs || breakpoints.isSm || breakpoints.isMd;
 
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
   const totalMarketplaceNFTs: any = useAppSelector((state) => state.nfts);
@@ -185,6 +186,32 @@ const Home: React.FC = () => {
     };
   }, [collectionStates, tokenPrices, totalMarketplaceNFTs]);
 
+  const fontSizes = useMemo(() => {
+    const { isXs, isSm } = breakpoints;
+    if (isXs || isSm) {
+      return {
+        size1: "34px",
+        size2: "23px",
+        size3: "17px",
+      };
+    }
+    let matchedKey = "";
+    Object.keys(breakpoints).forEach((key) => {
+      if (breakpoints[key]) matchedKey = key;
+    });
+    matchedKey = matchedKey.replace(/is/g, "").toLowerCase();
+    const responsiveSize = getResponsiveSize("xxxxl", {
+      size1: 100,
+      size2: 45,
+      size3: 25,
+    });
+    return {
+      size1: `${Math.floor(responsiveSize[matchedKey]?.size1)}px`,
+      size2: `${Math.floor(responsiveSize[matchedKey]?.size2)}px`,
+      size3: `${Math.floor(responsiveSize[matchedKey]?.size3)}px`,
+    };
+  }, [breakpoints]);
+
   const NotifyComingSoon = () => toast.info("Coming Soon!");
 
   // const HomeImage = () =>
@@ -225,17 +252,14 @@ const Home: React.FC = () => {
             top="0px"
             float="left"
           />
-          <Text fontSize="3vw">
-            <Text bold color="#02e296">
+          <Text fontSize={fontSizes.size2}>
+            <Text bold fontSize={fontSizes.size1} color="#02e296">
               Hopers.io
             </Text>
             <Text>,</Text>
             <Text>an</Text>
             <Text>avenue</Text>
-            <Text>for</Text>
-            <Text>the</Text>
-            <Text>evolution</Text>
-            <Text>of</Text>
+            <Text>for the evolution of</Text>
             <Text bold color="#02e296" margin="0 0 0 10px">
               DeFi
             </Text>
@@ -246,7 +270,7 @@ const Home: React.FC = () => {
             <Text>on</Text>
             <Text bold>Juno</Text>
           </Text>
-          <Text fontSize="1.5vw">
+          <Text fontSize={fontSizes.size3}>
             <Text>The first fully-permissionless</Text>
             <Text margin="0 5px" bold>
               DEX
@@ -276,15 +300,15 @@ const Home: React.FC = () => {
               NFT
             </Button>
           </ButtonContainer>
-          <Text style={{ marginTop: "10vw" }} fontSize="3vw">
-            <Text fontSize="5vw" bold color="#02e296">
+          <Text style={{ marginTop: "10vw" }} fontSize={fontSizes.size2}>
+            <Text fontSize={fontSizes.size1} bold color="#02e296">
               IDO
             </Text>
             <Text bold margin="0 10px">
               own the future
             </Text>
           </Text>
-          <Text fontSize="1.5vw">
+          <Text fontSize={fontSizes.size3}>
             Raise Capital In a Community-Driven Way to empower projects on
             Cosmos with the ability to distribute tokens and raise liquidity.
           </Text>
@@ -299,18 +323,18 @@ const Home: React.FC = () => {
         </FirstPanel>
         <SecondPanel>
           <PanelContent alignItems="flex-start">
-            <Text fontSize="3vw">
-              <Text fontSize="5vw" bold color="#02e296">
+            <Text fontSize={fontSizes.size2}>
+              <Text fontSize={fontSizes.size1} bold color="#02e296">
                 Swap
               </Text>
               <Text bold margin="0 10px">
                 anything.
               </Text>
             </Text>
-            <Text fontSize="3vw" bold>
+            <Text fontSize={fontSizes.size2} bold>
               No registration, no hassle.
             </Text>
-            <Text fontSize="1.5vw">
+            <Text fontSize={fontSizes.size1}>
               Swap any token on Juno Chain in seconds, just by connecting your
               wallet.
             </Text>
@@ -337,15 +361,15 @@ const Home: React.FC = () => {
               minWidth="250px"
             />
             <PanelContent>
-              <Text fontSize="3vw">
-                <Text fontSize="5vw" bold color="#02e296">
+              <Text fontSize={fontSizes.size2}>
+                <Text fontSize={fontSizes.size1} bold color="#02e296">
                   NFT
                 </Text>
                 <Text bold margin="0 10px">
                   Marketplace.
                 </Text>
               </Text>
-              <Text fontSize="1.5vw">
+              <Text fontSize={fontSizes.size3}>
                 Explore all the collections launched exclusively on hopers.io
               </Text>
               <ButtonContainer>
@@ -444,8 +468,8 @@ const Home: React.FC = () => {
             float="right"
             margin="0 20px 0 0"
           />
-          <Text fontSize="3vw">
-            <Text fontSize="5vw" bold color="#02e296">
+          <Text fontSize={fontSizes.size2}>
+            <Text fontSize={fontSizes.size1} bold color="#02e296">
               Earn
             </Text>
             <Text bold>passive</Text>
@@ -456,7 +480,7 @@ const Home: React.FC = () => {
             <Text bold>crypto</Text>
             <Text bold>assets.</Text>
           </Text>
-          <Text fontSize="1.5vw">
+          <Text fontSize={fontSizes.size3}>
             Explore all the collections launched exclusively on hopers.io
           </Text>
           <ButtonContainer>
