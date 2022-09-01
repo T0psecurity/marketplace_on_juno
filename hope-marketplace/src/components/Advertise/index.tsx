@@ -1,5 +1,5 @@
-import React from "react";
-import { Fade } from "react-slideshow-image";
+import React, { useRef } from "react";
+import { Fade, SlideshowRef } from "react-slideshow-image";
 import { MegaPhoneIcon } from "../SvgIcons";
 import {
   AdvertiseDescription,
@@ -10,20 +10,13 @@ import {
   AdvertiseWrapper,
 } from "./styled";
 
-const images = [
-  {
-    url: "/advertises/image_001.png",
-    description:
-      'HOPERS team will be attending and sponsoring the blockchain event "Adapt 2022" in Milan. Meet us there!',
-  },
-  {
-    url: "/advertises/image_002.png",
-    description: "HOPE GALAXY NFT II - MINT PASS II is now live on Mint Page",
-  },
-];
+interface AdvertiseProps {
+  images: { url: string; description: string }[];
+}
 
 const DescriptionTailIcon = ({ ...props }) => (
   <svg
+    style={{ cursor: "pointer" }}
     width="44"
     height="33"
     viewBox="0 0 44 33"
@@ -50,10 +43,16 @@ const DescriptionTailIcon = ({ ...props }) => (
   </svg>
 );
 
-const Advertise: React.FC = () => {
+const Advertise: React.FC<AdvertiseProps> = ({ images }) => {
+  const sliderRef = useRef<SlideshowRef>(null);
+  const handleNextImage = () => {
+    if (sliderRef.current) {
+      sliderRef.current.goNext();
+    }
+  };
   return (
     <AdvertiseWrapper>
-      <Fade arrows={false}>
+      <Fade ref={sliderRef} arrows={false}>
         {images.map((image, index) => (
           <AdvertiseItem key={index} className="each-fade">
             <AdvertiseImage src={image.url} alt="" />
@@ -62,7 +61,7 @@ const Advertise: React.FC = () => {
                 <MegaPhoneIcon height={20} />
                 <AdvertiseDescription>{image.description}</AdvertiseDescription>
               </AdvertiseDescriptionContainer>
-              <DescriptionTailIcon height={20} />
+              <DescriptionTailIcon onClick={handleNextImage} height={20} />
             </AdvertiseFooter>
           </AdvertiseItem>
         ))}

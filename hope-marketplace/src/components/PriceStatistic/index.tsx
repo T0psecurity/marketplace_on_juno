@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   LineChart,
   Line,
@@ -35,9 +35,9 @@ import {
   // StyledSelect as Select,
 } from "./styled";
 
-type LineDisplay = {
-  [key in TokenType]: boolean;
-};
+// type LineDisplay = {
+//   [key in TokenType]: boolean;
+// };
 
 const LineColors = {
   [TokenType.JUNO]: "#ea5545",
@@ -75,22 +75,22 @@ const PriceStatistic: React.FC = () => {
   // const [historyPeriod, setHistoryPeriod] = useState<PeriodOptionType>(
   //   SelectPeriodOptions[1]
   // );
-  const [lineDisplay, setLineDisplay] = useState<LineDisplay>(
-    {} as LineDisplay
-  );
+  // const [lineDisplay, setLineDisplay] = useState<LineDisplay>(
+  //   {} as LineDisplay
+  // );
   const [searchedToken, setSearchedToken] = useState("");
   const [tokenPriceHistory, setTokenPriceHistory] = useState<any[]>([]);
 
   // const { isDark } = useContext(ThemeContext);
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
 
-  useEffect(() => {
-    let lineDisplaySetting: LineDisplay = {} as LineDisplay;
-    (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach((key) => {
-      lineDisplaySetting[TokenType[key]] = true;
-    });
-    setLineDisplay(lineDisplaySetting);
-  }, []);
+  // useEffect(() => {
+  //   let lineDisplaySetting: LineDisplay = {} as LineDisplay;
+  //   (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach((key) => {
+  //     lineDisplaySetting[TokenType[key]] = true;
+  //   });
+  //   setLineDisplay(lineDisplaySetting);
+  // }, []);
 
   useEffect(() => {
     (async () => {
@@ -115,19 +115,59 @@ const PriceStatistic: React.FC = () => {
     })();
   }, []);
 
-  const handleClickChartLegend = (e: any) => {
-    const { dataKey } = e;
-    const denom: TokenType = TokenType[dataKey as keyof typeof TokenType];
-    setLineDisplay((prev) => ({
-      ...prev,
-      [denom]: !prev[denom],
-    }));
-  };
+  // const handleClickChartLegend = (e: any) => {
+  //   const { dataKey } = e;
+  //   const denom: TokenType = TokenType[dataKey as keyof typeof TokenType];
+  //   setLineDisplay((prev) => ({
+  //     ...prev,
+  //     [denom]: !prev[denom],
+  //   }));
+  // };
 
   const handleChangeSearchToken = (e: any) => {
     const { value } = e.target;
     setSearchedToken(value);
   };
+
+  const { legendPayload, lineDisplay } = useMemo(() => {
+    if (!searchedToken) {
+      return {
+        legendPayload: [
+          {
+            dataKey: (
+              Object.keys(TokenType) as Array<keyof typeof TokenType>
+            ).filter((key) => TokenType[key] === TokenType.JUNO)[0],
+            value: (
+              Object.keys(TokenType) as Array<keyof typeof TokenType>
+            ).filter((key) => TokenType[key] === TokenType.JUNO)[0],
+            color: LineColors[TokenType.JUNO],
+          },
+        ],
+        lineDisplay: { [TokenType.JUNO]: true },
+      };
+    }
+    const legendPayloadResult: any = [];
+    let lineDisplayResult: any = {};
+    (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach((key) => {
+      const denom = TokenType[key];
+      if (
+        `${key} ${TokenFullName[denom]}`
+          .toLowerCase()
+          .indexOf(searchedToken.toLowerCase()) > -1
+      ) {
+        legendPayloadResult.push({
+          dataKey: key,
+          value: key,
+          color: LineColors[TokenType[key]],
+        });
+        lineDisplayResult[denom] = true;
+      }
+    });
+    return {
+      legendPayload: legendPayloadResult,
+      lineDisplay: lineDisplayResult,
+    };
+  }, [searchedToken]);
 
   // const handleChangePeriodOption = (option: any) => {
   //   setHistoryPeriod(option);
@@ -177,7 +217,7 @@ const PriceStatistic: React.FC = () => {
                 !searchedToken ||
                 `${key} ${TokenFullName[denom]}`
                   .toLowerCase()
-                  .indexOf(searchedToken) > -1
+                  .indexOf(searchedToken.toLowerCase()) > -1
               ) {
                 const currentPrice =
                   tokenPrice?.market_data?.current_price?.usd || 0;
@@ -199,7 +239,10 @@ const PriceStatistic: React.FC = () => {
                     last={index === arr.length - 1}
                   >
                     <PriceStatisticContent>
-                      <CoinImage coinType={denom} />
+                      <CoinImage
+                        coinType={denom}
+                        onClick={() => setSearchedToken(key)}
+                      />
                     </PriceStatisticContent>
                     <PriceStatisticContent>
                       <TokenName>
@@ -272,16 +315,8 @@ const PriceStatistic: React.FC = () => {
               <YAxis />
               <Tooltip />
               <Legend
-                onClick={handleClickChartLegend}
-                payload={(
-                  Object.keys(TokenType) as Array<keyof typeof TokenType>
-                ).map((key) => ({
-                  dataKey: key,
-                  value: key,
-                  color: lineDisplay[TokenType[key]]
-                    ? LineColors[TokenType[key]]
-                    : "#ccc",
-                }))}
+                // onClick={handleClickChartLegend}
+                payload={legendPayload}
               />
               {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
                 (key) =>

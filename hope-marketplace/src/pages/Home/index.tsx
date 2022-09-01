@@ -17,6 +17,7 @@ import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { TokenType } from "../../types/tokens";
 import { addSuffix } from "../../util/string";
 import Advertise from "../../components/Advertise";
+import Text from "../../components/Text";
 
 import {
   Wrapper,
@@ -32,7 +33,6 @@ import {
   // StyledButton,
   HorizontalDivider,
   StyledImg,
-  Text,
   ButtonContainer,
   Button,
   FirstPanel,
@@ -201,7 +201,20 @@ const Home: React.FC = () => {
   return (
     <>
       <Wrapper isMobile={isMobile}>
-        <Advertise />
+        <Advertise
+          images={[
+            {
+              url: "/advertises/image_001.png",
+              description:
+                'HOPERS team will be attending and sponsoring the blockchain event "Adapt 2022" in Milan. Meet us there!',
+            },
+            {
+              url: "/advertises/image_002.png",
+              description:
+                "HOPE GALAXY NFT II - MINT PASS II is now live on Mint Page",
+            },
+          ]}
+        />
         <HorizontalDivider />
         <FirstPanel background="/others/home_background_01.png">
           <StyledImg
@@ -216,7 +229,13 @@ const Home: React.FC = () => {
             <Text bold color="#02e296">
               Hopers.io
             </Text>
-            , an avenue for the evolution of
+            <Text>,</Text>
+            <Text>an</Text>
+            <Text>avenue</Text>
+            <Text>for</Text>
+            <Text>the</Text>
+            <Text>evolution</Text>
+            <Text>of</Text>
             <Text bold color="#02e296" margin="0 0 0 10px">
               DeFi
             </Text>
@@ -224,7 +243,7 @@ const Home: React.FC = () => {
             <Text bold color="#02e296">
               NFTs
             </Text>
-            on
+            <Text>on</Text>
             <Text bold>Juno</Text>
           </Text>
           <Text fontSize="1.5vw">

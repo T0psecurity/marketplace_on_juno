@@ -344,51 +344,6 @@ export const StyledImg = styled.img<{
     `};
 `;
 
-export const Text = styled.div<{
-  fontSize?: string;
-  bold?: boolean;
-  color?: string;
-  margin?: string;
-  overflowWrap?: string;
-  cursor?: string;
-  width?: string;
-  justifyContent?: string;
-}>`
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: ${({ justifyContent }) => justifyContent ?? "center"};
-  gap: 0.5ex;
-  overflow-wrap: ${({ overflowWrap }) => overflowWrap ?? "break-word"};
-  ${({ fontSize }) =>
-    fontSize &&
-    css`
-      font-size: max(${fontSize}, 18px);
-    `}
-  ${({ bold }) =>
-    bold &&
-    css`
-      font-weight: bold;
-    `}
-  color: ${({ color, theme }) => color ?? theme.colors.fontColor};
-  ${({ margin }) =>
-    margin &&
-    css`
-      margin: ${margin};
-    `};
-  ${({ width }) =>
-    width &&
-    css`
-      width: ${width};
-    `}
-  ${({ cursor }) =>
-    cursor &&
-    css`
-      cursor: ${cursor};
-    `}
-`;
-
 export const Flex = styled.div<{
   justifyContent?: string;
   alignItems?: string;

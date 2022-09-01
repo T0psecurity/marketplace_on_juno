@@ -23,14 +23,14 @@ export const FooterSocialLinkItem = styled.div`
   justify-content: center;
   align-items: center;
   /* background-color: #2e7d32; */
-  background-color: green;
+  /* background-color: green; */
   margin: 10px;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   cursor: pointer;
   & > svg {
     width: 30px;
     path {
-      fill: white;
+      fill: black;
     }
   }
 `;

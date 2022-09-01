@@ -17,6 +17,7 @@ import {
   MediumIcon,
   TwitterIcon,
 } from "../SvgIcons";
+import Text from "../Text";
 
 import {
   FooterInfo,
@@ -24,11 +25,11 @@ import {
   FooterSocialLinkItemContainer,
   FooterWrapper,
   FooterImage,
-  FooterDocIcon,
-  MainContent,
-  FooterLinksContainer,
-  FooterLinksPanel,
-  FooterLinkItem,
+  // FooterDocIcon,
+  // MainContent,
+  // FooterLinksContainer,
+  // FooterLinksPanel,
+  // FooterLinkItem,
   LaunchpadButton,
   FooterAdvertiseWrapper,
   // SubContent,
@@ -72,18 +73,18 @@ const RocketIcon = ({ ...props }) => (
   </svg>
 );
 
-const Links: { title: string; url: string }[][] = [
-  [
-    { title: "Home", url: "" },
-    { title: "Contact", url: "" },
-    { title: "Resource", url: "" },
-  ],
-  [
-    { title: "Litepaper", url: "" },
-    { title: "Guides", url: "" },
-    { title: "Docs", url: "" },
-  ],
-];
+// const Links: { title: string; url: string }[][] = [
+//   [
+//     { title: "Home", url: "" },
+//     { title: "Contact", url: "" },
+//     { title: "Resource", url: "" },
+//   ],
+//   [
+//     { title: "Litepaper", url: "" },
+//     { title: "Guides", url: "" },
+//     { title: "Docs", url: "" },
+//   ],
+// ];
 
 const Footer: React.FC = () => {
   const history = useHistory();
@@ -102,7 +103,7 @@ const Footer: React.FC = () => {
           onClick={() => history.push("/")}
         />
         {/* <SubContent>Actually Desktop Only 🖥️</SubContent> */}
-        <FooterLinksContainer>
+        {/* <FooterLinksContainer>
           {Links.map((linksGroup, groupIndex) => (
             <FooterLinksPanel key={groupIndex}>
               {linksGroup.map((link, linkIndex) => (
@@ -110,8 +111,28 @@ const Footer: React.FC = () => {
               ))}
             </FooterLinksPanel>
           ))}
-        </FooterLinksContainer>
-        <LaunchpadButton>
+        </FooterLinksContainer> */}
+        <Text margin="24px" fontSize="20px">
+          <Text bold>Hopers.io,</Text>
+          <Text>an</Text>
+          <Text>avenue</Text>
+          <Text>for</Text>
+          <Text>the</Text>
+          <Text>evolution</Text>
+          <Text>of</Text>
+          <Text bold color="white">
+            DeFi
+          </Text>
+          <Text>&</Text>
+          <Text bold color="white">
+            NFTs
+          </Text>
+          <Text>on</Text>
+          <Text bold>Juno</Text>
+        </Text>
+        <LaunchpadButton
+          onClick={() => window.open("https://launchpad.hopers.io/")}
+        >
           <RocketIcon />
           Launchpad
         </LaunchpadButton>
@@ -127,7 +148,14 @@ const Footer: React.FC = () => {
         </FooterSocialLinkItemContainer>
       </FooterInfo>
       <FooterAdvertiseWrapper>
-        <Advertise />
+        <Advertise
+          images={[
+            {
+              url: "/advertises/image_003.png",
+              description: "Hopers.io Launchpad | List your NFT Collection",
+            },
+          ]}
+        />
       </FooterAdvertiseWrapper>
       {/* <FooterInfo>
         <MainContent>
