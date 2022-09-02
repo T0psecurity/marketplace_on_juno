@@ -50,7 +50,8 @@ export const SearchIcon = styled.button`
   position: absolute;
   right: 0px;
   color: white;
-  background-color: #6baf33;
+  /* background-color: #6baf33; */
+  background-color: #02e296;
   pointer-events: painted;
   /* &:focus {
     & ~ ${SearchInput} {

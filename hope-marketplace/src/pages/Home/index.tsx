@@ -321,7 +321,7 @@ const Home: React.FC = () => {
             <Text fontSize={fontSizes.size2} bold>
               No registration, no hassle.
             </Text>
-            <Text fontSize={fontSizes.size1}>
+            <Text fontSize={fontSizes.size3}>
               Swap any token on Juno Chain in seconds, just by connecting your
               wallet.
             </Text>
@@ -333,7 +333,7 @@ const Home: React.FC = () => {
             </ButtonContainer>
           </PanelContent>
           <StyledImg
-            src="/others/home_background_03.png"
+            src="/others/home_background_03.gif"
             alt=""
             width="45%"
             minWidth="250px"

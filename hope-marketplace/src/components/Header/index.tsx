@@ -354,7 +354,7 @@ const Header: React.FC = () => {
                     onClick={() => handleClickLink(linkItem.url || "/")}
                     selected={
                       linkItem.selectedUrl && linkItem.selectedUrl.length > 0
-                        ? linkItem.selectedUrl.reduce(
+                        ? !!linkItem.selectedUrl.reduce(
                             (result, crrItem) => result || pathname === crrItem,
                             false
                           )
