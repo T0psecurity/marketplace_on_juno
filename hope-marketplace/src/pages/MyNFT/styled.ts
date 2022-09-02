@@ -1,9 +1,16 @@
 import styled, { css } from "styled-components";
+import ExploreHeader from "../../components/ExploreHeader";
+
+import { Tabs as OriginTabs, Tab as OriginTab } from "../../components/Tab";
 
 export const Wrapper = styled.div<{ isMobile?: boolean }>`
   height: 100%;
   padding: 0 ${({ isMobile }) => (isMobile ? 10 : 100)}px;
   color: ${({ theme }) => theme.colors.fontColor};
+`;
+
+export const MyAssetsArea = styled.div`
+  min-height: 450px;
 `;
 
 export const TokenTypeString = styled.div`
@@ -78,8 +85,16 @@ export const CoinIcon = styled.img<{ size?: string }>`
   cursor: pointer;
 `;
 
-export const TokenBalance = styled.div`
+export const TokenBalance = styled.div<{ color?: string }>`
   font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  ${({ color }) =>
+    color &&
+    css`
+      color: ${color};
+    `};
 `;
 
 export const MyNftsHeader = styled.div`
@@ -90,7 +105,7 @@ export const MyNftsHeader = styled.div`
   margin-top: 20px;
 `;
 
-export const Tabs = styled.div<{ margin?: string }>`
+export const Tabs = styled(OriginTabs)<{ margin?: string }>`
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -102,7 +117,7 @@ export const Tabs = styled.div<{ margin?: string }>`
     `}/* width: 100%; */
 `;
 
-export const Tab = styled.div<{ selected: boolean; fontSize?: string }>`
+export const Tab = styled(OriginTab)<{ selected: boolean; fontSize?: string }>`
   cursor: pointer;
   margin-right: 20px;
   ${({ selected, theme }) =>
@@ -143,4 +158,20 @@ export const TokenContainer = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
+`;
+
+export const ChartArea = styled.div`
+  width: 100vw;
+  height: 100vw;
+  max-width: 400px;
+  max-height: 400px;
+  float: right;
+  background: url(${({ theme }) =>
+    `/others/chartLogo${theme.isDark ? "_dark" : ""}.png`});
+  background-repeat: no-repeat;
+  background-position: center bottom;
+`;
+
+export const StyledExploreHeader = styled(ExploreHeader)`
+  grid-template-columns: auto auto auto;
 `;

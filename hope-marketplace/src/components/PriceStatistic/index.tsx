@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useAppSelector } from "../../app/hooks";
+import { LineColors } from "../../constants/colors";
 import {
   fetchTokenPriceHistory,
   TokenHistoryPeriod,
@@ -38,14 +39,6 @@ import {
 // type LineDisplay = {
 //   [key in TokenType]: boolean;
 // };
-
-const LineColors = {
-  [TokenType.JUNO]: "#ea5545",
-  [TokenType.HOPE]: "#f46a9b",
-  [TokenType.NETA]: "#ef9b20",
-  [TokenType.RAW]: "#edbf33",
-  [TokenType.ATOM]: "#ede15b", // "#bdcf32", "#87bc45", "#27aeef", "#b33dc6"
-};
 
 // type PeriodOptionType = {
 //   value: any;

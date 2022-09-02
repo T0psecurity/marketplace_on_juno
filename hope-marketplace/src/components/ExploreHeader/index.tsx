@@ -1,22 +1,44 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { BasicProps } from "../../constants/BasicTypes";
 import { Title } from "../PageTitle";
 import { Tab, Tabs } from "../Tab";
 import { HorizontalDivider, Wrapper } from "./styled";
 
+type TabType = {
+  title: string;
+  url?: string;
+  selected?: (arg: any) => boolean;
+  onClick?: (arg: any) => void;
+  extend?: any;
+};
 interface ExploreHeaderProps extends BasicProps {
   title?: string;
-  tabs?: { title: string; url: string }[];
+  tabs?: TabType[];
 }
 
-const ExploreHeader: React.FC<ExploreHeaderProps> = ({ title, tabs }) => {
+const ExploreHeader: React.FC<ExploreHeaderProps> = ({
+  title,
+  tabs,
+  className,
+}) => {
   const history = useHistory();
   const { pathname } = useLocation();
+  const [wrapperElement, setWrapperElement] = useState<HTMLDivElement | null>(
+    null
+  );
+
+  const wrapperPadding = useMemo(() => {
+    if (wrapperElement) {
+      return wrapperElement.offsetLeft;
+    }
+    return 0;
+  }, [wrapperElement]);
+
   return (
     <>
-      <HorizontalDivider />
-      <Wrapper>
+      <HorizontalDivider offset={wrapperPadding} />
+      <Wrapper ref={(node) => setWrapperElement(node)} className={className}>
         {!!title ? (
           <Title title={title} justifyContent="flex-start" />
         ) : (
@@ -27,8 +49,12 @@ const ExploreHeader: React.FC<ExploreHeaderProps> = ({ title, tabs }) => {
             {tabs.map((tab, index) => (
               <Tab
                 title={tab.title}
-                selected={pathname === tab.url}
-                onClick={() => history.push(tab.url)}
+                selected={
+                  tab.selected ? tab.selected(tab) : pathname === tab.url
+                }
+                onClick={() =>
+                  tab.onClick ? tab.onClick(tab) : history.push(tab.url || "/")
+                }
               />
             ))}
           </Tabs>
@@ -37,7 +63,7 @@ const ExploreHeader: React.FC<ExploreHeaderProps> = ({ title, tabs }) => {
         )}
         <div />
       </Wrapper>
-      <HorizontalDivider />
+      <HorizontalDivider offset={wrapperPadding} />
     </>
   );
 };

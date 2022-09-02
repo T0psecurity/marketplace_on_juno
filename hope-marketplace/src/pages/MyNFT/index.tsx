@@ -1,9 +1,10 @@
 import React, { useContext, useMemo, useState, useCallback } from "react";
 import { toast } from "react-toastify";
+import ReactSelect from "react-select";
 
 import {
   Wrapper,
-  ProfileImage,
+  // ProfileImage,
   HorizontalDivider,
   TokenBalancesWrapper,
   TokenBalanceItem,
@@ -17,10 +18,16 @@ import {
   SearchWrapper,
   ActivityHeader,
   TokenContainer,
+  ChartArea,
+  MyAssetsArea,
+  StyledExploreHeader,
 } from "./styled";
 
 import { useAppSelector } from "../../app/hooks";
-import { SubTitle, Title } from "../../components/PageTitle";
+import {
+  SubTitle,
+  // Title
+} from "../../components/PageTitle";
 import NFTContainer from "../../components/NFTContainer";
 import { NFTItemStatus } from "../../components/NFTItem";
 import Collections, {
@@ -29,21 +36,26 @@ import Collections, {
   MarketplaceInfo,
 } from "../../constants/Collections";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import { TokenStatus, TokenType } from "../../types/tokens";
+import { TokenStatus, TokenType, TokenFullName } from "../../types/tokens";
 import usePopoutQuickSwap, { SwapType } from "../../components/Popout";
 import { ChainTypes } from "../../constants/ChainTypes";
 import { Tabs } from "./styled";
 import SearchInputer from "../../components/SearchInputer";
 import ActivityList from "../../components/ActivityList";
-import ReactSelect from "react-select";
 import { ThemeContext } from "../../context/ThemeContext";
 import { SortDirectionType } from "../Marketplace/types";
 import { getCustomTokenId } from "../../hook/useFetch";
+import ExploreHeader from "../../components/ExploreHeader";
+import Text from "../../components/Text";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { LineColors } from "../../constants/colors";
 // import { getCustomTokenId } from "../../hook/useFetch";
 
 enum TAB_TYPE {
   ITEMS = "NFTs",
   ACTIVITY = "Activity",
+  OFFER = "Offer",
+  STATS = "Stats",
 }
 
 enum NFT_TYPE {
@@ -78,19 +90,22 @@ const SortDirectionSelectOptions = [
   },
 ];
 
+const RADIAN = Math.PI / 180;
+
 const MyNFT: React.FC = () => {
   const [selectedPageTab, setSelectedPageTab] = useState<TAB_TYPE>(
     TAB_TYPE.ITEMS
   );
   const [selectedNftTab, setSelectedNftTab] = useState<NFT_TYPE>(NFT_TYPE.ALL);
   const [searchValue, setSearchValue] = useState<string>("");
-  const [searchActivityValue, setSearhActivityValue] = useState("");
+  const [searchActivityValue, setSearchActivityValue] = useState("");
   const [selectedTokenType, setSelectedTokenType] = useState<
     TokenType | undefined
   >();
   const [sortDirection, setSortDirection] = useState<
     SortDirectionType | undefined
   >(SortDirectionSelectOptions[0].value);
+
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const popoutQuickSwap = usePopoutQuickSwap();
   const { isDark } = useContext(ThemeContext);
@@ -179,7 +194,7 @@ const MyNFT: React.FC = () => {
 
   const handleChangeActivitySearchValue = (e: any) => {
     const { value } = e.target;
-    setSearhActivityValue(value);
+    setSearchActivityValue(value);
   };
 
   const handleChangeSortDirection = (item: any) => {
@@ -243,88 +258,183 @@ const MyNFT: React.FC = () => {
     [searchActivityValue, selectedTokenType, sortDirection, tokenPrices]
   );
 
+  const { totalBalanceInUsd, chartData } = useMemo(() => {
+    const chartDataResult: any = [];
+    const totalBalance = (
+      Object.keys(TokenType) as Array<keyof typeof TokenType>
+    ).reduce((result, key) => {
+      const denom = TokenType[key];
+      const crrBalance = (balances?.[denom]?.amount || 0) / 1e6;
+      const crrTokenPrice =
+        tokenPrices[denom]?.market_data.current_price?.usd || 0;
+      if (crrBalance * crrTokenPrice > 0)
+        chartDataResult.push({
+          name: key,
+          tokenFullName: TokenFullName[denom],
+          token: denom,
+          price: crrBalance * crrTokenPrice,
+        });
+      return result + crrBalance * crrTokenPrice;
+    }, 0);
+    return {
+      totalBalanceInUsd: totalBalance.toLocaleString("en-US", {
+        maximumFractionDigits: 3,
+      }),
+      chartData: chartDataResult,
+    };
+  }, [balances, tokenPrices]);
+
+  const renderCustomizedLabel = (params: any) => {
+    const { cx, cy, midAngle, innerRadius, outerRadius, percent, payload } =
+      params;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    return (
+      <text
+        x={x}
+        y={y}
+        fill={isDark ? "white" : "black"}
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
+        {`${(percent * 100).toFixed(0)}% (${payload.name})`}
+      </text>
+    );
+
+    // const { percent, price, payload } = params;
+    // const priceDisplay = price.toLocaleString("en-US", {
+    //   maximumFractionDigits: 3,
+    // });
+    // const percentDisplay = `${(percent * 100).toFixed(0)}%`;
+    // return `${payload.name}: ${priceDisplay}$ (${percentDisplay})`;
+  };
+
   return (
     <Wrapper isMobile={isMobile}>
-      <Title title="Profile" icon={<ProfileImage />} />
-      <HorizontalDivider />
-      <SubTitle subTitle="My Balance on Juno Chain" textAlign="left" />
-      <TokenTypeString>JUNO Chain Assets</TokenTypeString>
-      <TokenBalancesWrapper>
-        {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
-          (key) => {
-            const denom = TokenType[key];
-            const tokenStatus = TokenStatus[denom];
-            if (tokenStatus.isIBCCOin) return null;
-            return (
-              <TokenBalanceItem
-                key={denom}
-                onClick={() => handleClickBalanceItem(denom)}
+      {/* <Title title="Profile" icon={<ProfileImage />} /> */}
+      <ExploreHeader title="Profile" />
+      {/* <HorizontalDivider /> */}
+      {/* <SubTitle subTitle="My Balance on Juno Chain" textAlign="left" /> */}
+      <MyAssetsArea>
+        <Text fontSize="1.17em" justifyContent="flex-start">
+          <Text bold>My Assets</Text>
+          <Text>{`(${totalBalanceInUsd}$)`}</Text>
+        </Text>
+        <ChartArea>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                outerRadius="80%"
+                innerRadius="40%"
+                fill="#8884d8"
+                dataKey="price"
+                label={renderCustomizedLabel}
               >
-                <CoinIconWrapper>
-                  <CoinIcon
-                    alt=""
-                    src={`/coin-images/${denom.replace(/\//g, "")}.png`}
-                  />
-                  <TokenBalance>{key}</TokenBalance>
-                </CoinIconWrapper>
-                <TokenBalance>
-                  {((balances?.[denom]?.amount || 0) / 1e6).toLocaleString(
-                    "en-US",
-                    { maximumFractionDigits: 3 }
-                  )}
-                </TokenBalance>
-              </TokenBalanceItem>
-            );
-          }
+                {chartData.map((entry: any, index: number) => {
+                  return (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={LineColors[entry.token as TokenType]}
+                    />
+                  );
+                })}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </ChartArea>
+        <TokenTypeString>JUNO Chain Assets</TokenTypeString>
+        <TokenBalancesWrapper>
+          {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
+            (key) => {
+              const denom = TokenType[key];
+              const tokenStatus = TokenStatus[denom];
+              if (tokenStatus.isIBCCOin) return null;
+              const tokenBalance = (balances?.[denom]?.amount || 0) / 1e6;
+              const tokenPrice =
+                tokenPrices[denom]?.market_data.current_price?.usd || 0;
+              return (
+                <TokenBalanceItem
+                  key={denom}
+                  onClick={() => handleClickBalanceItem(denom)}
+                >
+                  <CoinIconWrapper>
+                    <CoinIcon
+                      alt=""
+                      src={`/coin-images/${denom.replace(/\//g, "")}.png`}
+                    />
+                    <TokenBalance>{key}</TokenBalance>
+                  </CoinIconWrapper>
+                  <TokenBalance>
+                    {tokenBalance.toLocaleString("en-US", {
+                      maximumFractionDigits: 3,
+                    })}
+                    <Text style={{ fontSize: "0.9em" }}>
+                      {`${(tokenBalance * tokenPrice).toLocaleString("en-US", {
+                        maximumFractionDigits: 3,
+                      })}$`}
+                    </Text>
+                  </TokenBalance>
+                </TokenBalanceItem>
+              );
+            }
+          )}
+        </TokenBalancesWrapper>
+        <TokenTypeString>
+          IBC Assets
+          {/* <span>(Click Asset to Withdraw)</span> */}
+        </TokenTypeString>
+        <TokenBalancesWrapper>
+          {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
+            (key) => {
+              const denom = TokenType[key];
+              const tokenStatus = TokenStatus[denom];
+              if (!tokenStatus.isIBCCOin) return null;
+              const tokenBalance = (balances?.[denom]?.amount || 0) / 1e6;
+              const tokenPrice =
+                tokenPrices[denom]?.market_data.current_price?.usd || 0;
+              return (
+                <TokenBalanceItem key={denom} marginBottom="20px">
+                  <CoinIconWrapper>
+                    <CoinIcon
+                      alt=""
+                      src={`/coin-images/${denom.replace(/\//g, "")}.png`}
+                    />
+                    <TokenBalance>{key}</TokenBalance>
+                  </CoinIconWrapper>
+                  <TokenBalance>
+                    {tokenBalance.toLocaleString("en-US", {
+                      maximumFractionDigits: 3,
+                    })}
+                    <Text style={{ fontSize: "0.9em" }}>
+                      {`${(tokenBalance * tokenPrice).toLocaleString("en-US", {
+                        maximumFractionDigits: 3,
+                      })}$`}
+                    </Text>
+                  </TokenBalance>
+                  <WithdrawButton onClick={() => handleClickBalanceItem(denom)}>
+                    Withdraw / Deposit
+                  </WithdrawButton>
+                </TokenBalanceItem>
+              );
+            }
+          )}
+        </TokenBalancesWrapper>
+      </MyAssetsArea>
+      <StyledExploreHeader
+        title={`My ${selectedPageTab}`}
+        tabs={(Object.keys(TAB_TYPE) as Array<keyof typeof TAB_TYPE>).map(
+          (key) => ({
+            title: key,
+            onClick: () => setSelectedPageTab(TAB_TYPE[key]),
+            selected: () => selectedPageTab === TAB_TYPE[key],
+          })
         )}
-      </TokenBalancesWrapper>
-      <TokenTypeString>
-        IBC Assets
-        {/* <span>(Click Asset to Withdraw)</span> */}
-      </TokenTypeString>
-      <TokenBalancesWrapper>
-        {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
-          (key) => {
-            const denom = TokenType[key];
-            const tokenStatus = TokenStatus[denom];
-            if (!tokenStatus.isIBCCOin) return null;
-            return (
-              <TokenBalanceItem key={denom} marginBottom="20px">
-                <CoinIconWrapper>
-                  <CoinIcon
-                    alt=""
-                    src={`/coin-images/${denom.replace(/\//g, "")}.png`}
-                  />
-                  <TokenBalance>{key}</TokenBalance>
-                </CoinIconWrapper>
-                <TokenBalance>
-                  {((balances?.[denom]?.amount || 0) / 1e6).toLocaleString(
-                    "en-US",
-                    { maximumFractionDigits: 3 }
-                  )}
-                </TokenBalance>
-                <WithdrawButton onClick={() => handleClickBalanceItem(denom)}>
-                  Withdraw / Deposit
-                </WithdrawButton>
-              </TokenBalanceItem>
-            );
-          }
-        )}
-      </TokenBalancesWrapper>
-      <Tabs margin="50px 0">
-        {(Object.keys(TAB_TYPE) as Array<keyof typeof TAB_TYPE>).map((key) => (
-          <Tab
-            key={key}
-            fontSize="1.17em"
-            selected={selectedPageTab === TAB_TYPE[key]}
-            onClick={() => setSelectedPageTab(TAB_TYPE[key])}
-          >
-            {key}
-          </Tab>
-        ))}
-      </Tabs>
-      <SubTitle subTitle={`My ${selectedPageTab}`} />
-      <HorizontalDivider />
+      />
       {selectedPageTab === TAB_TYPE.ITEMS && (
         <>
           <MyNftsHeader>
@@ -335,9 +445,10 @@ const MyNFT: React.FC = () => {
                     key={key}
                     selected={selectedNftTab === NFT_TYPE[key]}
                     onClick={() => setSelectedNftTab(NFT_TYPE[key])}
-                  >{`${NFT_TYPE[key]} (${
-                    myNfts[NFT_TYPE[key]].length || 0
-                  })`}</Tab>
+                    title={`${NFT_TYPE[key]} (${
+                      myNfts[NFT_TYPE[key]].length || 0
+                    })`}
+                  />
                 )
               )}
             </Tabs>

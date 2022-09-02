@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 export const TabsWrapper = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 20px;
 `;
 
