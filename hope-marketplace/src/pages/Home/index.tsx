@@ -16,7 +16,7 @@ import { getCustomTokenId, getTokenIdNumber } from "../../hook/useFetch";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { TokenType } from "../../types/tokens";
 import { addSuffix } from "../../util/string";
-import Advertise from "../../components/Advertise";
+import Advertise, { Advertise1 } from "../../components/Advertise";
 import Text from "../../components/Text";
 
 import {
@@ -228,20 +228,7 @@ const Home: React.FC = () => {
   return (
     <>
       <Wrapper isMobile={isMobile}>
-        <Advertise
-          images={[
-            {
-              url: "/advertises/image_001.png",
-              description:
-                'HOPERS team will be attending and sponsoring the blockchain event "Adapt 2022" in Milan. Meet us there!',
-            },
-            {
-              url: "/advertises/image_002.png",
-              description:
-                "HOPE GALAXY NFT II - MINT PASS II is now live on Mint Page",
-            },
-          ]}
-        />
+        <Advertise images={Advertise1} />
         <HorizontalDivider />
         <FirstPanel background="/others/home_background_01.png">
           <StyledImg

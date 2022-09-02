@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
-import Advertise from "../Advertise";
+import Advertise, { Advertise2 } from "../Advertise";
 // import {
 //   // DiscordIcon,
 //   // MediumIcon,
@@ -148,14 +148,7 @@ const Footer: React.FC = () => {
         </FooterSocialLinkItemContainer>
       </FooterInfo>
       <FooterAdvertiseWrapper>
-        <Advertise
-          images={[
-            {
-              url: "/advertises/image_003.png",
-              description: "Hopers.io Launchpad | List your NFT Collection",
-            },
-          ]}
-        />
+        <Advertise images={Advertise2} />
       </FooterAdvertiseWrapper>
       {/* <FooterInfo>
         <MainContent>

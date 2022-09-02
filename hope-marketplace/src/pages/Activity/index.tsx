@@ -3,6 +3,9 @@ import ReactSelect from "react-select";
 import { useAppSelector } from "../../app/hooks";
 import ActivityList from "../../components/ActivityList";
 import SearchInputer from "../../components/SearchInputer";
+import ExploreHeader from "../../components/ExploreHeader";
+import Advertise, { Advertise1 } from "../../components/Advertise";
+import PageWrapper from "../../components/PageWrapper";
 import { ThemeContext } from "../../context/ThemeContext";
 import { getCustomTokenId } from "../../hook/useFetch";
 import { TokenType } from "../../types/tokens";
@@ -12,12 +15,9 @@ import {
   CoinIcon,
   FilterContainer,
   HistoryContainer,
-  Logo,
   SearchContainer,
   SearchWrapper,
-  Title,
   TokenContainer,
-  Wrapper,
 } from "./styled";
 
 const SortDirectionSelectOptions = [
@@ -114,9 +114,9 @@ const Activity: React.FC = () => {
   };
 
   return (
-    <Wrapper>
-      <Logo />
-      <Title>Activity Page</Title>
+    <PageWrapper>
+      <ExploreHeader title="Activity" />
+      <Advertise images={Advertise1} />
       <SearchWrapper>
         <SearchInputer onChange={handleChangeSearchValue} />
       </SearchWrapper>
@@ -165,7 +165,7 @@ const Activity: React.FC = () => {
       <HistoryContainer>
         <ActivityList filterFunc={filterActivitiesFunc} />
       </HistoryContainer>
-    </Wrapper>
+    </PageWrapper>
   );
 };
 

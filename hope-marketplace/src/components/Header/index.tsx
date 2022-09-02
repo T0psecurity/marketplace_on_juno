@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useWalletManager } from "@noahsaso/cosmodal";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import Collections from "../../constants/Collections";
@@ -60,6 +60,7 @@ const HeaderLinks = [
   {
     title: "Swap",
     icon: SwapIcon,
+    url: "soon",
     children: [
       {
         title: "Swap",
@@ -75,8 +76,9 @@ const HeaderLinks = [
   },
   {
     title: "NFT",
-    url: "/",
+    url: "/collections/explore",
     icon: NFTMenuIcon,
+    selectedUrl: ["/collections/explore", "/activity"],
     children: [
       {
         title: "Explore",
@@ -136,6 +138,7 @@ const Header: React.FC = () => {
   // const { connect } = useKeplr();
   // const { connect: connectWithCosmodal } = useCosmodal();
   const { connect, disconnect, connectedWallet } = useWalletManager();
+  const { pathname } = useLocation();
   const history = useHistory();
   // const { initContracts } = useContract();
   const { refresh } = useRefresh();
@@ -349,6 +352,14 @@ const Header: React.FC = () => {
                   <LinkButton
                     key={linkIndex}
                     onClick={() => handleClickLink(linkItem.url || "/")}
+                    selected={
+                      linkItem.selectedUrl && linkItem.selectedUrl.length > 0
+                        ? linkItem.selectedUrl.reduce(
+                            (result, crrItem) => result || pathname === crrItem,
+                            false
+                          )
+                        : pathname === linkItem.url
+                    }
                   >
                     {linkItem.title}
                   </LinkButton>

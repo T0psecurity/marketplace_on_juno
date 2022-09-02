@@ -71,3 +71,5 @@ const Advertise: React.FC<AdvertiseProps> = ({ images }) => {
 };
 
 export default Advertise;
+
+export * from "./Advertises";
