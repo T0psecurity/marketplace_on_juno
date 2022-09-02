@@ -113,17 +113,19 @@ const Footer: React.FC = () => {
           ))}
         </FooterLinksContainer> */}
         <Text margin="24px" fontSize="20px">
-          <Text bold>Hopers.io,</Text>
-          <Text>an</Text>
-          <Text>avenue</Text>
-          <Text>for</Text>
-          <Text>the</Text>
-          <Text>evolution</Text>
-          <Text>of</Text>
+          <Text color="black" bold>
+            Hopers.io,
+          </Text>
+          <Text color="black">an</Text>
+          <Text color="black">avenue</Text>
+          <Text color="black">for</Text>
+          <Text color="black">the</Text>
+          <Text color="black">evolution</Text>
+          <Text color="black">of</Text>
           <Text bold color="white">
             DeFi
           </Text>
-          <Text>&</Text>
+          <Text color="black">&</Text>
           <Text bold color="white">
             NFTs
           </Text>

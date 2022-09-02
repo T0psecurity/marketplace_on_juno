@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { Fade, SlideshowRef } from "react-slideshow-image";
+import { BasicProps } from "../../constants/BasicTypes";
 import { MegaPhoneIcon } from "../SvgIcons";
 import {
   AdvertiseDescription,
@@ -10,8 +11,13 @@ import {
   AdvertiseWrapper,
 } from "./styled";
 
-interface AdvertiseProps {
-  images: { url: string; description: string }[];
+export interface AdvertiseItemProps {
+  url: string;
+  description: string;
+  style?: { image?: any; description?: any };
+}
+interface AdvertiseProps extends BasicProps {
+  images: AdvertiseItemProps[];
 }
 
 const DescriptionTailIcon = ({ ...props }) => (
@@ -43,7 +49,7 @@ const DescriptionTailIcon = ({ ...props }) => (
   </svg>
 );
 
-const Advertise: React.FC<AdvertiseProps> = ({ images }) => {
+const Advertise: React.FC<AdvertiseProps> = ({ images, className }) => {
   const sliderRef = useRef<SlideshowRef>(null);
   const handleNextImage = () => {
     if (sliderRef.current) {
@@ -51,7 +57,7 @@ const Advertise: React.FC<AdvertiseProps> = ({ images }) => {
     }
   };
   return (
-    <AdvertiseWrapper>
+    <AdvertiseWrapper className={className}>
       <Fade ref={sliderRef} arrows={false}>
         {images.map((image, index) => (
           <AdvertiseItem key={index} className="each-fade">
@@ -59,7 +65,9 @@ const Advertise: React.FC<AdvertiseProps> = ({ images }) => {
             <AdvertiseFooter>
               <AdvertiseDescriptionContainer>
                 <MegaPhoneIcon height={20} />
-                <AdvertiseDescription>{image.description}</AdvertiseDescription>
+                <AdvertiseDescription style={image.style?.description || {}}>
+                  {image.description}
+                </AdvertiseDescription>
               </AdvertiseDescriptionContainer>
               <DescriptionTailIcon onClick={handleNextImage} height={20} />
             </AdvertiseFooter>

@@ -1,4 +1,6 @@
-export const Advertise1 = [
+import { AdvertiseItemProps } from ".";
+
+export const Advertise1: AdvertiseItemProps[] = [
   {
     url: "/advertises/image_001.png",
     description:
@@ -10,9 +12,14 @@ export const Advertise1 = [
   },
 ];
 
-export const Advertise2 = [
+export const Advertise2: AdvertiseItemProps[] = [
   {
     url: "/advertises/image_003.png",
     description: "Hopers.io Launchpad | List your NFT Collection",
+    style: {
+      description: {
+        color: "black",
+      },
+    },
   },
 ];
