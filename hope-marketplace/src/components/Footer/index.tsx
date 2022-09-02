@@ -11,8 +11,8 @@ import Advertise, { Advertise2 } from "../Advertise";
 //   // youtubeIcon,
 // } from "../Icons";
 import {
-  BookIcon,
-  TempleIcon,
+  // BookIcon,
+  // TempleIcon,
   DiscordIcon,
   MediumIcon,
   TwitterIcon,
@@ -45,8 +45,8 @@ const SocialIcons = [
     link: "https://discord.com/invite/BfKPacc5jF",
   },
   { Icon: MediumIcon, link: "https://hopegalaxy.medium.com/" },
-  { Icon: TempleIcon, link: "" },
-  { Icon: BookIcon, link: "" },
+  // { Icon: TempleIcon, link: "" },
+  // { Icon: BookIcon, link: "" },
 ];
 
 const RocketIcon = ({ ...props }) => (
