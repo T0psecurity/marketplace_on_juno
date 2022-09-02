@@ -16,6 +16,9 @@ export const OperationPanel = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 20px;
+  @media (max-width: 1024px) {
+    grid-template-columns: auto;
+  }
 `;
 
 export const FilterWrapper = styled.div`
