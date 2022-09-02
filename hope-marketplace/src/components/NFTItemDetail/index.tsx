@@ -278,7 +278,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
             {targetCollection.creator}
           </Text>
         </Text>
-        <Text fontSize="28px" color="#2E7B31" bold>
+        <Text fontSize="28px" color="#02e296" bold>
           {item.token_id_display || item.token_id || ""}
         </Text>
         <Text margin="10px 0 15px" overflowWrap="anywhere">{`Owned: ${owner}${
@@ -291,7 +291,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
             {rarityRanks && (
               <Text
                 margin="0 5px"
-                color="#2E7B31"
+                color="#02e296"
               >{`#${rarityRanks.rank}`}</Text>
             )}
           </Text>
@@ -398,7 +398,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
             )}
             {status === "Buy" && (
               <NFTItemOperationButton
-                style={{ background: "#FFFFFF", color: "#2e7b31" }}
+                style={{ background: "#FFFFFF", color: "#02e296" }}
                 onClick={handleMakeOffer}
               >
                 <OfferIcon width={30} height={30} /> Make Offer

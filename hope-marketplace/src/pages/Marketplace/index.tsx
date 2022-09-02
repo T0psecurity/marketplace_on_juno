@@ -24,15 +24,17 @@ import { FilterOptions, MarketplaceTabs } from "./types";
 
 const Marketplace: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(MarketplaceTabs.ITEMS);
-  const { isXl } = useMatchBreakpoints();
-  const [expandedFilter, setExpandedFilter] = useState<boolean>(isXl);
+  const { isXs, isSm, isMd } = useMatchBreakpoints();
+  const [expandedFilter, setExpandedFilter] = useState<boolean>(
+    isXs || isSm || isMd
+  );
   const [filterOption, setFilterOption] = useState<FilterOptions>();
   const { search } = useLocation();
   const collectionId = new URLSearchParams(search).get("id") || "";
 
   useEffect(() => {
-    setExpandedFilter(isXl);
-  }, [isXl]);
+    setExpandedFilter(isXs || isSm || isMd);
+  }, [isXs, isSm, isMd]);
 
   const targetCollection = useMemo(
     () => getCollectionById(collectionId || ""),
@@ -108,7 +110,10 @@ const Marketplace: React.FC = () => {
       <NFTAdvertise collection={targetCollection} />
       <Statistic items={marketplaceNFTs} collectionId={collectionId || ""} />
       <HorizontalDivider />
-      <MainContentContainer isMobile={!isXl} expanded={expandedFilter}>
+      <MainContentContainer
+        isMobile={isXs || isSm || isMd}
+        expanded={expandedFilter}
+      >
         <FilterPanel
           onChangeExpanded={setExpandedFilter}
           expanded={expandedFilter}

@@ -22,10 +22,11 @@ export const NFTItemAttributesContainer = styled.div`
 export const NFTItemAttributeItem = styled.div`
   font-size: 14px;
   padding: 5px;
-  border: 1px solid #61b357;
+  border: 1px solid #02e296;
   border-radius: 10px;
   width: 150px;
-  background-color: rgba(97, 179, 87, 0.15);
+  /* background-color: rgba(97, 179, 87, 0.15); */
+  background: rgba(2, 226, 150, 0.15);
   color: ${({ theme }) => theme.colors.fontColor};
   & > span {
     align-self: center;
@@ -34,7 +35,7 @@ export const NFTItemAttributeItem = styled.div`
 
 export const NFTItemAttributeType = styled.div`
   font-weight: bold;
-  color: #2e7b31;
+  color: #02e296;
   margin-bottom: 10px;
 `;
 

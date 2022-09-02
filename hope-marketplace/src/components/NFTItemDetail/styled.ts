@@ -116,7 +116,8 @@ export const NFTItemOperationButton = styled.div`
   color: #fff;
   font-size: 20px;
   font-weight: bold;
-  background-color: #2e7b31;
+  /* background-color: #2e7b31; */
+  background-color: #02e296;
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
@@ -221,7 +222,7 @@ export const SocialLinkIcon = styled.div<{ backgroundColor?: string }>`
 
 export const NFTItemPricePanel = styled.div`
   border: 1px solid #dadada;
-  background: rgba(53, 203, 0, 0.1);
+  background: rgba(2, 226, 150, 0.1);
   border-radius: 10px;
   padding: 20px 40px;
   @media (max-width: 450px) {

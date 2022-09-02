@@ -33,14 +33,15 @@ import {
   CoinImage,
   CoinImageWrapper,
   FilterResultPanel,
-  NftListTabs,
-  NftListTab,
+  // NftListTabs,
+  // NftListTab,
   SortIcon,
   FilterIconSvg,
 } from "./styled";
 import { TokenType } from "../../types/tokens";
 import SearchInputer from "../../components/SearchInputer";
 import { ThemeContext } from "../../context/ThemeContext";
+import { Tab, Tabs } from "../../components/Tab";
 
 type SortType =
   | {
@@ -289,20 +290,18 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       </FilterContainer>
       <FilterMainContent>
         <SearchSortPanel ref={searchSortContainer}>
-          <NftListTabs>
-            <NftListTab
+          <Tabs>
+            <Tab
               selected={selectedTab === MarketplaceTabs.ITEMS}
               onClick={() => handleChangeNftListTab(MarketplaceTabs.ITEMS)}
-            >
-              Items
-            </NftListTab>
-            <NftListTab
+              title="Items"
+            />
+            <Tab
               selected={selectedTab === MarketplaceTabs.ACTIVITY}
               onClick={() => handleChangeNftListTab(MarketplaceTabs.ACTIVITY)}
-            >
-              Activity
-            </NftListTab>
-          </NftListTabs>
+              title="Activity"
+            />
+          </Tabs>
           {selectedTab === MarketplaceTabs.ITEMS && (
             <SortContainer>
               {/* <SortByPriceButton onClick={handleSortByPrice}>{`Sort By ${

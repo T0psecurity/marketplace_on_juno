@@ -8,7 +8,8 @@ export const Wrapper = styled.div`
 `;
 
 export const HorizontalDivider = styled.div`
-  background-color: #39c639;
+  /* background-color: #39c639; */
+  background-color: #02e296;
   height: 4px;
   margin: 0 5vw;
 `;
