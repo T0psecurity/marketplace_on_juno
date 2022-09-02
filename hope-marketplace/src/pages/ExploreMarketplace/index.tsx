@@ -192,7 +192,13 @@ const ExploreMarketplace: React.FC = () => {
 
   return (
     <PageWrapper>
-      <ExploreHeader title="Explore" />
+      <ExploreHeader
+        title="Explore"
+        tabs={[
+          { title: "Explore", url: "/collections/explore" },
+          { title: "Activity", url: "/activity" },
+        ]}
+      />
       <OperationPanel>
         <FilterWrapper>
           {filterOptions.map((item: FilterOptionsType, index: number) => (

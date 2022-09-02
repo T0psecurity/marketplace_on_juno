@@ -78,7 +78,7 @@ const HeaderLinks = [
     title: "NFT",
     url: "/collections/explore",
     icon: NFTMenuIcon,
-    selectedUrl: ["/collections/explore", "/activity"],
+    selectedUrl: ["/collections", "/activity"],
     children: [
       {
         title: "Explore",
@@ -355,7 +355,8 @@ const Header: React.FC = () => {
                     selected={
                       linkItem.selectedUrl && linkItem.selectedUrl.length > 0
                         ? !!linkItem.selectedUrl.reduce(
-                            (result, crrItem) => result || pathname === crrItem,
+                            (result, crrItem) =>
+                              result || pathname.includes(crrItem),
                             false
                           )
                         : pathname === linkItem.url

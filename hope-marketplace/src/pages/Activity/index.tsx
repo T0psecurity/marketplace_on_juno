@@ -115,7 +115,13 @@ const Activity: React.FC = () => {
 
   return (
     <PageWrapper>
-      <ExploreHeader title="Activity" />
+      <ExploreHeader
+        title="Activity"
+        tabs={[
+          { title: "Explore", url: "/collections/explore" },
+          { title: "Activity", url: "/activity" },
+        ]}
+      />
       <Advertise images={Advertise1} />
       <SearchWrapper>
         <SearchInputer onChange={handleChangeSearchValue} />

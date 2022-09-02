@@ -270,18 +270,21 @@ const Home: React.FC = () => {
             <Text bold>yield.</Text>
           </Text>
           <ButtonContainer>
-            <Button style={{ minWidth: "unset" }} onClick={NotifyComingSoon}>
+            <Button
+              style={{ minWidth: isMobile ? "60px" : "" }}
+              onClick={NotifyComingSoon}
+            >
               Swap
             </Button>
             <Button
-              style={{ minWidth: "unset" }}
+              style={{ minWidth: isMobile ? "60px" : "" }}
               colored
               onClick={NotifyComingSoon}
             >
               IDO
             </Button>
             <Button
-              style={{ minWidth: "unset" }}
+              style={{ minWidth: isMobile ? "60px" : "" }}
               onClick={() => history.push("/collections/explore")}
             >
               NFT

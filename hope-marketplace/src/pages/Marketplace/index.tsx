@@ -9,6 +9,7 @@ import { getCollectionById, CollectionIds } from "../../constants/Collections";
 import { getCustomTokenId } from "../../hook/useFetch";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import ActivityList from "../../components/ActivityList";
+// import ExploreHeader from "../../components/ExploreHeader";
 import FilterPanel from "./FilterPanel";
 import useFilter from "./hook/useFilter";
 import Statistic from "./Statistic";
@@ -107,6 +108,7 @@ const Marketplace: React.FC = () => {
 
   return (
     <Wrapper>
+      {/* <ExploreHeader /> */}
       <NFTAdvertise collection={targetCollection} />
       <Statistic items={marketplaceNFTs} collectionId={collectionId || ""} />
       <HorizontalDivider />
