@@ -5,7 +5,7 @@ import { Tabs as OriginTabs, Tab as OriginTab } from "../../components/Tab";
 
 export const Wrapper = styled.div<{ isMobile?: boolean }>`
   height: 100%;
-  width: calc(100% - ${({ isMobile }) => (isMobile ? 10 : 100)}px);
+  /* width: calc(100% - ${({ isMobile }) => (isMobile ? 10 : 100)}px); */
   padding: 0 ${({ isMobile }) => (isMobile ? 10 : 100)}px;
   color: ${({ theme }) => theme.colors.fontColor};
 `;
@@ -174,8 +174,36 @@ export const ChartArea = styled.div`
 `;
 
 export const StyledExploreHeader = styled(ExploreHeader)`
-  grid-template-columns: auto 1fr auto;
+  /* grid-template-columns: auto 1fr auto;
   @media (max-width: 800px) {
     grid-template-columns: auto 1fr;
+  } */
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+`;
+
+export const ReceivedOfferBanner = styled.div`
+  background: url("/others/offer_background.png");
+  width: 800px;
+  height: 73px;
+  max-width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  @media (max-width: 1450px) {
+    width: 600px;
+  }
+  @media (max-width: 1350px) {
+    width: 450px;
+    background-image: url("/others/offer_background_mobile.png");
+  }
+  @media (max-width: 1190px) {
+    width: 100%;
+    background-image: url("/others/offer_background.png");
+  }
+  @media (max-width: 575px) {
+    background-image: url("/others/offer_background_mobile.png");
   }
 `;

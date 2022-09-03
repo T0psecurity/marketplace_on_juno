@@ -15,11 +15,13 @@ type TabType = {
 interface ExploreHeaderProps extends BasicProps {
   title?: string;
   tabs?: TabType[];
+  extra?: any;
 }
 
 const ExploreHeader: React.FC<ExploreHeaderProps> = ({
   title,
   tabs,
+  extra,
   className,
 }) => {
   const history = useHistory();
@@ -61,7 +63,7 @@ const ExploreHeader: React.FC<ExploreHeaderProps> = ({
         ) : (
           <div />
         )}
-        <div />
+        {!!extra ? extra : <div />}
       </Wrapper>
       <HorizontalDivider offset={wrapperPadding} />
     </>

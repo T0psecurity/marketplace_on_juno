@@ -21,6 +21,7 @@ import {
   ChartArea,
   MyAssetsArea,
   StyledExploreHeader,
+  ReceivedOfferBanner,
 } from "./styled";
 
 import { useAppSelector } from "../../app/hooks";
@@ -434,6 +435,7 @@ const MyNFT: React.FC = () => {
             selected: () => selectedPageTab === TAB_TYPE[key],
           })
         )}
+        extra={<ReceivedOfferBanner />}
       />
       {selectedPageTab === TAB_TYPE.ITEMS && (
         <>
