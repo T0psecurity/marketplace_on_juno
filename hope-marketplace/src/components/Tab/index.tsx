@@ -1,17 +1,13 @@
-import React, { ReactElement } from "react";
-import { BasicProps } from "../../constants/BasicTypes";
+import React from "react";
+import { TabProps, TabsProps } from "./types";
 import { TabsWrapper, TabWrapper } from "./styled";
 
-interface TabsProps extends BasicProps {}
-
-interface TabProps extends BasicProps {
-  selected: boolean;
-  title: string | ReactElement;
-  onClick?: () => void;
-}
-
-export const Tabs: React.FC<TabsProps> = ({ className, children }) => {
-  return <TabsWrapper className={className}>{children}</TabsWrapper>;
+export const Tabs: React.FC<TabsProps> = ({ className, children, ...rest }) => {
+  return (
+    <TabsWrapper className={className} {...rest}>
+      {children}
+    </TabsWrapper>
+  );
 };
 
 export const Tab: React.FC<TabProps> = ({

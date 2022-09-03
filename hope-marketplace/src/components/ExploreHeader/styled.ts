@@ -6,6 +6,7 @@ export const Wrapper = styled.div`
   /* display: flex; */
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 20px;
   min-height: 95px;
 `;
 

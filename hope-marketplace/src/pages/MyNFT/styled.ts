@@ -5,6 +5,7 @@ import { Tabs as OriginTabs, Tab as OriginTab } from "../../components/Tab";
 
 export const Wrapper = styled.div<{ isMobile?: boolean }>`
   height: 100%;
+  width: calc(100% - ${({ isMobile }) => (isMobile ? 10 : 100)}px);
   padding: 0 ${({ isMobile }) => (isMobile ? 10 : 100)}px;
   color: ${({ theme }) => theme.colors.fontColor};
 `;
@@ -173,5 +174,8 @@ export const ChartArea = styled.div`
 `;
 
 export const StyledExploreHeader = styled(ExploreHeader)`
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto 1fr auto;
+  @media (max-width: 800px) {
+    grid-template-columns: auto 1fr;
+  }
 `;

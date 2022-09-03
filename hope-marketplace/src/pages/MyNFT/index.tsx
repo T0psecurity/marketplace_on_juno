@@ -438,7 +438,7 @@ const MyNFT: React.FC = () => {
       {selectedPageTab === TAB_TYPE.ITEMS && (
         <>
           <MyNftsHeader>
-            <Tabs>
+            <Tabs flexWrap="wrap">
               {(Object.keys(NFT_TYPE) as Array<keyof typeof NFT_TYPE>).map(
                 (key) => (
                   <Tab

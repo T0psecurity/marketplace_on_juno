@@ -1,9 +1,19 @@
 import styled, { css } from "styled-components";
+import { TabsProps } from "./types";
 
-export const TabsWrapper = styled.div`
+export const TabsWrapper = styled.div<TabsProps>`
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  align-items: ${({ alignItems }) => alignItems ?? "center"};
+  ${({ justifyContent }) =>
+    justifyContent &&
+    css`
+      justify-content: ${justifyContent};
+    `}
+  ${({ flexWrap }) =>
+    flexWrap &&
+    css`
+      flex-wrap: ${flexWrap};
+    `}
   gap: 20px;
 `;
 
