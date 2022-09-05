@@ -444,7 +444,7 @@ const MyNFT: React.FC = () => {
                     {tokenBalance.toLocaleString("en-US", {
                       maximumFractionDigits: 3,
                     })}
-                    <Text style={{ fontSize: "0.9em" }}>
+                    <Text style={{ fontSize: "0.8em" }}>
                       {`${(tokenBalance * tokenPrice).toLocaleString("en-US", {
                         maximumFractionDigits: 3,
                       })}$`}
