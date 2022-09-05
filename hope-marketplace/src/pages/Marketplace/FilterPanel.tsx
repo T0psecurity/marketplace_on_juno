@@ -211,7 +211,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   const Control = ({ children, ...props }: any) => {
     return (
       <components.Control {...props}>
-        <CustomSortIcon onMouseDown={handleSortByPrice} desc={!isAscending} />
+        <CustomSortIcon
+          onClick={handleSortByPrice}
+          // onMouseDown={handleSortByPrice}
+          desc={!isAscending}
+        />
         {children}
       </components.Control>
     );

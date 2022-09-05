@@ -306,7 +306,7 @@ const MyNFT: React.FC = () => {
     }, 0);
     return {
       totalBalanceInUsd: totalBalance.toLocaleString("en-US", {
-        maximumFractionDigits: 3,
+        maximumFractionDigits: 2,
       }),
       chartData: chartDataResult,
     };

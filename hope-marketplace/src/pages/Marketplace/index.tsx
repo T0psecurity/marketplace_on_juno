@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { useAppSelector } from "../../app/hooks";
 import NFTAdvertise from "../../components/NFTAdvertise";
@@ -27,15 +27,16 @@ const Marketplace: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(MarketplaceTabs.ITEMS);
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const [expandedFilter, setExpandedFilter] = useState<boolean>(
-    isXs || isSm || isMd
+    // isXs || isSm || isMd
+    false
   );
   const [filterOption, setFilterOption] = useState<FilterOptions>();
   const { search } = useLocation();
   const collectionId = new URLSearchParams(search).get("id") || "";
 
-  useEffect(() => {
-    setExpandedFilter(isXs || isSm || isMd);
-  }, [isXs, isSm, isMd]);
+  // useEffect(() => {
+  //   setExpandedFilter(isXs || isSm || isMd);
+  // }, [isXs, isSm, isMd]);
 
   const targetCollection = useMemo(
     () => getCollectionById(collectionId || ""),
