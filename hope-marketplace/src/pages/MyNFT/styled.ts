@@ -143,13 +143,14 @@ export const SearchWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 550px;
+  max-width: 350px;
 `;
 
 export const ActivityHeader = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
   margin: 20px 0;
 `;
 

@@ -116,6 +116,21 @@ const MyNFT: React.FC = () => {
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
   const account = useAppSelector((state) => state.accounts.keplrAccount);
 
+  const collectionsSelectValues = [
+    { value: "", label: "Choose Collection" },
+  ].concat(
+    Collections.map((collection) => ({
+      value: collection.collectionId,
+      label: collection.title,
+    })).sort((collection1, collection2) =>
+      collection1.label > collection2.label ? 1 : -1
+    )
+  );
+
+  const [selectCollectionValue, setSelectCollectionValue] = useState(
+    collectionsSelectValues[0]
+  );
+
   const myNfts: { [key in NFT_TYPE]: any } = useMemo(() => {
     let unlistedNFTs: any = [],
       listedNFTs: any = [],
@@ -205,9 +220,15 @@ const MyNFT: React.FC = () => {
   const filterActivitiesFunc = useCallback(
     (activities: any[]) => {
       let result: any[] = [];
-      if (searchActivityValue || selectedTokenType) {
+      if (
+        searchActivityValue ||
+        selectedTokenType ||
+        selectCollectionValue.value
+      ) {
         activities.forEach((activityItem: any) => {
-          let filtered = true;
+          let filtered =
+            !selectCollectionValue.value ||
+            selectCollectionValue.value === activityItem.collectionId;
           if (searchActivityValue) {
             const targetCollection = getCollectionById(
               activityItem.collectionId as CollectionIds
@@ -256,7 +277,13 @@ const MyNFT: React.FC = () => {
         return item1?.time < item2.time ? 1 : -1;
       });
     },
-    [searchActivityValue, selectedTokenType, sortDirection, tokenPrices]
+    [
+      searchActivityValue,
+      selectCollectionValue.value,
+      selectedTokenType,
+      sortDirection,
+      tokenPrices,
+    ]
   );
 
   const { totalBalanceInUsd, chartData } = useMemo(() => {
@@ -284,6 +311,49 @@ const MyNFT: React.FC = () => {
       chartData: chartDataResult,
     };
   }, [balances, tokenPrices]);
+
+  const displayedNfts = useMemo(() => {
+    const result = myNfts[selectedNftTab];
+    if (selectCollectionValue.value) {
+      return result.filter(
+        (item: any) => item.collectionId === selectCollectionValue.value
+      );
+    }
+    return result;
+  }, [myNfts, selectCollectionValue.value, selectedNftTab]);
+
+  const CollectionSelect = () => (
+    <ReactSelect
+      value={selectCollectionValue}
+      onChange={(value: any) => setSelectCollectionValue(value)}
+      options={collectionsSelectValues}
+      styles={{
+        container: (provided, state) => ({
+          ...provided,
+          margin: "5px 10px",
+          width: 200,
+          border: "1px solid black",
+          borderRadius: "5px",
+        }),
+        dropdownIndicator: (provided, state) => ({
+          ...provided,
+          color: "black",
+        }),
+        menu: (provided, state) => ({
+          ...provided,
+          backgroundColor: isDark ? "#838383" : "white",
+          zIndex: 10,
+        }),
+        singleValue: (provided, state) => ({
+          ...provided,
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          maxWidth: "100%",
+        }),
+      }}
+    />
+  );
 
   const renderCustomizedLabel = (params: any) => {
     const { cx, cy, midAngle, innerRadius, outerRadius, percent, payload } =
@@ -454,12 +524,13 @@ const MyNFT: React.FC = () => {
                 )
               )}
             </Tabs>
+            <CollectionSelect />
             <SearchWrapper>
               <SearchInputer onChange={handleChangeSearchValue} />
             </SearchWrapper>
           </MyNftsHeader>
           <NFTContainer
-            nfts={myNfts[selectedNftTab]}
+            nfts={displayedNfts}
             status={NFTItemStatus.SELL}
             emptyMsg="No NFTs in your wallet"
           />
@@ -510,6 +581,7 @@ const MyNFT: React.FC = () => {
                 }),
               }}
             />
+            <CollectionSelect />
             <SearchWrapper>
               <SearchInputer onChange={handleChangeActivitySearchValue} />
             </SearchWrapper>

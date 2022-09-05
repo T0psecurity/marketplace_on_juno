@@ -50,6 +50,7 @@ const ExploreHeader: React.FC<ExploreHeaderProps> = ({
           <Tabs>
             {tabs.map((tab, index) => (
               <Tab
+                key={index}
                 title={tab.title}
                 selected={
                   tab.selected ? tab.selected(tab) : pathname === tab.url
