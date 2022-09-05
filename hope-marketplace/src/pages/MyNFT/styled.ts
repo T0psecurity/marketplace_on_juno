@@ -163,8 +163,8 @@ export const TokenContainer = styled.div`
 `;
 
 export const ChartArea = styled.div`
-  width: 100vw;
-  height: 100vw;
+  width: 80vw;
+  height: 80vw;
   max-width: 400px;
   max-height: 400px;
   float: right;

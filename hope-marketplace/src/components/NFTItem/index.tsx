@@ -14,7 +14,6 @@ import { TokenType } from "../../types/tokens";
 import { addSuffix, escapeSpecialForUrl } from "../../util/string";
 import Image from "../Image";
 import { OfferIcon, WalletIcon } from "../SvgIcons";
-import Text from "../Text";
 
 import {
   NFTItemImageWrapper,
