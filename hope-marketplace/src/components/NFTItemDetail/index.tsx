@@ -36,6 +36,7 @@ import {
   SocialLinkContainer,
   SocialLinkIcon,
   TooltipContainer,
+  CustomAuctionPeriodControl,
 } from "./styled";
 import ReactSelect, { ControlProps } from "react-select";
 import { TokenType } from "../../types/tokens";
@@ -47,6 +48,7 @@ import {
 import { ThemeContext } from "../../context/ThemeContext";
 import { NFTItemPricePanel } from "./styled";
 import {
+  CalendarIcon,
   DescriptionIcon,
   InfoIcon,
   OfferIcon,
@@ -87,6 +89,30 @@ const SocialIcons = [
   },
 ];
 
+const SelectOptions = (
+  Object.keys(TokenType) as Array<keyof typeof TokenType>
+).map((key) => {
+  return {
+    value: TokenType[key],
+    text: key,
+  };
+});
+
+const AuctionPeriodOptions = [
+  {
+    value: 30,
+    label: "1 month",
+  },
+  {
+    value: 7,
+    label: "7 days",
+  },
+  {
+    value: 1,
+    label: "1 day",
+  },
+];
+
 const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const { isDark } = useContext(ThemeContext);
   const { sellNft, withdrawNft, buyNft, transferNft } = useHandleNftItem();
@@ -107,15 +133,8 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const [transferAdd, setTransferAdd] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
   const [isFixedSell, setIsFixedSell] = useState(true);
-  const SelectOptions = (
-    Object.keys(TokenType) as Array<keyof typeof TokenType>
-  ).map((key) => {
-    return {
-      value: TokenType[key],
-      text: key,
-    };
-  });
   const [selectValue, setSelectValue] = useState(SelectOptions[0]);
+  const [auctionPeriod, setAuctionPeriod] = useState(AuctionPeriodOptions[0]);
   const statistics: any = useStatistic(item.collectionId);
   const history = useHistory();
 
@@ -230,6 +249,18 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
         <CustomSelectItem option={selectValue} />
         {children}
       </CustomControl>
+    );
+  };
+
+  const CustomAuctionPeriodControlItem = ({
+    children,
+    ...props
+  }: ControlProps<any, false>) => {
+    return (
+      <CustomAuctionPeriodControl>
+        <CalendarIcon />
+        {children}
+      </CustomAuctionPeriodControl>
     );
   };
 
@@ -409,6 +440,11 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                       dropdownIndicator: (provided, state) => ({
                         ...provided,
                         padding: 0,
+                        color: "#02e296",
+                      }),
+                      indicatorSeparator: (provided, state) => ({
+                        ...provided,
+                        backgroundColor: "#02e296",
                       }),
                       valueContainer: (provided, state) => ({
                         ...provided,
@@ -456,6 +492,63 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                   onChange={handleChangeNFTPrice}
                 />
               </div>
+              <NFTItemOperationContainer>
+                <NFTItemOperationButton colored>
+                  {isFixedSell ? "Sell" : "Auction"}
+                </NFTItemOperationButton>
+                {!isFixedSell && (
+                  <ReactSelect
+                    value={auctionPeriod}
+                    onChange={(value: any) => setAuctionPeriod(value)}
+                    options={AuctionPeriodOptions}
+                    styles={{
+                      dropdownIndicator: (provided, state) => ({
+                        ...provided,
+                        padding: 0,
+                        color: "#02e296",
+                      }),
+                      indicatorSeparator: (provided, state) => ({
+                        ...provided,
+                        backgroundColor: "#02e296",
+                      }),
+                      valueContainer: (provided, state) => ({
+                        ...provided,
+                        // height: 10,
+                        padding: 0,
+                      }),
+                      container: (provided, state) => ({
+                        ...provided,
+                        // margin: "5px 10px",
+                        height: "100%",
+                        minWidth: 100,
+                      }),
+                      control: (provided, state) => ({
+                        ...provided,
+                        minHeight: "unset",
+                        height: "100%",
+                        borderColor: "#02e296 !important",
+                        borderRadius: 10,
+                        ...(isDark && {
+                          backgroundColor: "#838383",
+                        }),
+                      }),
+                      menu: (provided, state) => ({
+                        ...provided,
+                        backgroundColor: isDark ? "#838383" : "white",
+                      }),
+                      singleValue: (provided, state) => ({
+                        ...provided,
+                        ...(isDark && {
+                          color: "white",
+                        }),
+                      }),
+                    }}
+                    components={{
+                      Control: CustomAuctionPeriodControlItem,
+                    }}
+                  />
+                )}
+              </NFTItemOperationContainer>
               <NFTItemOperationContainer>
                 <NFTItemOperationButton onClick={handleTransferNFT}>
                   <TransferIcon width={30} height={30} fill="#2e7b31" />{" "}

@@ -373,3 +373,12 @@ export const TooltipContainer = styled.div`
     }
   }
 `;
+
+export const CustomAuctionPeriodControl = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid #02e296;
+  border-radius: 10px;
+  padding: 10px;
+`;

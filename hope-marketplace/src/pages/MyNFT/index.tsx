@@ -300,7 +300,7 @@ const MyNFT: React.FC = () => {
           name: key,
           tokenFullName: TokenFullName[denom],
           token: denom,
-          price: crrBalance * crrTokenPrice,
+          price: denom === TokenType.JUNO ? 1000 : crrBalance * crrTokenPrice,
         });
       return result + crrBalance * crrTokenPrice;
     }, 0);
@@ -393,7 +393,7 @@ const MyNFT: React.FC = () => {
           <Text>{`(${totalBalanceInUsd}$)`}</Text>
         </Text>
         <ChartArea>
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="80%" height="80%">
             <PieChart>
               <Pie
                 data={chartData}

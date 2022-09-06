@@ -163,15 +163,23 @@ export const TokenContainer = styled.div`
 `;
 
 export const ChartArea = styled.div`
-  width: 80vw;
-  height: 80vw;
-  max-width: 400px;
-  max-height: 400px;
-  float: right;
   background: url(${({ theme }) =>
     `/others/chartLogo${theme.isDark ? "_dark" : ""}.png`});
   background-repeat: no-repeat;
   background-position: center bottom;
+  display: flex;
+  justify-content: center;
+  svg {
+    overflow: visible;
+  }
+  @media (min-width: 600px) {
+    float: right;
+    width: 80vw;
+    height: 80vw;
+    max-width: 400px;
+    max-height: 400px;
+    margin-bottom: 20px;
+  }
 `;
 
 export const StyledExploreHeader = styled(ExploreHeader)`
