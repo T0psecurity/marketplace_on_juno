@@ -13,9 +13,7 @@ import { addSuffix, convertNumberToString } from "../../../util/string";
 const useStatistic = (collectionId: string) => {
   const items = useAppSelector((state) => {
     // console.log("nfts", state.nfts);
-    return (
-      (state.nfts as any)[`${collectionId}_marketplace`] || []
-    );
+    return (state.nfts as any)[`${collectionId}_marketplace`] || [];
   });
   const targetCollection: MarketplaceInfo = useMemo(
     () => getCollectionById(collectionId || ""),
@@ -60,7 +58,8 @@ const useStatistic = (collectionId: string) => {
 
   const volumePrices: VolumePriceType = useMemo(() => {
     let result: VolumePriceType = {} as VolumePriceType;
-    const junoUsd = tokenPrices["ujuno"]?.market_data.current_price?.usd || 0;
+    const junoUsd =
+      tokenPrices[TokenType.JUNO]?.market_data.current_price?.usd || 0;
     (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach((key) => {
       const crrVolume =
         (collectionState?.tradingInfo as any)?.[`${TokenType[key]}Total`] || 0;

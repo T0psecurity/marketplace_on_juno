@@ -178,6 +178,8 @@ export const ChartArea = styled.div`
     height: 80vw;
     max-width: 400px;
     max-height: 400px;
+  }
+  @media (max-width: 600px) {
     margin-bottom: 20px;
   }
 `;
