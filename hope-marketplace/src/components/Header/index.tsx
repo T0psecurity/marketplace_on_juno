@@ -78,7 +78,12 @@ const HeaderLinks = [
     title: "NFT",
     url: "/collections/explore",
     icon: NFTMenuIcon,
-    selectedUrl: ["/collections", "/activity"],
+    selectedUrl: [
+      "/collections/explore",
+      "/collections/marketplace",
+      "/detail",
+      "/activity",
+    ],
     children: [
       {
         title: "Explore",

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useAppSelector } from "../../app/hooks";
+import ExploreHeader from "../../components/ExploreHeader";
 
 import { Title } from "../../components/PageTitle";
 import Collections, { MarketplaceInfo } from "../../constants/Collections";
@@ -100,10 +101,32 @@ const Mint: React.FC = () => {
     };
   }, [collectionStates, filterType]);
 
+  const exploreHeaderTabs = useMemo(() => {
+    const result: any = [];
+    (Object.keys(FILTER_TYPE) as Array<keyof typeof FILTER_TYPE>).forEach(
+      (key) => {
+        const crrOption = FilterButtonOptions[FILTER_TYPE[key]];
+        if (crrOption) {
+          let count = 0;
+          totalFilteredCollections?.[FILTER_TYPE[key]]?.forEach(
+            (collection) => !!collection.mintInfo && count++
+          );
+          result.push({
+            title: `${crrOption.title} (${count})`,
+            onClick: () => setFilterType(FILTER_TYPE[key]),
+            selected: () => filterType === FILTER_TYPE[key],
+          });
+        }
+      }
+    );
+    return result;
+  }, [filterType, totalFilteredCollections]);
+
   return (
     <Wrapper>
-      <Title title="Mint Page" />
-      <ButtonContainer>
+      {/* <Title title="Mint Page" /> */}
+      <ExploreHeader title="Mint Page" tabs={exploreHeaderTabs} />
+      {/* <ButtonContainer>
         {(Object.keys(FILTER_TYPE) as Array<keyof typeof FILTER_TYPE>).map(
           (key) => {
             const crrOption = FilterButtonOptions[FILTER_TYPE[key]];
@@ -125,35 +148,7 @@ const Mint: React.FC = () => {
             );
           }
         )}
-        {/* <StyledButton
-          checked={filterType === FILTER_TYPE.LIVE}
-          onClick={() => setFilterType(FILTER_TYPE.LIVE)}
-        >
-          Live
-        </StyledButton>
-        <StyledButton
-          checked={filterType === FILTER_TYPE.SOLDOUT}
-          backgroundColor="#C63939"
-          color="white"
-          onClick={() => setFilterType(FILTER_TYPE.SOLDOUT)}
-        >
-          Sold Out
-        </StyledButton>
-        <StyledButton
-          checked={filterType === FILTER_TYPE.SCHEDULED}
-          backgroundColor="#FCFF5C"
-          onClick={() => setFilterType(FILTER_TYPE.SCHEDULED)}
-        >
-          Scheduled
-        </StyledButton>
-        <StyledButton
-          checked={filterType === FILTER_TYPE.ALL}
-          backgroundColor="white"
-          onClick={() => setFilterType(FILTER_TYPE.ALL)}
-        >
-          All
-        </StyledButton> */}
-      </ButtonContainer>
+      </ButtonContainer> */}
       {filteredCollections?.map((collection: MarketplaceInfo, index: number) =>
         collection.mintInfo ? (
           <MintItem key={collection.collectionId} mintItem={collection} />

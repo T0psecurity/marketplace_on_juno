@@ -98,7 +98,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     [mintItem]
   );
   const [crrTime, setCrrTime] = useState(new Date());
-  const { isXl } = useMatchBreakpoints();
+  const { isXl, isXxl, isXxxl, isXxxxl } = useMatchBreakpoints();
   const { runQuery, runExecute } = useContract();
   const history = useHistory();
   const { refresh } = useRefresh();
@@ -112,6 +112,8 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const mintDate = mintInfo.mintDate ? new Date(mintInfo.mintDate) : new Date();
   const now = new Date();
   const isLive = compareDate(now, mintDate) !== -1;
+
+  const isMobile = !isXl && !isXxl && !isXxxl && !isXxxxl;
 
   useEffect(() => {
     const interval = setInterval(() => setCrrTime(new Date()), 800);
@@ -312,15 +314,15 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   };
 
   const renderMintImage = () => (
-    <MintImage isMobile={!isXl} alt="mint image" src={mintInfo.mintImage} />
+    <MintImage isMobile={isMobile} alt="mint image" src={mintInfo.mintImage} />
   );
 
   return (
-    <MintDetailContainer isMobile={!isXl}>
+    <MintDetailContainer isMobile={isMobile}>
       <MintDetailInfo>
         <DetailTitle
           bold
-          isMobile={!isXl}
+          isMobile={isMobile}
           onClick={() => {
             history.push(
               `/collections/marketplace?id=${mintItem.collectionId}`
@@ -329,8 +331,8 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
         >
           {mintItem.title}
         </DetailTitle>
-        <DetailInfo isMobile={!isXl}>{mintItem.description}</DetailInfo>
-        {!isXl && <MintImageWrapper>{renderMintImage()}</MintImageWrapper>}
+        <DetailInfo isMobile={isMobile}>{mintItem.description}</DetailInfo>
+        {isMobile && <MintImageWrapper>{renderMintImage()}</MintImageWrapper>}
         <DetailBlockContainer>
           {renderDetailBlocks(NFT_DETAIL_KEYS, "25%")}
         </DetailBlockContainer>
@@ -340,13 +342,13 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
             ? `${collectionState.price} $${mintPriceDenom}`
             : mintItem.mintInfo?.price
         }`}</DetailInfo>
-        <OperationContainer isMobile={!isXl}>
+        <OperationContainer isMobile={isMobile}>
           <FlexColumn width={operationItemSize}>
             <DetailInfo># to mint</DetailInfo>
             {renderDetailBlocks([MINT_DETAIL_OPERATION])}
           </FlexColumn>
           <MintButton
-            isMobile={!isXl}
+            isMobile={isMobile}
             soldOut={isSoldOut}
             backgroundColor={beforePrivateMint ? "#FCFF5C" : ""}
             disabled={
@@ -369,7 +371,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
           </MintButton>
         </OperationContainer>
       </MintDetailInfo>
-      {isXl && renderMintImage()}
+      {!isMobile && renderMintImage()}
     </MintDetailContainer>
   );
 };
