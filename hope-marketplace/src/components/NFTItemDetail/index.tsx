@@ -35,6 +35,7 @@ import {
   RarityRankContainer,
   SocialLinkContainer,
   SocialLinkIcon,
+  TooltipContainer,
 } from "./styled";
 import ReactSelect, { ControlProps } from "react-select";
 import { TokenType } from "../../types/tokens";
@@ -47,6 +48,7 @@ import { ThemeContext } from "../../context/ThemeContext";
 import { NFTItemPricePanel } from "./styled";
 import {
   DescriptionIcon,
+  InfoIcon,
   OfferIcon,
   TransferIcon,
   WalletIcon,
@@ -55,6 +57,7 @@ import useStatistic from "../../pages/Marketplace/hook/useStatistic";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { DiscordIcon, GlobeIcon, ShareIcon, TwitterIcon } from "../Icons";
+import ReactTooltip from "react-tooltip";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -103,6 +106,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const [nftPrice, setNftPrice] = useState("");
   const [transferAdd, setTransferAdd] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
+  const [isFixedSell, setIsFixedSell] = useState(true);
   const SelectOptions = (
     Object.keys(TokenType) as Array<keyof typeof TokenType>
   ).map((key) => {
@@ -340,18 +344,65 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
               </DetailContent>
             </>
           )}
+          {status === "Sell" && (
+            <Text
+              style={{
+                justifyContent: "center",
+                gap: "10px",
+                cursor: "pointer",
+              }}
+              color="#02e296"
+            >
+              Type
+              <InfoIcon data-for="tooltip" data-tip width={30} height={30} />
+            </Text>
+          )}
           <NFTItemOperationContainer>
-            <NFTItemOperationButton onClick={handleNFTItem}>
-              <WalletIcon width={30} height={30} /> {status} Now
-            </NFTItemOperationButton>
+            {status !== "Sell" && (
+              <NFTItemOperationButton onClick={handleNFTItem}>
+                <WalletIcon width={30} height={30} /> {status} Now
+              </NFTItemOperationButton>
+            )}
             {status === "Sell" && (
+              <>
+                <NFTItemOperationButton
+                  colored={!isFixedSell}
+                  onClick={() => setIsFixedSell(true)}
+                >
+                  <WalletIcon width={30} height={30} /> Fixed Price
+                </NFTItemOperationButton>
+                <NFTItemOperationButton
+                  colored={isFixedSell}
+                  onClick={() => setIsFixedSell(false)}
+                >
+                  <OfferIcon width={30} height={30} />
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ lineHeight: "20px" }}>Auction</Text>
+                    <Text style={{ lineHeight: "15px" }} fontSize="0.6em">
+                      Timed
+                    </Text>
+                  </div>
+                </NFTItemOperationButton>
+              </>
+            )}
+            {status === "Buy" && (
+              <NFTItemOperationButton
+                style={{ background: "#FFFFFF", color: "#02e296" }}
+                onClick={handleMakeOffer}
+              >
+                <OfferIcon width={30} height={30} /> Make Offer
+              </NFTItemOperationButton>
+            )}
+          </NFTItemOperationContainer>
+          {status === "Sell" && (
+            <>
               <div style={{ display: "flex" }}>
-                <NFTItemPriceInputer
-                  width="200px"
-                  key={item.token_id}
-                  value={nftPrice}
-                  onChange={handleChangeNFTPrice}
-                />
                 <NFTItemPriceType>
                   <ReactSelect
                     styles={{
@@ -366,12 +417,16 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                       }),
                       container: (provided, state) => ({
                         ...provided,
-                        margin: "5px 10px",
+                        // margin: "5px 10px",
+                        height: "100%",
                         minWidth: 100,
                       }),
                       control: (provided, state) => ({
                         ...provided,
                         minHeight: "unset",
+                        height: "100%",
+                        borderColor: "#02e296 !important",
+                        borderRadius: 10,
                         ...(isDark && {
                           backgroundColor: "#838383",
                         }),
@@ -394,32 +449,26 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                     }))}
                   />
                 </NFTItemPriceType>
+                <NFTItemPriceInputer
+                  width="200px"
+                  key={item.token_id}
+                  value={nftPrice}
+                  onChange={handleChangeNFTPrice}
+                />
               </div>
-            )}
-            {status === "Buy" && (
-              <NFTItemOperationButton
-                style={{ background: "#FFFFFF", color: "#02e296" }}
-                onClick={handleMakeOffer}
-              >
-                <OfferIcon width={30} height={30} /> Make Offer
-              </NFTItemOperationButton>
-            )}
-          </NFTItemOperationContainer>
-          {status === "Sell" && (
-            <NFTItemOperationContainer>
-              <NFTItemOperationButton
-                onClick={handleTransferNFT}
-                style={{ background: "#FFFFFF", color: "#2e7b31" }}
-              >
-                <TransferIcon width={30} height={30} fill="#2e7b31" /> Transfer
-              </NFTItemOperationButton>
+              <NFTItemOperationContainer>
+                <NFTItemOperationButton onClick={handleTransferNFT}>
+                  <TransferIcon width={30} height={30} fill="#2e7b31" />{" "}
+                  Transfer
+                </NFTItemOperationButton>
 
-              <NFTItemPriceInputer
-                width="270px"
-                value={transferAdd}
-                onChange={handleChangeTransferAdd}
-              />
-            </NFTItemOperationContainer>
+                <NFTItemPriceInputer
+                  width="270px"
+                  value={transferAdd}
+                  onChange={handleChangeTransferAdd}
+                />
+              </NFTItemOperationContainer>
+            </>
           )}
         </NFTItemPricePanel>
 
@@ -453,6 +502,24 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
           />
         </FloorPriceContainer>
       </NFTDetailContainer>
+      <ReactTooltip id="tooltip" place="left" effect="float">
+        <TooltipContainer>
+          <ul>
+            <li>
+              In a <span style={{ fontWeight: "bold" }}>Fixed Price</span> sale,
+              the seller establishes the NFT price. <br /> This will not be able
+              to receive offers other than the established price.
+            </li>
+            <li>
+              In a <span style={{ fontWeight: "bold" }}>Auction Offers</span>{" "}
+              you choose a maximum price, and buyers can make offers. <br /> The
+              seller can choose to accept it at any time, but the buyer will
+              need the funds to create a bid. <br /> Making a bid on this kind
+              of action is like making an offer on a fixed-price listing.
+            </li>
+          </ul>
+        </TooltipContainer>
+      </ReactTooltip>
     </Wrapper>
   );
 };

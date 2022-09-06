@@ -82,6 +82,16 @@ export const Wrapper = styled.div<{ isMobile: boolean }>`
         margin: 10px;
       }
     `}
+
+  .__react_component_tooltip {
+    background: rgba(2, 226, 150, 0.12);
+    backdrop-filter: blur(8px);
+    border: 1px solid #02e296;
+    border-radius: 10px;
+    &::after {
+      border-left-color: #02e296 !important;
+    }
+  }
 `;
 
 export const NFTItemImageDownloadIcon = styled.svg`
@@ -91,7 +101,7 @@ export const NFTItemImageDownloadIcon = styled.svg`
   cursor: pointer;
 `;
 
-export const NFTItemOperationButton = styled.div`
+export const NFTItemOperationButton = styled.div<{ colored?: boolean }>`
   display: inline-flex;
   align-items: center;
   gap: 20px;
@@ -113,11 +123,11 @@ export const NFTItemOperationButton = styled.div`
   min-width: 200px;
   margin: 10px 0;
   padding: 6px 16px;
-  color: #fff;
+  color: ${({ colored }) => (colored ? "white" : "#02e296")};
   font-size: 20px;
   font-weight: bold;
   /* background-color: #2e7b31; */
-  background-color: #02e296;
+  background-color: ${({ colored }) => (colored ? "#02e296" : "white")};
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
@@ -125,6 +135,12 @@ export const NFTItemOperationButton = styled.div`
     border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  svg {
+    path {
+      transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      fill: ${({ colored }) => (colored ? "white" : "#02e096")};
+    }
+  }
   &:hover {
     text-decoration: none;
     /* background-color: #704343; */
@@ -164,9 +180,15 @@ export const NFTItemDescriptionContent = styled.div`
 
 export const NFTItemOperationContainer = styled.div<{
   justifyContent?: string;
+  flexDirection?: string;
 }>`
   display: flex;
   justify-content: ${({ justifyContent }) => justifyContent ?? "flex-start"};
+  ${({ flexDirection }) =>
+    flexDirection &&
+    css`
+      flex-direction: ${flexDirection};
+    `}
   align-items: center;
   gap: 20px;
   @media (max-width: 650px) {
@@ -178,6 +200,9 @@ export const NFTItemPriceInputer = styled.input<{ width: string }>`
   width: ${({ width }) => width};
   height: 40px;
   margin: 0 10px;
+  border: 1px solid #02e296;
+  border-radius: 10px;
+  outline: none;
   @media (max-width: 450px) {
     width: unset;
   }
@@ -337,4 +362,14 @@ export const FloorPriceContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const TooltipContainer = styled.div`
+  font-size: 20px;
+  color: black;
+  ul {
+    li {
+      text-align: left;
+    }
+  }
 `;
