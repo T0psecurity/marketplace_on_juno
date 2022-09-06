@@ -300,7 +300,7 @@ const MyNFT: React.FC = () => {
           name: key,
           tokenFullName: TokenFullName[denom],
           token: denom,
-          price: denom === TokenType.JUNO ? 1000 : crrBalance * crrTokenPrice,
+          price: crrBalance * crrTokenPrice,
         });
       return result + crrBalance * crrTokenPrice;
     }, 0);

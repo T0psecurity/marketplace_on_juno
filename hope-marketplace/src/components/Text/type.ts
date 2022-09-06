@@ -1,4 +1,6 @@
-export interface TextProps {
+import { BasicProps } from "../../constants/BasicTypes";
+
+export interface TextProps extends BasicProps {
   fontSize?: string;
   bold?: boolean;
   color?: string;

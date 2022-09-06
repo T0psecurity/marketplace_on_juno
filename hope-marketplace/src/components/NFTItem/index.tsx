@@ -94,7 +94,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
     setIsPendingTx(true);
     try {
       if (status === NFTItemStatus.SELL) {
-        await sellNft(item, nftPrice, nftPriceType);
+        await sellNft(item, nftPrice, nftPriceType, 0);
       } else if (status === NFTItemStatus.WITHDRAW) {
         await withdrawNft(item);
       } else if (status === NFTItemStatus.BUY) {

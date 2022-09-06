@@ -88,9 +88,6 @@ export const Wrapper = styled.div<{ isMobile: boolean }>`
     backdrop-filter: blur(8px);
     border: 1px solid #02e296;
     border-radius: 10px;
-    &::after {
-      border-left-color: #02e296 !important;
-    }
   }
 `;
 

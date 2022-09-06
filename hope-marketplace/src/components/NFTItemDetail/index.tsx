@@ -36,7 +36,7 @@ import {
   SocialLinkContainer,
   SocialLinkIcon,
   TooltipContainer,
-  CustomAuctionPeriodControl,
+  // CustomAuctionPeriodControl,
 } from "./styled";
 import ReactSelect, { ControlProps } from "react-select";
 import { TokenType } from "../../types/tokens";
@@ -48,18 +48,17 @@ import {
 import { ThemeContext } from "../../context/ThemeContext";
 import { NFTItemPricePanel } from "./styled";
 import {
-  CalendarIcon,
+  // CalendarIcon,
   DescriptionIcon,
-  InfoIcon,
   OfferIcon,
   TransferIcon,
   WalletIcon,
 } from "../SvgIcons";
 import useStatistic from "../../pages/Marketplace/hook/useStatistic";
 import { useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
 import { DiscordIcon, GlobeIcon, ShareIcon, TwitterIcon } from "../Icons";
 import ReactTooltip from "react-tooltip";
+import MakeOfferTooltip from "../MakeOfferTooltip";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -98,20 +97,20 @@ const SelectOptions = (
   };
 });
 
-const AuctionPeriodOptions = [
-  {
-    value: 30,
-    label: "1 month",
-  },
-  {
-    value: 7,
-    label: "7 days",
-  },
-  {
-    value: 1,
-    label: "1 day",
-  },
-];
+// const AuctionPeriodOptions = [
+//   {
+//     value: 30,
+//     label: "1 month",
+//   },
+//   {
+//     value: 7,
+//     label: "7 days",
+//   },
+//   {
+//     value: 1,
+//     label: "1 day",
+//   },
+// ];
 
 const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const { isDark } = useContext(ThemeContext);
@@ -132,9 +131,8 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   const [nftPrice, setNftPrice] = useState("");
   const [transferAdd, setTransferAdd] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
-  const [isFixedSell, setIsFixedSell] = useState(true);
   const [selectValue, setSelectValue] = useState(SelectOptions[0]);
-  const [auctionPeriod, setAuctionPeriod] = useState(AuctionPeriodOptions[0]);
+  // const [auctionPeriod, setAuctionPeriod] = useState(AuctionPeriodOptions[0]);
   const statistics: any = useStatistic(item.collectionId);
   const history = useHistory();
 
@@ -169,7 +167,9 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
   const handleNFTItem = async () => {
     if (status === "Sell") {
-      await sellNft(item, nftPrice, nftPriceType);
+      // const expire =
+      //   (Number(new Date()) + auctionPeriod.value * 24 * 3600 * 1000) * 1e6;
+      await sellNft(item, nftPrice, nftPriceType, 0);
     } else if (status === "Withdraw") {
       await withdrawNft(item);
     } else if (status === "Buy") {
@@ -199,10 +199,6 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
   const handleTransferNFT = async () => {
     await transferNft(transferAdd, item, "/profile");
-  };
-
-  const handleMakeOffer = () => {
-    toast.info("Function available soon!");
   };
 
   const CustomSelectItem = ({ ...props }) => {
@@ -252,17 +248,17 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
     );
   };
 
-  const CustomAuctionPeriodControlItem = ({
-    children,
-    ...props
-  }: ControlProps<any, false>) => {
-    return (
-      <CustomAuctionPeriodControl>
-        <CalendarIcon />
-        {children}
-      </CustomAuctionPeriodControl>
-    );
-  };
+  // const CustomAuctionPeriodControlItem = ({
+  //   children,
+  //   ...props
+  // }: ControlProps<any, false>) => {
+  //   return (
+  //     <CustomAuctionPeriodControl>
+  //       <CalendarIcon />
+  //       {children}
+  //     </CustomAuctionPeriodControl>
+  //   );
+  // };
 
   return (
     <Wrapper isMobile={isMobile}>
@@ -375,7 +371,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
               </DetailContent>
             </>
           )}
-          {status === "Sell" && (
+          {/* {status === "Sell" && (
             <Text
               style={{
                 justifyContent: "center",
@@ -387,7 +383,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
               Type
               <InfoIcon data-for="tooltip" data-tip width={30} height={30} />
             </Text>
-          )}
+          )} */}
           <NFTItemOperationContainer>
             {status !== "Sell" && (
               <NFTItemOperationButton onClick={handleNFTItem}>
@@ -396,13 +392,10 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
             )}
             {status === "Sell" && (
               <>
-                <NFTItemOperationButton
-                  colored={!isFixedSell}
-                  onClick={() => setIsFixedSell(true)}
-                >
-                  <WalletIcon width={30} height={30} /> Fixed Price
+                <NFTItemOperationButton colored onClick={handleNFTItem}>
+                  <WalletIcon width={30} height={30} /> Sell/Auction
                 </NFTItemOperationButton>
-                <NFTItemOperationButton
+                {/* <NFTItemOperationButton
                   colored={isFixedSell}
                   onClick={() => setIsFixedSell(false)}
                 >
@@ -419,13 +412,15 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                       Timed
                     </Text>
                   </div>
-                </NFTItemOperationButton>
+                </NFTItemOperationButton> */}
               </>
             )}
             {status === "Buy" && (
               <NFTItemOperationButton
-                style={{ background: "#FFFFFF", color: "#02e296" }}
-                onClick={handleMakeOffer}
+                colored
+                data-for="makeOfferTooltip"
+                data-tip
+                data-event="click focus"
               >
                 <OfferIcon width={30} height={30} /> Make Offer
               </NFTItemOperationButton>
@@ -491,64 +486,57 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                   value={nftPrice}
                   onChange={handleChangeNFTPrice}
                 />
+                {/* <ReactSelect
+                  value={auctionPeriod}
+                  onChange={(value: any) => setAuctionPeriod(value)}
+                  options={AuctionPeriodOptions}
+                  styles={{
+                    dropdownIndicator: (provided, state) => ({
+                      ...provided,
+                      padding: 0,
+                      color: "#02e296",
+                    }),
+                    indicatorSeparator: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: "#02e296",
+                    }),
+                    valueContainer: (provided, state) => ({
+                      ...provided,
+                      // height: 10,
+                      padding: 0,
+                    }),
+                    container: (provided, state) => ({
+                      ...provided,
+                      // margin: "5px 10px",
+                      height: "100%",
+                      minWidth: 100,
+                    }),
+                    control: (provided, state) => ({
+                      ...provided,
+                      minHeight: "unset",
+                      height: "100%",
+                      borderColor: "#02e296 !important",
+                      borderRadius: 10,
+                      ...(isDark && {
+                        backgroundColor: "#838383",
+                      }),
+                    }),
+                    menu: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: isDark ? "#838383" : "white",
+                    }),
+                    singleValue: (provided, state) => ({
+                      ...provided,
+                      ...(isDark && {
+                        color: "white",
+                      }),
+                    }),
+                  }}
+                  components={{
+                    Control: CustomAuctionPeriodControlItem,
+                  }}
+                /> */}
               </div>
-              <NFTItemOperationContainer>
-                <NFTItemOperationButton colored>
-                  {isFixedSell ? "Sell" : "Auction"}
-                </NFTItemOperationButton>
-                {!isFixedSell && (
-                  <ReactSelect
-                    value={auctionPeriod}
-                    onChange={(value: any) => setAuctionPeriod(value)}
-                    options={AuctionPeriodOptions}
-                    styles={{
-                      dropdownIndicator: (provided, state) => ({
-                        ...provided,
-                        padding: 0,
-                        color: "#02e296",
-                      }),
-                      indicatorSeparator: (provided, state) => ({
-                        ...provided,
-                        backgroundColor: "#02e296",
-                      }),
-                      valueContainer: (provided, state) => ({
-                        ...provided,
-                        // height: 10,
-                        padding: 0,
-                      }),
-                      container: (provided, state) => ({
-                        ...provided,
-                        // margin: "5px 10px",
-                        height: "100%",
-                        minWidth: 100,
-                      }),
-                      control: (provided, state) => ({
-                        ...provided,
-                        minHeight: "unset",
-                        height: "100%",
-                        borderColor: "#02e296 !important",
-                        borderRadius: 10,
-                        ...(isDark && {
-                          backgroundColor: "#838383",
-                        }),
-                      }),
-                      menu: (provided, state) => ({
-                        ...provided,
-                        backgroundColor: isDark ? "#838383" : "white",
-                      }),
-                      singleValue: (provided, state) => ({
-                        ...provided,
-                        ...(isDark && {
-                          color: "white",
-                        }),
-                      }),
-                    }}
-                    components={{
-                      Control: CustomAuctionPeriodControlItem,
-                    }}
-                  />
-                )}
-              </NFTItemOperationContainer>
               <NFTItemOperationContainer>
                 <NFTItemOperationButton onClick={handleTransferNFT}>
                   <TransferIcon width={30} height={30} fill="#2e7b31" />{" "}
@@ -595,7 +583,12 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
           />
         </FloorPriceContainer>
       </NFTDetailContainer>
-      <ReactTooltip id="tooltip" place="left" effect="float">
+      <ReactTooltip
+        id="tooltip"
+        place="left"
+        effect="float"
+        arrowColor="#02e296"
+      >
         <TooltipContainer>
           <ul>
             <li>
@@ -613,6 +606,11 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
           </ul>
         </TooltipContainer>
       </ReactTooltip>
+      <MakeOfferTooltip
+        id="makeOfferTooltip"
+        nftItem={item}
+        collection={targetCollection}
+      />
     </Wrapper>
   );
 };

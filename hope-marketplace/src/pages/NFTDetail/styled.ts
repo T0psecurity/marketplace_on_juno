@@ -101,11 +101,34 @@ export const NFTItemDescriptionContent = styled.div<{ maxHeight?: string }>`
   max-height: ${({ maxHeight }) => maxHeight ?? "300px"};
   overflow: auto;
   min-height: 50px;
+
+  table {
+    width: 100%;
+    tr {
+      th,
+      td {
+        color: ${({ theme }) => theme.colors.fontColor};
+      }
+    }
+  }
 `;
 
 export const ViewCollectionButton = styled.span`
   font-size: 14px;
   text-decoration: underline;
   color: #0057ff;
+  cursor: pointer;
+`;
+
+export const CoinIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const CoinIcon = styled.img<{ size?: string }>`
+  width: ${({ size }) => size || "35px"};
+  height: ${({ size }) => size || "35px"};
+  margin-right: 5px;
   cursor: pointer;
 `;
