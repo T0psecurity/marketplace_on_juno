@@ -17,6 +17,7 @@ import {
   ViewCollectionButton,
   CoinIconWrapper,
   CoinIcon,
+  AcceptButton,
   // HorizontalDivider,
 } from "./styled";
 import { CollectionTraitsStateType } from "../../features/collectionTraits/collectionTraitsSlice";
@@ -40,6 +41,9 @@ import useContract from "../../hook/useContract";
 import Text from "../../components/Text";
 import { TokenType } from "../../types/tokens";
 import moment from "moment";
+import Button from "../../components/Button";
+import useRefresh from "../../hook/useRefresh";
+import { toast } from "react-toastify";
 // import NFTAdvertise from "../../components/NFTAdvertise";
 
 const MAX_ITEM = 30;
@@ -53,10 +57,11 @@ const NFTDetail: React.FC = () => {
     new URLSearchParams(search).get("token_id")
   );
 
-  const { runQuery } = useContract();
+  const { runQuery, runExecute } = useContract();
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const isMobile = isXs || isSm || isMd;
   const { pickNFTByTokenId } = usePickNFT();
+  const { refresh } = useRefresh();
   const selectedNFT: any = pickNFTByTokenId(token_id || "");
   const history = useHistory();
 
@@ -98,6 +103,7 @@ const NFTDetail: React.FC = () => {
     targetCollection.nftContract,
   ]);
 
+  const account = useAppSelector((state) => state.accounts.keplrAccount);
   const collectionTraitsState: CollectionTraitsStateType = useAppSelector(
     (state: any) => state.collectionTraitsStates[selectedNFT.collectionId]
   );
@@ -126,6 +132,27 @@ const NFTDetail: React.FC = () => {
     },
     [token_id]
   );
+
+  const handleAcceptBid = async (offer: any) => {
+    const message = {
+      accept_bid: {
+        nft_address: targetCollection.nftContract,
+        token_id: selectedNFT.token_id,
+        bidder: offer.bidder,
+      },
+    };
+    try {
+      await runExecute(selectedNFT.contractAddress, message);
+      toast.success("Accept bid successfully!");
+      refresh();
+      history.goBack();
+    } catch (e) {
+      toast.error("Accept bid failed!");
+    }
+  };
+
+  const isMySellingNft =
+    selectedNFT?.seller && selectedNFT.seller === account?.address;
 
   return (
     <Wrapper>
@@ -177,6 +204,7 @@ const NFTDetail: React.FC = () => {
                   <th>USD Price</th>
                   <th>Expiration</th>
                   <th>From</th>
+                  {isMySellingNft && <th />}
                 </tr>
               </thead>
               <tbody>
@@ -214,7 +242,18 @@ const NFTDetail: React.FC = () => {
                       </td>
                       <td>{priceInUsd}</td>
                       <td>{expirationDate}</td>
-                      <td>{offer.bidder}</td>
+                      <td title={offer.bidder}>
+                        {offer.bidder === account?.address
+                          ? "YOU"
+                          : offer.bidder}
+                      </td>
+                      {isMySellingNft && (
+                        <td>
+                          <AcceptButton onClick={() => handleAcceptBid(offer)}>
+                            Accept
+                          </AcceptButton>
+                        </td>
+                      )}
                     </tr>
                   );
                 })}

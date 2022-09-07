@@ -13,7 +13,7 @@ import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { TokenType } from "../../types/tokens";
 import { addSuffix, escapeSpecialForUrl } from "../../util/string";
 import Image from "../Image";
-import { OfferIcon, WalletIcon } from "../SvgIcons";
+// import { OfferIcon, WalletIcon } from "../SvgIcons";
 
 import {
   NFTItemImageWrapper,
@@ -31,8 +31,8 @@ import {
   RarityRankContainer,
   RarityRankContent,
   SellInfoContainer,
-  SellTypeButtonContainer,
-  SellTypeButton,
+  // SellTypeButtonContainer,
+  // SellTypeButton,
   SellButtonContainer,
 } from "./styled";
 
@@ -50,7 +50,7 @@ export const NFTItemStatus = {
 
 export default function NFTItem({ item, status }: NFTItemProps) {
   const [isPendingTx, setIsPendingTx] = useState(false);
-  const [isAuction, setIsAuction] = useState(false);
+  // const [isAuction, setIsAuction] = useState(false);
   const [nftPrice, setNftPrice] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
   const { isDark } = useContext(ThemeContext);
@@ -156,7 +156,9 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const NFTItemOperationButtonItem = () => (
     <NFTItemOperationButton onClick={handleNFTItem} disabled={isPendingTx}>
-      {`${status}${isPendingTx ? "ing" : " Now"}`}
+      {`${status === NFTItemStatus.SELL ? "Sell / Auction" : status}${
+        isPendingTx ? "ing" : " Now"
+      }`}
     </NFTItemOperationButton>
   );
 
@@ -184,7 +186,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
         {!isMobile && !isSellItem && <NFTItemOperationButtonItem />}
         {isSellItem && (
           <SellInfoContainer>
-            <SellTypeButtonContainer>
+            {/* <SellTypeButtonContainer>
               <SellTypeButton
                 onClick={() => setIsAuction(false)}
                 checked={!isAuction}
@@ -197,7 +199,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
               >
                 <OfferIcon width={20} height={20} /> Offers
               </SellTypeButton>
-            </SellTypeButtonContainer>
+            </SellTypeButtonContainer> */}
             <NFTItemPriceType>
               <ReactSelect
                 styles={{

@@ -198,7 +198,7 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
                     const denom = TokenType[key];
                     const tokenStatus = TokenStatus[denom];
                     if (tokenStatus.isIBCCOin) return null;
-                    return <TokenBalanceItem token={key} />;
+                    return <TokenBalanceItem key={key} token={key} />;
                   }
                 )}
                 <Text margin="10px 0 0 0">IBC Assets</Text>
