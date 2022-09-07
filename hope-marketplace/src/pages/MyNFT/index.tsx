@@ -129,7 +129,7 @@ const MyNFT: React.FC = () => {
   const { runQuery } = useContract();
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const { pickNFTByTokenId } = usePickNFT();
-  const { acceptBid } = useHandleNftItem();
+  const { acceptBid, withdrawBid } = useHandleNftItem();
   const popoutQuickSwap = usePopoutQuickSwap();
   const { isDark } = useContext(ThemeContext);
   const isMobile = isXs || isSm || isMd;
@@ -289,6 +289,7 @@ const MyNFT: React.FC = () => {
 
   const handleAcceptWithdrawOffer = (offer: any) => {
     if (offer.bidder === account?.address) {
+      withdrawBid(offer);
     } else {
       acceptBid(offer);
     }
@@ -683,94 +684,101 @@ const MyNFT: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {myOffers.map((offer: any, index: number) => {
-                const listPrice = offer.list_price || {};
-                const currentNft: any = pickNFTByTokenId(offer?.token_id || "");
-                const targetCollection =
-                  getCollectionById(currentNft.collectionId || "") || {};
-                const tokenName = (
-                  Object.keys(TokenType) as Array<keyof typeof TokenType>
-                ).filter((key) => TokenType[key] === listPrice?.denom)[0];
-                const tokenPrice =
-                  tokenPrices[listPrice?.denom as TokenType]?.market_data
-                    .current_price?.usd || 0;
-                const priceInUsd = (
-                  (+listPrice.amount * tokenPrice) /
-                  1e6
-                ).toLocaleString("en-US", {
-                  maximumFractionDigits: 2,
-                });
-                const expirationDate = moment(
-                  new Date(+(offer?.expires_at || "0") / 1e6)
-                ).format("YYYY-MM-DD hh:mm:ss");
-                const collectionState =
-                  collectionStates[currentNft.collectionId as CollectionIds] ||
-                  {};
+              {myOffers.length ? (
+                myOffers.map((offer: any, index: number) => {
+                  const listPrice = offer.list_price || {};
+                  const currentNft: any = pickNFTByTokenId(
+                    offer?.token_id || ""
+                  );
+                  const targetCollection =
+                    getCollectionById(currentNft.collectionId || "") || {};
+                  const tokenName = (
+                    Object.keys(TokenType) as Array<keyof typeof TokenType>
+                  ).filter((key) => TokenType[key] === listPrice?.denom)[0];
+                  const tokenPrice =
+                    tokenPrices[listPrice?.denom as TokenType]?.market_data
+                      .current_price?.usd || 0;
+                  const priceInUsd = (
+                    (+listPrice.amount * tokenPrice) /
+                    1e6
+                  ).toLocaleString("en-US", {
+                    maximumFractionDigits: 2,
+                  });
+                  const expirationDate = moment(
+                    new Date(+(offer?.expires_at || "0") / 1e6)
+                  ).format("YYYY-MM-DD hh:mm:ss");
+                  const collectionState =
+                    collectionStates[
+                      currentNft.collectionId as CollectionIds
+                    ] || {};
 
-                let url = "";
-                if (currentNft.collectionId === "mintpass1") {
-                  url = "/others/mint_pass.png";
-                } else if (currentNft.collectionId === "mintpass2") {
-                  url = "/others/mint_pass2.png";
-                } else if (currentNft.collectionId === "hopegalaxy1") {
-                  url = `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${getTokenIdNumber(
-                    currentNft.token_id
-                  )}.png`;
-                } else if (collectionState.imageUrl) {
-                  url = `${collectionState.imageUrl}${getTokenIdNumber(
-                    currentNft.token_id
-                  )}.png`;
-                }
+                  let url = "";
+                  if (currentNft.collectionId === "mintpass1") {
+                    url = "/others/mint_pass.png";
+                  } else if (currentNft.collectionId === "mintpass2") {
+                    url = "/others/mint_pass2.png";
+                  } else if (currentNft.collectionId === "hopegalaxy1") {
+                    url = `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${getTokenIdNumber(
+                      currentNft.token_id
+                    )}.png`;
+                  } else if (collectionState.imageUrl) {
+                    url = `${collectionState.imageUrl}${getTokenIdNumber(
+                      currentNft.token_id
+                    )}.png`;
+                  }
 
-                return (
-                  <tr key={index}>
-                    <td>OFFER</td>
-                    <td>
-                      <ItemTd>
-                        <img alt="" src={url} />
-                        <TokenNameContainer>
-                          <Text>{targetCollection.title}</Text>
-                          <Text>
-                            {targetCollection.customTokenId
-                              ? getCustomTokenId(
-                                  currentNft.token_id,
-                                  targetCollection.customTokenId
-                                )
-                              : currentNft.token_id}
-                          </Text>
-                        </TokenNameContainer>
-                      </ItemTd>
-                    </td>
-                    <td>
-                      <CoinIconWrapper>
-                        <CoinIcon
-                          alt=""
-                          src={`/coin-images/${listPrice?.denom.replace(
-                            /\//g,
-                            ""
-                          )}.png`}
-                        />
-                        <Text>{Number(listPrice.amount) / 1e6}</Text>
-                        <Text>{tokenName}</Text>
-                        <Text>{`($${priceInUsd})`}</Text>
-                      </CoinIconWrapper>
-                    </td>
-                    <td>{offer.bidder}</td>
-                    <td>
-                      {account?.address ? (
-                        <AcceptWithdrawBidButton
-                          onClick={() => handleAcceptWithdrawOffer(offer)}
-                        >
-                          {account.address === offer.bidder
-                            ? "Withdraw"
-                            : "Accept"}
-                        </AcceptWithdrawBidButton>
-                      ) : null}
-                    </td>
-                    <td>{expirationDate}</td>
-                  </tr>
-                );
-              })}
+                  return (
+                    <tr key={index}>
+                      <td>OFFER</td>
+                      <td>
+                        <ItemTd>
+                          <img alt="" src={url} />
+                          <TokenNameContainer>
+                            <Text>{targetCollection.title}</Text>
+                            <Text>
+                              {targetCollection.customTokenId
+                                ? getCustomTokenId(
+                                    currentNft.token_id,
+                                    targetCollection.customTokenId
+                                  )
+                                : currentNft.token_id}
+                            </Text>
+                          </TokenNameContainer>
+                        </ItemTd>
+                      </td>
+                      <td>
+                        <CoinIconWrapper>
+                          <CoinIcon
+                            alt=""
+                            src={`/coin-images/${listPrice?.denom.replace(
+                              /\//g,
+                              ""
+                            )}.png`}
+                          />
+                          <Text>{Number(listPrice.amount) / 1e6}</Text>
+                          <Text>{tokenName}</Text>
+                          <Text>{`($${priceInUsd})`}</Text>
+                        </CoinIconWrapper>
+                      </td>
+                      <td>{offer.bidder}</td>
+                      <td>
+                        {account?.address ? (
+                          <AcceptWithdrawBidButton
+                            onClick={() => handleAcceptWithdrawOffer(offer)}
+                          >
+                            {account.address === offer.bidder
+                              ? "Withdraw"
+                              : "Accept"}
+                          </AcceptWithdrawBidButton>
+                        ) : null}
+                      </td>
+                      <td>{expirationDate}</td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <td colSpan={6}>No Offers</td>
+              )}
             </tbody>
           </table>
         </OffersContainer>

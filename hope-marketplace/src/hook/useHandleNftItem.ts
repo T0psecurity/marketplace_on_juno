@@ -395,6 +395,28 @@ const useHandleNftItem = () => {
     [history, pickNFTByTokenId, refresh, runExecute]
   );
 
+  const withdrawBid = useCallback(
+    async (offer: any) => {
+      if (!offer) return;
+      const selectedNFT: any = pickNFTByTokenId(offer.token_id || "");
+      const targetCollection = getCollectionById(selectedNFT.collectionId);
+      const message = {
+        remove_bid: {
+          nft_address: targetCollection.nftContract,
+          token_id: offer.token_id,
+        },
+      };
+      try {
+        await runExecute(selectedNFT.contractAddress, message);
+        toast.success("Withdraw bid successfully!");
+        refresh();
+      } catch (e) {
+        toast.error("Withdraw bid failed!");
+      }
+    },
+    [history, pickNFTByTokenId, refresh, runExecute]
+  );
+
   return {
     sellNft,
     withdrawNft,
@@ -402,6 +424,7 @@ const useHandleNftItem = () => {
     transferNft,
     makeOfferToNft,
     acceptBid,
+    withdrawBid,
   };
 };
 
