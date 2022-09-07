@@ -49,6 +49,19 @@ const AcceptCollectionBidTooltip: React.FC<AcceptCollectionBidTooltipProps> = ({
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
 
   const handleAcceptBid = async (item: any) => {
+    if (!item.list_price) {
+      try {
+        await runExecute(collection.nftContract, {
+          approve: {
+            spender: MarketplaceContracts[0],
+            token_id: item.token_id,
+          },
+        });
+        toast.success("Approved!");
+      } catch (e) {
+        toast.error("Approve failed!");
+      }
+    }
     const message = {
       accept_collection_bid: {
         nft_address: collection.nftContract,
@@ -60,6 +73,7 @@ const AcceptCollectionBidTooltip: React.FC<AcceptCollectionBidTooltipProps> = ({
       await runExecute(MarketplaceContracts[0], message);
       toast.success("Accept bid successfully!");
     } catch (e) {
+      console.error("accept collection bid error", e);
       toast.error("Accept bid failed!");
     }
   };

@@ -188,7 +188,7 @@ const useFetch = () => {
 
             get_tvlby_collection: {
               collection: collection.nftContract,
-              limit: 30,
+              limit: MAX_ITEMS,
             },
           });
           let totalVolume: any = {};
