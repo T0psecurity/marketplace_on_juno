@@ -80,7 +80,7 @@ enum NFT_TYPE {
   ONSALE = "On Sale",
 }
 
-const MAX_ITEM = 1;
+const MAX_ITEM = 10;
 
 // const checkSearchedNft = (
 //   nft: any,

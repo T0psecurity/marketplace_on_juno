@@ -186,6 +186,97 @@ export const StyledButton = styled(Button)<{ selected?: boolean }>`
     `}
 `;
 
+export const BidsWrapper = styled.div`
+  table {
+    width: 100%;
+    table-layout: fixed;
+    tr {
+      th,
+      td {
+        color: ${({ theme }) => theme.colors.fontColor};
+        min-width: 85px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+`;
+
+export const CoinIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const CoinIcon = styled.img<{ size?: string }>`
+  width: ${({ size }) => size || "35px"};
+  height: ${({ size }) => size || "35px"};
+  margin-right: 5px;
+  cursor: pointer;
+`;
+
+export const AcceptWithdrawButton = styled.div`
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  background-color: #02e296;
+  color: white;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  &:hover {
+    opacity: 0.6;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
+      0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  }
+`;
+
+export const OperationWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+`;
+
+export const MakeOfferButton = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  background-color: #02e296;
+  color: white;
+  border-radius: 10px;
+  padding: 6px 16px;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  svg {
+    path {
+      fill: white;
+    }
+  }
+  &:hover {
+    opacity: 0.6;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
+      0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  }
+`;
+
+export const ButtonText = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 24px;
+  color: white;
+`;
+
 export const StatisticWrapper = styled.div`
   display: flex;
   justify-content: center;

@@ -2,13 +2,13 @@ import React, { useMemo, useState } from "react";
 import { useAppSelector } from "../../app/hooks";
 import ExploreHeader from "../../components/ExploreHeader";
 
-import { Title } from "../../components/PageTitle";
+// import { Title } from "../../components/PageTitle";
 import Collections, { MarketplaceInfo } from "../../constants/Collections";
 import { TotalStateType } from "../../features/collections/collectionsSlice";
 import { compareDate } from "../../util/date";
 import MintItem from "./MintItem";
 
-import { Wrapper, ButtonContainer, StyledButton } from "./styled";
+import { Wrapper } from "./styled";
 
 enum FILTER_TYPE {
   LIVE,

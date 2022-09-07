@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import ReactSelect, { ControlProps } from "react-select";
-import ReactTooltip from "react-tooltip";
 import { useAppSelector } from "../../app/hooks";
 import { MarketplaceInfo } from "../../constants/Collections";
 import useHandleNftItem from "../../hook/useHandleNftItem";
 import { TokenStatus, TokenType } from "../../types/tokens";
 import { CalendarIcon, OfferIcon } from "../SvgIcons";
 import Text from "../Text";
+import ToolTip from "../ToolTip";
 import {
   BalanceItem,
   CoinIcon,
@@ -89,7 +89,7 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
   const balances = useAppSelector((state) => state.balances);
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
 
-  const { makeOfferToNft } = useHandleNftItem();
+  const { makeOfferToNft, makeOfferToCollection } = useHandleNftItem();
 
   const handleSelectTokenType = (token: any) => {
     setSelectedTokenType(token);
@@ -104,11 +104,18 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
   };
 
   const handleMakeOffer = async () => {
+    const expiration =
+      (Number(new Date()) + expirationDate.value * 24 * 3600 * 1000) * 1e6;
     if (nftItem) {
-      const expiration =
-        (Number(new Date()) + expirationDate.value * 24 * 3600 * 1000) * 1e6;
       await makeOfferToNft(
         nftItem,
+        offerPrice,
+        selectedTokenType.denom,
+        expiration
+      );
+    } else {
+      await makeOfferToCollection(
+        collection.collectionId,
         offerPrice,
         selectedTokenType.denom,
         expiration
@@ -162,7 +169,7 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
 
   return (
     <Wrapper>
-      <ReactTooltip
+      <ToolTip
         id={id}
         place="top"
         effect="solid"
@@ -171,7 +178,9 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
       >
         <TooltipContainer>
           <HoperLogo />
-          <Text>Make an offer to this NFT</Text>
+          <Text>{`Make an offer to this ${
+            !!nftItem ? "NFT" : "Collection"
+          }`}</Text>
           <Text bold>{collection.title}</Text>
           <TokenTypeContainer>
             <SelectedTokenItem>
@@ -286,7 +295,7 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
             Make Offer
           </MakeOfferButton>
         </TooltipContainer>
-      </ReactTooltip>
+      </ToolTip>
     </Wrapper>
   );
 };

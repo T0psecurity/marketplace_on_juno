@@ -305,6 +305,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               onClick={() => handleChangeNftListTab(MarketplaceTabs.ACTIVITY)}
               title="Activity"
             />
+            <Tab
+              selected={selectedTab === MarketplaceTabs.BIDS}
+              onClick={() => handleChangeNftListTab(MarketplaceTabs.BIDS)}
+              title="Bids"
+            />
           </Tabs>
           {selectedTab === MarketplaceTabs.ITEMS && (
             <SortContainer>

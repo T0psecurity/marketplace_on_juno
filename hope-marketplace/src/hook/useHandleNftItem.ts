@@ -13,6 +13,7 @@ import {
 import usePopoutQuickSwap, { SwapType } from "../components/Popout";
 import { ChainTypes } from "../constants/ChainTypes";
 import {
+  CollectionIds,
   getCollectionById,
   MarketplaceContracts,
 } from "../constants/Collections";
@@ -181,6 +182,73 @@ const useHandleNftItem = () => {
       try {
         if (tokenStatus.isNativeCoin) {
           await runExecute(item.contractAddress, message, {
+            funds: `${price}`,
+            denom: tokenType,
+          });
+        } else {
+          await runExecute(
+            TokenStatus[tokenType as TokenType].contractAddress || "",
+            message
+          );
+        }
+        toast.success("Make offer successfully!");
+        refresh();
+      } catch (err: any) {
+        const errMsg = err.message;
+        console.error(err, errMsg, typeof errMsg);
+        toast.error(`Fail! ${errMsg}`);
+      }
+    },
+    [refresh, runExecute]
+  );
+
+  const makeOfferToCollection = useCallback(
+    async (
+      collectionId: CollectionIds,
+      nftPrice: any,
+      tokenType: any,
+      expire: number
+    ) => {
+      const regExp = /^(\d+(\.\d+)?)$/;
+      const price = +nftPrice;
+      const targetCollection = getCollectionById(collectionId);
+      const tokenStatus = TokenStatus[tokenType as TokenType];
+      if (!(price > 0 && regExp.test(nftPrice))) {
+        toast.error("Invalid Price!");
+        return;
+      }
+      if (!tokenType) {
+        toast.error("Select Price Type!");
+        return;
+      }
+      const message = tokenStatus.isNativeCoin
+        ? {
+            set_bid_coin: {
+              nft_address: targetCollection.nftContract,
+              expire: `${expire}`,
+              sale_type: "collection_bid",
+              list_price: {
+                denom: tokenType,
+                amount: `${price * 1e6}`,
+              },
+            },
+          }
+        : {
+            send: {
+              contract: MarketplaceContracts[0],
+              amount: `${price * 1e6}`,
+              msg: btoa(
+                JSON.stringify({
+                  sale_type: "collection_bid",
+                  nft_address: targetCollection.nftContract,
+                  expire: `${expire}`,
+                })
+              ),
+            },
+          };
+      try {
+        if (tokenStatus.isNativeCoin) {
+          await runExecute(MarketplaceContracts[0], message, {
             funds: `${price}`,
             denom: tokenType,
           });
@@ -423,6 +491,7 @@ const useHandleNftItem = () => {
     buyNft,
     transferNft,
     makeOfferToNft,
+    makeOfferToCollection,
     acceptBid,
     withdrawBid,
   };

@@ -69,7 +69,7 @@ const NFTIntroduction: React.FC<NFTIntroductionProps> = ({
           {title}
         </Text>
         <Text fontSize="1.3em" bold justifyContent="flex-start">
-          <Text>crated by</Text>
+          <Text>created by</Text>
           <Text color="#0057FF">{creator}</Text>
         </Text>
         <Text
