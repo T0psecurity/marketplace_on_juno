@@ -41,9 +41,7 @@ import useContract from "../../hook/useContract";
 import Text from "../../components/Text";
 import { TokenType } from "../../types/tokens";
 import moment from "moment";
-import Button from "../../components/Button";
-import useRefresh from "../../hook/useRefresh";
-import { toast } from "react-toastify";
+import useHandleNftItem from "../../hook/useHandleNftItem";
 // import NFTAdvertise from "../../components/NFTAdvertise";
 
 const MAX_ITEM = 30;
@@ -57,11 +55,11 @@ const NFTDetail: React.FC = () => {
     new URLSearchParams(search).get("token_id")
   );
 
-  const { runQuery, runExecute } = useContract();
+  const { runQuery } = useContract();
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const isMobile = isXs || isSm || isMd;
   const { pickNFTByTokenId } = usePickNFT();
-  const { refresh } = useRefresh();
+  const { acceptBid } = useHandleNftItem();
   const selectedNFT: any = pickNFTByTokenId(token_id || "");
   const history = useHistory();
 
@@ -133,22 +131,8 @@ const NFTDetail: React.FC = () => {
     [token_id]
   );
 
-  const handleAcceptBid = async (offer: any) => {
-    const message = {
-      accept_bid: {
-        nft_address: targetCollection.nftContract,
-        token_id: selectedNFT.token_id,
-        bidder: offer.bidder,
-      },
-    };
-    try {
-      await runExecute(selectedNFT.contractAddress, message);
-      toast.success("Accept bid successfully!");
-      refresh();
-      history.goBack();
-    } catch (e) {
-      toast.error("Accept bid failed!");
-    }
+  const handleAcceptBid = (offer: any) => {
+    acceptBid(offer);
   };
 
   const isMySellingNft =

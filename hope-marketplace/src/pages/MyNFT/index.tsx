@@ -1,4 +1,10 @@
-import React, { useContext, useMemo, useState, useCallback } from "react";
+import React, {
+  useContext,
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 import { toast } from "react-toastify";
 import ReactSelect from "react-select";
 
@@ -22,6 +28,10 @@ import {
   MyAssetsArea,
   StyledExploreHeader,
   ReceivedOfferBanner,
+  OffersContainer,
+  ItemTd,
+  TokenNameContainer,
+  AcceptWithdrawBidButton,
 } from "./styled";
 
 import { useAppSelector } from "../../app/hooks";
@@ -34,6 +44,7 @@ import { NFTItemStatus } from "../../components/NFTItem";
 import Collections, {
   CollectionIds,
   getCollectionById,
+  MarketplaceContracts,
   MarketplaceInfo,
 } from "../../constants/Collections";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
@@ -45,11 +56,15 @@ import SearchInputer from "../../components/SearchInputer";
 import ActivityList from "../../components/ActivityList";
 import { ThemeContext } from "../../context/ThemeContext";
 import { SortDirectionType } from "../Marketplace/types";
-import { getCustomTokenId } from "../../hook/useFetch";
+import { getCustomTokenId, getTokenIdNumber } from "../../hook/useFetch";
 import ExploreHeader from "../../components/ExploreHeader";
 import Text from "../../components/Text";
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { LineColors } from "../../constants/colors";
+import useContract from "../../hook/useContract";
+import moment from "moment";
+import usePickNFT from "../../hook/usePickNFT";
+import useHandleNftItem from "../../hook/useHandleNftItem";
 // import { getCustomTokenId } from "../../hook/useFetch";
 
 enum TAB_TYPE {
@@ -64,6 +79,8 @@ enum NFT_TYPE {
   AVAILABLE = "Available",
   ONSALE = "On Sale",
 }
+
+const MAX_ITEM = 1;
 
 // const checkSearchedNft = (
 //   nft: any,
@@ -97,6 +114,8 @@ const MyNFT: React.FC = () => {
   const [selectedPageTab, setSelectedPageTab] = useState<TAB_TYPE>(
     TAB_TYPE.ITEMS
   );
+  const [isReceivedOffer, setIsReceivedOffer] = useState(false);
+  const [myOffers, setMyOffers] = useState([]);
   const [selectedNftTab, setSelectedNftTab] = useState<NFT_TYPE>(NFT_TYPE.ALL);
   const [searchValue, setSearchValue] = useState<string>("");
   const [searchActivityValue, setSearchActivityValue] = useState("");
@@ -107,7 +126,10 @@ const MyNFT: React.FC = () => {
     SortDirectionType | undefined
   >(SortDirectionSelectOptions[0].value);
 
+  const { runQuery } = useContract();
   const { isXs, isSm, isMd } = useMatchBreakpoints();
+  const { pickNFTByTokenId } = usePickNFT();
+  const { acceptBid } = useHandleNftItem();
   const popoutQuickSwap = usePopoutQuickSwap();
   const { isDark } = useContext(ThemeContext);
   const isMobile = isXs || isSm || isMd;
@@ -115,6 +137,54 @@ const MyNFT: React.FC = () => {
   const balances = useAppSelector((state) => state.balances);
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
   const account = useAppSelector((state) => state.accounts.keplrAccount);
+  const collectionStates = useAppSelector((state) => state.collectionStates);
+
+  useEffect(() => {
+    (async () => {
+      let offers: any = [];
+      const fetchBidsToMyNft = async (startAfter?: any) => {
+        if (!account?.address) return;
+        const fetchedBidsResult = await runQuery(MarketplaceContracts[0], {
+          bids_by_seller: {
+            seller: account.address,
+            start_after: startAfter,
+            limit: MAX_ITEM,
+          },
+        });
+        const fetchedBids = fetchedBidsResult?.bids || [];
+        offers = offers.concat(fetchedBids);
+        if (fetchedBids.length === MAX_ITEM) {
+          await fetchBidsToMyNft({
+            collection: fetchedBids[MAX_ITEM - 1].collection,
+            token_id: fetchedBids[MAX_ITEM - 1].token_id,
+            bidder: fetchedBids[MAX_ITEM - 1].bidder,
+          });
+        }
+      };
+      const fetchMyBids = async (startAfter?: any) => {
+        if (!account?.address) return;
+        const fetchedBidsResult = await runQuery(MarketplaceContracts[0], {
+          bids_by_bidder: {
+            bidder: account.address,
+            start_after: startAfter,
+            limit: MAX_ITEM,
+          },
+        });
+        const fetchedBids = fetchedBidsResult?.bids || [];
+        offers = offers.concat(fetchedBids);
+        if (fetchedBids.length === MAX_ITEM) {
+          await fetchMyBids({
+            collection: fetchedBids[MAX_ITEM - 1].collection,
+            token_id: fetchedBids[MAX_ITEM - 1].token_id,
+          });
+        }
+      };
+      await fetchBidsToMyNft();
+      setIsReceivedOffer(!!offers.length);
+      await fetchMyBids();
+      setMyOffers(offers);
+    })();
+  }, [account, runQuery]);
 
   const collectionsSelectValues = [
     { value: "", label: "Choose Collection" },
@@ -215,6 +285,13 @@ const MyNFT: React.FC = () => {
 
   const handleChangeSortDirection = (item: any) => {
     setSortDirection(item.value);
+  };
+
+  const handleAcceptWithdrawOffer = (offer: any) => {
+    if (offer.bidder === account?.address) {
+    } else {
+      acceptBid(offer);
+    }
   };
 
   const filterActivitiesFunc = useCallback(
@@ -505,7 +582,7 @@ const MyNFT: React.FC = () => {
             selected: () => selectedPageTab === TAB_TYPE[key],
           })
         )}
-        extra={<ReceivedOfferBanner />}
+        extra={isReceivedOffer ? <ReceivedOfferBanner /> : null}
       />
       {selectedPageTab === TAB_TYPE.ITEMS && (
         <>
@@ -591,6 +668,112 @@ const MyNFT: React.FC = () => {
             filterFunc={filterActivitiesFunc}
           />
         </>
+      )}
+      {selectedPageTab === TAB_TYPE.OFFER && (
+        <OffersContainer>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Item</th>
+                <th>Price</th>
+                <th>From</th>
+                <th>Action</th>
+                <th>Expiration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {myOffers.map((offer: any, index: number) => {
+                const listPrice = offer.list_price || {};
+                const currentNft: any = pickNFTByTokenId(offer?.token_id || "");
+                const targetCollection =
+                  getCollectionById(currentNft.collectionId || "") || {};
+                const tokenName = (
+                  Object.keys(TokenType) as Array<keyof typeof TokenType>
+                ).filter((key) => TokenType[key] === listPrice?.denom)[0];
+                const tokenPrice =
+                  tokenPrices[listPrice?.denom as TokenType]?.market_data
+                    .current_price?.usd || 0;
+                const priceInUsd = (
+                  (+listPrice.amount * tokenPrice) /
+                  1e6
+                ).toLocaleString("en-US", {
+                  maximumFractionDigits: 2,
+                });
+                const expirationDate = moment(
+                  new Date(+(offer?.expires_at || "0") / 1e6)
+                ).format("YYYY-MM-DD hh:mm:ss");
+                const collectionState =
+                  collectionStates[currentNft.collectionId as CollectionIds] ||
+                  {};
+
+                let url = "";
+                if (currentNft.collectionId === "mintpass1") {
+                  url = "/others/mint_pass.png";
+                } else if (currentNft.collectionId === "mintpass2") {
+                  url = "/others/mint_pass2.png";
+                } else if (currentNft.collectionId === "hopegalaxy1") {
+                  url = `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${getTokenIdNumber(
+                    currentNft.token_id
+                  )}.png`;
+                } else if (collectionState.imageUrl) {
+                  url = `${collectionState.imageUrl}${getTokenIdNumber(
+                    currentNft.token_id
+                  )}.png`;
+                }
+
+                return (
+                  <tr key={index}>
+                    <td>OFFER</td>
+                    <td>
+                      <ItemTd>
+                        <img alt="" src={url} />
+                        <TokenNameContainer>
+                          <Text>{targetCollection.title}</Text>
+                          <Text>
+                            {targetCollection.customTokenId
+                              ? getCustomTokenId(
+                                  currentNft.token_id,
+                                  targetCollection.customTokenId
+                                )
+                              : currentNft.token_id}
+                          </Text>
+                        </TokenNameContainer>
+                      </ItemTd>
+                    </td>
+                    <td>
+                      <CoinIconWrapper>
+                        <CoinIcon
+                          alt=""
+                          src={`/coin-images/${listPrice?.denom.replace(
+                            /\//g,
+                            ""
+                          )}.png`}
+                        />
+                        <Text>{Number(listPrice.amount) / 1e6}</Text>
+                        <Text>{tokenName}</Text>
+                        <Text>{`($${priceInUsd})`}</Text>
+                      </CoinIconWrapper>
+                    </td>
+                    <td>{offer.bidder}</td>
+                    <td>
+                      {account?.address ? (
+                        <AcceptWithdrawBidButton
+                          onClick={() => handleAcceptWithdrawOffer(offer)}
+                        >
+                          {account.address === offer.bidder
+                            ? "Withdraw"
+                            : "Accept"}
+                        </AcceptWithdrawBidButton>
+                      ) : null}
+                    </td>
+                    <td>{expirationDate}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </OffersContainer>
       )}
       {/* <HorizontalDivider />
       <SubTitle subTitle="My NFTs on sale" textAlign="left" />

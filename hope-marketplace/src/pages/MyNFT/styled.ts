@@ -77,6 +77,7 @@ export const WithdrawButton = styled.div`
 export const CoinIconWrapper = styled.div`
   display: flex;
   align-items: center;
+  gap: 10px;
 `;
 
 export const CoinIcon = styled.img<{ size?: string }>`
@@ -216,5 +217,52 @@ export const ReceivedOfferBanner = styled.div`
   }
   @media (max-width: 575px) {
     background-image: url("/others/offer_background_mobile.png");
+  }
+`;
+
+export const OffersContainer = styled.div`
+  table {
+    width: 100%;
+    table-layout: fixed;
+    tr {
+      th,
+      td {
+        color: ${({ theme }) => theme.colors.fontColor};
+        min-width: 85px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+`;
+
+export const ItemTd = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const TokenNameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const AcceptWithdrawBidButton = styled.div`
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  background-color: #02e296;
+  color: white;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  &:hover {
+    opacity: 0.6;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
+      0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
   }
 `;
