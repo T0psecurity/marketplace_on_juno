@@ -44,6 +44,7 @@ import { NFTItemStatus } from "../../components/NFTItem";
 import Collections, {
   CollectionIds,
   getCollectionById,
+  getCollectionByNftContract,
   MarketplaceContracts,
   MarketplaceInfo,
 } from "../../constants/Collections";
@@ -179,9 +180,28 @@ const MyNFT: React.FC = () => {
           });
         }
       };
+      const fetchMyCollectionBids = async (startAfter?: any) => {
+        if (!account?.address) return;
+        const fetchedBidsResult = await runQuery(MarketplaceContracts[0], {
+          collection_bids_by_bidder: {
+            bidder: account.address,
+            start_after: startAfter,
+            limit: MAX_ITEM,
+          },
+        });
+        const fetchedBids = fetchedBidsResult?.bids || [];
+        offers = offers.concat(fetchedBids);
+        if (fetchedBids.length === MAX_ITEM) {
+          await fetchMyCollectionBids({
+            collection: fetchedBids[MAX_ITEM - 1].collection,
+            token_id: fetchedBids[MAX_ITEM - 1].token_id,
+          });
+        }
+      };
       await fetchBidsToMyNft();
       setIsReceivedOffer(!!offers.length);
       await fetchMyBids();
+      await fetchMyCollectionBids();
       setMyOffers(offers);
     })();
   }, [account, runQuery]);
@@ -691,7 +711,10 @@ const MyNFT: React.FC = () => {
                     offer?.token_id || ""
                   );
                   const targetCollection =
-                    getCollectionById(currentNft.collectionId || "") || {};
+                    (offer?.token_id
+                      ? getCollectionById(currentNft.collectionId || "")
+                      : getCollectionByNftContract(offer?.collection || "")) ||
+                    {};
                   const tokenName = (
                     Object.keys(TokenType) as Array<keyof typeof TokenType>
                   ).filter((key) => TokenType[key] === listPrice?.denom)[0];
@@ -708,9 +731,7 @@ const MyNFT: React.FC = () => {
                     new Date(+(offer?.expires_at || "0") / 1e6)
                   ).format("YYYY-MM-DD hh:mm:ss");
                   const collectionState =
-                    collectionStates[
-                      currentNft.collectionId as CollectionIds
-                    ] || {};
+                    collectionStates[targetCollection.collectionId] || {};
 
                   let url = "";
                   if (currentNft.collectionId === "mintpass1") {
@@ -735,14 +756,18 @@ const MyNFT: React.FC = () => {
                           <img alt="" src={url} />
                           <TokenNameContainer>
                             <Text>{targetCollection.title}</Text>
-                            <Text>
-                              {targetCollection.customTokenId
-                                ? getCustomTokenId(
-                                    currentNft.token_id,
-                                    targetCollection.customTokenId
-                                  )
-                                : currentNft.token_id}
-                            </Text>
+                            {!!offer?.token_id ? (
+                              <Text>
+                                {targetCollection.customTokenId
+                                  ? getCustomTokenId(
+                                      currentNft.token_id,
+                                      targetCollection.customTokenId
+                                    )
+                                  : currentNft.token_id}
+                              </Text>
+                            ) : (
+                              <Text>Collection Offer</Text>
+                            )}
                           </TokenNameContainer>
                         </ItemTd>
                       </td>

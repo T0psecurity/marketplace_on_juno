@@ -36,6 +36,7 @@ import { TokenType } from "../../types/tokens";
 import Text from "../../components/Text";
 import { toast } from "react-toastify";
 import AcceptCollectionBidTooltip from "../../components/AcceptCollectionBidTooltip";
+import useHandleNftItem from "../../hook/useHandleNftItem";
 
 const MAX_ITEM = 30;
 
@@ -48,7 +49,8 @@ const Marketplace: React.FC = () => {
   );
   const [filterOption, setFilterOption] = useState<FilterOptions>();
   const { isXs, isSm, isMd } = useMatchBreakpoints();
-  const { runQuery, runExecute } = useContract();
+  const { runQuery } = useContract();
+  const { withdrawBid } = useHandleNftItem();
   const { search } = useLocation();
   const collectionId = new URLSearchParams(search).get("id") || "";
 
@@ -152,17 +154,7 @@ const Marketplace: React.FC = () => {
   const handleAcceptWithdrawBid = async (offer: any) => {
     if (!account?.address) return;
     if (account.address === offer.bidder) {
-      const message = {
-        remove_collection_bid: {
-          nft_address: targetCollection.nftContract,
-        },
-      };
-      try {
-        await runExecute(MarketplaceContracts[0], message);
-        toast.success("Withdraw bid successfully!");
-      } catch (e) {
-        toast.error("Withdraw bid failed!");
-      }
+      withdrawBid(offer);
     }
   };
 

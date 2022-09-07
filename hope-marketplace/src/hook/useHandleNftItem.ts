@@ -15,6 +15,7 @@ import { ChainTypes } from "../constants/ChainTypes";
 import {
   CollectionIds,
   getCollectionById,
+  getCollectionByNftContract,
   MarketplaceContracts,
 } from "../constants/Collections";
 import { TokenStatus, TokenType } from "../types/tokens";
@@ -466,23 +467,37 @@ const useHandleNftItem = () => {
   const withdrawBid = useCallback(
     async (offer: any) => {
       if (!offer) return;
+      console.log("withdraw bid", offer);
       const selectedNFT: any = pickNFTByTokenId(offer.token_id || "");
-      const targetCollection = getCollectionById(selectedNFT.collectionId);
-      const message = {
-        remove_bid: {
-          nft_address: targetCollection.nftContract,
-          token_id: offer.token_id,
-        },
-      };
+      const targetCollection = offer.token_id
+        ? getCollectionById(selectedNFT.collectionId)
+        : getCollectionByNftContract(offer.collection || "");
+      const message = offer.token_id
+        ? {
+            remove_bid: {
+              nft_address: targetCollection.nftContract,
+              token_id: offer.token_id,
+            },
+          }
+        : {
+            remove_collection_bid: {
+              nft_address: targetCollection.nftContract,
+            },
+          };
       try {
-        await runExecute(selectedNFT.contractAddress, message);
+        await runExecute(
+          offer.token_id
+            ? selectedNFT.contractAddress
+            : MarketplaceContracts[0],
+          message
+        );
         toast.success("Withdraw bid successfully!");
         refresh();
       } catch (e) {
         toast.error("Withdraw bid failed!");
       }
     },
-    [history, pickNFTByTokenId, refresh, runExecute]
+    [pickNFTByTokenId, refresh, runExecute]
   );
 
   return {
