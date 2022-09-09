@@ -178,7 +178,9 @@ export const NFTItemDescriptionContent = styled.div`
 export const NFTItemOperationContainer = styled.div<{
   justifyContent?: string;
   flexDirection?: string;
+  hasDivider?: boolean;
 }>`
+  position: relative;
   display: flex;
   justify-content: ${({ justifyContent }) => justifyContent ?? "flex-start"};
   ${({ flexDirection }) =>
@@ -191,6 +193,21 @@ export const NFTItemOperationContainer = styled.div<{
   @media (max-width: 650px) {
     flex-direction: column-reverse;
   }
+  ${({ hasDivider }) =>
+    hasDivider &&
+    css`
+      margin-top: 30px;
+      width: 100%;
+      &:before {
+        content: "";
+        background-color: #02e296;
+        height: 2px;
+        position: absolute;
+        width: calc(100% + 80px);
+        left: -40px;
+        top: -15px;
+      }
+    `}
 `;
 
 export const NFTItemPriceInputer = styled.input<{ width: string }>`
@@ -200,8 +217,15 @@ export const NFTItemPriceInputer = styled.input<{ width: string }>`
   border: 1px solid #02e296;
   border-radius: 10px;
   outline: none;
+  position: relative;
   @media (max-width: 450px) {
     width: unset;
+  }
+  &::placeholder {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
   }
 `;
 
@@ -243,6 +267,9 @@ export const SocialLinkIcon = styled.div<{ backgroundColor?: string }>`
 `;
 
 export const NFTItemPricePanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border: 1px solid #dadada;
   background: rgba(2, 226, 150, 0.1);
   border-radius: 10px;

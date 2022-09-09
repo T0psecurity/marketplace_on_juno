@@ -32,6 +32,7 @@ import {
   ItemTd,
   TokenNameContainer,
   AcceptWithdrawBidButton,
+  MyOfferButton,
 } from "./styled";
 
 import { useAppSelector } from "../../app/hooks";
@@ -603,7 +604,20 @@ const MyNFT: React.FC = () => {
             selected: () => selectedPageTab === TAB_TYPE[key],
           })
         )}
-        extra={isReceivedOffer ? <ReceivedOfferBanner /> : null}
+        // extra={
+        //   isReceivedOffer ? (
+        //     <ReceivedOfferBanner>
+        //       <MyOfferButton>My Offer</MyOfferButton>
+        //     </ReceivedOfferBanner>
+        //   ) : null
+        // }
+        extra={
+          <ReceivedOfferBanner>
+            <MyOfferButton onClick={() => setSelectedPageTab(TAB_TYPE.OFFER)}>
+              My Offer
+            </MyOfferButton>
+          </ReceivedOfferBanner>
+        }
       />
       {selectedPageTab === TAB_TYPE.ITEMS && (
         <>

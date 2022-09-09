@@ -197,6 +197,7 @@ export const StyledExploreHeader = styled(ExploreHeader)`
 `;
 
 export const ReceivedOfferBanner = styled.div`
+  position: relative;
   background: url("/others/offer_background.png");
   width: 800px;
   height: 73px;
@@ -218,6 +219,18 @@ export const ReceivedOfferBanner = styled.div`
   @media (max-width: 575px) {
     background-image: url("/others/offer_background_mobile.png");
   }
+`;
+
+export const MyOfferButton = styled.div`
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  cursor: pointer;
 `;
 
 export const OffersContainer = styled.div`

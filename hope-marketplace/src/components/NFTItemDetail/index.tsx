@@ -384,48 +384,6 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
               <InfoIcon data-for="tooltip" data-tip width={30} height={30} />
             </Text>
           )} */}
-          <NFTItemOperationContainer>
-            {status !== "Sell" && (
-              <NFTItemOperationButton onClick={handleNFTItem}>
-                <WalletIcon width={30} height={30} /> {status} Now
-              </NFTItemOperationButton>
-            )}
-            {status === "Sell" && (
-              <>
-                <NFTItemOperationButton colored onClick={handleNFTItem}>
-                  <WalletIcon width={30} height={30} /> Sell/Auction
-                </NFTItemOperationButton>
-                {/* <NFTItemOperationButton
-                  colored={isFixedSell}
-                  onClick={() => setIsFixedSell(false)}
-                >
-                  <OfferIcon width={30} height={30} />
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text style={{ lineHeight: "20px" }}>Auction</Text>
-                    <Text style={{ lineHeight: "15px" }} fontSize="0.6em">
-                      Timed
-                    </Text>
-                  </div>
-                </NFTItemOperationButton> */}
-              </>
-            )}
-            {status === "Buy" && (
-              <NFTItemOperationButton
-                colored
-                data-for="makeOfferTooltip"
-                data-tip
-                data-event="click focus"
-              >
-                <OfferIcon width={30} height={30} /> Make Offer
-              </NFTItemOperationButton>
-            )}
-          </NFTItemOperationContainer>
           {status === "Sell" && (
             <>
               <div style={{ display: "flex" }}>
@@ -481,6 +439,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                   />
                 </NFTItemPriceType>
                 <NFTItemPriceInputer
+                  placeholder="Maximum Price"
                   width="200px"
                   key={item.token_id}
                   value={nftPrice}
@@ -537,19 +496,44 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                   }}
                 /> */}
               </div>
-              <NFTItemOperationContainer>
-                <NFTItemOperationButton onClick={handleTransferNFT}>
-                  <TransferIcon width={30} height={30} fill="#2e7b31" />{" "}
-                  Transfer
-                </NFTItemOperationButton>
-
-                <NFTItemPriceInputer
-                  width="270px"
-                  value={transferAdd}
-                  onChange={handleChangeTransferAdd}
-                />
-              </NFTItemOperationContainer>
             </>
+          )}
+          <NFTItemOperationContainer>
+            {status !== "Sell" && (
+              <NFTItemOperationButton onClick={handleNFTItem}>
+                <WalletIcon width={30} height={30} /> {status} Now
+              </NFTItemOperationButton>
+            )}
+            {status === "Sell" && (
+              <>
+                <NFTItemOperationButton colored onClick={handleNFTItem}>
+                  <WalletIcon width={30} height={30} /> Sell
+                </NFTItemOperationButton>
+              </>
+            )}
+            {status === "Buy" && (
+              <NFTItemOperationButton
+                colored
+                data-for="makeOfferTooltip"
+                data-tip
+                data-event="click focus"
+              >
+                <OfferIcon width={30} height={30} /> Make Offer
+              </NFTItemOperationButton>
+            )}
+          </NFTItemOperationContainer>
+          {status === "Sell" && (
+            <NFTItemOperationContainer hasDivider justifyContent="center">
+              <NFTItemPriceInputer
+                placeholder="Destination Wallet"
+                width="270px"
+                value={transferAdd}
+                onChange={handleChangeTransferAdd}
+              />
+              <NFTItemOperationButton colored onClick={handleTransferNFT}>
+                <TransferIcon width={30} height={30} fill="#2e7b31" /> Transfer
+              </NFTItemOperationButton>
+            </NFTItemOperationContainer>
           )}
         </NFTItemPricePanel>
 
