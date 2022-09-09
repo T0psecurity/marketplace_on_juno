@@ -85,7 +85,7 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
   });
   const [isOpenTokenTypes, setIsOpenTokenTypes] = useState(false);
   const [offerPrice, setOfferPrice] = useState(0);
-  const [expirationDate, setExpirationDate] = useState(ExpirationOptions[0]);
+  const [expirationDate, setExpirationDate] = useState(ExpirationOptions[3]);
   const balances = useAppSelector((state) => state.balances);
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
 

@@ -2,8 +2,10 @@ import styled, { css } from "styled-components";
 
 export const Wrapper = styled.div`
   .__react_component_tooltip {
-    background: rgba(2, 226, 150, 0.12);
-    backdrop-filter: blur(8px);
+    background: rgba(2, 226, 150, 0.9);
+    /* background: #02e296; */
+    opacity: 0.8;
+    backdrop-filter: blur(3px);
     border: 1px solid #02e296;
     border-radius: 10px;
   }

@@ -221,6 +221,7 @@ export const ReceivedOfferBanner = styled.div`
 `;
 
 export const OffersContainer = styled.div`
+  margin-bottom: 50px;
   table {
     width: 100%;
     table-layout: fixed;

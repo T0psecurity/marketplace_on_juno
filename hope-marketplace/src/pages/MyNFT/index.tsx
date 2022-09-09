@@ -785,7 +785,11 @@ const MyNFT: React.FC = () => {
                           <Text>{`($${priceInUsd})`}</Text>
                         </CoinIconWrapper>
                       </td>
-                      <td>{offer.bidder}</td>
+                      <td title={offer.bidder}>
+                        {offer.bidder === account?.address
+                          ? "YOU"
+                          : offer.bidder}
+                      </td>
                       <td>
                         {account?.address ? (
                           <AcceptWithdrawBidButton
