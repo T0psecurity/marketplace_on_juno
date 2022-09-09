@@ -146,7 +146,7 @@ export const MintButton = styled(Button)<{
 }>`
   margin: 0;
   background-color: ${({ soldOut, backgroundColor }) =>
-    backgroundColor ? backgroundColor : soldOut ? "#C63939" : "#39c639"};
+    backgroundColor ? backgroundColor : soldOut ? "#C63939" : "#02e296"};
   border: 1px solid black;
   border-radius: 4px;
   font-weight: 700;
@@ -156,8 +156,8 @@ export const MintButton = styled(Button)<{
   transition: opacity 0.5s;
   &:hover {
     opacity: 0.8;
-    background-color: ${({ soldOut, backgroundColor }) =>
-      backgroundColor ? backgroundColor : soldOut ? "#C63939" : "#39c639"};
+    /* background-color: ${({ soldOut, backgroundColor }) =>
+      backgroundColor ? backgroundColor : soldOut ? "#C63939" : "#39c639"}; */
   }
 `;
 

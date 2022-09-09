@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { InfoIcon } from "../SvgIcons";
 
 export const MintVideoContainer = styled.div`
   /* width: 50vw; */
@@ -267,6 +268,7 @@ export const SocialLinkIcon = styled.div<{ backgroundColor?: string }>`
 `;
 
 export const NFTItemPricePanel = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -274,6 +276,7 @@ export const NFTItemPricePanel = styled.div`
   background: rgba(2, 226, 150, 0.1);
   border-radius: 10px;
   padding: 20px 40px;
+  overflow: hidden;
   @media (max-width: 450px) {
     padding: 20px;
   }
@@ -391,11 +394,7 @@ export const FloorPriceContainer = styled.div`
 export const TooltipContainer = styled.div`
   font-size: 20px;
   color: black;
-  ul {
-    li {
-      text-align: left;
-    }
-  }
+  text-align: left;
 `;
 
 export const CustomAuctionPeriodControl = styled.div`
@@ -405,4 +404,11 @@ export const CustomAuctionPeriodControl = styled.div`
   border: 1px solid #02e296;
   border-radius: 10px;
   padding: 10px;
+`;
+
+export const StyledInfoIcon = styled(InfoIcon)`
+  position: absolute;
+  cursor: pointer;
+  right: 0;
+  top: 0;
 `;

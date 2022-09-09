@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "nft-marketplace-on-juno-chain"
-  }
+    "default": "marketplace-on-juno-chain",
+    "staging": "marketplace-on-juno-chain"
+  },
+  "targets": {}
 }
