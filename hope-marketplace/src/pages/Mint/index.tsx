@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useAppSelector } from "../../app/hooks";
+import Advertise, { Advertise1 } from "../../components/Advertise";
 import ExploreHeader from "../../components/ExploreHeader";
 
 // import { Title } from "../../components/PageTitle";
@@ -126,6 +127,7 @@ const Mint: React.FC = () => {
     <Wrapper>
       {/* <Title title="Mint Page" /> */}
       <ExploreHeader title="Mint Page" tabs={exploreHeaderTabs} />
+      <Advertise images={Advertise1} />
       {/* <ButtonContainer>
         {(Object.keys(FILTER_TYPE) as Array<keyof typeof FILTER_TYPE>).map(
           (key) => {

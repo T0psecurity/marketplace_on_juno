@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 20px;
   min-height: 95px;
+  overflow: auto;
 `;
 
 export const HorizontalDivider = styled.div<{ offset: number }>`

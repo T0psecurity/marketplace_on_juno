@@ -21,6 +21,7 @@ export const TabWrapper = styled.div<{ selected: boolean }>`
   cursor: pointer;
   color: ${({ theme }) => theme.colors.fontColor};
   padding: 5px 10px;
+  white-space: nowrap;
   ${({ selected }) =>
     selected &&
     css`
