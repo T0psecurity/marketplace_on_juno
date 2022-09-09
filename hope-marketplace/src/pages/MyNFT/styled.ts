@@ -170,6 +170,9 @@ export const ChartArea = styled.div`
   background-position: center bottom;
   display: flex;
   justify-content: center;
+  .recharts-responsive-container {
+    min-height: 300px;
+  }
   svg {
     overflow: visible;
   }

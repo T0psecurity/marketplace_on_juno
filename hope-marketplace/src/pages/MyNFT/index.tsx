@@ -11,7 +11,7 @@ import ReactSelect from "react-select";
 import {
   Wrapper,
   // ProfileImage,
-  HorizontalDivider,
+  // HorizontalDivider,
   TokenBalancesWrapper,
   TokenBalanceItem,
   CoinIcon,
@@ -36,10 +36,10 @@ import {
 } from "./styled";
 
 import { useAppSelector } from "../../app/hooks";
-import {
-  SubTitle,
-  // Title
-} from "../../components/PageTitle";
+// import {
+//   SubTitle,
+//   // Title
+// } from "../../components/PageTitle";
 import NFTContainer from "../../components/NFTContainer";
 import { NFTItemStatus } from "../../components/NFTItem";
 import Collections, {
@@ -604,19 +604,14 @@ const MyNFT: React.FC = () => {
             selected: () => selectedPageTab === TAB_TYPE[key],
           })
         )}
-        // extra={
-        //   isReceivedOffer ? (
-        //     <ReceivedOfferBanner>
-        //       <MyOfferButton>My Offer</MyOfferButton>
-        //     </ReceivedOfferBanner>
-        //   ) : null
-        // }
         extra={
-          <ReceivedOfferBanner>
-            <MyOfferButton onClick={() => setSelectedPageTab(TAB_TYPE.OFFER)}>
-              My Offer
-            </MyOfferButton>
-          </ReceivedOfferBanner>
+          isReceivedOffer ? (
+            <ReceivedOfferBanner>
+              <MyOfferButton onClick={() => setSelectedPageTab(TAB_TYPE.OFFER)}>
+                My Offer
+              </MyOfferButton>
+            </ReceivedOfferBanner>
+          ) : null
         }
       />
       {selectedPageTab === TAB_TYPE.ITEMS && (
