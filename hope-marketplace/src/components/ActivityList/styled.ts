@@ -8,10 +8,6 @@ export const NoHistoryWrapper = styled.div`
   gap: 20px;
 `;
 
-export const SaleHistoryWrapper = styled.div`
-  overflow: auto;
-`;
-
 export const HistoryItemImage = styled.div`
   width: 60px;
   height: 60px;
@@ -104,10 +100,17 @@ export const HistoryItemAddress = styled(HistoryItemText)`
   }
 `;
 
-export const SaleHistoryItem = styled.div<{
+// export const SaleHistoryItem = styled.div<{
+//   isMobile: boolean;
+// }>`
+//   scroll-snap-align: start;
+// `;
+
+export const SaleHistoryWrapper = styled.div<{
   isMobile: boolean;
   forUser: boolean;
 }>`
+  overflow: auto;
   display: grid;
   grid-template-columns: ${({ isMobile, forUser }) =>
     isMobile
@@ -118,7 +121,6 @@ export const SaleHistoryItem = styled.div<{
   flex-wrap: wrap; */
   min-width: 460px;
   margin: ${({ isMobile }) => (isMobile ? "5px" : "10px")} 0;
-  scroll-snap-align: start;
   ${({ isMobile }) =>
     isMobile &&
     css`
