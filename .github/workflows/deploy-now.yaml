@@ -23,7 +23,7 @@ jobs:
         if: ${{ steps.project.outputs.deployment-enabled == 'true' }}
         uses: actions/checkout@v2
         with:
-          submodules: "recursive"
+          submodules: 'recursive'
 
       - name: Setup Node
         if: ${{ steps.project.outputs.deployment-enabled == 'true' }}
@@ -32,6 +32,7 @@ jobs:
           node-version: v14.17.5
 
       - name: Build Node assets
+        if: ${{ steps.project.outputs.deployment-enabled == 'true' }}
         env:
           CI: true
           SITE_URL: ${{ steps.project.outputs.site-url }}
@@ -48,5 +49,4 @@ jobs:
           branch-id: ${{ steps.project.outputs.branch-id }}
           service-host: api-eu.ionos.space
           api-key: ${{ secrets.IONOS_API_KEY }}
-          dist-folder: build
-          runtime-placeholder-files: ${{ steps.template.outputs.runtime-placeholder-files }}
+          dist-folder: public
