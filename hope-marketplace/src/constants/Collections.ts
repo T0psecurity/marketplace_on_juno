@@ -695,6 +695,7 @@ export const getCollectionByNftContract = (
 export const MarketplaceContracts: string[] = [
   // "juno1vmj8fa943t8pz4ezpfrzl330caevlshq8r4pz9cwa6ey27wcxfpsa5fnwk",
   // "juno1t076mvffajnuctaw0jtgfqyfrneuvw74gdpq6xycs2k975uc59rslcardy",
+  "juno14umelpxlujja7lysyhufqdp2rlzyuvlek3lgz0v54wp0gyvwnp4s7f3sgs",
 ];
 
 export const MintContracts: string[] = [

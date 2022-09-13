@@ -5,7 +5,6 @@ import { MarketplaceInfo } from "../../constants/Collections";
 import useHandleNftItem from "../../hook/useHandleNftItem";
 import { TokenStatus, TokenType } from "../../types/tokens";
 import { CalendarIcon, OfferIcon } from "../SvgIcons";
-import Text from "../Text";
 import ToolTip from "../ToolTip";
 import {
   BalanceItem,
@@ -23,6 +22,7 @@ import {
   TokenTypesContainer,
   TooltipContainer,
   Wrapper,
+  StyledText as Text,
 } from "./styled";
 
 interface MakeOfferTooltipProps {

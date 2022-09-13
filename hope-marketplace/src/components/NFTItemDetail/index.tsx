@@ -391,6 +391,11 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
               <div style={{ display: "flex" }}>
                 <NFTItemPriceType>
                   <ReactSelect
+                    onChange={handleChangePriceType}
+                    options={SelectOptions.map((option) => ({
+                      ...option,
+                      label: option.text,
+                    }))}
                     styles={{
                       dropdownIndicator: (provided, state) => ({
                         ...provided,
@@ -433,11 +438,6 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                         }),
                       }),
                     }}
-                    onChange={handleChangePriceType}
-                    options={SelectOptions.map((option) => ({
-                      ...option,
-                      label: option.text,
-                    }))}
                   />
                 </NFTItemPriceType>
                 <NFTItemPriceInputer

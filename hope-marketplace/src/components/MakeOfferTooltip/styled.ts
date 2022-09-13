@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import Text from "../Text";
 
 export const Wrapper = styled.div`
   .__react_component_tooltip {
@@ -69,6 +70,7 @@ export const TokenTypesContainer = styled.div`
   border-radius: 10px;
   z-index: 20;
   padding: 10px;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const TokenTypeItem = styled.div`
@@ -172,4 +174,8 @@ export const MakeOfferButton = styled.div`
     box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
       0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
   }
+`;
+
+export const StyledText = styled(Text)`
+  color: black;
 `;

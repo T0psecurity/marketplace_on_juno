@@ -34,7 +34,6 @@ import useContract from "../../hook/useContract";
 import moment from "moment";
 import { TokenType } from "../../types/tokens";
 import Text from "../../components/Text";
-import { toast } from "react-toastify";
 import AcceptCollectionBidTooltip from "../../components/AcceptCollectionBidTooltip";
 import useHandleNftItem from "../../hook/useHandleNftItem";
 
