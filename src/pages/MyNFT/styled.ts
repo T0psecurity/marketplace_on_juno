@@ -1,9 +1,17 @@
 import styled, { css } from "styled-components";
+import ExploreHeader from "../../components/ExploreHeader";
+
+import { Tabs as OriginTabs, Tab as OriginTab } from "../../components/Tab";
 
 export const Wrapper = styled.div<{ isMobile?: boolean }>`
   height: 100%;
+  /* width: calc(100% - ${({ isMobile }) => (isMobile ? 10 : 100)}px); */
   padding: 0 ${({ isMobile }) => (isMobile ? 10 : 100)}px;
   color: ${({ theme }) => theme.colors.fontColor};
+`;
+
+export const MyAssetsArea = styled.div`
+  min-height: 450px;
 `;
 
 export const TokenTypeString = styled.div`
@@ -69,6 +77,7 @@ export const WithdrawButton = styled.div`
 export const CoinIconWrapper = styled.div`
   display: flex;
   align-items: center;
+  gap: 10px;
 `;
 
 export const CoinIcon = styled.img<{ size?: string }>`
@@ -78,8 +87,16 @@ export const CoinIcon = styled.img<{ size?: string }>`
   cursor: pointer;
 `;
 
-export const TokenBalance = styled.div`
+export const TokenBalance = styled.div<{ color?: string }>`
   font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  ${({ color }) =>
+    color &&
+    css`
+      color: ${color};
+    `};
 `;
 
 export const MyNftsHeader = styled.div`
@@ -90,7 +107,7 @@ export const MyNftsHeader = styled.div`
   margin-top: 20px;
 `;
 
-export const Tabs = styled.div<{ margin?: string }>`
+export const Tabs = styled(OriginTabs)<{ margin?: string }>`
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -102,7 +119,7 @@ export const Tabs = styled.div<{ margin?: string }>`
     `}/* width: 100%; */
 `;
 
-export const Tab = styled.div<{ selected: boolean; fontSize?: string }>`
+export const Tab = styled(OriginTab)<{ selected: boolean; fontSize?: string }>`
   cursor: pointer;
   margin-right: 20px;
   ${({ selected, theme }) =>
@@ -127,13 +144,14 @@ export const SearchWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 550px;
+  max-width: 350px;
 `;
 
 export const ActivityHeader = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
   margin: 20px 0;
 `;
 
@@ -143,4 +161,125 @@ export const TokenContainer = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
+`;
+
+export const ChartArea = styled.div`
+  background: url(${({ theme }) =>
+    `/others/chartLogo${theme.isDark ? "_dark" : ""}.png`});
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  display: flex;
+  justify-content: center;
+  .recharts-responsive-container {
+    min-height: 300px;
+  }
+  svg {
+    overflow: visible;
+  }
+  @media (min-width: 600px) {
+    float: right;
+    width: 80vw;
+    height: 80vw;
+    max-width: 400px;
+    max-height: 400px;
+  }
+  @media (max-width: 600px) {
+    margin-bottom: 20px;
+  }
+`;
+
+export const StyledExploreHeader = styled(ExploreHeader)`
+  /* grid-template-columns: auto 1fr auto;
+  @media (max-width: 800px) {
+    grid-template-columns: auto 1fr;
+  } */
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+`;
+
+export const ReceivedOfferBanner = styled.div`
+  position: relative;
+  background: url("/others/offer_background.png");
+  width: 800px;
+  height: 73px;
+  max-width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  @media (max-width: 1450px) {
+    width: 600px;
+  }
+  @media (max-width: 1350px) {
+    width: 450px;
+    background-image: url("/others/offer_background_mobile.png");
+  }
+  @media (max-width: 1190px) {
+    width: 100%;
+    background-image: url("/others/offer_background.png");
+  }
+  @media (max-width: 575px) {
+    background-image: url("/others/offer_background_mobile.png");
+  }
+`;
+
+export const MyOfferButton = styled.div`
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  cursor: pointer;
+`;
+
+export const OffersContainer = styled.div`
+  margin-bottom: 50px;
+  table {
+    width: 100%;
+    table-layout: fixed;
+    tr {
+      th,
+      td {
+        color: ${({ theme }) => theme.colors.fontColor};
+        min-width: 85px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+`;
+
+export const ItemTd = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const TokenNameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const AcceptWithdrawBidButton = styled.div`
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  background-color: #02e296;
+  color: white;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  &:hover {
+    opacity: 0.6;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
+      0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  }
 `;

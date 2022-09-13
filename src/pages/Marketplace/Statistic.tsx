@@ -1,5 +1,9 @@
 import React, { useContext, useState } from "react";
 import ReactSelect, { ControlProps } from "react-select";
+import MakeOfferTooltip from "../../components/MakeOfferTooltip";
+import { OfferIcon } from "../../components/SvgIcons";
+import Text from "../../components/Text";
+import { getCollectionById } from "../../constants/Collections";
 import { ThemeContext } from "../../context/ThemeContext";
 // import {
 //   getCollectionById,
@@ -11,7 +15,8 @@ import { TokenType } from "../../types/tokens";
 import useStatistic from "./hook/useStatistic";
 
 import {
-  StatisticWrapper as Wrapper,
+  OperationWrapper as Wrapper,
+  StatisticWrapper,
   StatisticItem,
   StatisticValue,
   StatisticName,
@@ -20,6 +25,8 @@ import {
   SelectItemTitle,
   SelectItemContent,
   CustomControl,
+  MakeOfferButton,
+  ButtonText,
 } from "./styled";
 
 interface StatisticProps {
@@ -102,6 +109,7 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
   // const { isXs, isSm } = useMatchBreakpoints();
   // const isMobile = isXs || isSm;
 
+  const targetCollection = getCollectionById(collectionId);
   const statistics: any = useStatistic(collectionId);
   // const targetCollection: MarketplaceInfo = getCollectionById(
   //   collectionId || ""
@@ -208,46 +216,47 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
 
   return (
     <Wrapper>
-      <StatisticItem>
-        <StatisticValue>{statistics.total || "X"}</StatisticValue>
-        <StatisticName>Items</StatisticName>
-      </StatisticItem>
-      <StatisticItem>
-        <StatisticValue>{statistics.itemsOnSale || "X"}</StatisticValue>
-        <StatisticName>Items On Sale</StatisticName>
-      </StatisticItem>
-      <StatisticItem>
-        <StatisticValue>
-          <StatisticIcon alt="" src={"/coin-images/ujuno.png"} />
-          {statistics.totalVolumeInJuno || "X"}
-        </StatisticValue>
-        <StatisticName>Total Volume</StatisticName>
-      </StatisticItem>
-      <ReactSelect
-        value={selectValue}
-        onChange={(value: any) => setSelectValue(value)}
-        options={SelectOptions}
-        styles={{
-          container: (provided, state) => ({
-            ...provided,
-            margin: "5px 10px",
-            minWidth: 100,
-            border: "1px solid black",
-            borderRadius: "5px",
-          }),
-          dropdownIndicator: (provided, state) => ({
-            ...provided,
-            color: "black",
-          }),
-          menu: (provided, state) => ({
-            ...provided,
-            backgroundColor: isDark ? "#838383" : "white",
-            zIndex: 10,
-          }),
-        }}
-        components={{ MenuList: CustomMenuList, Control: CustomControlItem }}
-      />
-      {/* {STATISTIC_PARAMS.map(
+      <StatisticWrapper>
+        <StatisticItem>
+          <StatisticValue>{statistics.total || "X"}</StatisticValue>
+          <StatisticName>Items</StatisticName>
+        </StatisticItem>
+        <StatisticItem>
+          <StatisticValue>{statistics.itemsOnSale || "X"}</StatisticValue>
+          <StatisticName>Items On Sale</StatisticName>
+        </StatisticItem>
+        <StatisticItem>
+          <StatisticValue>
+            <StatisticIcon alt="" src={"/coin-images/ujuno.png"} />
+            {statistics.totalVolumeInJuno || "X"}
+          </StatisticValue>
+          <StatisticName>Total Volume</StatisticName>
+        </StatisticItem>
+        <ReactSelect
+          value={selectValue}
+          onChange={(value: any) => setSelectValue(value)}
+          options={SelectOptions}
+          styles={{
+            container: (provided, state) => ({
+              ...provided,
+              margin: "5px 10px",
+              minWidth: 100,
+              border: "1px solid black",
+              borderRadius: "5px",
+            }),
+            dropdownIndicator: (provided, state) => ({
+              ...provided,
+              color: "black",
+            }),
+            menu: (provided, state) => ({
+              ...provided,
+              backgroundColor: isDark ? "#838383" : "white",
+              zIndex: 10,
+            }),
+          }}
+          components={{ MenuList: CustomMenuList, Control: CustomControlItem }}
+        />
+        {/* {STATISTIC_PARAMS.map(
         (statisticItem: StatisticItemType, index: number) => {
           if (
             targetCollection.statisticOption &&
@@ -268,6 +277,23 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
           );
         }
       )} */}
+      </StatisticWrapper>
+      <MakeOfferButton
+        data-for="makeOfferTooltip"
+        data-tip
+        data-event="click focus"
+      >
+        <OfferIcon width={40} />
+        <ButtonText>
+          <Text color="white" bold>
+            Make offer
+          </Text>
+          <Text color="white" style={{ fontSize: "0.7em" }}>
+            to the collection
+          </Text>
+        </ButtonText>
+      </MakeOfferButton>
+      <MakeOfferTooltip id="makeOfferTooltip" collection={targetCollection} />
     </Wrapper>
   );
 };

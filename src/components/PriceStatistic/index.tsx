@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   LineChart,
   Line,
@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useAppSelector } from "../../app/hooks";
+import { LineColors } from "../../constants/colors";
 import {
   fetchTokenPriceHistory,
   TokenHistoryPeriod,
@@ -17,12 +18,17 @@ import {
 import { TokenFullName, TokenType } from "../../types/tokens";
 // import { ThemeContext } from "../../context/ThemeContext";
 import {
+  AllButton,
   ChartArea,
   CoinImage,
   ContentContainer,
   PriceStatisticContainer,
   PriceStatisticContent,
   PriceStatisticItem,
+  SearchContainer,
+  SearchIcon,
+  SearchInput,
+  SearchInputWrapper,
   Span,
   Title,
   TokenName,
@@ -30,17 +36,9 @@ import {
   // StyledSelect as Select,
 } from "./styled";
 
-type LineDisplay = {
-  [key in TokenType]: boolean;
-};
-
-const LineColors = {
-  [TokenType.JUNO]: "#ea5545",
-  [TokenType.HOPE]: "#f46a9b",
-  [TokenType.NETA]: "#ef9b20",
-  [TokenType.RAW]: "#edbf33",
-  [TokenType.ATOM]: "#ede15b", // "#bdcf32", "#87bc45", "#27aeef", "#b33dc6"
-};
+// type LineDisplay = {
+//   [key in TokenType]: boolean;
+// };
 
 // type PeriodOptionType = {
 //   value: any;
@@ -70,20 +68,22 @@ const PriceStatistic: React.FC = () => {
   // const [historyPeriod, setHistoryPeriod] = useState<PeriodOptionType>(
   //   SelectPeriodOptions[1]
   // );
-  const [lineDisplay, setLineDisplay] = useState<LineDisplay>(
-    {} as LineDisplay
-  );
+  // const [lineDisplay, setLineDisplay] = useState<LineDisplay>(
+  //   {} as LineDisplay
+  // );
+  const [searchedToken, setSearchedToken] = useState("");
   const [tokenPriceHistory, setTokenPriceHistory] = useState<any[]>([]);
+
   // const { isDark } = useContext(ThemeContext);
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
 
-  useEffect(() => {
-    let lineDisplaySetting: LineDisplay = {} as LineDisplay;
-    (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach((key) => {
-      lineDisplaySetting[TokenType[key]] = true;
-    });
-    setLineDisplay(lineDisplaySetting);
-  }, []);
+  // useEffect(() => {
+  //   let lineDisplaySetting: LineDisplay = {} as LineDisplay;
+  //   (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach((key) => {
+  //     lineDisplaySetting[TokenType[key]] = true;
+  //   });
+  //   setLineDisplay(lineDisplaySetting);
+  // }, []);
 
   useEffect(() => {
     (async () => {
@@ -92,7 +92,7 @@ const PriceStatistic: React.FC = () => {
         // historyPeriod.value
         TokenHistoryPeriod.MONTHLY
       );
-      Object.keys(tokenHistoryQueryResult[TokenType.JUNO]).forEach(
+      Object.keys(tokenHistoryQueryResult?.[TokenType.JUNO] || {}).forEach(
         (date: string) => {
           let resultItem: any = { date };
           (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach(
@@ -108,14 +108,59 @@ const PriceStatistic: React.FC = () => {
     })();
   }, []);
 
-  const handleClickChartLegend = (e: any) => {
-    const { dataKey } = e;
-    const denom: TokenType = TokenType[dataKey as keyof typeof TokenType];
-    setLineDisplay((prev) => ({
-      ...prev,
-      [denom]: !prev[denom],
-    }));
+  // const handleClickChartLegend = (e: any) => {
+  //   const { dataKey } = e;
+  //   const denom: TokenType = TokenType[dataKey as keyof typeof TokenType];
+  //   setLineDisplay((prev) => ({
+  //     ...prev,
+  //     [denom]: !prev[denom],
+  //   }));
+  // };
+
+  const handleChangeSearchToken = (e: any) => {
+    const { value } = e.target;
+    setSearchedToken(value);
   };
+
+  const { legendPayload, lineDisplay } = useMemo(() => {
+    if (!searchedToken) {
+      return {
+        legendPayload: [
+          {
+            dataKey: (
+              Object.keys(TokenType) as Array<keyof typeof TokenType>
+            ).filter((key) => TokenType[key] === TokenType.JUNO)[0],
+            value: (
+              Object.keys(TokenType) as Array<keyof typeof TokenType>
+            ).filter((key) => TokenType[key] === TokenType.JUNO)[0],
+            color: LineColors[TokenType.JUNO],
+          },
+        ],
+        lineDisplay: { [TokenType.JUNO]: true },
+      };
+    }
+    const legendPayloadResult: any = [];
+    let lineDisplayResult: any = {};
+    (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach((key) => {
+      const denom = TokenType[key];
+      if (
+        `${key} ${TokenFullName[denom]}`
+          .toLowerCase()
+          .indexOf(searchedToken.toLowerCase()) > -1
+      ) {
+        legendPayloadResult.push({
+          dataKey: key,
+          value: key,
+          color: LineColors[TokenType[key]],
+        });
+        lineDisplayResult[denom] = true;
+      }
+    });
+    return {
+      legendPayload: legendPayloadResult,
+      lineDisplay: lineDisplayResult,
+    };
+  }, [searchedToken]);
 
   // const handleChangePeriodOption = (option: any) => {
   //   setHistoryPeriod(option);
@@ -126,7 +171,18 @@ const PriceStatistic: React.FC = () => {
       <Title>ECOSYSTEM PRICE CHARTS</Title>
       <ContentContainer>
         <PriceStatisticContainer>
-          <PriceStatisticItem>
+          <SearchContainer>
+            <AllButton onClick={() => setSearchedToken("")}>All</AllButton>
+            <SearchInputWrapper>
+              <SearchInput
+                placeholder="Search Vault"
+                value={searchedToken}
+                onChange={handleChangeSearchToken}
+              />
+              <SearchIcon className="fa fa-search" />
+            </SearchInputWrapper>
+          </SearchContainer>
+          <PriceStatisticItem first>
             <PriceStatisticContent>
               <Span>#</Span>
             </PriceStatisticContent>
@@ -147,54 +203,69 @@ const PriceStatistic: React.FC = () => {
             </PriceStatisticContent>
           </PriceStatisticItem>
           {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
-            (key) => {
+            (key, index, arr) => {
               const denom = TokenType[key];
               const tokenPrice = tokenPrices[denom];
-              const currentPrice =
-                tokenPrice?.market_data?.current_price?.usd || 0;
-              const priceChange1h =
-                tokenPrice?.market_data?.price_change_percentage_1h_in_currency?.usd?.toFixed(
-                  2
-                ) || 0;
-              const priceChange24h =
-                tokenPrice?.market_data?.price_change_percentage_24h_in_currency?.usd?.toFixed(
-                  2
-                ) || 0;
-              const priceChange7d =
-                tokenPrice?.market_data?.price_change_percentage_7d_in_currency?.usd?.toFixed(
-                  2
-                ) || 0;
-              return (
-                <PriceStatisticItem key={denom}>
-                  <PriceStatisticContent>
-                    <CoinImage coinType={denom} />
-                  </PriceStatisticContent>
-                  <PriceStatisticContent>
-                    <TokenName>
-                      <Span>{TokenFullName[denom]}</Span>
-                      <Span>{`(${key})`}</Span>
-                    </TokenName>
-                  </PriceStatisticContent>
-                  <PriceStatisticContent>
-                    <Span>{`$${currentPrice}`}</Span>
-                  </PriceStatisticContent>
-                  <PriceStatisticContent>
-                    <Span
-                      color={priceChange1h < 0 ? "#FF4842" : "#35cb00"}
-                    >{`${priceChange1h}%`}</Span>
-                  </PriceStatisticContent>
-                  <PriceStatisticContent>
-                    <Span
-                      color={priceChange24h < 0 ? "#FF4842" : "#35cb00"}
-                    >{`${priceChange24h}%`}</Span>
-                  </PriceStatisticContent>
-                  <PriceStatisticContent>
-                    <Span
-                      color={priceChange7d < 0 ? "#FF4842" : "#35cb00"}
-                    >{`${priceChange7d}%`}</Span>
-                  </PriceStatisticContent>
-                </PriceStatisticItem>
-              );
+              if (
+                !searchedToken ||
+                `${key} ${TokenFullName[denom]}`
+                  .toLowerCase()
+                  .indexOf(searchedToken.toLowerCase()) > -1
+              ) {
+                const currentPrice =
+                  tokenPrice?.market_data?.current_price?.usd || 0;
+                const priceChange1h =
+                  tokenPrice?.market_data?.price_change_percentage_1h_in_currency?.usd?.toFixed(
+                    2
+                  ) || 0;
+                const priceChange24h =
+                  tokenPrice?.market_data?.price_change_percentage_24h_in_currency?.usd?.toFixed(
+                    2
+                  ) || 0;
+                const priceChange7d =
+                  tokenPrice?.market_data?.price_change_percentage_7d_in_currency?.usd?.toFixed(
+                    2
+                  ) || 0;
+                return (
+                  <PriceStatisticItem
+                    key={denom}
+                    last={index === arr.length - 1}
+                  >
+                    <PriceStatisticContent>
+                      <CoinImage
+                        coinType={denom}
+                        onClick={() => setSearchedToken(key)}
+                      />
+                    </PriceStatisticContent>
+                    <PriceStatisticContent>
+                      <TokenName>
+                        <Span>{`(${key})`}</Span>
+                        <Span>{TokenFullName[denom]}</Span>
+                      </TokenName>
+                    </PriceStatisticContent>
+                    <PriceStatisticContent>
+                      <Span>{`$${currentPrice}`}</Span>
+                    </PriceStatisticContent>
+                    <PriceStatisticContent>
+                      <Span
+                        color={priceChange1h < 0 ? "#FF4842" : "#35cb00"}
+                      >{`${priceChange1h}%`}</Span>
+                    </PriceStatisticContent>
+                    <PriceStatisticContent>
+                      <Span
+                        color={priceChange24h < 0 ? "#FF4842" : "#35cb00"}
+                      >{`${priceChange24h}%`}</Span>
+                    </PriceStatisticContent>
+                    <PriceStatisticContent>
+                      <Span
+                        color={priceChange7d < 0 ? "#FF4842" : "#35cb00"}
+                      >{`${priceChange7d}%`}</Span>
+                    </PriceStatisticContent>
+                  </PriceStatisticItem>
+                );
+              } else {
+                return null;
+              }
             }
           )}
         </PriceStatisticContainer>
@@ -237,16 +308,8 @@ const PriceStatistic: React.FC = () => {
               <YAxis />
               <Tooltip />
               <Legend
-                onClick={handleClickChartLegend}
-                payload={(
-                  Object.keys(TokenType) as Array<keyof typeof TokenType>
-                ).map((key) => ({
-                  dataKey: key,
-                  value: key,
-                  color: lineDisplay[TokenType[key]]
-                    ? LineColors[TokenType[key]]
-                    : "#ccc",
-                }))}
+                // onClick={handleClickChartLegend}
+                payload={legendPayload}
               />
               {(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
                 (key) =>

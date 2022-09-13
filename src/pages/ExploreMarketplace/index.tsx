@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import { Title } from "../../components/PageTitle";
 import Collections, {
   CollectionIds,
   MarketplaceBasicInfo,
@@ -8,14 +7,6 @@ import Collections, {
 import MarketplaceItem from "./MarketplaceItem";
 import SearchInputer from "../../components/SearchInputer";
 import {
-  Wrapper,
-  SearchWrapper,
-  Flex,
-  FilterWrapper,
-  FilterItem,
-  ActivityButton,
-} from "./styled";
-import {
   NewIcon,
   TopIcon,
   VerifiedIcon,
@@ -23,12 +14,23 @@ import {
   UtilityIcon,
   ArtIcon,
   NFTIcon,
-  ActivityIcon,
+  // ActivityIcon,
 } from "../../components/SvgIcons";
 import { useAppSelector } from "../../app/hooks";
 import { TotalStateType } from "../../features/collections/collectionsSlice";
 import { TokenType } from "../../types/tokens";
-import { useHistory } from "react-router-dom";
+import Advertise, { Advertise1 } from "../../components/Advertise";
+import ExploreHeader from "../../components/ExploreHeader";
+import PageWrapper from "../../components/PageWrapper";
+
+import {
+  SearchWrapper,
+  Flex,
+  FilterWrapper,
+  FilterItem,
+  // ActivityButton,
+  OperationPanel,
+} from "./styled";
 
 type FilterOptionsType = {
   title: string;
@@ -36,11 +38,33 @@ type FilterOptionsType = {
   order: CollectionIds[];
 };
 
+export const NEW_COLLECTIONS: FilterOptionsType = {
+  title: "New",
+  Icon: () => <NewIcon />,
+  order: [
+    // CollectionIds.BEARS,
+    CollectionIds.LUNATICS,
+    CollectionIds.GORILLA,
+    CollectionIds.BORED3D,
+    CollectionIds.JUNOPUNKS2,
+    CollectionIds.ROMANS,
+    CollectionIds.WITCHES,
+    CollectionIds.CRYPTOGIRLS,
+    CollectionIds.BORED,
+    CollectionIds.GOBLIN,
+    CollectionIds.NETANOTS,
+    CollectionIds.SUNNYSIDE,
+    CollectionIds.JUNOPUNKS,
+    CollectionIds.MINTPASSI,
+    CollectionIds.MINTPASSII,
+    CollectionIds.HOPEGALAXYI,
+  ],
+};
+
 const ExploreMarketplace: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [orderValue, setOrderValue] = useState<CollectionIds[]>([]);
   const [selectedFilterOption, setSelectedFilterOption] = useState<string>("");
-  const history = useHistory();
   const tokenPrices = useAppSelector((state) => state.tokenPrices);
   const collectionStates: TotalStateType = useAppSelector(
     (state) => state.collectionStates
@@ -93,28 +117,7 @@ const ExploreMarketplace: React.FC = () => {
   }, [collectionStates, tokenPrices]);
 
   const filterOptions: FilterOptionsType[] = [
-    {
-      title: "New",
-      Icon: () => <NewIcon />,
-      order: [
-        // CollectionIds.BEARS,
-        CollectionIds.LUNATICS,
-        CollectionIds.GORILLA,
-        CollectionIds.BORED3D,
-        CollectionIds.JUNOPUNKS2,
-        CollectionIds.ROMANS,
-        CollectionIds.WITCHES,
-        CollectionIds.CRYPTOGIRLS,
-        CollectionIds.BORED,
-        CollectionIds.GOBLIN,
-        CollectionIds.NETANOTS,
-        CollectionIds.SUNNYSIDE,
-        CollectionIds.JUNOPUNKS,
-        CollectionIds.MINTPASSI,
-        CollectionIds.MINTPASSII,
-        CollectionIds.HOPEGALAXYI,
-      ],
-    },
+    NEW_COLLECTIONS,
     {
       title: "Top",
       Icon: () => <TopIcon />,
@@ -188,32 +191,41 @@ const ExploreMarketplace: React.FC = () => {
   };
 
   return (
-    <Wrapper>
-      <Title title="Explore Collections" />
-      <FilterWrapper>
-        {filterOptions.map((item: FilterOptionsType, index: number) => (
-          <FilterItem
-            key={index}
-            checked={selectedFilterOption === item.title}
-            onClick={() => handleClickFilterOption(item)}
-          >
-            {item.title}
-            <item.Icon />
-          </FilterItem>
-        ))}
-      </FilterWrapper>
-      <SearchWrapper>
-        <SearchInputer onChange={handleChangeSearchValue} />
-        <ActivityButton onClick={() => history.push("/activity")}>
+    <PageWrapper>
+      <ExploreHeader
+        title="Explore"
+        tabs={[
+          { title: "Explore", url: "/collections/explore" },
+          { title: "Activity", url: "/activity" },
+        ]}
+      />
+      <OperationPanel>
+        <FilterWrapper>
+          {filterOptions.map((item: FilterOptionsType, index: number) => (
+            <FilterItem
+              key={index}
+              checked={selectedFilterOption === item.title}
+              onClick={() => handleClickFilterOption(item)}
+            >
+              {item.title}
+              <item.Icon />
+            </FilterItem>
+          ))}
+        </FilterWrapper>
+        <SearchWrapper>
+          <SearchInputer onChange={handleChangeSearchValue} />
+          {/* <ActivityButton onClick={() => history.push("/activity")}>
           <ActivityIcon /> Activity
-        </ActivityButton>
-      </SearchWrapper>
+        </ActivityButton> */}
+        </SearchWrapper>
+      </OperationPanel>
+      <Advertise images={Advertise1} />
       <Flex>
         {displayCollections.map((item: MarketplaceBasicInfo, index: number) => (
           <MarketplaceItem key={item.collectionId} {...item} />
         ))}
       </Flex>
-    </Wrapper>
+    </PageWrapper>
   );
 };
 

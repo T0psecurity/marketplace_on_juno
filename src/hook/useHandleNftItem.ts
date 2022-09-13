@@ -13,11 +13,14 @@ import {
 import usePopoutQuickSwap, { SwapType } from "../components/Popout";
 import { ChainTypes } from "../constants/ChainTypes";
 import {
+  CollectionIds,
   getCollectionById,
+  getCollectionByNftContract,
   MarketplaceContracts,
 } from "../constants/Collections";
 import { TokenStatus, TokenType } from "../types/tokens";
 import useContract from "./useContract";
+import usePickNFT from "./usePickNFT";
 import useRefresh from "./useRefresh";
 
 const useHandleNftItem = () => {
@@ -25,10 +28,11 @@ const useHandleNftItem = () => {
   const { refresh } = useRefresh();
   const history = useHistory();
   const popoutQuickSwap = usePopoutQuickSwap();
+  const { pickNFTByTokenId } = usePickNFT();
   const balances = useAppSelector((state) => state.balances);
 
   const sellNft = useCallback(
-    async (item: any, nftPrice: any, TokenType: any) => {
+    async (item: any, nftPrice: any, tokenType: any, expireDate: number) => {
       const targetCollection = getCollectionById(item.collectionId);
       const regExp = /^(\d+(\.\d+)?)$/;
       const price = +nftPrice;
@@ -40,7 +44,7 @@ const useHandleNftItem = () => {
         toast.error("Invalid Price!");
         return;
       }
-      if (!TokenType) {
+      if (!tokenType) {
         toast.error("Select Price Type!");
         return;
       }
@@ -54,6 +58,7 @@ const useHandleNftItem = () => {
       // const marketplaceContract = targetCollection.marketplaceContract[0];
       const marketplaceContract = MarketplaceContracts[0];
       const nftContract = targetCollection.nftContract;
+      const tokenStatus = TokenStatus[tokenType as TokenType];
       const message = {
         send_nft: {
           // contract: item.token_id.includes("Hope")
@@ -64,9 +69,13 @@ const useHandleNftItem = () => {
           msg: btoa(
             JSON.stringify({
               list_price: {
-                denom: TokenType,
+                denom: tokenType,
                 amount: `${price * 1e6}`,
               },
+              expire: `${(Number(new Date()) + 180 * 24 * 3600 * 1000) * 1e6}`,
+              ...(!tokenStatus.isNativeCoin && {
+                token_address: tokenStatus.contractAddress,
+              }),
             })
           ),
         },
@@ -92,14 +101,26 @@ const useHandleNftItem = () => {
   const withdrawNft = useCallback(
     async (item: any) => {
       const targetCollection = getCollectionById(item.collectionId);
-      const message = {
-        withdraw_nft: {
-          offering_id: item.id,
-          ...(MarketplaceContracts.includes(item.contractAddress) && {
-            nft_address: targetCollection.nftContract,
-          }),
-        },
-      };
+      // const message = {
+      //   withdraw_nft: {
+      //     offering_id: item.id,
+      //     ...(MarketplaceContracts.includes(item.contractAddress) && {
+      //       nft_address: targetCollection.nftContract,
+      //     }),
+      //   },
+      // };
+      const message = MarketplaceContracts.includes(item.contractAddress)
+        ? {
+            withdraw_nft: {
+              token_id: item.token_id,
+              nft_address: targetCollection.nftContract,
+            },
+          }
+        : {
+            withdraw_nft: {
+              offering_id: item.id,
+            },
+          };
       try {
         await runExecute(
           // item.token_id.includes("Hope")
@@ -118,37 +139,196 @@ const useHandleNftItem = () => {
     [runExecute, refresh]
   );
 
+  const makeOfferToNft = useCallback(
+    async (item: any, nftPrice: any, tokenType: any, expire: number) => {
+      const regExp = /^(\d+(\.\d+)?)$/;
+      const price = +nftPrice;
+      const targetCollection = getCollectionById(item.collectionId);
+      const tokenStatus = TokenStatus[tokenType as TokenType];
+      if (!(price > 0 && regExp.test(nftPrice))) {
+        toast.error("Invalid Price!");
+        return;
+      }
+      if (!tokenType) {
+        toast.error("Select Price Type!");
+        return;
+      }
+      const message = tokenStatus.isNativeCoin
+        ? {
+            set_bid_coin: {
+              nft_address: targetCollection.nftContract,
+              expire: `${expire}`,
+              sale_type: "auction",
+              token_id: item.token_id,
+              list_price: {
+                denom: tokenType,
+                amount: `${price * 1e6}`,
+              },
+            },
+          }
+        : {
+            send: {
+              contract: item.contractAddress,
+              amount: `${price * 1e6}`,
+              msg: btoa(
+                JSON.stringify({
+                  sale_type: "auction",
+                  nft_address: targetCollection.nftContract,
+                  token_id: item.token_id,
+                  expire: `${expire}`,
+                })
+              ),
+            },
+          };
+      try {
+        if (tokenStatus.isNativeCoin) {
+          await runExecute(item.contractAddress, message, {
+            funds: `${price}`,
+            denom: tokenType,
+          });
+        } else {
+          await runExecute(
+            TokenStatus[tokenType as TokenType].contractAddress || "",
+            message
+          );
+        }
+        toast.success("Make offer successfully!");
+        refresh();
+      } catch (err: any) {
+        const errMsg = err.message;
+        console.error(err, errMsg, typeof errMsg);
+        toast.error(`Fail! ${errMsg}`);
+      }
+    },
+    [refresh, runExecute]
+  );
+
+  const makeOfferToCollection = useCallback(
+    async (
+      collectionId: CollectionIds,
+      nftPrice: any,
+      tokenType: any,
+      expire: number
+    ) => {
+      const regExp = /^(\d+(\.\d+)?)$/;
+      const price = +nftPrice;
+      const targetCollection = getCollectionById(collectionId);
+      const tokenStatus = TokenStatus[tokenType as TokenType];
+      if (!(price > 0 && regExp.test(nftPrice))) {
+        toast.error("Invalid Price!");
+        return;
+      }
+      if (!tokenType) {
+        toast.error("Select Price Type!");
+        return;
+      }
+      const message = tokenStatus.isNativeCoin
+        ? {
+            set_bid_coin: {
+              nft_address: targetCollection.nftContract,
+              expire: `${expire}`,
+              sale_type: "collection_bid",
+              list_price: {
+                denom: tokenType,
+                amount: `${price * 1e6}`,
+              },
+            },
+          }
+        : {
+            send: {
+              contract: MarketplaceContracts[0],
+              amount: `${price * 1e6}`,
+              msg: btoa(
+                JSON.stringify({
+                  sale_type: "collection_bid",
+                  nft_address: targetCollection.nftContract,
+                  expire: `${expire}`,
+                })
+              ),
+            },
+          };
+      try {
+        if (tokenStatus.isNativeCoin) {
+          await runExecute(MarketplaceContracts[0], message, {
+            funds: `${price}`,
+            denom: tokenType,
+          });
+        } else {
+          await runExecute(
+            TokenStatus[tokenType as TokenType].contractAddress || "",
+            message
+          );
+        }
+        toast.success("Make offer successfully!");
+        refresh();
+      } catch (err: any) {
+        const errMsg = err.message;
+        console.error(err, errMsg, typeof errMsg);
+        toast.error(`Fail! ${errMsg}`);
+      }
+    },
+    [refresh, runExecute]
+  );
+
   const mainLogic = useCallback(
     async (item: any) => {
       const price = item?.list_price || {};
       const targetCollection = getCollectionById(item.collectionId);
       const tokenStatus = TokenStatus[price.denom as TokenType];
-      const message = tokenStatus.isNativeCoin
-        ? {
-            buy_nft: {
-              offering_id: item.id,
-              ...(MarketplaceContracts.includes(item.contractAddress) && {
+      let message: any;
+      if (item.contractAddress === MarketplaceContracts[0]) {
+        message = tokenStatus.isNativeCoin
+          ? {
+              set_bid_coin: {
                 nft_address: targetCollection.nftContract,
-              }),
-            },
-          }
-        : {
-            send: {
-              // contract: item.token_id.includes("Hope")
-              //   ? contractAddresses.MARKET_CONTRACT
-              //   : contractAddresses.MARKET_REVEAL_CONTRACT,
-              contract: item.contractAddress,
-              amount: price.amount,
-              msg: btoa(
-                JSON.stringify({
-                  offering_id: item.id,
-                  ...(MarketplaceContracts.includes(item.contractAddress) && {
+                expire: "0",
+                sale_type: "fixed_price",
+                token_id: item.token_id,
+                list_price: price,
+              },
+            }
+          : {
+              send: {
+                contract: item.contractAddress,
+                amount: price.amount,
+                msg: btoa(
+                  JSON.stringify({
+                    sale_type: "fixed_price",
                     nft_address: targetCollection.nftContract,
-                  }),
-                })
-              ),
-            },
-          };
+                    token_id: item.token_id,
+                    expire: "0",
+                  })
+                ),
+              },
+            };
+      } else {
+        message = tokenStatus.isNativeCoin
+          ? {
+              buy_nft: {
+                offering_id: item.id,
+                ...(MarketplaceContracts.includes(item.contractAddress) && {
+                  nft_address: targetCollection.nftContract,
+                }),
+              },
+            }
+          : {
+              send: {
+                // contract: item.token_id.includes("Hope")
+                //   ? contractAddresses.MARKET_CONTRACT
+                //   : contractAddresses.MARKET_REVEAL_CONTRACT,
+                contract: item.contractAddress,
+                amount: price.amount,
+                msg: btoa(
+                  JSON.stringify({
+                    offering_id: item.id,
+                    ...(MarketplaceContracts.includes(item.contractAddress) && {
+                      nft_address: targetCollection.nftContract,
+                    }),
+                  })
+                ),
+              },
+            };
+      }
       try {
         if (tokenStatus.isNativeCoin) {
           await runExecute(
@@ -238,6 +418,7 @@ const useHandleNftItem = () => {
     },
     [balances, mainLogic, popoutQuickSwap]
   );
+
   const transferNft = useCallback(
     async (recipient: any, item: any, callbackLink?: string) => {
       const targetCollection = getCollectionById(item.collectionId);
@@ -259,11 +440,75 @@ const useHandleNftItem = () => {
     [history, runExecute]
   );
 
+  const acceptBid = useCallback(
+    async (offer: any) => {
+      if (!offer) return;
+      const selectedNFT: any = pickNFTByTokenId(offer.token_id || "");
+      const targetCollection = getCollectionById(selectedNFT.collectionId);
+      const message = {
+        accept_bid: {
+          nft_address: targetCollection.nftContract,
+          token_id: selectedNFT.token_id,
+          bidder: offer.bidder,
+        },
+      };
+      try {
+        await runExecute(selectedNFT.contractAddress, message);
+        toast.success("Accept bid successfully!");
+        refresh();
+        history.goBack();
+      } catch (e) {
+        toast.error("Accept bid failed!");
+      }
+    },
+    [history, pickNFTByTokenId, refresh, runExecute]
+  );
+
+  const withdrawBid = useCallback(
+    async (offer: any) => {
+      if (!offer) return;
+      console.log("withdraw bid", offer);
+      const selectedNFT: any = pickNFTByTokenId(offer.token_id || "");
+      const targetCollection = offer.token_id
+        ? getCollectionById(selectedNFT.collectionId)
+        : getCollectionByNftContract(offer.collection || "");
+      const message = offer.token_id
+        ? {
+            remove_bid: {
+              nft_address: targetCollection.nftContract,
+              token_id: offer.token_id,
+            },
+          }
+        : {
+            remove_collection_bid: {
+              nft_address: targetCollection.nftContract,
+            },
+          };
+      try {
+        await runExecute(
+          offer.token_id
+            ? selectedNFT.contractAddress
+            : MarketplaceContracts[0],
+          message
+        );
+        toast.success("Withdraw bid successfully!");
+        refresh();
+      } catch (e) {
+        toast.error("Withdraw bid failed!");
+      }
+    },
+    [pickNFTByTokenId, refresh, runExecute]
+  );
+
   return {
     sellNft,
     withdrawNft,
     buyNft,
     transferNft,
+    makeOfferToNft,
+    makeOfferToCollection,
+    acceptBid,
+    withdrawBid,
   };
 };
 

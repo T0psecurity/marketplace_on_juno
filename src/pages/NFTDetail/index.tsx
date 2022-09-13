@@ -15,6 +15,9 @@ import {
   NFTItemAttributeType,
   NFTItemAttributeValue,
   ViewCollectionButton,
+  CoinIconWrapper,
+  CoinIcon,
+  AcceptButton,
   // HorizontalDivider,
 } from "./styled";
 import { CollectionTraitsStateType } from "../../features/collectionTraits/collectionTraitsSlice";
@@ -30,41 +33,89 @@ import ActivityList from "../../components/ActivityList";
 import { getRandomIndex } from "../../util/basic";
 import NFTContainer from "../../components/NFTContainer";
 import { NFTItemStatus } from "../../components/NFTItem";
+import {
+  getCollectionById,
+  MarketplaceContracts,
+} from "../../constants/Collections";
+import useContract from "../../hook/useContract";
+import Text from "../../components/Text";
+import { TokenType } from "../../types/tokens";
+import moment from "moment";
+import useHandleNftItem from "../../hook/useHandleNftItem";
 // import NFTAdvertise from "../../components/NFTAdvertise";
+
+const MAX_ITEM = 30;
 
 const NFTDetail: React.FC = () => {
   // const selectedNFT = useAppSelector((state) => state.nfts.selectedNFT);
-  const [randomNftsInterval, setRandomNftsInterval] = useState(0);
+  const [refreshInterval, setRefreshInterval] = useState(0);
+  const [offers, setOffers] = useState([]);
   const { search } = useLocation();
   const token_id = addSpecialForUrl(
     new URLSearchParams(search).get("token_id")
   );
+
+  const { runQuery } = useContract();
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const isMobile = isXs || isSm || isMd;
   const { pickNFTByTokenId } = usePickNFT();
+  const { acceptBid } = useHandleNftItem();
   const selectedNFT: any = pickNFTByTokenId(token_id || "");
   const history = useHistory();
 
+  const targetCollection = getCollectionById(selectedNFT.collectionId);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setRandomNftsInterval((prev) => prev + 1);
+      setRefreshInterval((prev) => prev + 1);
     }, 30000);
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (!targetCollection?.nftContract) return;
+    (async () => {
+      let offers: any = [];
+      const fetchOffers = async (startAfter?: any) => {
+        const fetchedOffersResult = await runQuery(MarketplaceContracts[0], {
+          bids: {
+            collection: targetCollection.nftContract,
+            token_id: selectedNFT.token_id,
+            start_after: startAfter,
+            limit: MAX_ITEM,
+          },
+        });
+        const fetchedOffers = fetchedOffersResult.bids || [];
+        offers = offers.concat(fetchedOffers);
+        if (fetchedOffers.length === MAX_ITEM) {
+          await fetchOffers(fetchedOffers[MAX_ITEM - 1].bidder);
+        }
+      };
+      await fetchOffers();
+      setOffers(offers);
+    })();
+  }, [
+    refreshInterval,
+    runQuery,
+    selectedNFT.token_id,
+    targetCollection.nftContract,
+  ]);
+
+  const account = useAppSelector((state) => state.accounts.keplrAccount);
   const collectionTraitsState: CollectionTraitsStateType = useAppSelector(
     (state: any) => state.collectionTraitsStates[selectedNFT.collectionId]
   );
   const marketplaceNFTs = useAppSelector(
     (state) => (state.nfts as any)[`${selectedNFT.collectionId}_marketplace`]
   );
+  const tokenPrices = useAppSelector((state) => state.tokenPrices);
 
   const randomNfts = useMemo(() => {
     if (!marketplaceNFTs?.length) return [];
     const randomIndex = getRandomIndex({ max: marketplaceNFTs.length - 1 }, 4);
     return randomIndex.map((index) => marketplaceNFTs[index]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [randomNftsInterval]);
+  }, [refreshInterval]);
 
   const filterActivitiesFunc = useCallback(
     (activities: any[]) => {
@@ -79,6 +130,13 @@ const NFTDetail: React.FC = () => {
     },
     [token_id]
   );
+
+  const handleAcceptBid = (offer: any) => {
+    acceptBid(offer);
+  };
+
+  const isMySellingNft =
+    selectedNFT?.seller && selectedNFT.seller === account?.address;
 
   return (
     <Wrapper>
@@ -122,7 +180,70 @@ const NFTDetail: React.FC = () => {
           <NFTItemDescriptionHeader>
             <OfferListIcon width={30} height={30} /> NFT Offers
           </NFTItemDescriptionHeader>
-          <NFTItemDescriptionContent></NFTItemDescriptionContent>
+          <NFTItemDescriptionContent>
+            <table>
+              <thead>
+                <tr>
+                  <th>Price</th>
+                  <th>USD Price</th>
+                  <th>Expiration</th>
+                  <th>From</th>
+                  {isMySellingNft && <th />}
+                </tr>
+              </thead>
+              <tbody>
+                {offers.map((offer: any, index: number) => {
+                  const listPrice = offer.list_price || {};
+                  const tokenName = (
+                    Object.keys(TokenType) as Array<keyof typeof TokenType>
+                  ).filter((key) => TokenType[key] === listPrice?.denom)[0];
+                  const tokenPrice =
+                    tokenPrices[listPrice?.denom as TokenType]?.market_data
+                      .current_price?.usd || 0;
+                  const priceInUsd = (
+                    (+listPrice.amount * tokenPrice) /
+                    1e6
+                  ).toLocaleString("en-US", {
+                    maximumFractionDigits: 2,
+                  });
+                  const expirationDate = moment(
+                    new Date(+(offer?.expires_at || "0") / 1e6)
+                  ).format("YYYY-MM-DD hh:mm:ss");
+                  return (
+                    <tr key={index}>
+                      <td>
+                        <CoinIconWrapper>
+                          <CoinIcon
+                            alt=""
+                            src={`/coin-images/${listPrice?.denom.replace(
+                              /\//g,
+                              ""
+                            )}.png`}
+                          />
+                          <Text>{Number(listPrice.amount) / 1e6}</Text>
+                          <Text>{tokenName}</Text>
+                        </CoinIconWrapper>
+                      </td>
+                      <td>{priceInUsd}</td>
+                      <td>{expirationDate}</td>
+                      <td title={offer.bidder}>
+                        {offer.bidder === account?.address
+                          ? "YOU"
+                          : offer.bidder}
+                      </td>
+                      {isMySellingNft && (
+                        <td>
+                          <AcceptButton onClick={() => handleAcceptBid(offer)}>
+                            Accept
+                          </AcceptButton>
+                        </td>
+                      )}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </NFTItemDescriptionContent>
         </NFTItemDescription>
       </AttributeOfferPanel>
       <NFTItemDescription>

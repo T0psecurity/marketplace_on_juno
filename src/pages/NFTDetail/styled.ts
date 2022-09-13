@@ -22,10 +22,11 @@ export const NFTItemAttributesContainer = styled.div`
 export const NFTItemAttributeItem = styled.div`
   font-size: 14px;
   padding: 5px;
-  border: 1px solid #61b357;
+  border: 1px solid #02e296;
   border-radius: 10px;
   width: 150px;
-  background-color: rgba(97, 179, 87, 0.15);
+  /* background-color: rgba(97, 179, 87, 0.15); */
+  background: rgba(2, 226, 150, 0.15);
   color: ${({ theme }) => theme.colors.fontColor};
   & > span {
     align-self: center;
@@ -34,7 +35,7 @@ export const NFTItemAttributeItem = styled.div`
 
 export const NFTItemAttributeType = styled.div`
   font-weight: bold;
-  color: #2e7b31;
+  color: #02e296;
   margin-bottom: 10px;
 `;
 
@@ -60,7 +61,7 @@ export const HorizontalDivider = styled.div`
 export const AttributeOfferPanel = styled.div<{ isMobile: boolean }>`
   width: 100%;
   display: grid;
-  grid-template-columns: 0.4fr 0.6fr;
+  grid-template-columns: 40% 60%;
   grid-gap: 20px;
   justify-content: center;
   justify-items: start;
@@ -100,6 +101,20 @@ export const NFTItemDescriptionContent = styled.div<{ maxHeight?: string }>`
   max-height: ${({ maxHeight }) => maxHeight ?? "300px"};
   overflow: auto;
   min-height: 50px;
+
+  table {
+    width: 100%;
+    table-layout: fixed;
+    tr {
+      th,
+      td {
+        color: ${({ theme }) => theme.colors.fontColor};
+        min-width: 85px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
 `;
 
 export const ViewCollectionButton = styled.span`
@@ -107,4 +122,36 @@ export const ViewCollectionButton = styled.span`
   text-decoration: underline;
   color: #0057ff;
   cursor: pointer;
+`;
+
+export const CoinIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const CoinIcon = styled.img<{ size?: string }>`
+  width: ${({ size }) => size || "35px"};
+  height: ${({ size }) => size || "35px"};
+  margin-right: 5px;
+  cursor: pointer;
+`;
+
+export const AcceptButton = styled.div`
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  background-color: #02e296;
+  color: white;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  &:hover {
+    opacity: 0.6;
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
+      0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  }
 `;

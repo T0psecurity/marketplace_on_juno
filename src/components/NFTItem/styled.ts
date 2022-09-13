@@ -70,18 +70,21 @@ export const NFTItemOperationButton = styled.button`
   color: #fff;
   font-size: 16px;
   font-weight: bold;
-  background-color: #39c639;
+  /* background-color: #39c639; */
+  background-color: #02e296;
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
-  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   &:hover {
     text-decoration: none;
-    background-color: #1b5e20;
+    /* background-color: #1b5e20; */
     box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
       0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    opacity: 0.8;
   }
 `;
 
@@ -101,10 +104,16 @@ export const NFTItemOperationContainer = styled.div<{ isSellItem?: boolean }>`
 
 export const NFTItemPriceInputer = styled.input`
   width: 50px;
+  max-height: 32px !important;
   margin: 0 10px;
 `;
 
-export const NFTItemPriceType = styled.form``;
+export const NFTItemPriceType = styled.form`
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+`;
 
 export const CoinIcon = styled.img`
   width: 35px;
@@ -151,4 +160,59 @@ export const NFTItemWrapper = styled.div<{ isMobile: boolean }>`
         margin: 5px;
       }
     `}
+`;
+
+export const SellInfoContainer = styled.div`
+  background: rgba(2, 226, 150, 0.1);
+  border: 1px solid #02e296;
+  border-radius: 10px;
+  width: 100%;
+  padding: 5px;
+`;
+
+export const SellTypeButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+`;
+
+export const SellTypeButton = styled.div<{ checked: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: ${({ checked }) => (checked ? "white" : "#02e296")};
+  background: ${({ checked }) =>
+    checked ? "#02e296" : "rgba(255, 255, 255, 0.6)"};
+  border: 0.5px solid #02e296;
+  border-radius: 10px;
+  font-weight: bold;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.5s;
+  svg {
+    path {
+      transition: all 0.5s;
+      fill: ${({ checked }) => (checked ? "white" : "#02e296")};
+    }
+  }
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+export const SellButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  & > button {
+    width: max-content;
+    height: 26px;
+    padding: 5px;
+    border-radius: 20px !important;
+    border: 1px solid #02e296;
+  }
 `;

@@ -6,6 +6,7 @@ export enum SortDirectionType {
 export enum MarketplaceTabs {
   "ITEMS",
   "ACTIVITY",
+  "BIDS",
 }
 
 export interface FilterPanelProps {

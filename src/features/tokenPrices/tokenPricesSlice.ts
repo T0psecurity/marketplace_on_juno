@@ -153,9 +153,14 @@ export const tokenPricesSlice = createSlice({
   initialState,
   reducers: {
     clearTokenPrice: (state, action: PayloadAction) => {
-      state.ujuno = null;
-      state.hope = null;
-      state.raw = null;
+      // state.ujuno = null;
+      // state.hope = null;
+      // state.raw = null;
+      (Object.keys(TokenType) as Array<keyof typeof TokenType>).forEach(
+        (key) => {
+          state[TokenType[key]] = null;
+        }
+      );
     },
   },
   extraReducers: (builder) => {

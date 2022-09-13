@@ -6,6 +6,9 @@ export const breakpointMap: { [key: string]: number } = {
   md: 852,
   lg: 968,
   xl: 1080,
+  xxl: 1366,
+  xxxl: 1600,
+  xxxxl: 1920,
 };
 
 const breakpoints: Breakpoints = Object.values(breakpointMap).map(
@@ -18,6 +21,9 @@ const mediaQueries: MediaQueries = {
   md: `@media screen and (min-width: ${breakpointMap.md}px)`,
   lg: `@media screen and (min-width: ${breakpointMap.lg}px)`,
   xl: `@media screen and (min-width: ${breakpointMap.xl}px)`,
+  xxl: `@media screen and (min-width: ${breakpointMap.xxl}px)`,
+  xxxl: `@media screen and (min-width: ${breakpointMap.xxxl}px)`,
+  xxxxl: `@media screen and (min-width: ${breakpointMap.xxxxl}px)`,
   nav: `@media screen and (min-width: ${breakpointMap.lg}px)`,
 };
 
