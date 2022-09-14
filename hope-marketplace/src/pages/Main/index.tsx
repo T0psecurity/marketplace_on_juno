@@ -8,6 +8,7 @@ import NFTDetail from "../NFTDetail";
 import Home from "../Home";
 import Mint from "../Mint";
 import Activity from "../Activity";
+import IDO from "../IDO";
 import { Wrapper } from "./styled";
 
 const Main: React.FC = () => {
@@ -28,8 +29,9 @@ const Main: React.FC = () => {
         <Route exact={false} path="/collections/mint" component={Mint} />
         <Route exact={false} path="/detail" component={NFTDetail} />
         <Route exact={false} path="/activity" component={Activity} />
+        <Route exact={false} path="/ido" component={IDO} />
         <Route exact path="/" component={Home} />
-        <Redirect to="/profile" />
+        <Redirect to="/" />
       </Switch>
     </Wrapper>
   );

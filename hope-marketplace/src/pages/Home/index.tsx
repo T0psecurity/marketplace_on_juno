@@ -279,7 +279,7 @@ const Home: React.FC = () => {
             <Button
               style={{ minWidth: isMobile ? "60px" : "" }}
               colored
-              onClick={NotifyComingSoon}
+              onClick={() => history.push("/ido")}
             >
               IDO
             </Button>

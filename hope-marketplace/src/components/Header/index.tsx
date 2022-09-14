@@ -108,7 +108,7 @@ const HeaderLinks = [
   { title: "Mint", url: "/collections/mint", icon: MintIcon },
   {
     title: "IDO",
-    url: "soon",
+    url: "/ido",
     icon: ExploreIcon,
   },
   // {
