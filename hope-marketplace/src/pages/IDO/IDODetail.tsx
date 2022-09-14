@@ -16,6 +16,7 @@ import {
   ProjectDetailTitle,
   StatusContent,
   TokenLogo,
+  VestingPeriodItem,
 } from "./styled";
 import Text from "../../components/Text";
 import { FilterButtonOptions } from ".";
@@ -26,6 +27,30 @@ import {
   TwitterIcon,
 } from "../../components/SvgIcons";
 import moment from "moment";
+import { AvailableTokens } from "./IDOItem";
+
+const VestingPeriods = [
+  {
+    period: "Listing",
+    amount: "30%,",
+  },
+  {
+    period: "30 Days",
+    amount: "20%,",
+  },
+  {
+    period: "60 Days",
+    amount: "20%,",
+  },
+  {
+    period: "90 Days",
+    amount: "20%,",
+  },
+  {
+    period: "180 Days",
+    amount: "10%,",
+  },
+];
 
 const IDODetail: React.FC = () => {
   const { search } = useLocation();
@@ -33,7 +58,7 @@ const IDODetail: React.FC = () => {
 
   const idoInfo = getIDOById(idoId);
 
-  const { idoStatus: basicIdoStatus, fetchResult } = useIDOStatus(idoId);
+  const { idoStatus: basicIdoStatus } = useIDOStatus(idoId);
 
   const idoStatus = useMemo(() => {
     return {
@@ -50,7 +75,7 @@ const IDODetail: React.FC = () => {
             fontSize="20px"
             bold
           >
-            {idoInfo.name}
+            {idoInfo.symbol}
             <IDOItemSocialLinkContainer>
               <TwitterIcon height={20} />
               <DiscordIcon height={20} />
@@ -92,23 +117,73 @@ const IDODetail: React.FC = () => {
           <ProjectDetailTitle>Project Detail</ProjectDetailTitle>
         </ProjectDetailHeader>
         <Flex gap="50px">
-          <ProjectDetailContentTable>
-            <ProjectDetailContentTableRow>
-              Pool Information
-            </ProjectDetailContentTableRow>
-            <ProjectDetailContentTableRow>
-              <Text>Opens</Text>
-              <Text>{`${moment(idoStatus.startTime).format(
-                "YYYY-MM-DD hh:mm:ss"
-              )} CEST`}</Text>
-            </ProjectDetailContentTableRow>
-            <ProjectDetailContentTableRow>
-              <Text>Closes</Text>
-              <Text>{`${moment(idoStatus.endTime).format(
-                "YYYY-MM-DD hh:mm:ss"
-              )} CEST`}</Text>
-            </ProjectDetailContentTableRow>
-          </ProjectDetailContentTable>
+          <Flex gap="50px" flexDirection="column">
+            <ProjectDetailContentTable>
+              <ProjectDetailContentTableRow>
+                Pool Information
+              </ProjectDetailContentTableRow>
+              <ProjectDetailContentTableRow>
+                <Text>Opens</Text>
+                <Text>{`${moment(idoStatus.startTime).format(
+                  "YYYY-MM-DD hh:mm:ss"
+                )} CEST`}</Text>
+              </ProjectDetailContentTableRow>
+              <ProjectDetailContentTableRow>
+                <Text>Closes</Text>
+                <Text>{`${moment(idoStatus.endTime).format(
+                  "YYYY-MM-DD hh:mm:ss"
+                )} CEST`}</Text>
+              </ProjectDetailContentTableRow>
+              <ProjectDetailContentTableRow>
+                <Text>Swap Rate</Text>
+                <Flex flexDirection="column" gap="10px">
+                  {(
+                    Object.keys(AvailableTokens) as Array<
+                      keyof typeof AvailableTokens
+                    >
+                  ).map((key) => (
+                    <Text
+                      key={key}
+                    >{`1 ${AvailableTokens[key].symbol} = ${idoStatus.costs[key]} ${idoInfo.symbol}`}</Text>
+                  ))}
+                </Flex>
+              </ProjectDetailContentTableRow>
+              <ProjectDetailContentTableRow style={{ padding: 0 }}>
+                <Text margin="5px 10px">Vesting Period</Text>
+                <Flex gap="0px">
+                  {VestingPeriods.map((vestingPeriodItem, index) => (
+                    <VestingPeriodItem key={index}>
+                      <Text>{vestingPeriodItem.period}</Text>
+                      <Text>{vestingPeriodItem.amount}</Text>
+                    </VestingPeriodItem>
+                  ))}
+                </Flex>
+              </ProjectDetailContentTableRow>
+              <ProjectDetailContentTableRow>
+                <Text>Access Type</Text>
+                <Text>PUBLIC</Text>
+              </ProjectDetailContentTableRow>
+            </ProjectDetailContentTable>
+          </Flex>
+          <Flex gap="50px" flexDirection="column" alignItems="center">
+            <ProjectDetailContentTable>
+              <ProjectDetailContentTableRow>
+                Token Information
+              </ProjectDetailContentTableRow>
+              <ProjectDetailContentTableRow>
+                <Text>Name</Text>
+                <Text>{idoInfo.name}</Text>
+              </ProjectDetailContentTableRow>
+              <ProjectDetailContentTableRow>
+                <Text>Token Symbol</Text>
+                <Text>{idoInfo.symbol}</Text>
+              </ProjectDetailContentTableRow>
+              <ProjectDetailContentTableRow>
+                <Text>Total Supply</Text>
+                <Text>{idoStatus.total}</Text>
+              </ProjectDetailContentTableRow>
+            </ProjectDetailContentTable>
+          </Flex>
         </Flex>
       </ProjectDetail>
     </Wrapper>

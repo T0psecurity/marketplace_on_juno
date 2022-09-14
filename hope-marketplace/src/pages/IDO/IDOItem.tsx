@@ -57,16 +57,16 @@ type AvailableTokenType = TokenType.JUNO | TokenType.ATOM;
 export const AvailableTokens: {
   [key in AvailableTokenType]: {
     fieldKey: string;
-    name: string;
+    symbol: string;
   };
 } = {
   [TokenType.JUNO]: {
     fieldKey: "token_cost_juno",
-    name: "JUNO",
+    symbol: "JUNO",
   },
   [TokenType.ATOM]: {
     fieldKey: "token_cost_atom",
-    name: "ATOM",
+    symbol: "ATOM",
   },
 };
 
@@ -170,7 +170,7 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
     <Wrapper>
       <IDOItemHeader>
         <Text justifyContent="flex-start" fontSize="20px" bold>
-          {`${idoInfo.title} | ${idoInfo.name}`}
+          {`${idoInfo.name} | ${idoInfo.symbol}`}
           <PresaleStatus
             style={{ marginLeft: 10 }}
             backgroundColor={
@@ -202,7 +202,7 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
           <TokenSoldStatus>
             <TokenSoldStatusItem>
               <Text>Number of Tokens in Presale</Text>
-              <Text bold>{`${idoStatus.total} ${idoInfo.name}`}</Text>
+              <Text bold>{`${idoStatus.total} ${idoInfo.symbol}`}</Text>
             </TokenSoldStatusItem>
             <TokenSoldStatusItem>
               <Text>Percentage Sold</Text>
@@ -296,14 +296,14 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
             <SwapCrossIcon width={30} />
             <TokenSwapAmountItem>
               <TokenSwapAmountInputer>
-                <Text>{`1 ${AvailableTokens[selectedTokenType].name} = ${idoStatus.ratio} HOPERS`}</Text>
+                <Text>{`1 ${AvailableTokens[selectedTokenType].symbol} = ${idoStatus.ratio} ${idoInfo.symbol}`}</Text>
                 <input
                   value={swapAmount[SwapAmountType.TARGET]}
                   onChange={(e) =>
                     handleChangeSwapAmountInput(SwapAmountType.TARGET, e)
                   }
                 />
-                <Text>{idoInfo.name}</Text>
+                <Text>{idoInfo.symbol}</Text>
               </TokenSwapAmountInputer>
               <TokenImage src={`/token-logos/${idoInfo.id}.png`} alt="" />
             </TokenSwapAmountItem>

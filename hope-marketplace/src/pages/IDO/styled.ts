@@ -338,6 +338,15 @@ export const ProjectDetailContentTableRow = styled.div`
   }
 `;
 
+export const VestingPeriodItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-left: 1px solid #02e296;
+  padding: 5px;
+  width: 80px;
+`;
+
 export const Flex = styled.div<{
   flexDirection?: string;
   gap?: string;
