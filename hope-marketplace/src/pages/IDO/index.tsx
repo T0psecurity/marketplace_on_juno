@@ -11,23 +11,30 @@ enum FILTER_TYPE {
   SCHEDULED,
 }
 
-const FilterButtonOptions: {
-  [key in FILTER_TYPE]: {
+export enum PresaleState {
+  BEFORE,
+  PRESALE,
+  ENDED,
+}
+
+export const FilterButtonOptions: {
+  [key in PresaleState]: {
     title: string;
-    backgroundColor?: string;
+    backgroundColor: string;
     color?: string;
   };
 } = {
-  [FILTER_TYPE.LIVE]: {
+  [PresaleState.PRESALE]: {
     title: "Live",
+    backgroundColor: "#02E296",
   },
-  [FILTER_TYPE.SCHEDULED]: {
+  [PresaleState.BEFORE]: {
     title: "Scheduled",
-    backgroundColor: "#FCFF5C",
+    backgroundColor: "#F7ED51",
   },
-  [FILTER_TYPE.FINISHED]: {
-    title: "Sold out",
-    backgroundColor: "#C63939",
+  [PresaleState.ENDED]: {
+    title: "Finished",
+    backgroundColor: "#FF0000",
     color: "white",
   },
 };

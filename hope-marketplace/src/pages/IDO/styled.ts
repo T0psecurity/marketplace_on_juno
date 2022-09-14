@@ -194,3 +194,159 @@ export const OtherInfoContainer = styled.div`
   align-items: center;
   justify-content: space-evenly;
 `;
+
+export const RememberMe = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  & > input {
+    border: 1px solid #02e296;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    height: 50px;
+  }
+`;
+
+export const SelectItem = styled.div<{ checked?: boolean }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  ${({ checked }) =>
+    checked &&
+    css`
+      background-color: #6baf33;
+    `}
+  &: hover {
+    background-color: rgba(107, 175, 51, 0.5);
+  }
+`;
+
+export const CustomControl = styled.div`
+  display: flex;
+  align-items: center;
+  ${SelectItem} {
+    background-color: unset;
+    &:hover {
+      background-color: unset;
+    }
+  }
+`;
+
+export const PresaleStatus = styled.div<{ backgroundColor: string }>`
+  background-color: ${({ backgroundColor }) => `${backgroundColor}40`};
+  position: relative;
+  height: 25px;
+  padding-left: 24px;
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
+  &:before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translate(0, -50%);
+    background-color: ${({ backgroundColor }) => backgroundColor};
+    border-radius: 100%;
+    width: 16px;
+    height: 16px;
+  }
+`;
+
+export const IDODetailWrapper = styled.div`
+  height: 100%;
+  padding: 0 5%;
+`;
+
+export const DetailHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 0.6fr;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 20px 0;
+  border-top: 1px solid #02e296;
+  gap: 30px;
+  grid-gap: 30px;
+`;
+
+export const StatusContent = styled.div`
+  border-radius: 20px;
+  background: rgba(2, 226, 150, 0.3);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+`;
+
+export const ProgressBar = styled.div<{ value: number }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background: #d2faec;
+  border: 1px solid #02e296;
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: ${({ value }) => `${value}%`};
+    background: #02e297;
+  }
+`;
+
+export const ProjectDetail = styled.div``;
+
+export const ProjectDetailHeader = styled.div`
+  width: 100%;
+  display: flex;
+  border-bottom: 1px solid black;
+  margin-bottom: 20px;
+`;
+
+export const ProjectDetailTitle = styled(Text)`
+  font-weight: bold;
+  border-bottom: 2px solid #02e296;
+  padding-bottom: 5px;
+`;
+
+export const ProjectDetailContentTable = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ProjectDetailContentTableRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  border-bottom: 1px solid #02e296;
+  border-left: 1px solid #02e296;
+  border-right: 1px solid #02e296;
+  &:first-child {
+    border-top: 1px solid #02e296;
+    background: rgba(2, 226, 150, 0.12);
+  }
+`;
+
+export const Flex = styled.div<{
+  flexDirection?: string;
+  gap?: string;
+  alignItems?: string;
+  justifyContent?: string;
+}>`
+  display: flex;
+  flex-direction: ${({ flexDirection }) => flexDirection || "row"};
+  justify-content: ${({ justifyContent }) => justifyContent || "flex-start"};
+  align-items: ${({ alignItems }) => alignItems || "center"};
+  gap: ${({ gap }) => gap || "5px"};
+`;

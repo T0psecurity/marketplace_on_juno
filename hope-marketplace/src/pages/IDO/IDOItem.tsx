@@ -1,4 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { useHistory } from "react-router-dom";
+import ReactSelect, { ControlProps } from "react-select";
+import { FilterButtonOptions, PresaleState } from ".";
 import { useAppSelector } from "../../app/hooks";
 import CountDown from "../../components/CountDown";
 import {
@@ -11,16 +14,20 @@ import {
 import Text from "../../components/Text";
 import { BasicProps } from "../../constants/BasicTypes";
 import { IDOInterface } from "../../constants/IDOs";
-import useContract from "../../hook/useContract";
 import { TokenType } from "../../types/tokens";
 
 import {
   Button,
   ClearDiv,
+  CustomControl,
   IDOItemContent,
   IDOItemHeader,
   IDOItemSocialLinkContainer,
   IDOItemWrapper as Wrapper,
+  OtherInfoContainer,
+  PresaleStatus,
+  RememberMe,
+  SelectItem,
   TokenAmountAutoInputer,
   TokenAmountAutoInputItem,
   TokenImage,
@@ -34,6 +41,7 @@ import {
   TokenSwapAmountItem,
   TokenSwapAmountPanel,
 } from "./styled";
+import useIDOStatus from "./useIDOStatus";
 
 interface IDOItemProps extends BasicProps {
   idoInfo: IDOInterface;
@@ -44,24 +52,21 @@ enum SwapAmountType {
   TARGET,
 }
 
-enum PresaleState {
-  BEFORE,
-  PRESALE,
-  ENDED,
-}
-
 type AvailableTokenType = TokenType.JUNO | TokenType.ATOM;
 
-const AvailableTokens: {
+export const AvailableTokens: {
   [key in AvailableTokenType]: {
     fieldKey: string;
+    name: string;
   };
 } = {
   [TokenType.JUNO]: {
     fieldKey: "token_cost_juno",
+    name: "JUNO",
   },
   [TokenType.ATOM]: {
     fieldKey: "token_cost_atom",
+    name: "ATOM",
   },
 };
 
@@ -70,73 +75,37 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
     [SwapAmountType.ORIGIN]: 0,
     [SwapAmountType.TARGET]: 0,
   });
-  const [fetchResult, setFetchResult] = useState<{
-    stateInfo: any;
-    saleInfo: any;
-  }>({
-    stateInfo: {},
-    saleInfo: {},
-  });
   const [selectedTokenType, setSelectedTokenType] =
     useState<AvailableTokenType>(TokenType.JUNO);
 
-  const { runQuery } = useContract();
+  const { idoStatus: basicIdoStatus } = useIDOStatus(idoInfo.id);
+  const history = useHistory();
+
+  const SelectOptions = (
+    Object.keys(AvailableTokens) as Array<keyof typeof AvailableTokens>
+  ).map((key) => {
+    return {
+      value: key,
+    };
+  });
+
   const balances = useAppSelector((state) => state.balances);
 
-  useEffect(() => {
-    (async () => {
-      const contractAddress = idoInfo.contract;
-      const stateQueryResult = await runQuery(contractAddress, {
-        get_state_info: {},
-      });
-      const saleQueryResult = await runQuery(contractAddress, {
-        get_sale_info: {},
-      });
-      setFetchResult({
-        stateInfo: stateQueryResult || {},
-        saleInfo: saleQueryResult || {},
-      });
-    })();
-  }, [idoInfo.contract, runQuery]);
-
   const idoStatus = useMemo(() => {
-    const totalAmount = Number(fetchResult.stateInfo.total_supply || 0);
     const tokenBalance = (balances[TokenType.JUNO]?.amount || 0) / 1e6;
-    const startTime = fetchResult.stateInfo?.presale_start
-      ? new Date(fetchResult.stateInfo.presale_start * 1000)
-      : new Date();
-    const endTime = new Date(
-      Number(startTime) + (fetchResult.stateInfo.presale_period || 0) * 1000
-    );
-    const now = new Date();
-    let crrState =
-      Number(now) < Number(startTime)
-        ? PresaleState.BEFORE
-        : Number(now) < Number(endTime)
-        ? PresaleState.PRESALE
-        : PresaleState.ENDED;
-    let ratio = Number(
-      fetchResult.stateInfo[AvailableTokens[selectedTokenType].fieldKey]
-    );
-    const tokenSoldAmount = Number(fetchResult.saleInfo.token_sold_amount || 0);
-    const percentageSold = Number(
-      ((tokenSoldAmount / totalAmount) * 100).toFixed(2)
-    );
+
+    let ratio = basicIdoStatus.costs[selectedTokenType];
 
     return {
+      ...basicIdoStatus,
       ratio,
-      percentageSold,
-      total: totalAmount.toLocaleString("en-Us", { maximumFractionDigits: 2 }),
       tokenBalance,
-      startTime,
-      endTime,
-      crrState,
       balance:
         tokenBalance.toLocaleString("en-Us", {
           maximumFractionDigits: 2,
         }) + " JUNO",
     };
-  }, [balances, fetchResult, selectedTokenType]);
+  }, [balances, basicIdoStatus, selectedTokenType]);
 
   const handleChangeSwapAmountInput = (amountType: SwapAmountType, e: any) => {
     const { value } = e.target;
@@ -157,14 +126,60 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
     setSwapAmount(newAmountObject);
   };
 
+  const CustomSelectItem = ({ ...props }) => {
+    const { selectOption, option } = props;
+    return (
+      <SelectItem
+        onClick={() => {
+          if (selectOption) selectOption(option);
+        }}
+        checked={option.value === selectedTokenType}
+      >
+        <TokenImage
+          alt=""
+          src={`/coin-images/${option.value.replace(/\//g, "")}.png`}
+        />
+      </SelectItem>
+    );
+  };
+
+  const CustomMenuList = (props: any) => {
+    const { options, selectOption } = props;
+    return options.map((option: any, index: number) => (
+      <CustomSelectItem
+        key={index}
+        selectOption={selectOption}
+        option={option}
+      />
+    ));
+  };
+
+  const CustomControlItem = ({
+    children,
+    ...props
+  }: ControlProps<any, false>) => {
+    return (
+      <CustomControl>
+        <CustomSelectItem option={{ value: selectedTokenType }} />
+        {children}
+      </CustomControl>
+    );
+  };
+
   return (
     <Wrapper>
       <IDOItemHeader>
-        <Text
-          justifyContent="flex-start"
-          fontSize="20px"
-          bold
-        >{`${idoInfo.title} | ${idoInfo.name}`}</Text>
+        <Text justifyContent="flex-start" fontSize="20px" bold>
+          {`${idoInfo.title} | ${idoInfo.name}`}
+          <PresaleStatus
+            style={{ marginLeft: 10 }}
+            backgroundColor={
+              FilterButtonOptions[idoStatus.crrState].backgroundColor
+            }
+          >
+            {FilterButtonOptions[idoStatus.crrState].title}
+          </PresaleStatus>
+        </Text>
         <IDOItemSocialLinkContainer>
           <TwitterIcon height={20} />
           <DiscordIcon height={20} />
@@ -175,7 +190,12 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
       <IDOItemContent>
         <TokenLogoContainer>
           <TokenLogo src={`/token-logos/${idoInfo.id}.png`} alt="" />
-          <Button color="white">Details</Button>
+          <Button
+            color="white"
+            onClick={() => history.push(`/ido/detail?id=${idoInfo.id}`)}
+          >
+            Details
+          </Button>
         </TokenLogoContainer>
         <Text justifyContent="flex-start">{idoInfo.description}</Text>
         <TokenOperationPanel>
@@ -194,7 +214,33 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
           </TokenSoldStatus>
           <TokenSwapAmountPanel>
             <TokenSwapAmountItem>
-              <TokenImage src="/coin-images/ujuno.png" alt="" />
+              <ReactSelect
+                value={{ value: selectedTokenType }}
+                onChange={(value: any) => setSelectedTokenType(value.value)}
+                options={SelectOptions}
+                styles={{
+                  container: (provided, state) => ({
+                    ...provided,
+                    margin: "5px 10px",
+                    minWidth: 100,
+                    border: "1px solid black",
+                    borderRadius: "5px",
+                  }),
+                  dropdownIndicator: (provided, state) => ({
+                    ...provided,
+                    color: "black",
+                  }),
+                  menu: (provided, state) => ({
+                    ...provided,
+                    // backgroundColor: isDark ? "#838383" : "white",
+                    zIndex: 10,
+                  }),
+                }}
+                components={{
+                  MenuList: CustomMenuList,
+                  Control: CustomControlItem,
+                }}
+              />
               <TokenSwapAmountInputer>
                 <TokenAmountAutoInputer>
                   <TokenAmountAutoInputItem
@@ -250,7 +296,7 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
             <SwapCrossIcon width={30} />
             <TokenSwapAmountItem>
               <TokenSwapAmountInputer>
-                <Text>{`1 JUNO = ${idoStatus.ratio} HOPERS`}</Text>
+                <Text>{`1 ${AvailableTokens[selectedTokenType].name} = ${idoStatus.ratio} HOPERS`}</Text>
                 <input
                   value={swapAmount[SwapAmountType.TARGET]}
                   onChange={(e) =>
@@ -265,13 +311,19 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
           <Button>BUY</Button>
         </TokenOperationPanel>
         <ClearDiv />
-        <CountDown
-          time={
-            idoStatus.crrState === PresaleState.BEFORE
-              ? idoStatus.startTime
-              : idoStatus.endTime
-          }
-        />
+        <OtherInfoContainer>
+          <CountDown
+            time={
+              idoStatus.crrState === PresaleState.BEFORE
+                ? idoStatus.startTime
+                : idoStatus.endTime
+            }
+          />
+          <RememberMe>
+            <Text>Remember me...</Text>
+            <input placeholder="Email Alert" />
+          </RememberMe>
+        </OtherInfoContainer>
       </IDOItemContent>
     </Wrapper>
   );

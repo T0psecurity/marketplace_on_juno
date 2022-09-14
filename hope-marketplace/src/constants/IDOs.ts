@@ -20,3 +20,7 @@ export const IDOs: IDOInterface[] = [
     contract: "juno12w5u9dtnmx07axcjlkvhmwwkuy6n427z0x2wvewaqcf5dwqn2jzsfrr0ac",
   },
 ];
+
+export const getIDOById = (id: IDOIds): IDOInterface => {
+  return IDOs.filter((ido: IDOInterface) => ido.id === id)[0] || {};
+};
