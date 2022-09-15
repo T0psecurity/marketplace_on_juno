@@ -110,6 +110,7 @@ const HeaderLinks = [
     title: "IDO",
     url: "/ido",
     icon: ExploreIcon,
+    selectedUrl: ["/ido", "/ido/detail"],
   },
   // {
   //   title: "Launchpad",

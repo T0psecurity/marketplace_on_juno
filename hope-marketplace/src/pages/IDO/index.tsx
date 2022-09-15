@@ -11,34 +11,6 @@ enum FILTER_TYPE {
   SCHEDULED,
 }
 
-export enum PresaleState {
-  BEFORE,
-  PRESALE,
-  ENDED,
-}
-
-export const FilterButtonOptions: {
-  [key in PresaleState]: {
-    title: string;
-    backgroundColor: string;
-    color?: string;
-  };
-} = {
-  [PresaleState.PRESALE]: {
-    title: "Live",
-    backgroundColor: "#02E296",
-  },
-  [PresaleState.BEFORE]: {
-    title: "Scheduled",
-    backgroundColor: "#F7ED51",
-  },
-  [PresaleState.ENDED]: {
-    title: "Finished",
-    backgroundColor: "#FF0000",
-    color: "white",
-  },
-};
-
 const IDO: React.FC = () => {
   const [selectedFilterType, setSelectedFilterType] = useState(
     FILTER_TYPE.LIVE

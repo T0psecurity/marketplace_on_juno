@@ -132,7 +132,7 @@ export const TokenSwapAmountInputer = styled.div`
   gap: 5px;
   align-items: center;
   & > input {
-    width: 180px;
+    width: 140px;
     height: 50px;
     outline: none;
     border: 1px solid #02e296;
@@ -148,7 +148,7 @@ export const TokenAmountAutoInputer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 5px;
 `;
 
 export const TokenAmountAutoInputItem = styled(Text)`
@@ -156,7 +156,15 @@ export const TokenAmountAutoInputItem = styled(Text)`
 `;
 
 export const TokenImage = styled.img`
-  width: 50px;
+  width: 30px;
+`;
+
+export const SwapAmountInputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 30px;
 `;
 
 export const TokenSwapAmountPanel = styled.div`
@@ -164,12 +172,9 @@ export const TokenSwapAmountPanel = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 5px;
   @media (max-width: 400px) {
     gap: 5px;
-    ${TokenImage} {
-      width: 30px;
-    }
     ${TokenSwapAmountInputer} {
       & > input {
         width: 130px;
@@ -319,7 +324,16 @@ export const ProjectDetailTitle = styled(Text)`
   padding-bottom: 5px;
 `;
 
+export const ProjectDetailContent = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 100px;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
 export const ProjectDetailContentTable = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -344,7 +358,14 @@ export const VestingPeriodItem = styled.div`
   align-items: center;
   border-left: 1px solid #02e296;
   padding: 5px;
-  width: 80px;
+  width: 70px;
+`;
+
+export const VestingDetailContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const Flex = styled.div<{
@@ -352,10 +373,34 @@ export const Flex = styled.div<{
   gap?: string;
   alignItems?: string;
   justifyContent?: string;
+  width?: string;
 }>`
   display: flex;
   flex-direction: ${({ flexDirection }) => flexDirection || "row"};
   justify-content: ${({ justifyContent }) => justifyContent || "flex-start"};
   align-items: ${({ alignItems }) => alignItems || "center"};
   gap: ${({ gap }) => gap || "5px"};
+  ${({ width }) =>
+    width &&
+    css`
+      width: ${width};
+    `}
+`;
+
+export const Grid = styled.div<{
+  gridTemplateColumns?: string;
+  alignItems?: string;
+  justifyContent?: string;
+  gap?: string;
+}>`
+  display: grid;
+  grid-template-columns: ${({ gridTemplateColumns }) =>
+    gridTemplateColumns || "auto"};
+  align-items: ${({ alignItems }) => alignItems || "center"};
+  justify-content: ${({ justifyContent }) => justifyContent || "flex-start"};
+  ${({ gap }) =>
+    gap &&
+    css`
+      grid-gap: ${gap};
+    `}
 `;

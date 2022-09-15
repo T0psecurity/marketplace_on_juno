@@ -1,8 +1,9 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { IDOIds, getIDOById } from "../../constants/IDOs";
 import useIDOStatus from "./useIDOStatus";
 import {
+  Button,
   DetailHeader,
   Flex,
   IDODetailWrapper as Wrapper,
@@ -10,16 +11,18 @@ import {
   PresaleStatus,
   ProgressBar,
   ProjectDetail,
+  ProjectDetailContent,
   ProjectDetailContentTable,
   ProjectDetailContentTableRow,
   ProjectDetailHeader,
   ProjectDetailTitle,
   StatusContent,
   TokenLogo,
+  VestingDetailContainer,
   VestingPeriodItem,
 } from "./styled";
 import Text from "../../components/Text";
-import { FilterButtonOptions } from ".";
+import { FilterButtonOptions, AvailableTokens, PresaleState } from "./type";
 import {
   DiscordIcon,
   GlobeIcon,
@@ -27,7 +30,10 @@ import {
   TwitterIcon,
 } from "../../components/SvgIcons";
 import moment from "moment";
-import { AvailableTokens } from "./IDOItem";
+import useContract from "../../hook/useContract";
+import { useAppSelector } from "../../app/hooks";
+import SwapAmountInput from "./SwapAmountInput";
+import CountDown from "../../components/CountDown";
 
 const VestingPeriods = [
   {
@@ -53,12 +59,73 @@ const VestingPeriods = [
 ];
 
 const IDODetail: React.FC = () => {
+  const [userInfo, setUserInfo] = useState<{
+    totalClaimAmount: number;
+    claimedAmount: number;
+    claimableAmount: number;
+    claimedPercent: string;
+    claimablePercent: string;
+    claimableTime: Date | null;
+  }>({
+    totalClaimAmount: 0,
+    claimedAmount: 0,
+    claimableAmount: 0,
+    claimedPercent: "0%",
+    claimablePercent: "0%",
+    claimableTime: null,
+  });
   const { search } = useLocation();
   const idoId = new URLSearchParams(search).get("id") as IDOIds;
 
   const idoInfo = getIDOById(idoId);
 
+  const account = useAppSelector((state) => state?.accounts.keplrAccount);
   const { idoStatus: basicIdoStatus } = useIDOStatus(idoId);
+  const { runQuery } = useContract();
+
+  useEffect(() => {
+    if (idoInfo.contract && account) {
+      (async () => {
+        const userInfoResult = await runQuery(idoInfo.contract, {
+          get_user_info: {
+            address: account.address,
+          },
+        });
+        const claimableAmountResult = await runQuery(idoInfo.contract, {
+          get_claimable_amount: {
+            address: account.address,
+          },
+        });
+        const claimableTimeResult = await runQuery(idoInfo.contract, {
+          get_claimable_time: {
+            address: account.address,
+          },
+        });
+        const totalClaimAmount =
+          Number(userInfoResult.user_info?.total_claim_amount || 0) / 1e6;
+        const claimedAmount = Number(userInfoResult.claimed_amount || 0) / 1e6;
+        const claimedPercent = (claimedAmount / totalClaimAmount) * 100;
+        const claimableAmount = Number(claimableAmountResult || 0) / 1e6;
+        const claimablePercent = claimableAmount / totalClaimAmount;
+        setUserInfo({
+          totalClaimAmount,
+          claimedAmount,
+          claimableAmount,
+          claimedPercent:
+            claimedPercent.toLocaleString("en-Us", {
+              maximumFractionDigits: 2,
+            }) + "%",
+          claimablePercent:
+            claimablePercent.toLocaleString("en-Us", {
+              maximumFractionDigits: 2,
+            }) + "%",
+          claimableTime: claimableTimeResult.claimable_time
+            ? new Date(claimableTimeResult.claimable_time * 1000)
+            : null,
+        });
+      })();
+    }
+  }, [account, idoInfo.contract, runQuery]);
 
   const idoStatus = useMemo(() => {
     return {
@@ -116,8 +183,8 @@ const IDODetail: React.FC = () => {
         <ProjectDetailHeader>
           <ProjectDetailTitle>Project Detail</ProjectDetailTitle>
         </ProjectDetailHeader>
-        <Flex gap="50px">
-          <Flex gap="50px" flexDirection="column">
+        <ProjectDetailContent>
+          <Flex width="100%" gap="50px" flexDirection="column">
             <ProjectDetailContentTable>
               <ProjectDetailContentTableRow>
                 Pool Information
@@ -164,8 +231,29 @@ const IDODetail: React.FC = () => {
                 <Text>PUBLIC</Text>
               </ProjectDetailContentTableRow>
             </ProjectDetailContentTable>
+            <Flex width="100%" justifyContent="space-between">
+              <VestingDetailContainer>
+                <Text>Your Allocation</Text>
+                <Text>Claimable</Text>
+                <Text>Claimed</Text>
+                <Text>{`${userInfo.totalClaimAmount || 0} $HOPERS`}</Text>
+                <Text>{userInfo.claimablePercent}</Text>
+                <Text>{userInfo.claimedPercent}</Text>
+              </VestingDetailContainer>
+              <Flex flexDirection="column" gap="10px">
+                <Text>Vesting</Text>
+                <Button>
+                  {userInfo.claimableAmount > 0 ? "Claimable" : "Not claimable"}
+                </Button>
+              </Flex>
+            </Flex>
           </Flex>
-          <Flex gap="50px" flexDirection="column" alignItems="center">
+          <Flex
+            width="100%"
+            gap="50px"
+            flexDirection="column"
+            alignItems="center"
+          >
             <ProjectDetailContentTable>
               <ProjectDetailContentTableRow>
                 Token Information
@@ -183,8 +271,22 @@ const IDODetail: React.FC = () => {
                 <Text>{idoStatus.total}</Text>
               </ProjectDetailContentTableRow>
             </ProjectDetailContentTable>
+            <SwapAmountInput idoInfo={idoInfo} />
+            <CountDown
+              title={
+                idoStatus.crrState === PresaleState.BEFORE
+                  ? "Presale starts in"
+                  : "Presale ends in"
+              }
+              time={
+                idoStatus.crrState === PresaleState.BEFORE
+                  ? idoStatus.startTime
+                  : idoStatus.endTime
+              }
+              completedString="Presale ended"
+            />
           </Flex>
-        </Flex>
+        </ProjectDetailContent>
       </ProjectDetail>
     </Wrapper>
   );

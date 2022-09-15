@@ -7,12 +7,17 @@ import { DigitContainer, DigitItem, TimerContainer, Wrapper } from "./styled";
 interface CountDownProps extends BasicProps {
   time: any;
   completedString?: string;
+  title?: string;
 }
 
-const CountDown: React.FC<CountDownProps> = ({ time, completedString }) => {
+const CountDown: React.FC<CountDownProps> = ({
+  time,
+  completedString,
+  title,
+}) => {
   return (
     <Wrapper>
-      <Text bold>Countdown</Text>
+      <Text bold>{title || "Countdown"}</Text>
       <Countdown
         date={new Date(time)}
         renderer={({ days, hours, minutes, seconds, completed }) => {

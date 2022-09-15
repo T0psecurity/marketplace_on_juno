@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { PresaleState } from ".";
+import { PresaleState, AvailableTokens } from "./type";
 import { getIDOById, IDOIds } from "../../constants/IDOs";
 import useContract from "../../hook/useContract";
-import { AvailableTokens } from "./IDOItem";
 
 const useIDOStatus = (id: IDOIds) => {
   const [fetchResult, setFetchResult] = useState<{
