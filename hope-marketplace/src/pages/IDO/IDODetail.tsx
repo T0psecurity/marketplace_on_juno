@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { IDOIds, getIDOById } from "../../constants/IDOs";
 import useIDOStatus from "./useIDOStatus";
@@ -34,6 +34,7 @@ import useContract from "../../hook/useContract";
 import { useAppSelector } from "../../app/hooks";
 import SwapAmountInput from "./SwapAmountInput";
 import CountDown from "../../components/CountDown";
+import { toast } from "react-toastify";
 
 const VestingPeriods = [
   {
@@ -81,57 +82,75 @@ const IDODetail: React.FC = () => {
 
   const account = useAppSelector((state) => state?.accounts.keplrAccount);
   const { idoStatus: basicIdoStatus } = useIDOStatus(idoId);
-  const { runQuery } = useContract();
+  const { runQuery, runExecute } = useContract();
+
+  const fetchUserInfo = useCallback(async () => {
+    if (!idoInfo?.contract || !account) return;
+    const userInfoResult = await runQuery(idoInfo.contract, {
+      get_user_info: {
+        address: account.address,
+      },
+    });
+    const claimableAmountResult = await runQuery(idoInfo.contract, {
+      get_claimable_amount: {
+        address: account.address,
+      },
+    });
+    const claimableTimeResult = await runQuery(idoInfo.contract, {
+      get_claimable_time: {
+        address: account.address,
+      },
+    });
+    const totalClaimAmount =
+      Number(userInfoResult.user_info?.total_claim_amount || 0) / 1e6;
+    const claimedAmount = Number(userInfoResult.claimed_amount || 0) / 1e6;
+    const claimedPercent = (claimedAmount / totalClaimAmount) * 100;
+    const claimableAmount = Number(claimableAmountResult || 0) / 1e6;
+    const claimablePercent = claimableAmount / totalClaimAmount;
+    setUserInfo({
+      totalClaimAmount,
+      claimedAmount,
+      claimableAmount,
+      claimedPercent:
+        claimedPercent.toLocaleString("en-Us", {
+          maximumFractionDigits: 2,
+        }) + "%",
+      claimablePercent:
+        claimablePercent.toLocaleString("en-Us", {
+          maximumFractionDigits: 2,
+        }) + "%",
+      claimableTime: claimableTimeResult.claimable_time
+        ? new Date(claimableTimeResult.claimable_time * 1000)
+        : null,
+    });
+  }, [account, idoInfo.contract, runQuery]);
 
   useEffect(() => {
     if (idoInfo.contract && account) {
-      (async () => {
-        const userInfoResult = await runQuery(idoInfo.contract, {
-          get_user_info: {
-            address: account.address,
-          },
-        });
-        const claimableAmountResult = await runQuery(idoInfo.contract, {
-          get_claimable_amount: {
-            address: account.address,
-          },
-        });
-        const claimableTimeResult = await runQuery(idoInfo.contract, {
-          get_claimable_time: {
-            address: account.address,
-          },
-        });
-        const totalClaimAmount =
-          Number(userInfoResult.user_info?.total_claim_amount || 0) / 1e6;
-        const claimedAmount = Number(userInfoResult.claimed_amount || 0) / 1e6;
-        const claimedPercent = (claimedAmount / totalClaimAmount) * 100;
-        const claimableAmount = Number(claimableAmountResult || 0) / 1e6;
-        const claimablePercent = claimableAmount / totalClaimAmount;
-        setUserInfo({
-          totalClaimAmount,
-          claimedAmount,
-          claimableAmount,
-          claimedPercent:
-            claimedPercent.toLocaleString("en-Us", {
-              maximumFractionDigits: 2,
-            }) + "%",
-          claimablePercent:
-            claimablePercent.toLocaleString("en-Us", {
-              maximumFractionDigits: 2,
-            }) + "%",
-          claimableTime: claimableTimeResult.claimable_time
-            ? new Date(claimableTimeResult.claimable_time * 1000)
-            : null,
-        });
-      })();
+      fetchUserInfo();
     }
-  }, [account, idoInfo.contract, runQuery]);
+  }, [account, fetchUserInfo, idoInfo.contract, runQuery]);
 
   const idoStatus = useMemo(() => {
     return {
       ...basicIdoStatus,
     };
   }, [basicIdoStatus]);
+
+  const handleClaim = async () => {
+    if (userInfo.claimableAmount > 0) {
+      try {
+        await runExecute(idoInfo.contract, {
+          claim_token: {},
+        });
+        toast.success("Claimed Successfully");
+        fetchUserInfo();
+      } catch (e) {
+        toast.error("Claim Failed");
+      }
+    }
+  };
+
   return (
     <Wrapper>
       <DetailHeader>
@@ -242,7 +261,7 @@ const IDODetail: React.FC = () => {
               </VestingDetailContainer>
               <Flex flexDirection="column" gap="10px">
                 <Text>Vesting</Text>
-                <Button>
+                <Button onClick={handleClaim}>
                   {userInfo.claimableAmount > 0 ? "Claimable" : "Not claimable"}
                 </Button>
               </Flex>
@@ -276,7 +295,9 @@ const IDODetail: React.FC = () => {
               title={
                 idoStatus.crrState === PresaleState.BEFORE
                   ? "Presale starts in"
-                  : "Presale ends in"
+                  : idoStatus.crrState === PresaleState.PRESALE
+                  ? "Presale ends in"
+                  : ""
               }
               time={
                 idoStatus.crrState === PresaleState.BEFORE

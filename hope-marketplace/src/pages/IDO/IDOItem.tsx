@@ -94,7 +94,9 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
             title={
               idoStatus.crrState === PresaleState.BEFORE
                 ? "Presale starts in"
-                : "Presale ends in"
+                : idoStatus.crrState === PresaleState.PRESALE
+                ? "Presale ends in"
+                : ""
             }
             time={
               idoStatus.crrState === PresaleState.BEFORE

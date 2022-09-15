@@ -28,7 +28,7 @@ const Main: React.FC = () => {
           component={ExploreMarketplace}
         />
         <Route exact={false} path="/collections/mint" component={Mint} />
-        <Route exact={false} path="/detail" component={NFTDetail} />
+        <Route exact={false} path="/nft/detail" component={NFTDetail} />
         <Route exact={false} path="/activity" component={Activity} />
         <Route exact path="/ido" component={IDO} />
         <Route exact path="/ido/detail" component={IDODetail} />

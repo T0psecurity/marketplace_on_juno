@@ -17,12 +17,12 @@ const CountDown: React.FC<CountDownProps> = ({
 }) => {
   return (
     <Wrapper>
-      <Text bold>{title || "Countdown"}</Text>
+      <Text bold>{title ?? "Countdown"}</Text>
       <Countdown
         date={new Date(time)}
         renderer={({ days, hours, minutes, seconds, completed }) => {
           if (completed) {
-            return <Text bold>{completedString || "Completed"}</Text>;
+            return <Text bold>{completedString ?? "Completed"}</Text>;
           } else {
             const weeks = Math.floor(days / 7);
             const remainDays = days % 7;

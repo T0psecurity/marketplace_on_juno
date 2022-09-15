@@ -81,7 +81,7 @@ const HeaderLinks = [
     selectedUrl: [
       "/collections/explore",
       "/collections/marketplace",
-      "/detail",
+      "/nft/detail",
       "/activity",
     ],
     children: [
