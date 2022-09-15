@@ -10,12 +10,12 @@ export const Wrapper = styled.div<TextProps>`
   gap: 0.5ex;
   overflow-wrap: ${({ overflowWrap }) => overflowWrap ?? "break-word"};
   font-weight: ${({ bold }) => (bold ? "bold" : "normal")};
+  color: ${({ color, theme }) => color ?? theme.colors.fontColor};
   ${({ fontSize }) =>
     fontSize &&
     css`
       font-size: max(${fontSize}, 18px);
     `}
-  color: ${({ color, theme }) => color ?? theme.colors.fontColor};
   ${({ margin }) =>
     margin &&
     css`
@@ -30,5 +30,10 @@ export const Wrapper = styled.div<TextProps>`
     cursor &&
     css`
       cursor: ${cursor};
+    `}
+  ${({ textAlign }) =>
+    textAlign &&
+    css`
+      text-align: ${textAlign};
     `}
 `;

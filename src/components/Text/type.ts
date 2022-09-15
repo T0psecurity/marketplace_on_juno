@@ -10,4 +10,5 @@ export interface TextProps extends BasicProps {
   width?: string;
   justifyContent?: string;
   style?: any;
+  textAlign?: string;
 }

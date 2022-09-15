@@ -185,7 +185,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
                   <HistoryItemText
                   // onClick={() =>
                   //   history.push(
-                  //     `/detail?token_id=${escapeSpecialForUrl(
+                  //     `/nft/detail?token_id=${escapeSpecialForUrl(
                   //       historyItem.token_id
                   //     )}`
                   //   )

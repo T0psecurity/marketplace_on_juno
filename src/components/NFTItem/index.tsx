@@ -121,7 +121,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const handleGotoDetail = () => {
     // dispatch(setSelectedNFT(item));
-    history.push(`/detail?token_id=${escapeSpecialForUrl(item.token_id)}`);
+    history.push(`/nft/detail?token_id=${escapeSpecialForUrl(item.token_id)}`);
   };
 
   const isSellItem = status === NFTItemStatus.SELL;

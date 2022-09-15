@@ -81,7 +81,7 @@ const HeaderLinks = [
     selectedUrl: [
       "/collections/explore",
       "/collections/marketplace",
-      "/detail",
+      "/nft/detail",
       "/activity",
     ],
     children: [
@@ -108,8 +108,9 @@ const HeaderLinks = [
   { title: "Mint", url: "/collections/mint", icon: MintIcon },
   {
     title: "IDO",
-    url: "soon",
+    url: "/ido",
     icon: ExploreIcon,
+    selectedUrl: ["/ido", "/ido/detail"],
   },
   // {
   //   title: "Launchpad",

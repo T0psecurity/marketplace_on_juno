@@ -407,18 +407,21 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
             </Status>
             <SocialLinks>
               <TwitterIcon
+                width={20}
                 onClick={(e: any) => {
                   e.stopPropagation();
                   window.open(targetCollection.socialLinks.twitter);
                 }}
               />
               <DiscordIcon
+                width={20}
                 onClick={(e: any) => {
                   e.stopPropagation();
                   window.open(targetCollection.socialLinks.discord);
                 }}
               />
               <GlobeIcon
+                width={20}
                 onClick={(e: any) => {
                   e.stopPropagation();
                   window.open(targetCollection.socialLinks.website);
