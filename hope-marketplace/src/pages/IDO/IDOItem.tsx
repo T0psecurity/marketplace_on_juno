@@ -71,7 +71,9 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
             Details
           </Button>
         </TokenLogoContainer>
-        <Text justifyContent="flex-start">{idoInfo.description}</Text>
+        <Text justifyContent="flex-start" textAlign="left">
+          {idoInfo.description}
+        </Text>
         <TokenOperationPanel>
           <TokenSoldStatus>
             <TokenSoldStatusItem>

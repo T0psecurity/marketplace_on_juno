@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import { IDOIds, getIDOById } from "../../constants/IDOs";
 import useIDOStatus from "./useIDOStatus";
 import {
   Button,
   DetailHeader,
+  DetailTitle,
   Flex,
   IDODetailWrapper as Wrapper,
   IDOItemSocialLinkContainer,
@@ -24,6 +25,7 @@ import {
 import Text from "../../components/Text";
 import { FilterButtonOptions, AvailableTokens, PresaleState } from "./type";
 import {
+  ArrowLeftIcon,
   DiscordIcon,
   GlobeIcon,
   ListIcon,
@@ -76,12 +78,13 @@ const IDODetail: React.FC = () => {
     claimableTime: null,
   });
   const { search } = useLocation();
+  const history = useHistory();
   const idoId = new URLSearchParams(search).get("id") as IDOIds;
 
   const idoInfo = getIDOById(idoId);
 
   const account = useAppSelector((state) => state?.accounts.keplrAccount);
-  const { idoStatus: basicIdoStatus } = useIDOStatus(idoId);
+  const { idoStatus } = useIDOStatus(idoId);
   const { runQuery, runExecute } = useContract();
 
   const fetchUserInfo = useCallback(async () => {
@@ -103,10 +106,11 @@ const IDODetail: React.FC = () => {
     });
     const totalClaimAmount =
       Number(userInfoResult.user_info?.total_claim_amount || 0) / 1e6;
-    const claimedAmount = Number(userInfoResult.claimed_amount || 0) / 1e6;
+    const claimedAmount =
+      Number(userInfoResult.user_info?.claimed_amount || 0) / 1e6;
     const claimedPercent = (claimedAmount / totalClaimAmount) * 100;
     const claimableAmount = Number(claimableAmountResult || 0) / 1e6;
-    const claimablePercent = claimableAmount / totalClaimAmount;
+    const claimablePercent = (claimableAmount / totalClaimAmount) * 100;
     setUserInfo({
       totalClaimAmount,
       claimedAmount,
@@ -131,11 +135,11 @@ const IDODetail: React.FC = () => {
     }
   }, [account, fetchUserInfo, idoInfo.contract, runQuery]);
 
-  const idoStatus = useMemo(() => {
-    return {
-      ...basicIdoStatus,
-    };
-  }, [basicIdoStatus]);
+  // const idoStatus = useMemo(() => {
+  //   return {
+  //     ...basicIdoStatus,
+  //   };
+  // }, [basicIdoStatus]);
 
   const handleClaim = async () => {
     if (userInfo.claimableAmount > 0) {
@@ -153,6 +157,9 @@ const IDODetail: React.FC = () => {
 
   return (
     <Wrapper>
+      <DetailTitle onClick={() => history.push("/ido")}>
+        <ArrowLeftIcon height={22} /> IDO
+      </DetailTitle>
       <DetailHeader>
         <Flex flexDirection="column" gap="20px">
           <Text

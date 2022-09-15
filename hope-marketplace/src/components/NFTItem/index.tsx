@@ -157,7 +157,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
   const NFTItemOperationButtonItem = () => (
     <NFTItemOperationButton onClick={handleNFTItem} disabled={isPendingTx}>
       {`${status === NFTItemStatus.SELL ? "Sell / Auction" : status}${
-        isPendingTx ? "ing" : " Now"
+        isPendingTx ? "ing" : isMobile ? "" : " Now"
       }`}
     </NFTItemOperationButton>
   );

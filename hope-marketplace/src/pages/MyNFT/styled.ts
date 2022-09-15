@@ -256,6 +256,10 @@ export const OffersContainer = styled.div`
 export const ItemTd = styled.div`
   display: flex;
   align-items: center;
+  flex-direction: column;
+  & > img {
+    height: 100px;
+  }
 `;
 
 export const TokenNameContainer = styled.div`
