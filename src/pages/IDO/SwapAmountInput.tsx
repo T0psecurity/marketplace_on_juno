@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ReactSelect, { ControlProps } from "react-select";
 import {
   AvailableTokens,
@@ -31,9 +31,13 @@ import { toast } from "react-toastify";
 
 interface SwapAmountInputProps extends BasicProps {
   idoInfo: IDOInterface;
+  buyCallback?: any;
 }
 
-const SwapAmountInput: React.FC<SwapAmountInputProps> = ({ idoInfo }) => {
+const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
+  idoInfo,
+  buyCallback,
+}) => {
   const [swapAmount, setSwapAmount] = useState<any>({
     [SwapAmountType.ORIGIN]: 0,
     [SwapAmountType.TARGET]: 0,
@@ -66,6 +70,14 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({ idoInfo }) => {
       })} ${AvailableTokens[selectedTokenType].symbol}`,
     };
   }, [balances, basicIdoStatus, selectedTokenType]);
+
+  useEffect(() => {
+    handleChangeSwapAmount(
+      SwapAmountType.ORIGIN,
+      swapAmount[SwapAmountType.ORIGIN]
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idoStatus.ratio]);
 
   const handleChangeSwapAmountInput = (amountType: SwapAmountType, e: any) => {
     const { value } = e.target;
@@ -111,6 +123,7 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({ idoInfo }) => {
         }
       );
       toast.success("Successfully Buy!");
+      if (buyCallback) buyCallback();
     } catch (e) {
       toast.error("Buying Failed!");
       console.error(e);

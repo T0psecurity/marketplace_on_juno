@@ -44,8 +44,8 @@ export const TokenLogoContainer = styled.div`
   gap: 50px;
   /* min-width: 350px; */
   @media (min-width: 600px) {
-    width: 35%;
-    margin-left: 20px;
+    width: 20%;
+    margin-left: 100px;
     /* min-width: unset; */
     float: right;
     right: 0;
@@ -86,6 +86,7 @@ export const TokenOperationPanel = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  margin: 20px 0;
 `;
 
 export const TokenSoldStatus = styled.div`
