@@ -135,12 +135,6 @@ const IDODetail: React.FC = () => {
     }
   }, [account, fetchUserInfo, idoInfo.contract, runQuery]);
 
-  // const idoStatus = useMemo(() => {
-  //   return {
-  //     ...basicIdoStatus,
-  //   };
-  // }, [basicIdoStatus]);
-
   const handleClaim = async () => {
     if (userInfo.claimableAmount > 0) {
       try {

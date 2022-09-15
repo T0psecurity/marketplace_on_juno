@@ -21,7 +21,7 @@ import {
   IDOItemWrapper as Wrapper,
   OtherInfoContainer,
   PresaleStatus,
-  RememberMe,
+  // RememberMe,
   TokenLogo,
   TokenLogoContainer,
   TokenOperationPanel,
@@ -107,10 +107,10 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
             }
             completedString="Presale ended"
           />
-          <RememberMe>
+          {/* <RememberMe>
             <Text>Remember me...</Text>
             <input placeholder="Email Alert" />
-          </RememberMe>
+          </RememberMe> */}
         </OtherInfoContainer>
       </IDOItemContent>
     </Wrapper>
