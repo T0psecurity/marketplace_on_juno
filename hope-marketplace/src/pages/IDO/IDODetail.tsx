@@ -297,7 +297,7 @@ const IDODetail: React.FC = () => {
                 <Text>{idoStatus.total}</Text>
               </ProjectDetailContentTableRow>
             </ProjectDetailContentTable>
-            <SwapAmountInput idoInfo={idoInfo} />
+            <SwapAmountInput idoInfo={idoInfo} buyCallback={fetchUserInfo} />
             <CountDown
               title={
                 idoStatus.crrState === PresaleState.BEFORE
