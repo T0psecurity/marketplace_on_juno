@@ -31,7 +31,7 @@ const useIDOStatus = (id: IDOIds) => {
   }, [id, runQuery]);
 
   const idoStatus = useMemo(() => {
-    const totalAmount = Number(fetchResult.stateInfo.total_supply || 0);
+    const totalAmount = Number(fetchResult.stateInfo.total_supply || 0) / 1e6;
     const startTime = fetchResult.stateInfo?.presale_start
       ? new Date(fetchResult.stateInfo.presale_start * 1000)
       : new Date();
@@ -39,13 +39,14 @@ const useIDOStatus = (id: IDOIds) => {
       Number(startTime) + (fetchResult.stateInfo.presale_period || 0) * 1000
     );
     const now = new Date();
-    let crrState =
+    const crrState =
       Number(now) < Number(startTime)
         ? PresaleState.BEFORE
         : Number(now) < Number(endTime)
         ? PresaleState.PRESALE
         : PresaleState.ENDED;
-    const tokenSoldAmount = Number(fetchResult.saleInfo.token_sold_amount || 0);
+    const tokenSoldAmount =
+      Number(fetchResult.saleInfo.token_sold_amount || 0) / 1e6;
     const percentageSold = Number(
       ((tokenSoldAmount / totalAmount) * 100).toFixed(2)
     );

@@ -1,6 +1,11 @@
 import React, { useMemo, useState } from "react";
 import ReactSelect, { ControlProps } from "react-select";
-import { AvailableTokens, AvailableTokenType, SwapAmountType } from "./type";
+import {
+  AvailableTokens,
+  AvailableTokenType,
+  PresaleState,
+  SwapAmountType,
+} from "./type";
 import {
   Button,
   CustomControl,
@@ -82,6 +87,18 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({ idoInfo }) => {
   };
 
   const handleBuyToken = async () => {
+    if (swapAmount[SwapAmountType.ORIGIN] === 0) {
+      toast.error("Invalid amount!");
+      return;
+    }
+    if (idoStatus.crrState === PresaleState.BEFORE) {
+      toast.error("Presale is not started");
+      return;
+    }
+    if (idoStatus.crrState === PresaleState.ENDED) {
+      toast.error("Presale is ended");
+      return;
+    }
     try {
       await runExecute(
         idoInfo.contract,
