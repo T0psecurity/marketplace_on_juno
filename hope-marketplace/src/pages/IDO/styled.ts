@@ -267,7 +267,7 @@ export const DetailHeader = styled.div`
   padding: 20px 0;
   border-top: 1px solid #02e296;
   gap: 30px;
-  grid-gap: 30px;
+  grid-gap: 50px;
 `;
 
 export const StatusContent = styled.div`
@@ -349,7 +349,8 @@ export const VestingPeriodItem = styled.div`
   align-items: center;
   border-left: 1px solid #02e296;
   padding: 5px;
-  width: 70px;
+  width: 50px;
+  height: 100%;
 `;
 
 export const VestingDetailContainer = styled.div`

@@ -42,24 +42,32 @@ import { toast } from "react-toastify";
 
 const VestingPeriods = [
   {
-    period: "Listing",
-    amount: "30%,",
+    period: "IDO end",
+    amount: "10%,",
   },
   {
     period: "30 Days",
-    amount: "20%,",
+    amount: "15%,",
   },
   {
     period: "60 Days",
-    amount: "20%,",
+    amount: "15%,",
   },
   {
     period: "90 Days",
-    amount: "20%,",
+    amount: "15%,",
+  },
+  {
+    period: "120 Days",
+    amount: "15%,",
+  },
+  {
+    period: "150 Days",
+    amount: "15%,",
   },
   {
     period: "180 Days",
-    amount: "10%,",
+    amount: "15%,",
   },
 ];
 
@@ -245,7 +253,9 @@ const IDODetail: React.FC = () => {
                 <Flex gap="0px">
                   {VestingPeriods.map((vestingPeriodItem, index) => (
                     <VestingPeriodItem key={index}>
-                      <Text>{vestingPeriodItem.period}</Text>
+                      <Text style={{ fontSize: "0.7em" }}>
+                        {vestingPeriodItem.period}
+                      </Text>
                       <Text>{vestingPeriodItem.amount}</Text>
                     </VestingPeriodItem>
                   ))}
