@@ -19,7 +19,9 @@ import {
   ProjectDetailTitle,
   StatusContent,
   TokenLogo,
+  VestingDetailClaimed,
   VestingDetailContainer,
+  VestingDetailItem,
   VestingPeriodItem,
 } from "./styled";
 import Text from "../../components/Text";
@@ -155,10 +157,11 @@ const IDODetail: React.FC = () => {
         <ArrowLeftIcon height={22} /> IDO
       </DetailTitle>
       <DetailHeader>
-        <Flex flexDirection="column" gap="20px">
+        <Flex flexDirection="column" gap="20px" alignItems="flex-start">
           <Text
             style={{ gap: 20 }}
             justifyContent="space-between"
+            align-items="center"
             fontSize="20px"
             bold
           >
@@ -177,7 +180,9 @@ const IDODetail: React.FC = () => {
               {FilterButtonOptions[idoStatus.crrState].title}
             </PresaleStatus>
           </Text>
-          <Text justifyContent="flex-start">{idoInfo.description}</Text>
+          <Text justifyContent="flex-start" textAlign="left">
+            {idoInfo.description}
+          </Text>
         </Flex>
         <Flex style={{ width: "100%" }} flexDirection="column" gap="20px">
           <Flex gap="20px" justifyContent="space-evenly">
@@ -253,16 +258,26 @@ const IDODetail: React.FC = () => {
             </ProjectDetailContentTable>
             <Flex width="100%" justifyContent="space-between">
               <VestingDetailContainer>
-                <Text>Your Allocation</Text>
-                <Text>Claimable</Text>
-                <Text>Claimed</Text>
-                <Text>{`${userInfo.totalClaimAmount || 0} $HOPERS`}</Text>
-                <Text>{userInfo.claimablePercent}</Text>
-                <Text>{userInfo.claimedPercent}</Text>
+                <VestingDetailItem border>Your Allocation</VestingDetailItem>
+                <VestingDetailItem border>Claimable</VestingDetailItem>
+                <VestingDetailItem border>Claimed</VestingDetailItem>
+                <VestingDetailItem bold>{`${
+                  userInfo.totalClaimAmount || 0
+                } $HOPERS`}</VestingDetailItem>
+                <VestingDetailItem bold>
+                  {userInfo.claimablePercent}
+                </VestingDetailItem>
+                <VestingDetailClaimed percent={userInfo.claimedPercent} bold>
+                  <span>{userInfo.claimedPercent}</span>
+                </VestingDetailClaimed>
               </VestingDetailContainer>
               <Flex flexDirection="column" gap="10px">
                 <Text>Vesting</Text>
-                <Button onClick={handleClaim}>
+                <Button
+                  background={userInfo.claimableAmount > 0 ? null : "#E20202"}
+                  color={userInfo.claimableAmount > 0 ? "black" : "white"}
+                  onClick={handleClaim}
+                >
                   {userInfo.claimableAmount > 0 ? "Claimable" : "Not claimable"}
                 </Button>
               </Flex>

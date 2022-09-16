@@ -57,29 +57,6 @@ export const TokenLogo = styled.img`
   width: 100%;
 `;
 
-export const Button = styled.div<{ color?: string }>`
-  min-width: 150px;
-  background: linear-gradient(
-      0deg,
-      rgba(2, 226, 150, 0.26),
-      rgba(2, 226, 150, 0.26)
-    ),
-    #02e296;
-  color: ${({ color }) => color || "black"};
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 15px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.5s;
-  &:hover {
-    opacity: 0.8;
-  }
-  @media (max-width: 500px) {
-    min-width: 100px;
-  }
-`;
-
 export const TokenOperationPanel = styled.div`
   display: flex;
   flex-direction: column;
@@ -284,7 +261,7 @@ export const DetailTitle = styled(Text)`
 export const DetailHeader = styled.div`
   display: grid;
   grid-template-columns: 1fr 0.6fr;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   margin: 10px 0;
   padding: 20px 0;
@@ -380,6 +357,36 @@ export const VestingDetailContainer = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   justify-content: space-between;
   align-items: center;
+  border: 1px solid #02e296;
+`;
+
+export const VestingDetailItem = styled(Text)<{ border?: boolean }>`
+  padding: 10px;
+  ${({ border }) =>
+    border &&
+    css`
+      border-bottom: 1px solid #02e296;
+    `}
+`;
+
+export const VestingDetailClaimed = styled(Text)<{ percent: string }>`
+  border-left: 1px solid #02e296;
+  background: #d2faec;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  & > span {
+    z-index: 1;
+  }
+  &:before {
+    content: "";
+    height: 100%;
+    width: ${({ percent }) => percent};
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #02e296;
+  }
 `;
 
 export const Flex = styled.div<{
@@ -417,4 +424,27 @@ export const Grid = styled.div<{
     css`
       grid-gap: ${gap};
     `}
+`;
+
+export const Button = styled.div<{
+  color?: string | null;
+  background?: string | null;
+}>`
+  min-width: 150px;
+  background: ${({ background }) =>
+    background ??
+    "linear-gradient(0deg, rgba(2, 226, 150, 0.26), rgba(2, 226, 150, 0.26)), #02e296"};
+  color: ${({ color }) => color || "black"};
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.5s;
+  &:hover {
+    opacity: 0.8;
+  }
+  @media (max-width: 500px) {
+    min-width: 100px;
+  }
 `;
