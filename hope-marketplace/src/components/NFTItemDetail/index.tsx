@@ -15,7 +15,7 @@ import {
   // NFTItemImage,
   NFTItemOperationButton,
   NFTItemOperationContainer,
-  NFTItemPriceInputer,
+  NFTItemPriceInputer as NFTItemPriceInputerWrapper,
   NFTItemPriceType,
   CoinIcon,
   MainPriceContainer,
@@ -260,6 +260,20 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   //     </CustomAuctionPeriodControl>
   //   );
   // };
+
+  const NFTItemPriceInputer = ({ ...props }) => {
+    const { placeholder, value, onChange, key, width } = props;
+    return (
+      <NFTItemPriceInputerWrapper
+        key={key}
+        width={width}
+        hidePlaceholder={!!value}
+      >
+        <input value={value} onChange={onChange} />
+        <span>{placeholder}</span>
+      </NFTItemPriceInputerWrapper>
+    );
+  };
 
   return (
     <Wrapper isMobile={isMobile}>

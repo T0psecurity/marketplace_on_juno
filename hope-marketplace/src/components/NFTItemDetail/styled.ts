@@ -211,22 +211,36 @@ export const NFTItemOperationContainer = styled.div<{
     `}
 `;
 
-export const NFTItemPriceInputer = styled.input<{ width: string }>`
+export const NFTItemPriceInputer = styled.div<{
+  width: string;
+  hidePlaceholder: boolean;
+}>`
   width: ${({ width }) => width};
   height: 40px;
   margin: 0 10px;
-  border: 1px solid #02e296;
-  border-radius: 10px;
-  outline: none;
   position: relative;
   @media (max-width: 450px) {
     width: unset;
   }
-  &::placeholder {
+  & > input {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border: 1px solid #02e296;
+    border-radius: 10px;
+    font-size: inherit;
+  }
+  & > span {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    font-size: 0.7em;
+    color: #8e8e8e;
+    cursor: default;
+    white-space: nowrap;
+    transition: 0.5s all;
+    opacity: ${({ hidePlaceholder }) => (hidePlaceholder ? 0 : 1)};
   }
 `;
 

@@ -4,6 +4,11 @@ import Text from "../../components/Text";
 export const Wrapper = styled.div`
   height: 100%;
   padding: 0 5%;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 226, 150, 0.12) 0%,
+    rgba(2, 226, 150, 0) 100%
+  );
 `;
 
 export const IDOItemWrapper = styled.div`
