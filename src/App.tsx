@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Helmet from "react-helmet";
 import {
   // HashRouter,
   Router,
@@ -155,47 +156,80 @@ function App() {
   // ];
 
   return (
-    <ThemeContextProvider>
-      <GlobalStyle isMobile={isMobile} />
-      <WalletManagerProvider
-        defaultChainId={config.chainId}
-        enabledWalletTypes={[WalletType.Keplr, WalletType.WalletConnectKeplr]}
-        localStorageKey="keplr-wallet"
-        walletConnectClientMeta={{
-          name: "Hopers.io Marketplace",
-          description:
-            "The DAO governs the marketplace and earns rewards through the staking system of the token $HOPE.",
-          url: "https://hopers.io",
-          icons: ["https://hopers.io/logo.png"],
-        }}
-      >
-        <RefreshContextProvider>
-          <PopoutContextProvider>
-            <Updater />
-            <MainWrapper className="main">
-              <Router history={history}>
-                <ScrollToTopOnRouting />
-                <Header />
-                <Main />
-                <Footer />
-                <ToastContainer
-                  position="top-right"
-                  autoClose={5000}
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  hideProgressBar
-                  newestOnTop
-                  closeOnClick
-                  theme="colored"
-                />
-              </Router>
-            </MainWrapper>
-          </PopoutContextProvider>
-        </RefreshContextProvider>
-      </WalletManagerProvider>
-    </ThemeContextProvider>
+    <main>
+      <Helmet>
+        <title>-- Hopers.io Marketplace --</title>
+        <meta
+          name="description"
+          content="http://hopers.io/ 🍀 an avenue for the evolution of #DeFi & #NFTs on $JUNO living in the #Cosmos ⚛️"
+        />
+
+        <meta itemProp="name" content="-- Hopers.io Marketplace --" />
+        <meta
+          itemProp="description"
+          content="http://hopers.io/ 🍀 an avenue for the evolution of #DeFi & #NFTs on $JUNO living in the #Cosmos ⚛️"
+        />
+        <meta itemProp="image" content="http://hopers.io/SEO.png" />
+
+        <meta property="og:url" content="https://hopers.io" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="-- Hopers.io Marketplace --" />
+        <meta
+          property="og:description"
+          content="http://hopers.io/ 🍀 an avenue for the evolution of #DeFi & #NFTs on $JUNO living in the #Cosmos ⚛️"
+        />
+        <meta property="og:image" content="http://hopers.io/SEO.png" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="-- Hopers.io Marketplace --" />
+        <meta
+          name="twitter:description"
+          content="http://hopers.io/ 🍀 an avenue for the evolution of #DeFi & #NFTs on $JUNO living in the #Cosmos ⚛️"
+        />
+        <meta name="twitter:image" content="http://hopers.io/SEO.png" />
+      </Helmet>
+      <ThemeContextProvider>
+        <GlobalStyle isMobile={isMobile} />
+        <WalletManagerProvider
+          defaultChainId={config.chainId}
+          enabledWalletTypes={[WalletType.Keplr, WalletType.WalletConnectKeplr]}
+          localStorageKey="keplr-wallet"
+          walletConnectClientMeta={{
+            name: "Hopers.io Marketplace",
+            description:
+              "The DAO governs the marketplace and earns rewards through the staking system of the token $HOPE.",
+            url: "https://hopers.io",
+            icons: ["https://hopers.io/logo.png"],
+          }}
+        >
+          <RefreshContextProvider>
+            <PopoutContextProvider>
+              <Updater />
+              <MainWrapper className="main">
+                <Router history={history}>
+                  <ScrollToTopOnRouting />
+                  <Header />
+                  <Main />
+                  <Footer />
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    hideProgressBar
+                    newestOnTop
+                    closeOnClick
+                    theme="colored"
+                  />
+                </Router>
+              </MainWrapper>
+            </PopoutContextProvider>
+          </RefreshContextProvider>
+        </WalletManagerProvider>
+      </ThemeContextProvider>
+    </main>
   );
 }
 
