@@ -158,7 +158,6 @@ function App() {
   return (
     <main>
       <Helmet>
-        <title>-- Hopers.io Marketplace --</title>
         <meta
           name="description"
           content="http://hopers.io/ 🍀 an avenue for the evolution of #DeFi & #NFTs on $JUNO living in the #Cosmos ⚛️"
