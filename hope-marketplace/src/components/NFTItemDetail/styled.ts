@@ -352,6 +352,21 @@ export const SelectItem = styled.div<{ checked?: boolean }>`
   }
 `;
 
+export const SelectTokenItem = styled.div<{ checked?: boolean }>`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s;
+  ${({ checked }) =>
+    checked &&
+    css`
+      background-color: #6baf33;
+    `}
+  &: hover {
+    background-color: rgba(107, 175, 51, 0.5);
+  }
+`;
+
 export const StatisticIcon = styled.img`
   width: 35px;
   height: 35px;
