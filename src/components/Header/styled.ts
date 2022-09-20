@@ -122,6 +122,7 @@ export const WalletTypeModal = styled.div`
   opacity: 0;
   transition: 0.5s opacity;
   background-color: ${({ theme }) => theme.colors.backgroundColor};
+  text-transform: none;
 `;
 
 export const Logo = styled.div`
@@ -137,7 +138,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  gap: 30px;
+  gap: 20px;
 `;
 
 export const WalletImage = styled.img`
