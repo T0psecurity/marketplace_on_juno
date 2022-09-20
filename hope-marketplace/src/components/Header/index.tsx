@@ -36,7 +36,7 @@ import {
   LinkContainer,
   SubMenuContainer,
   WalletTypeModal,
-  Logo,
+  // Logo,
   Container,
   WalletImage,
   WalletItem,
@@ -294,7 +294,10 @@ const Header: React.FC = () => {
           <WalletIcon width={20} height={15} />
           <span style={{ marginLeft: 5 }}>Connect Wallet</span>
           <WalletTypeModal>
-            <Logo />
+            {/* <Logo /> */}
+            <Text bold fontSize="18px">
+              Choose Wallet Type
+            </Text>
             <Container>
               <WalletItem onClick={() => clickWalletButton(WalletType.KEPLR)}>
                 <WalletImage
