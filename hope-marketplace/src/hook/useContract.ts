@@ -8,7 +8,7 @@ import {
   useWallet,
   // useWalletManager
 } from "@noahsaso/cosmodal";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { useSelector } from "react-redux";
 // import {
 //   // useAppSelector
@@ -26,29 +26,7 @@ import { useSelector } from "react-redux";
 import { toMicroAmount } from "../util/coins";
 import { TokenStatus, TokenType } from "../types/tokens";
 import { ChainConfigs, ChainTypes } from "../constants/ChainTypes";
-
-// type TokenContractType = {
-//   [key in TokenType]: string;
-// };
-
-// interface ContractAddressesType extends TokenContractType {
-interface ContractAddressesType {
-  MINT_CONTRACT: string;
-}
-
-export const contractAddresses: ContractAddressesType = {
-  MINT_CONTRACT:
-    // "juno1u230upl8ut7vn8uyk7hd9ac2ygwrvk5jygsjzv838hkn2u4xj34slyg2qy",
-    "juno17kr4uahqlz8hl8nucx82q4vmlj7lrzzlz0yr0ax9hejaevw6ewqsf8p5ux",
-  // [TokenType.JUNO]: "",
-  // [TokenType.HOPE]:
-  //   // "juno1ckulym5ufeu29kqcqn0pw7qfavdmup9a9kwt9uzgt4arkq84qetssd9ltl",
-  //   "juno1re3x67ppxap48ygndmrc7har2cnc7tcxtm9nplcas4v0gc3wnmvs3s807z",
-  // [TokenType.RAW]:
-  //   "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
-  // [TokenType.NETA]:
-  //   "juno168ctmpyppk90d34p3jjy658zf5a5l3w8wk35wht6ccqj4mr0yv8s4j5awr",
-};
+import { CosmostationWalletContext } from "../context/Wallet";
 
 const getQueryClient = async (
   config: {
@@ -80,75 +58,20 @@ const useContract = () => {
   // const { connect } = useWalletManager();
 
   const state = useSelector((state: any) => state);
-  const { offlineSigner, signingCosmWasmClient } = useWallet(
+  const { offlineSigner: keplrOfflineSigner } = useWallet(
     ChainConfigs[ChainTypes.JUNO].chainId
   );
-
-  // const initContracts = useCallback(() => {
-  //   // remove existing contracts
-  //   // if (contracts.length) {
-  //   //   for (let i = 0; i < contracts.length; i++) {
-  //   //     const contract = contracts[i];
-  //   //     dispatch(deleteAccount(contract.address));
-  //   //   }
-  //   // }
-
-  //   // import target contracts
-  //   let targetContractAddresses: string[] = [];
-  //   Object.keys(contractAddresses).forEach((key: string) => {
-  //     targetContractAddresses.push(
-  //       contractAddresses[key as keyof ContractAddressesType]
-  //     );
-  //   });
-  //   Collections.forEach((collection: MarketplaceInfo) => {
-  //     if (collection.nftContract)
-  //       targetContractAddresses.push(collection.nftContract);
-  //     if (collection.mintContract)
-  //       targetContractAddresses.push(collection.mintContract);
-  //     if (collection.marketplaceContract.length)
-  //       collection.marketplaceContract.forEach((contract: string) => {
-  //         if (contract) targetContractAddresses.push(contract);
-  //       });
-  //   });
-  //   MarketplaceContracts.forEach((contract: string) =>
-  //     targetContractAddresses.push(contract)
-  //   );
-  //   MintContracts.forEach((contract: string) =>
-  //     targetContractAddresses.push(contract)
-  //   );
-
-  //   dispatch(importContract(targetContractAddresses));
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [Collections]);
+  const { offlineSigner: cosmostationOfflineSigner } = useContext(
+    CosmostationWalletContext
+  );
 
   const runQuery = useCallback(
-    // async (contractAddress: string, queryMsg: any) => {
     async (contractAddress: string, queryMsg: any) => {
-      // const contract = state.accounts.accountList[contractAddress];
-      // const contract = state.accounts.accountList[contractAddress];
-      // if (!contract) {
-      //   if (contractAddress) dispatch(importContract([contractAddress]));
-      //   console.error("contract selection error", contractAddress);
-      //   throw new Error("No contract selected");
-      // }
-      if (signingCosmWasmClient) {
-        const result = await signingCosmWasmClient?.queryContractSmart(
-          // contract.address,
-          contractAddress,
-          queryMsg
-        );
-        return result;
-      } else {
-        const client = await getQueryClient(ChainConfigs[ChainTypes.JUNO]);
-        const result = await client.queryContractSmart(
-          contractAddress,
-          queryMsg
-        );
-        return result;
-      }
+      const client = await getQueryClient(ChainConfigs[ChainTypes.JUNO]);
+      const result = await client.queryContractSmart(contractAddress, queryMsg);
+      return result;
     },
-    [signingCosmWasmClient]
+    []
   );
 
   const runExecute = useCallback(
@@ -162,8 +85,8 @@ const useContract = () => {
       }
     ) => {
       const config = ChainConfigs[ChainTypes.JUNO];
-      let signer = offlineSigner;
-      if (!offlineSigner) {
+      let signer = keplrOfflineSigner || cosmostationOfflineSigner;
+      if (!signer) {
         signer = await getOfflineSigner(config.chainId);
       }
       if (!signer) {
@@ -219,10 +142,11 @@ const useContract = () => {
           : undefined
       );
     },
-    [state, offlineSigner]
+    [state, keplrOfflineSigner, cosmostationOfflineSigner]
   );
 
   const getBalances = useCallback(async () => {
+    const offlineSigner = keplrOfflineSigner || cosmostationOfflineSigner;
     if (!offlineSigner) return {};
     const account = state.accounts.keplrAccount;
     const config = ChainConfigs[ChainTypes.JUNO];
@@ -276,7 +200,12 @@ const useContract = () => {
         console.error("get balance error", err);
         return {};
       });
-  }, [offlineSigner, runQuery, state.accounts.keplrAccount]);
+  }, [
+    keplrOfflineSigner,
+    cosmostationOfflineSigner,
+    runQuery,
+    state.accounts.keplrAccount,
+  ]);
 
   return {
     // initContracts,

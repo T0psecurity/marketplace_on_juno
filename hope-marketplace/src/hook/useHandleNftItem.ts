@@ -61,9 +61,6 @@ const useHandleNftItem = () => {
       const tokenStatus = TokenStatus[tokenType as TokenType];
       const message = {
         send_nft: {
-          // contract: item.token_id.includes("Hope")
-          //   ? contractAddresses.MARKET_CONTRACT
-          //   : contractAddresses.MARKET_REVEAL_CONTRACT,
           contract: marketplaceContract,
           token_id: item.token_id,
           msg: btoa(
@@ -81,13 +78,7 @@ const useHandleNftItem = () => {
         },
       };
       try {
-        await runExecute(
-          // item.token_id.includes("Hope")
-          //   ? contractAddresses.NFT_CONTRACT
-          //   : contractAddresses.REVEAL_NFT_CONTRACT,
-          nftContract,
-          message
-        );
+        await runExecute(nftContract, message);
         toast.success("Success!");
         refresh();
       } catch (err) {
@@ -122,13 +113,7 @@ const useHandleNftItem = () => {
             },
           };
       try {
-        await runExecute(
-          // item.token_id.includes("Hope")
-          //   ? contractAddresses.MARKET_CONTRACT
-          //   : contractAddresses.MARKET_REVEAL_CONTRACT,
-          item.contractAddress,
-          message
-        );
+        await runExecute(item.contractAddress, message);
         toast.success("Success!");
         refresh();
       } catch (err) {
@@ -313,9 +298,6 @@ const useHandleNftItem = () => {
             }
           : {
               send: {
-                // contract: item.token_id.includes("Hope")
-                //   ? contractAddresses.MARKET_CONTRACT
-                //   : contractAddresses.MARKET_REVEAL_CONTRACT,
                 contract: item.contractAddress,
                 amount: price.amount,
                 msg: btoa(
@@ -331,17 +313,10 @@ const useHandleNftItem = () => {
       }
       try {
         if (tokenStatus.isNativeCoin) {
-          await runExecute(
-            // item.token_id.includes("Hope")
-            //   ? contractAddresses.MARKET_CONTRACT
-            //   : contractAddresses.MARKET_REVEAL_CONTRACT,
-            item.contractAddress,
-            message,
-            {
-              funds: "" + price.amount / 1e6,
-              denom: price.denom,
-            }
-          );
+          await runExecute(item.contractAddress, message, {
+            funds: "" + price.amount / 1e6,
+            denom: price.denom,
+          });
         } else {
           await runExecute(
             TokenStatus[price.denom as TokenType].contractAddress || "",

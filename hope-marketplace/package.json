@@ -9,6 +9,8 @@
     "@cosmjs/launchpad": "0.27.0-rc2",
     "@cosmjs/proto-signing": "^0.28.9",
     "@cosmjs/stargate": "0.27.0-rc2",
+    "@cosmostation/cosmos-client": "0.0.1",
+    "@cosmostation/extension-client": "^0.1.9",
     "@noahsaso/cosmodal": "^0.5.0",
     "@reduxjs/toolkit": "^1.7.2",
     "@shoelace-style/shoelace": "^2.0.0-beta.64",
