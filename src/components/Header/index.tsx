@@ -39,6 +39,7 @@ import {
   Logo,
   Container,
   WalletImage,
+  WalletItem,
 } from "./styled";
 import { coin } from "@cosmjs/proto-signing";
 import useRefresh from "../../hook/useRefresh";
@@ -63,6 +64,7 @@ import {
   WalletType,
 } from "../../constants/BasicTypes";
 import { CosmostationWalletContext } from "../../context/Wallet";
+import Text from "../Text";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
@@ -294,16 +296,26 @@ const Header: React.FC = () => {
           <WalletTypeModal>
             <Logo />
             <Container>
-              <WalletImage
-                onClick={() => clickWalletButton(WalletType.KEPLR)}
-                src="/wallet-images/keplr-wallet-extension.png"
-                alt=""
-              />
-              <WalletImage
+              <WalletItem onClick={() => clickWalletButton(WalletType.KEPLR)}>
+                <WalletImage
+                  src="/wallet-images/keplr-wallet-extension.png"
+                  alt=""
+                />
+                <Text bold fontSize="20px">
+                  Keplr
+                </Text>
+              </WalletItem>
+              <WalletItem
                 onClick={() => clickWalletButton(WalletType.COSMOSTATION)}
-                src="/wallet-images/cosmostation-wallet-extension.png"
-                alt=""
-              />
+              >
+                <WalletImage
+                  src="/wallet-images/cosmostation-wallet-extension.png"
+                  alt=""
+                />
+                <Text bold fontSize="18px">
+                  Cosmostation
+                </Text>
+              </WalletItem>
             </Container>
           </WalletTypeModal>
         </>
