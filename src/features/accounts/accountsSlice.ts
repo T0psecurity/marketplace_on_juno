@@ -6,6 +6,7 @@ export enum AccountType {
   Basic,
   Keplr,
   Contract,
+  Cosmostation,
 }
 
 export interface BaseAccount {
@@ -19,6 +20,10 @@ export interface KeplrAccount extends BaseAccount {
   type: AccountType.Keplr;
 }
 
+export interface CosmostationAccount extends BaseAccount {
+  type: AccountType.Cosmostation;
+}
+
 export interface BasicAccount extends BaseAccount {
   type: AccountType.Basic;
   mnemonic: string;
@@ -30,7 +35,11 @@ export interface Contract extends BaseAccount {
   exists: boolean;
 }
 
-export type Account = KeplrAccount | BasicAccount | Contract;
+export type Account =
+  | KeplrAccount
+  | CosmostationAccount
+  | BasicAccount
+  | Contract;
 
 export interface AccountsState {
   accountList: { [key: string]: Account };
@@ -55,7 +64,7 @@ export const accountsSlice = createSlice({
   reducers: {
     setKeplrAccount: (
       state,
-      action: PayloadAction<KeplrAccount | undefined>
+      action: PayloadAction<KeplrAccount | CosmostationAccount | undefined>
     ) => {
       const account = action.payload;
 

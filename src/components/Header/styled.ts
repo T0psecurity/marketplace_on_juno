@@ -111,6 +111,45 @@ export const HorizontalDivider = styled.div`
   background-color: ${({ theme }) => theme.colors.fontColor};
 `;
 
+export const WalletTypeModal = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  padding: 10px;
+  border: 3px solid #02e296;
+  border-radius: 10px;
+  opacity: 0;
+  transition: 0.5s opacity;
+  background-color: ${({ theme }) => theme.colors.backgroundColor};
+`;
+
+export const Logo = styled.div`
+  background: url("/others/hopeHeaderLogo.png");
+  background-size: cover;
+  background-position: center;
+  width: 124px;
+  height: 30px;
+  cursor: pointer;
+`;
+
+export const Container = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  gap: 30px;
+`;
+
+export const WalletImage = styled.img`
+  height: 80px;
+  cursor: pointer;
+  transform: scale(0.8);
+  transition: 0.5s transform;
+  &:hover {
+    transform: scale(1);
+  }
+`;
+
 export const ConnectWalletButton = styled.div`
   display: inline-flex;
   align-items: center;
@@ -154,6 +193,9 @@ export const ConnectWalletButton = styled.div`
     /* background-color: #1b5e20; */
     box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
       0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    ${WalletTypeModal} {
+      opacity: 1;
+    }
   }
 `;
 
