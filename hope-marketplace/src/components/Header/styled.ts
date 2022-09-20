@@ -116,7 +116,7 @@ export const WalletTypeModal = styled.div`
   bottom: 0;
   left: 50%;
   transform: translate(-50%, 100%);
-  padding: 10px;
+  padding: 5px;
   border: 3px solid #02e296;
   border-radius: 10px;
   opacity: 0;
@@ -135,14 +135,20 @@ export const Logo = styled.div`
 
 export const Container = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
   margin-top: 20px;
   gap: 30px;
 `;
 
 export const WalletImage = styled.img`
-  height: 80px;
+  height: 50px;
   cursor: pointer;
+`;
+
+export const WalletItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
   transform: scale(0.8);
   transition: 0.5s transform;
   &:hover {
