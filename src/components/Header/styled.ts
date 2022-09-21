@@ -137,7 +137,7 @@ export const Logo = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 10px;
   gap: 20px;
 `;
 
