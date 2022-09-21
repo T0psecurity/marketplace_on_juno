@@ -32,7 +32,7 @@ export const CosmostationWalletContext =
     client: null,
   });
 
-const EXPIRATION_TIME = 3600;
+// const EXPIRATION_TIME = 3600;
 
 export const WalletProvider = ({ children }: { children: any }) => {
   const [offlineSigner, setOfflineSigner] = useState<OfflineSigner | null>(
@@ -55,38 +55,39 @@ export const WalletProvider = ({ children }: { children: any }) => {
   const config = ChainConfigs[ChainTypes.JUNO];
   const connect = async () => {
     const provider = await cosmos();
-    provider.autoSign
-      .set(config.chainId, EXPIRATION_TIME)
-      .then(async (result) => {
-        const offlineSigner = await getOfflineSigner(config.chainId);
-        const client = await SigningCosmWasmClient.connectWithSigner(
-          config.rpcEndpoint,
-          offlineSigner
-        );
-        const account = await provider.getAccount(config.chainId);
-        const { name: label, address } = account;
-        dispatch(
-          setKeplrAccount({
-            label,
-            address,
-            type: AccountType.Cosmostation,
-            balance: coin(0, config["microDenom"]),
-          })
-        );
-        setProvider(provider);
-        setOfflineSigner(offlineSigner);
-        setClient(client);
-        localStorage.setItem(
-          ConnectedWalletTypeLocalStorageKey,
-          ConnectedWalletType.COSMOSTATION
-        );
-        setTimeout(() => {
-          disconnect();
-        }, EXPIRATION_TIME * 1000);
+    // provider.autoSign
+    //   .set(config.chainId, EXPIRATION_TIME)
+    //   .then(async (result) => {
+
+    //     setTimeout(() => {
+    //       disconnect();
+    //     }, EXPIRATION_TIME * 1000);
+    //   })
+    //   .catch((err) => {
+    //     console.error("cosmostation connect error", err);
+    //   });
+    const offlineSigner = await getOfflineSigner(config.chainId);
+    const client = await SigningCosmWasmClient.connectWithSigner(
+      config.rpcEndpoint,
+      offlineSigner
+    );
+    const account = await provider.getAccount(config.chainId);
+    const { name: label, address } = account;
+    dispatch(
+      setKeplrAccount({
+        label,
+        address,
+        type: AccountType.Cosmostation,
+        balance: coin(0, config["microDenom"]),
       })
-      .catch((err) => {
-        console.error("cosmostation connect error", err);
-      });
+    );
+    setProvider(provider);
+    setOfflineSigner(offlineSigner);
+    setClient(client);
+    localStorage.setItem(
+      ConnectedWalletTypeLocalStorageKey,
+      ConnectedWalletType.COSMOSTATION
+    );
   };
 
   const disconnect = () => {
