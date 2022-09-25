@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { PresaleState, AvailableTokens } from "./type";
-import { getIDOById, IDOIds } from "../../constants/IDOs";
+import {
+  // getIDOById,
+  IDOIds,
+} from "../../constants/IDOs";
 import useContract from "../../hook/useContract";
 
 const tempIdoContractInfo = {
