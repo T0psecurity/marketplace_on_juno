@@ -1,6 +1,9 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { FilterButtonOptions, PresaleState } from "./type";
+import {
+  FilterButtonOptions,
+  // PresaleState
+} from "./type";
 // import CountDown from "../../components/CountDown";
 import {
   DiscordIcon,

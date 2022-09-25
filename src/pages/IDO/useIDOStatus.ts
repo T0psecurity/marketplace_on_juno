@@ -27,8 +27,8 @@ const useIDOStatus = (id: IDOIds) => {
 
   useEffect(() => {
     (async () => {
-      const idoInfo = getIDOById(id);
-      const contractAddress = idoInfo.contract;
+      // const idoInfo = getIDOById(id);
+      // const contractAddress = idoInfo.contract;
       // const stateQueryResult = await runQuery(contractAddress, {
       //   get_state_info: {},
       // });

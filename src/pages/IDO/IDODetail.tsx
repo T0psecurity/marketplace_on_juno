@@ -25,7 +25,11 @@ import {
   VestingPeriodItem,
 } from "./styled";
 import Text from "../../components/Text";
-import { FilterButtonOptions, AvailableTokens, PresaleState } from "./type";
+import {
+  FilterButtonOptions,
+  AvailableTokens,
+  // PresaleState
+} from "./type";
 import {
   ArrowLeftIcon,
   DiscordIcon,
@@ -36,8 +40,8 @@ import {
 import moment from "moment";
 import useContract from "../../hook/useContract";
 import { useAppSelector } from "../../app/hooks";
-import SwapAmountInput from "./SwapAmountInput";
-import CountDown from "../../components/CountDown";
+// import SwapAmountInput from "./SwapAmountInput";
+// import CountDown from "../../components/CountDown";
 import { toast } from "react-toastify";
 import useWindowSize from "../../hook/useWindowSize";
 

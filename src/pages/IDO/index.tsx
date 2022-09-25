@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ExploreHeader from "../../components/ExploreHeader";
 import Text from "../../components/Text";
 import { IDOIds, IDOs } from "../../constants/IDOs";
@@ -28,9 +28,10 @@ const IDO: React.FC = () => {
     // FILTER_TYPE.LIVE
     FILTER_TYPE.SCHEDULED
   );
-  const [idoStatuses, setIdoStatuses] = useState<IDOStatuses>({
-    hopers: 0,
-  } as IDOStatuses);
+  const idoStatuses: IDOStatuses = { hopers: 0 } as IDOStatuses;
+  // const [idoStatuses, setIdoStatuses] = useState<IDOStatuses>({
+  //   hopers: 0,
+  // } as IDOStatuses);
   // const { runQuery } = useContract();
 
   // useEffect(() => {
