@@ -15,7 +15,7 @@ import {
   // NFTItemImage,
   NFTItemOperationButton,
   NFTItemOperationContainer,
-  NFTItemPriceInputer,
+  NFTItemPriceInputer as NFTItemPriceInputerWrapper,
   NFTItemPriceType,
   CoinIcon,
   MainPriceContainer,
@@ -37,6 +37,7 @@ import {
   SocialLinkIcon,
   TooltipContainer,
   StyledInfoIcon,
+  SelectTokenItem,
   // CustomAuctionPeriodControl,
 } from "./styled";
 import ReactSelect, { ControlProps } from "react-select";
@@ -131,7 +132,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   );
   const [nftPrice, setNftPrice] = useState("");
   const [transferAdd, setTransferAdd] = useState("");
-  const [nftPriceType, setNftPriceType] = useState("");
+  const [nftPriceType, setNftPriceType] = useState<any>();
   const [selectValue, setSelectValue] = useState(SelectOptions[0]);
   // const [auctionPeriod, setAuctionPeriod] = useState(AuctionPeriodOptions[0]);
   const statistics: any = useStatistic(item.collectionId);
@@ -170,7 +171,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
     if (status === "Sell") {
       // const expire =
       //   (Number(new Date()) + auctionPeriod.value * 24 * 3600 * 1000) * 1e6;
-      await sellNft(item, nftPrice, nftPriceType, 0);
+      await sellNft(item, nftPrice, nftPriceType.value, 0);
     } else if (status === "Withdraw") {
       await withdrawNft(item);
     } else if (status === "Buy") {
@@ -190,7 +191,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
   // };
   const handleChangePriceType = (item: any) => {
-    setNftPriceType(item.value);
+    setNftPriceType(item);
   };
 
   const handleChangeTransferAdd = (e: any) => {
@@ -249,6 +250,53 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
     );
   };
 
+  const CustomTokenSelectItem = ({ ...props }) => {
+    const { selectOption, option } = props;
+    if (!option) return null;
+    return (
+      <SelectTokenItem
+        onClick={() => {
+          if (selectOption) selectOption(option);
+        }}
+        checked={option.value === nftPriceType?.value}
+      >
+        <StatisticIcon
+          alt=""
+          src={`/coin-images/${option.value.replace(/\//g, "")}.png`}
+        />
+        <SelectItemContent>{option.text}</SelectItemContent>
+      </SelectTokenItem>
+    );
+  };
+
+  const CustomTokenMenuList = (props: any) => {
+    const { options, selectOption } = props;
+    return options.map((option: any, index: number) => (
+      <CustomTokenSelectItem
+        key={index}
+        selectOption={selectOption}
+        option={option}
+      />
+    ));
+  };
+
+  const CustomTokenControlItem = ({
+    children,
+    ...props
+  }: ControlProps<any, false>) => {
+    return (
+      <CustomControl>
+        {nftPriceType && (
+          <StatisticIcon
+            alt=""
+            src={`/coin-images/${nftPriceType.value.replace(/\//g, "")}.png`}
+          />
+        )}
+        {children}
+      </CustomControl>
+    );
+  };
+
   // const CustomAuctionPeriodControlItem = ({
   //   children,
   //   ...props
@@ -260,6 +308,20 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   //     </CustomAuctionPeriodControl>
   //   );
   // };
+
+  const NFTItemPriceInputer = ({ ...props }) => {
+    const { placeholder, value, onChange, key, width } = props;
+    return (
+      <NFTItemPriceInputerWrapper
+        key={key}
+        width={width}
+        hidePlaceholder={!!value}
+      >
+        <input value={value} onChange={onChange} />
+        <span>{placeholder}</span>
+      </NFTItemPriceInputerWrapper>
+    );
+  };
 
   return (
     <Wrapper isMobile={isMobile}>
@@ -437,6 +499,10 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                           color: "white",
                         }),
                       }),
+                    }}
+                    components={{
+                      MenuList: CustomTokenMenuList,
+                      Control: CustomTokenControlItem,
                     }}
                   />
                 </NFTItemPriceType>

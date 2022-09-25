@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useWalletManager } from "@noahsaso/cosmodal";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -35,6 +35,11 @@ import {
   HorizontalDivider,
   LinkContainer,
   SubMenuContainer,
+  WalletTypeModal,
+  // Logo,
+  Container,
+  WalletImage,
+  WalletItem,
 } from "./styled";
 import { coin } from "@cosmjs/proto-signing";
 import useRefresh from "../../hook/useRefresh";
@@ -54,6 +59,12 @@ import {
 } from "../SvgIcons";
 import HopePriceDisplay from "../HopePriceDisplay";
 import { toast } from "react-toastify";
+import {
+  ConnectedWalletTypeLocalStorageKey,
+  WalletType,
+} from "../../constants/BasicTypes";
+import { CosmostationWalletContext } from "../../context/Wallet";
+import Text from "../Text";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
@@ -81,7 +92,7 @@ const HeaderLinks = [
     selectedUrl: [
       "/collections/explore",
       "/collections/marketplace",
-      "/detail",
+      "/nft/detail",
       "/activity",
     ],
     children: [
@@ -110,6 +121,7 @@ const HeaderLinks = [
     title: "IDO",
     url: "soon",
     icon: ExploreIcon,
+    // selectedUrl: ["/ido", "/ido/detail"],
   },
   // {
   //   title: "Launchpad",
@@ -142,7 +154,13 @@ const Header: React.FC = () => {
   const config = ChainConfigs[ChainTypes.JUNO];
   // const { connect } = useKeplr();
   // const { connect: connectWithCosmodal } = useCosmodal();
-  const { connect, disconnect, connectedWallet } = useWalletManager();
+  const {
+    connect: connectKeplr,
+    disconnect: disconnectKeplr,
+    connectedWallet,
+  } = useWalletManager();
+  const { connect: connectCosmostation, disconnect: disconnectCosmostation } =
+    useContext(CosmostationWalletContext);
   const { pathname } = useLocation();
   const history = useHistory();
   // const { initContracts } = useContract();
@@ -163,11 +181,16 @@ const Header: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!connectedWallet) {
-      dispatch(setKeplrAccount());
+    if (!account) {
       Collections.forEach((collection: MarketplaceInfo) =>
         setNFTs([collection.collectionId, []])
       );
+    }
+  }, [account]);
+
+  useEffect(() => {
+    if (!connectedWallet) {
+      dispatch(setKeplrAccount());
     } else {
       const { name: label, address } = connectedWallet;
       dispatch(
@@ -189,16 +212,26 @@ const Header: React.FC = () => {
       setHeaderHeight(headerElementHeight);
   });
 
-  const clickWalletButton = () => {
+  const clickWalletButton = (walletType: WalletType | null) => {
     if (!account) {
-      connect();
+      if (!walletType) return;
+      localStorage.setItem(ConnectedWalletTypeLocalStorageKey, walletType);
+      if (walletType === WalletType.KEPLR) {
+        connectKeplr();
+      } else if (walletType === WalletType.COSMOSTATION) {
+        connectCosmostation();
+      }
       // connectWithCosmodal();
     } else {
-      // dispatch(setKeplrAccount());
-      // Collections.forEach((collection: MarketplaceInfo) =>
-      //   setNFTs([collection.collectionId, []])
-      // );
-      disconnect();
+      const ConnectedWalletType = localStorage.getItem(
+        ConnectedWalletTypeLocalStorageKey
+      );
+      localStorage.setItem(ConnectedWalletTypeLocalStorageKey, "");
+      if (ConnectedWalletType === (WalletType.COSMOSTATION as string)) {
+        disconnectCosmostation();
+      } else {
+        disconnectKeplr();
+      }
     }
   };
 
@@ -248,7 +281,7 @@ const Header: React.FC = () => {
 
   const ConnectButton = () => (
     <ConnectWalletButton
-      onClick={clickWalletButton}
+      onClick={account ? () => clickWalletButton(null) : undefined}
       title={account?.label || ""}
     >
       {account ? (
@@ -260,6 +293,34 @@ const Header: React.FC = () => {
         <>
           <WalletIcon width={20} height={15} />
           <span style={{ marginLeft: 5 }}>Connect Wallet</span>
+          <WalletTypeModal>
+            {/* <Logo /> */}
+            <Text bold fontSize="18px">
+              Choose Wallet Type
+            </Text>
+            <Container>
+              <WalletItem onClick={() => clickWalletButton(WalletType.KEPLR)}>
+                <WalletImage
+                  src="/wallet-images/keplr-wallet-extension.png"
+                  alt=""
+                />
+                <Text bold fontSize="20px">
+                  Keplr
+                </Text>
+              </WalletItem>
+              <WalletItem
+                onClick={() => clickWalletButton(WalletType.COSMOSTATION)}
+              >
+                <WalletImage
+                  src="/wallet-images/cosmostation-wallet-extension.png"
+                  alt=""
+                />
+                <Text bold fontSize="18px">
+                  Cosmostation
+                </Text>
+              </WalletItem>
+            </Container>
+          </WalletTypeModal>
         </>
       )}
     </ConnectWalletButton>
