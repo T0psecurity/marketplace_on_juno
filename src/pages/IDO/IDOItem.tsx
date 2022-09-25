@@ -38,6 +38,7 @@ interface IDOItemProps extends BasicProps {
 
 const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
   const { idoStatus } = useIDOStatus(idoInfo.id);
+  console.log("idoStatus: ", idoStatus, idoInfo);
   const history = useHistory();
 
   return (
@@ -91,7 +92,7 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
           <SwapAmountInput idoInfo={idoInfo} />
         </TokenOperationPanel>
         <ClearDiv />
-        <OtherInfoContainer>
+        {/* <OtherInfoContainer>
           <CountDown
             title={
               idoStatus.crrState === PresaleState.BEFORE
@@ -106,12 +107,12 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
                 : idoStatus.endTime
             }
             completedString="Presale ended"
-          />
-          {/* <RememberMe>
+          /> */}
+        {/* <RememberMe>
             <Text>Remember me...</Text>
             <input placeholder="Email Alert" />
           </RememberMe> */}
-        </OtherInfoContainer>
+        {/* </OtherInfoContainer> */}
       </IDOItemContent>
     </Wrapper>
   );

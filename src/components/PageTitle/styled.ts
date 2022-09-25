@@ -4,7 +4,7 @@ export const Title = styled.div<{ justifyContent?: string }>`
   display: flex;
   align-items: center;
   justify-content: ${({ justifyContent }) => justifyContent ?? "center"};
-  padding: 30px 0;
+  // padding: 30px 0;
   text-align: center;
   font-size: 2em;
   font-weight: bold;
