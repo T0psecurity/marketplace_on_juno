@@ -383,7 +383,7 @@ const Home: React.FC = () => {
             </Text>
             <Flex gap="" width="100%">
               <NFTStatsItem>
-                <Text>Top Volume 7D</Text>
+                <Text>Top Volume 30D</Text>
                 <Text>{highestTradesCollection.collection?.title || ""}</Text>
                 <img
                   src={highestTradesCollection.collection?.logoUrl || ""}
@@ -395,7 +395,7 @@ const Home: React.FC = () => {
                 </Flex>
               </NFTStatsItem>
               <NFTStatsItem>
-                <Text>Highest Sale 7D</Text>
+                <Text>Highest Sale 30D</Text>
                 <Text>{highestSaleNft.tokenId || ""}</Text>
                 <img src={highestSaleNft.imageUrl || ""} alt="" />
                 <Text>{`$${addSuffix(highestSaleNft.trades)}`}</Text>
