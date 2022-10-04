@@ -62,7 +62,8 @@ const Home: React.FC = () => {
     highestTradesCollection,
     highestSaleNft,
     lastCollection,
-    mintSoldOutCollection,
+    mintLiveCollection,
+    // mintSoldOutCollection,
   } = useMemo(() => {
     const junoUsd =
       tokenPrices[TokenType.JUNO]?.market_data.current_price?.usd || 0;
@@ -73,7 +74,8 @@ const Home: React.FC = () => {
       } = {} as { collection: MarketplaceInfo; volume: number },
       totalItemsOnSaleResult = 0,
       tradesByNftResult: any = {},
-      mintSoldOutResult: any = {};
+      mintSoldOutResult: any[] = [],
+      mintLiveResult: any[] = [];
     Collections.forEach((collection: MarketplaceInfo) => {
       const crrMarketplaceItems =
         totalMarketplaceNFTs[`${collection.collectionId}_marketplace`] || [];
@@ -93,7 +95,7 @@ const Home: React.FC = () => {
           ? 0
           : (Number(history.amount) * crrUsd) / 1e6;
         // tradesVolumeResult += crrValue;
-        if (now - (history.time || now) <= 60 * 60 * 24 * 7) {
+        if (now - (history.time || now) <= 60 * 60 * 24 * 30) {
           // if the sale is hold in the last 7 days
           crrCollectionTradesVolume += crrValue; // calculate collection trades in the last 7 days
           tradesByNftResult[history.token_id] = {
@@ -133,7 +135,12 @@ const Home: React.FC = () => {
         (crrCollectionState?.totalNfts !== 0 &&
           crrCollectionState?.mintedNfts >= crrCollectionState?.totalNfts)
       ) {
-        mintSoldOutResult = collection;
+        mintSoldOutResult.push(collection);
+      } else if (
+        crrCollectionState?.mintedNfts < crrCollectionState?.totalNfts &&
+        crrCollectionState?.mintedNfts > 0
+      ) {
+        mintLiveResult.push(collection);
       }
     });
 
@@ -171,20 +178,24 @@ const Home: React.FC = () => {
           targetCollection.customTokenId
         )
       : highestSaleNftResult.tokenId;
-
+    const randMintResult =
+      mintLiveResult[Math.floor(Math.random() * mintLiveResult.length)];
     return {
       tradesVolume: tradesVolumeResult,
       highestTradesCollection: highestTradeCollectionResult,
       totalItemsOnSale: totalItemsOnSaleResult,
-      lastCollection: Collections[Collections.length - 1],
-      mintSoldOutCollection: mintSoldOutResult,
+      lastCollection: mintSoldOutResult[mintSoldOutResult.length - 1],
+      // mintSoldOutCollection: mintSoldOutResult,
+      mintLiveCollection: randMintResult,
       highestSaleNft: {
         imageUrl,
         tokenId,
         trades: highestSaleNftResult.trades,
       },
     };
-  }, [collectionStates, tokenPrices, totalMarketplaceNFTs]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // }, [collectionStates, tokenPrices, totalMarketplaceNFTs]);
 
   const fontSizes = useMemo(() => {
     const { isXs, isSm } = breakpoints;
@@ -401,18 +412,14 @@ const Home: React.FC = () => {
                 <Text>{`$${addSuffix(highestSaleNft.trades)}`}</Text>
               </NFTStatsItem>
               <NFTStatsItem>
-                <Text>Mint Sold Out</Text>
-                <Text>{mintSoldOutCollection?.title || ""}</Text>
-                <img src={mintSoldOutCollection?.logoUrl || ""} alt="" />
+                <Text>Mint Live Now</Text>
+                <Text>{mintLiveCollection?.title || ""}</Text>
+                <img src={mintLiveCollection?.logoUrl || ""} alt="" />
                 <Button
                   colored
-                  onClick={() =>
-                    history.push(
-                      `/collections/marketplace?id=${mintSoldOutCollection.collectionId}`
-                    )
-                  }
+                  onClick={() => history.push(`/collections/mint`)}
                 >
-                  View Collection
+                  Mint Now
                 </Button>
               </NFTStatsItem>
               <NFTStatsItem>
@@ -421,9 +428,13 @@ const Home: React.FC = () => {
                 <img src={lastCollection?.logoUrl || ""} alt="" />
                 <Button
                   colored
-                  onClick={() => history.push("/collections/mint")}
+                  onClick={() =>
+                    history.push(
+                      `/collections/marketplace?id=${lastCollection.collectionId}`
+                    )
+                  }
                 >
-                  Mint Now
+                  View Collection
                 </Button>
               </NFTStatsItem>
             </Flex>
