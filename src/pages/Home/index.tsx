@@ -61,9 +61,9 @@ const Home: React.FC = () => {
     totalItemsOnSale,
     highestTradesCollection,
     highestSaleNft,
-    lastCollection,
+    // lastCollection,
     mintLiveCollection,
-    // mintSoldOutCollection,
+    mintSoldOutCollection,
   } = useMemo(() => {
     const junoUsd =
       tokenPrices[TokenType.JUNO]?.market_data.current_price?.usd || 0;
@@ -180,12 +180,14 @@ const Home: React.FC = () => {
       : highestSaleNftResult.tokenId;
     const randMintResult =
       mintLiveResult[Math.floor(Math.random() * mintLiveResult.length)];
+    const randSoldOutResult =
+      mintSoldOutResult[Math.floor(Math.random() * mintSoldOutResult.length)];
     return {
       tradesVolume: tradesVolumeResult,
       highestTradesCollection: highestTradeCollectionResult,
       totalItemsOnSale: totalItemsOnSaleResult,
-      lastCollection: mintSoldOutResult[mintSoldOutResult.length - 1],
-      // mintSoldOutCollection: mintSoldOutResult,
+      // lastCollection: mintSoldOutResult[mintSoldOutResult.length - 1],
+      mintSoldOutCollection: randSoldOutResult,
       mintLiveCollection: randMintResult,
       highestSaleNft: {
         imageUrl,
@@ -196,7 +198,6 @@ const Home: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // }, [collectionStates, tokenPrices, totalMarketplaceNFTs]);
-
   const fontSizes = useMemo(() => {
     const { isXs, isSm } = breakpoints;
     if (isXs || isSm) {
@@ -423,14 +424,14 @@ const Home: React.FC = () => {
                 </Button>
               </NFTStatsItem>
               <NFTStatsItem>
-                <Text>Last Collection</Text>
-                <Text>{lastCollection?.title || ""}</Text>
-                <img src={lastCollection?.logoUrl || ""} alt="" />
+                <Text>Mint Sold Out</Text>
+                <Text>{mintSoldOutCollection?.title || ""}</Text>
+                <img src={mintSoldOutCollection?.logoUrl || ""} alt="" />
                 <Button
                   colored
                   onClick={() =>
                     history.push(
-                      `/collections/marketplace?id=${lastCollection.collectionId}`
+                      `/collections/marketplace?id=${mintSoldOutCollection.collectionId}`
                     )
                   }
                 >

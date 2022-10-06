@@ -74,8 +74,9 @@ export enum CollectionIds {
   BORED3D = "bored3d",
   GORILLA = "gorilla",
   LUNATICS = "lunatic",
-  TESTI = "test1",
-  TESTII = "test2",
+  // TESTI = "test1",
+  // TESTII = "test2",
+  KOALA = "koala",
 }
 
 const Collections: MarketplaceInfo[] = [
@@ -578,6 +579,37 @@ const Collections: MarketplaceInfo[] = [
       mintDate: "TBA",
       mintLogic: MintLogics.logic1,
       isWhiteListMint: true,
+    },
+    isLaunched: true,
+  },
+  {
+    title: "Bipolar Koalas",
+    creator: "Bipolar Koalas",
+    imageUrl: "/backgrounds/koala.jpg",
+    backgroundUrl: "/marketplace-backgrounds/koala.png",
+    logoUrl: "/logos/koala.gif",
+    collectionId: CollectionIds.KOALA,
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmNqani8fNeCuiGoEniBMpoUPmG1etwedhvVkwNMknFGEd/_metadata.json",
+    nftContract:
+      "juno1s5l386y8kamfpl9zlxz8rh2d99n5wt533wef5med47g7teuer4tqyn99ct",
+    mintContract:
+      "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.gg/hM6b85qtfR",
+      website: "",
+      twitter: "https://twitter.com/BipolarKoala",
+    },
+    description:
+      "Bipolar Koalas/ unique innovative project/ IRL support for mental health disorders/",
+    mintInfo: {
+      totalNfts: 313,
+      royalties: "7.5% + 3%",
+      price: "4.77",
+      mintImage: "/mint-images/koala.gif",
+      mintDate: "2022-10-06",
+      mintLogic: MintLogics.logic1,
     },
     isLaunched: true,
   },
