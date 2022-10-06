@@ -288,13 +288,13 @@ const Home: React.FC = () => {
             >
               Swap
             </Button>
-            <Button
+            {/* <Button
               style={{ minWidth: isMobile ? "60px" : "" }}
               colored
               onClick={() => history.push("/ido")}
             >
               IDO
-            </Button>
+            </Button> */}
             <Button
               style={{ minWidth: isMobile ? "60px" : "" }}
               onClick={() => history.push("/collections/explore")}
