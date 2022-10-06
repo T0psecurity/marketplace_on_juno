@@ -122,7 +122,6 @@ const Mint: React.FC = () => {
     );
     return result;
   }, [filterType, totalFilteredCollections]);
-  console.log("filteredCollections: ", filteredCollections);
   return (
     <Wrapper>
       {/* <Title title="Mint Page" /> */}
