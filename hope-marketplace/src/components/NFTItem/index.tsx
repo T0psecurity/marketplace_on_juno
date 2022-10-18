@@ -13,6 +13,7 @@ import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import { TokenType } from "../../types/tokens";
 import { addSuffix, escapeSpecialForUrl } from "../../util/string";
 import Image from "../Image";
+// import { OfferIcon, WalletIcon } from "../SvgIcons";
 
 import {
   NFTItemImageWrapper,
@@ -29,6 +30,10 @@ import {
   NFTItemUsdPrice,
   RarityRankContainer,
   RarityRankContent,
+  SellInfoContainer,
+  // SellTypeButtonContainer,
+  // SellTypeButton,
+  SellButtonContainer,
 } from "./styled";
 
 export interface NFTItemProps {
@@ -45,6 +50,7 @@ export const NFTItemStatus = {
 
 export default function NFTItem({ item, status }: NFTItemProps) {
   const [isPendingTx, setIsPendingTx] = useState(false);
+  // const [isAuction, setIsAuction] = useState(false);
   const [nftPrice, setNftPrice] = useState("");
   const [nftPriceType, setNftPriceType] = useState("");
   const { isDark } = useContext(ThemeContext);
@@ -88,7 +94,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
     setIsPendingTx(true);
     try {
       if (status === NFTItemStatus.SELL) {
-        await sellNft(item, nftPrice, nftPriceType);
+        await sellNft(item, nftPrice, nftPriceType, 0);
       } else if (status === NFTItemStatus.WITHDRAW) {
         await withdrawNft(item);
       } else if (status === NFTItemStatus.BUY) {
@@ -115,7 +121,7 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const handleGotoDetail = () => {
     // dispatch(setSelectedNFT(item));
-    history.push(`/detail?token_id=${escapeSpecialForUrl(item.token_id)}`);
+    history.push(`/nft/detail?token_id=${escapeSpecialForUrl(item.token_id)}`);
   };
 
   const isSellItem = status === NFTItemStatus.SELL;
@@ -150,7 +156,9 @@ export default function NFTItem({ item, status }: NFTItemProps) {
 
   const NFTItemOperationButtonItem = () => (
     <NFTItemOperationButton onClick={handleNFTItem} disabled={isPendingTx}>
-      {`${status}${isPendingTx ? "ing" : " Now"}`}
+      {`${status === NFTItemStatus.SELL ? "Sell / Auction" : status}${
+        isPendingTx ? "ing" : isMobile ? "" : " Now"
+      }`}
     </NFTItemOperationButton>
   );
 
@@ -175,14 +183,23 @@ export default function NFTItem({ item, status }: NFTItemProps) {
       </div>
 
       <NFTItemOperationContainer isSellItem={isSellItem}>
-        {!isMobile && <NFTItemOperationButtonItem />}
+        {!isMobile && !isSellItem && <NFTItemOperationButtonItem />}
         {isSellItem && (
-          <div>
-            <NFTItemPriceInputer
-              key={item.token_id}
-              value={nftPrice}
-              onChange={handleChangeNFTPrice}
-            />
+          <SellInfoContainer>
+            {/* <SellTypeButtonContainer>
+              <SellTypeButton
+                onClick={() => setIsAuction(false)}
+                checked={!isAuction}
+              >
+                <WalletIcon width={20} height={20} /> Fixed Price
+              </SellTypeButton>
+              <SellTypeButton
+                onClick={() => setIsAuction(true)}
+                checked={isAuction}
+              >
+                <OfferIcon width={20} height={20} /> Offers
+              </SellTypeButton>
+            </SellTypeButtonContainer> */}
             <NFTItemPriceType>
               <ReactSelect
                 styles={{
@@ -221,29 +238,21 @@ export default function NFTItem({ item, status }: NFTItemProps) {
                 onChange={handleChangePriceType}
                 options={SelectOptions}
               />
-              {/* <input
-                type="radio"
-                id={`hope-${item.token_id}`}
-                name="priceType"
-                value={TokenType.HOPE}
-                onClick={handleChangePriceType}
+              <NFTItemPriceInputer
+                key={item.token_id}
+                value={nftPrice}
+                onChange={handleChangeNFTPrice}
               />
-              <label htmlFor={`hope-${item.token_id}`}>HOPE</label>
-              <br />
-              <input
-                type="radio"
-                id={`juno-${item.token_id}`}
-                name="priceType"
-                value={TokenType.JUNO}
-                onClick={handleChangePriceType}
-              />
-              <label htmlFor={`juno-${item.token_id}`}>JUNO</label>
-              <br /> */}
             </NFTItemPriceType>
-          </div>
+            <SellButtonContainer>
+              <div />
+              <NFTItemOperationButtonItem />
+              <div />
+            </SellButtonContainer>
+          </SellInfoContainer>
         )}
       </NFTItemOperationContainer>
-      {isMobile && <NFTItemOperationButtonItem />}
+      {isMobile && !isSellItem && <NFTItemOperationButtonItem />}
     </NFTItemWrapper>
   );
 }

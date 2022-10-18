@@ -9,20 +9,32 @@ export const Wrapper = styled.div`
   }
 `;
 
+export const OperationPanel = styled.div`
+  justify-content: space-between;
+  align-items: center;
+  /* display: flex;*/
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 20px;
+  @media (max-width: 1024px) {
+    grid-template-columns: auto;
+  }
+`;
+
 export const FilterWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
   color: ${({ theme }) => theme.colors.fontColor};
+  gap: 20px;
 `;
 
 export const FilterItem = styled.div<{ checked: boolean }>`
   display: flex;
   align-items: center;
-  margin: 10px;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 16px;
   cursor: pointer;
   & > svg {
     margin-left: 5px;
@@ -50,7 +62,8 @@ export const SearchWrapper = styled.div`
   justify-content: center;
   width: 100%;
   max-width: 550px;
-  margin: 20px auto 40px;
+  min-width: 250px;
+  /* margin: 20px auto 40px; */
 `;
 
 export const ActivityButton = styled.div`

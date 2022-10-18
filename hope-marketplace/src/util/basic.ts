@@ -1,3 +1,5 @@
+import { breakpointMap } from "../theme/base";
+
 declare global {
   interface Window {
     opera: any;
@@ -34,3 +36,25 @@ export function getRandomIndex(
   }
   return result;
 }
+
+type ResponsiveSizeType = { [key: string]: number };
+type GetResponsiveSizeReturnType = {
+  [key: string]: ResponsiveSizeType;
+};
+
+export const getResponsiveSize = (
+  size: string,
+  target: ResponsiveSizeType
+): GetResponsiveSizeReturnType => {
+  let result: GetResponsiveSizeReturnType = {};
+  Object.keys(breakpointMap).forEach((key) => {
+    const crrSize = breakpointMap[key];
+    const crrResult: any = {};
+    Object.keys(target).forEach((targetKey) => {
+      crrResult[targetKey] =
+        (target[targetKey] * crrSize) / breakpointMap[size];
+    });
+    result[key] = crrResult;
+  });
+  return result;
+};

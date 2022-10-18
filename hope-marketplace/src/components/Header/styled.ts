@@ -1,17 +1,27 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
+
+export const HeaderBackground = styled.div<{ height: number }>`
+  height: ${({ height }) => height}px;
+  width: 100vw;
+`;
 
 export const HeaderWrapper = styled.div`
   /* width: 100vw; */
-  height: 70px;
-  padding-left: 24px;
-  padding-right: 24px;
+  min-height: 70px;
+  padding: 0 24px;
   background-color: ${({ theme }) => theme.colors.backgroundColor};
   box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
     0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
   display: flex;
+  grid-template-columns: auto auto;
   align-items: center;
   justify-content: space-between;
-  position: static;
+  gap: 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100vw - 48px);
+  z-index: 2;
 
   /* @media (min-width: 600px) {
     min-height: 64px;
@@ -55,18 +65,96 @@ export const ProfileIcon = styled.div`
   cursor: pointer;
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div<{ isMobile: boolean }>`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 10px 0;
+  gap: 10px;
 `;
 
-export const LinkButton = styled.div`
+export const LinkContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 40px;
+  &: last-child {
+    justify-content: space-between;
+  }
+`;
+
+export const LinkButton = styled.div<{ selected: boolean }>`
   cursor: pointer;
   font-size: 20px;
   background: none;
   font-weight: bold;
   margin: 0 10px;
   color: ${({ theme }) => theme.colors.fontColor};
+  padding: 5px 10px;
+  ${({ selected }) =>
+    selected &&
+    css`
+      background: rgba(2, 226, 150, 0.2);
+      border: 0.5px solid #02e296;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      border-radius: 10px;
+      text-decoration: underline #02e296 4px;
+      text-underline-offset: 6px;
+    `}
+`;
+
+export const HorizontalDivider = styled.div`
+  width: 2px;
+  height: 23px;
+  margin: 0 5px;
+  background-color: ${({ theme }) => theme.colors.fontColor};
+`;
+
+export const WalletTypeModal = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  padding: 5px;
+  border: 3px solid #02e296;
+  border-radius: 10px;
+  opacity: 0;
+  transition: 0.5s opacity;
+  background-color: ${({ theme }) => theme.colors.backgroundColor};
+  text-transform: none;
+`;
+
+export const Logo = styled.div`
+  background: url("/others/hopeHeaderLogo.png");
+  background-size: cover;
+  background-position: center;
+  width: 124px;
+  height: 30px;
+  cursor: pointer;
+`;
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  gap: 20px;
+`;
+
+export const WalletImage = styled.img`
+  height: 50px;
+  cursor: pointer;
+`;
+
+export const WalletItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: scale(0.8);
+  transition: 0.5s transform;
+  &:hover {
+    transform: scale(1);
+  }
 `;
 
 export const ConnectWalletButton = styled.div`
@@ -76,21 +164,26 @@ export const ConnectWalletButton = styled.div`
   position: relative;
   box-sizing: border-box;
   outline: 0;
-  border: 0;
-  border-radius: 10px;
+  border: 1px solid black;
+  border-radius: 15px;
   cursor: pointer;
   user-select: none;
   vertical-align: middle;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: bold;
   font-size: 0.875rem;
   line-height: 1.75;
   letter-spacing: 0.02857em;
   text-transform: uppercase;
-  width: 150px;
+  /* width: 200px; */
+  width: max-content;
+  max-width: 200px;
   padding: 6px 16px;
-  color: #fff;
-  background-color: #2e7d32;
+  color: black;
+  /* background-color: #2e7d32; */
+  background: linear-gradient(90deg, #02e296 0%, rgba(2, 226, 150, 0) 114.55%);
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  background-color: white;
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
@@ -104,9 +197,12 @@ export const ConnectWalletButton = styled.div`
   }
   &:hover {
     text-decoration: none;
-    background-color: #1b5e20;
+    /* background-color: #1b5e20; */
     box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
       0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+    ${WalletTypeModal} {
+      opacity: 1;
+    }
   }
 `;
 
@@ -138,10 +234,16 @@ export const MenuContainer = styled.div`
   position: absolute;
   top: 50px;
   right: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 226, 150, 0.5) 0%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
   background-color: ${({ theme }) => theme.colors.backgroundColor};
-  /* color: ${({ theme }) => theme.colors.fontColor}; */
-  color: ${({ theme }) => (theme.isDark ? "white" : "#686868")};
-  border-radius: 4px;
+  color: ${({ theme }) => theme.colors.fontColor};
+  /* color: ${({ theme }) => (theme.isDark ? "white" : "#686868")}; */
+  border: 1px solid #02e296;
+  border-radius: 10px;
   box-shadow: 0px 5px 5px -3px rgb(${({ theme }) =>
             theme.isDark ? "255 255 255" : "0 0 0"} / 20%),
     0px 8px 10px 1px
@@ -165,17 +267,85 @@ export const MenuItem = styled.div<{ lastElement?: boolean }>`
   line-height: 1.5;
   /* width: max-content; */
   letter-spacing: 0.00938rem;
-  border-top: 1px solid ${({ theme }) => (theme.isDark ? "white" : "#686868")};
+  border-top: 1px solid #02e296;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 226, 150, 0.1) 0%,
+    rgba(2, 226, 150, 0) 99.99%,
+    rgba(2, 226, 150, 0) 100%
+  );
   ${({ lastElement }) =>
     lastElement &&
     css`
-      border-bottom: 1px solid
-        ${({ theme }) => (theme.isDark ? "white" : "#686868")};
+      border-bottom: 1px solid #02e296;
     `}
-  & > svg {
+  svg {
     path {
-      /* fill: ${({ theme }) => theme.colors.fontColor}; */
-      fill: ${({ theme }) => (theme.isDark ? "white" : "#686868")};
+      fill: ${({ theme }) => theme.colors.fontColor};
+      /* fill: ${({ theme }) => (theme.isDark ? "white" : "#686868")}; */
+    }
+    .black-path {
+      fill: ${({ theme }) => (theme.isDark ? "white" : "black")};
+    }
+    .white-path {
+      fill: ${({ theme }) => (theme.isDark ? "black" : "white")};
+    }
+  }
+`;
+
+const expandSubMenuAnimation = keyframes`
+  from {
+    height: 0;
+    border-top-color: transparent;
+  }
+  to {
+    height: 37px;
+    border-top-color: #02e296;
+  }
+`;
+
+const collapseSubMenuAnimation = keyframes`
+  from {
+    height: 37px;
+    border-top-color: #02e296;
+  }
+  to {
+    height: 0;
+    border-top-color: transparent;
+  }
+`;
+
+export const SubMenuContainer = styled.div<{
+  expanded: boolean;
+  loaded: boolean;
+}>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 226, 150, 0.1) 0%,
+    rgba(2, 226, 150, 0) 99.99%,
+    rgba(2, 226, 150, 0) 100%
+  );
+  border-top: 1px solid #02e296;
+  ${({ expanded, loaded }) =>
+    expanded
+      ? css`
+          animation: ${expandSubMenuAnimation} ${loaded ? "500ms" : "0ms"}
+            linear forwards;
+        `
+      : css`
+          animation: ${collapseSubMenuAnimation} ${loaded ? "500ms" : "0ms"}
+            linear forwards;
+        `};
+  ${MenuItem} {
+    width: 50%;
+    border-top: none;
+    &:first-child {
+      border-right: 1px solid #02e296;
     }
   }
 `;

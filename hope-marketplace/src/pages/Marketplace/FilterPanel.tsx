@@ -33,14 +33,15 @@ import {
   CoinImage,
   CoinImageWrapper,
   FilterResultPanel,
-  NftListTabs,
-  NftListTab,
+  // NftListTabs,
+  // NftListTab,
   SortIcon,
   FilterIconSvg,
 } from "./styled";
 import { TokenType } from "../../types/tokens";
 import SearchInputer from "../../components/SearchInputer";
 import { ThemeContext } from "../../context/ThemeContext";
+import { Tab, Tabs } from "../../components/Tab";
 
 type SortType =
   | {
@@ -210,7 +211,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   const Control = ({ children, ...props }: any) => {
     return (
       <components.Control {...props}>
-        <CustomSortIcon onMouseDown={handleSortByPrice} desc={!isAscending} />
+        <CustomSortIcon
+          onClick={handleSortByPrice}
+          // onMouseDown={handleSortByPrice}
+          desc={!isAscending}
+        />
         {children}
       </components.Control>
     );
@@ -289,20 +294,23 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       </FilterContainer>
       <FilterMainContent>
         <SearchSortPanel ref={searchSortContainer}>
-          <NftListTabs>
-            <NftListTab
+          <Tabs>
+            <Tab
               selected={selectedTab === MarketplaceTabs.ITEMS}
               onClick={() => handleChangeNftListTab(MarketplaceTabs.ITEMS)}
-            >
-              Items
-            </NftListTab>
-            <NftListTab
+              title="Items"
+            />
+            <Tab
               selected={selectedTab === MarketplaceTabs.ACTIVITY}
               onClick={() => handleChangeNftListTab(MarketplaceTabs.ACTIVITY)}
-            >
-              Activity
-            </NftListTab>
-          </NftListTabs>
+              title="Activity"
+            />
+            <Tab
+              selected={selectedTab === MarketplaceTabs.BIDS}
+              onClick={() => handleChangeNftListTab(MarketplaceTabs.BIDS)}
+              title="Offers"
+            />
+          </Tabs>
           {selectedTab === MarketplaceTabs.ITEMS && (
             <SortContainer>
               {/* <SortByPriceButton onClick={handleSortByPrice}>{`Sort By ${

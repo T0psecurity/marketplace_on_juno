@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { InfoIcon } from "../SvgIcons";
 
 export const MintVideoContainer = styled.div`
   /* width: 50vw; */
@@ -82,6 +83,13 @@ export const Wrapper = styled.div<{ isMobile: boolean }>`
         margin: 10px;
       }
     `}
+
+  .__react_component_tooltip {
+    background: rgba(2, 226, 150, 0.12);
+    backdrop-filter: blur(8px);
+    border: 1px solid #02e296;
+    border-radius: 10px;
+  }
 `;
 
 export const NFTItemImageDownloadIcon = styled.svg`
@@ -91,7 +99,7 @@ export const NFTItemImageDownloadIcon = styled.svg`
   cursor: pointer;
 `;
 
-export const NFTItemOperationButton = styled.div`
+export const NFTItemOperationButton = styled.div<{ colored?: boolean }>`
   display: inline-flex;
   align-items: center;
   gap: 20px;
@@ -113,10 +121,11 @@ export const NFTItemOperationButton = styled.div`
   min-width: 200px;
   margin: 10px 0;
   padding: 6px 16px;
-  color: #fff;
+  color: ${({ colored }) => (colored ? "white" : "#02e296")};
   font-size: 20px;
   font-weight: bold;
-  background-color: #2e7b31;
+  /* background-color: #2e7b31; */
+  background-color: ${({ colored }) => (colored ? "#02e296" : "white")};
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
@@ -124,6 +133,12 @@ export const NFTItemOperationButton = styled.div`
     border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
     opacity 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  svg {
+    path {
+      transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      fill: ${({ colored }) => (colored ? "white" : "#02e096")};
+    }
+  }
   &:hover {
     text-decoration: none;
     /* background-color: #704343; */
@@ -163,22 +178,69 @@ export const NFTItemDescriptionContent = styled.div`
 
 export const NFTItemOperationContainer = styled.div<{
   justifyContent?: string;
+  flexDirection?: string;
+  hasDivider?: boolean;
 }>`
+  position: relative;
   display: flex;
   justify-content: ${({ justifyContent }) => justifyContent ?? "flex-start"};
+  ${({ flexDirection }) =>
+    flexDirection &&
+    css`
+      flex-direction: ${flexDirection};
+    `}
   align-items: center;
   gap: 20px;
   @media (max-width: 650px) {
     flex-direction: column-reverse;
   }
+  ${({ hasDivider }) =>
+    hasDivider &&
+    css`
+      margin-top: 30px;
+      width: 100%;
+      &:before {
+        content: "";
+        background-color: #02e296;
+        height: 2px;
+        position: absolute;
+        width: calc(100% + 80px);
+        left: -40px;
+        top: -15px;
+      }
+    `}
 `;
 
-export const NFTItemPriceInputer = styled.input<{ width: string }>`
+export const NFTItemPriceInputer = styled.div<{
+  width: string;
+  hidePlaceholder: boolean;
+}>`
   width: ${({ width }) => width};
   height: 40px;
   margin: 0 10px;
+  position: relative;
   @media (max-width: 450px) {
     width: unset;
+  }
+  & > input {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border: 1px solid #02e296;
+    border-radius: 10px;
+    font-size: inherit;
+  }
+  & > span {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7em;
+    color: #8e8e8e;
+    cursor: default;
+    white-space: nowrap;
+    transition: 0.5s all;
+    opacity: ${({ hidePlaceholder }) => (hidePlaceholder ? 0 : 1)};
   }
 `;
 
@@ -220,10 +282,15 @@ export const SocialLinkIcon = styled.div<{ backgroundColor?: string }>`
 `;
 
 export const NFTItemPricePanel = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border: 1px solid #dadada;
-  background: rgba(53, 203, 0, 0.1);
+  background: rgba(2, 226, 150, 0.1);
   border-radius: 10px;
   padding: 20px 40px;
+  overflow: hidden;
   @media (max-width: 450px) {
     padding: 20px;
   }
@@ -273,6 +340,21 @@ export const SelectItem = styled.div<{ checked?: boolean }>`
   align-items: center;
   min-width: 200px;
   padding: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  ${({ checked }) =>
+    checked &&
+    css`
+      background-color: #6baf33;
+    `}
+  &: hover {
+    background-color: rgba(107, 175, 51, 0.5);
+  }
+`;
+
+export const SelectTokenItem = styled.div<{ checked?: boolean }>`
+  display: flex;
+  align-items: center;
   cursor: pointer;
   transition: 0.3s;
   ${({ checked }) =>
@@ -336,4 +418,26 @@ export const FloorPriceContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const TooltipContainer = styled.div`
+  font-size: 20px;
+  color: black;
+  text-align: left;
+`;
+
+export const CustomAuctionPeriodControl = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid #02e296;
+  border-radius: 10px;
+  padding: 10px;
+`;
+
+export const StyledInfoIcon = styled(InfoIcon)`
+  position: absolute;
+  cursor: pointer;
+  right: 0;
+  top: 0;
 `;

@@ -74,7 +74,8 @@ export enum CollectionIds {
   BORED3D = "bored3d",
   GORILLA = "gorilla",
   LUNATICS = "lunatic",
-  // BEARS = "bears",
+  TESTI = "test1",
+  TESTII = "test2",
 }
 
 const Collections: MarketplaceInfo[] = [
@@ -581,6 +582,66 @@ const Collections: MarketplaceInfo[] = [
     isLaunched: true,
   },
   // {
+  //   title: "Test Collection I for Auction",
+  //   creator: "Jason",
+  //   imageUrl: "/backgrounds/bear.png",
+  //   backgroundUrl: "/marketplace-backgrounds/bear.png",
+  //   logoUrl: "/logos/bear.gif",
+  //   collectionId: CollectionIds.TESTI,
+  //   metaDataUrl: "",
+  //   nftContract:
+  //     "juno1fu5zz6u5h3gt3c9c5kxjkz8dr2q5swfcl2upegzw5sv7ng33wvxqwqs36p",
+  //   mintContract:
+  //     "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
+  //   marketplaceContract: [],
+  //   socialLinks: {
+  //     discord: "https://discord.gg/VEQtM2Hc",
+  //     website: "",
+  //     twitter: "https://twitter.com/LunaticsLoser",
+  //   },
+  //   description: "Test Collection for Auction",
+  //   mintInfo: {
+  //     totalNfts: 1000,
+  //     royalties: "2% + 3%",
+  //     price: "FREE",
+  //     mintImage: "/mint-images/bear.gif",
+  //     mintDate: "TBA",
+  //     mintLogic: MintLogics.logic1,
+  //     isWhiteListMint: true,
+  //   },
+  //   isLaunched: true,
+  // },
+  // {
+  //   title: "Test Collection II for Auction",
+  //   creator: "Jason",
+  //   imageUrl: "/backgrounds/bear.png",
+  //   backgroundUrl: "/marketplace-backgrounds/bear.png",
+  //   logoUrl: "/logos/bear.gif",
+  //   collectionId: CollectionIds.TESTII,
+  //   metaDataUrl: "",
+  //   nftContract:
+  //     "juno1rss8t6q5hnh7g83my0n6zl97rpxfaqkvr3f4fuy30nwad5lazdssk3zpx6",
+  //   mintContract:
+  //     "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
+  //   marketplaceContract: [],
+  //   socialLinks: {
+  //     discord: "https://discord.gg/VEQtM2Hc",
+  //     website: "",
+  //     twitter: "https://twitter.com/LunaticsLoser",
+  //   },
+  //   description: "Test Collection for Auction",
+  //   mintInfo: {
+  //     totalNfts: 1000,
+  //     royalties: "2% + 3%",
+  //     price: "FREE",
+  //     mintImage: "/mint-images/bear.gif",
+  //     mintDate: "TBA",
+  //     mintLogic: MintLogics.logic1,
+  //     isWhiteListMint: true,
+  //   },
+  //   isLaunched: true,
+  // },
+  // {
   //   title: "Juno Bear Society",
   //   creator: "Juno Bear Society",
   //   imageUrl: "/backgrounds/bear.png",
@@ -621,8 +682,20 @@ export const getCollectionById = (id: string): MarketplaceInfo => {
   );
 };
 
+export const getCollectionByNftContract = (
+  contract: string
+): MarketplaceInfo => {
+  return (
+    Collections.filter(
+      (collection: MarketplaceInfo) => collection.nftContract === contract
+    )[0] || {}
+  );
+};
+
 export const MarketplaceContracts: string[] = [
-  "juno1vmj8fa943t8pz4ezpfrzl330caevlshq8r4pz9cwa6ey27wcxfpsa5fnwk",
+  // "juno1vmj8fa943t8pz4ezpfrzl330caevlshq8r4pz9cwa6ey27wcxfpsa5fnwk",
+  // "juno1t076mvffajnuctaw0jtgfqyfrneuvw74gdpq6xycs2k975uc59rslcardy",
+  "juno14umelpxlujja7lysyhufqdp2rlzyuvlek3lgz0v54wp0gyvwnp4s7f3sgs",
 ];
 
 export const MintContracts: string[] = [

@@ -53,7 +53,9 @@ const BuySuccessToast: React.FC<BuySuccessToastProps> = ({ type, nftItem }) => {
 
   const handleGotoDetail = () => {
     // dispatch(setSelectedNFT(item));
-    history.push(`/detail?token_id=${escapeSpecialForUrl(nftItem.token_id)}`);
+    history.push(
+      `/nft/detail?token_id=${escapeSpecialForUrl(nftItem.token_id)}`
+    );
   };
 
   return (

@@ -6,5 +6,8 @@ export type MediaQueries = {
   md: string;
   lg: string;
   xl: string;
+  xxl: string;
+  xxxl: string;
+  xxxxl: string;
   nav: string;
 };

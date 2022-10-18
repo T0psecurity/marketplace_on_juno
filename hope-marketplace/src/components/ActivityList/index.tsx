@@ -14,7 +14,7 @@ import { addSuffix } from "../../util/string";
 import {
   SaleHistoryWrapper,
   HistoryItemBlock,
-  SaleHistoryItem,
+  // SaleHistoryItem,
   HistoryItemImage,
   HistoryItemToken,
   HistoryItemText,
@@ -127,7 +127,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
 
   return (
     <>
-      <SaleHistoryWrapper>
+      <SaleHistoryWrapper isMobile={isMobile} forUser={!!user}>
         {activityHistory.map((historyItem: any, index: number) => {
           const collectionState =
             collectionStates[historyItem.collectionId as CollectionIds] || {};
@@ -159,7 +159,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
           );
           const tokenRarityRank = tokenRarityRanks[tokenIdNumber];
           return (
-            <SaleHistoryItem key={index} isMobile={isMobile} forUser={!!user}>
+            <>
               {!!user && (
                 <HistoryItemText minWidth="" fontSize="16px" textAlign="end">
                   {historyItem.from === user ? "Sell" : "Buy"}
@@ -185,7 +185,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
                   <HistoryItemText
                   // onClick={() =>
                   //   history.push(
-                  //     `/detail?token_id=${escapeSpecialForUrl(
+                  //     `/nft/detail?token_id=${escapeSpecialForUrl(
                   //       historyItem.token_id
                   //     )}`
                   //   )
@@ -244,7 +244,7 @@ const ActivityList: React.FC<ActivityListProps> = ({
               <HistoryItemText>
                 {moment(moment(time).toISOString(true)).fromNow()}
               </HistoryItemText>
-            </SaleHistoryItem>
+            </>
           );
         })}
         <LoadMoreButton
