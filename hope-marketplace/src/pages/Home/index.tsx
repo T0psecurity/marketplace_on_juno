@@ -61,7 +61,8 @@ const Home: React.FC = () => {
     totalItemsOnSale,
     highestTradesCollection,
     highestSaleNft,
-    lastCollection,
+    // lastCollection,
+    mintLiveCollection,
     mintSoldOutCollection,
   } = useMemo(() => {
     const junoUsd =
@@ -73,7 +74,8 @@ const Home: React.FC = () => {
       } = {} as { collection: MarketplaceInfo; volume: number },
       totalItemsOnSaleResult = 0,
       tradesByNftResult: any = {},
-      mintSoldOutResult: any = {};
+      mintSoldOutResult: any[] = [],
+      mintLiveResult: any[] = [];
     Collections.forEach((collection: MarketplaceInfo) => {
       const crrMarketplaceItems =
         totalMarketplaceNFTs[`${collection.collectionId}_marketplace`] || [];
@@ -93,7 +95,7 @@ const Home: React.FC = () => {
           ? 0
           : (Number(history.amount) * crrUsd) / 1e6;
         // tradesVolumeResult += crrValue;
-        if (now - (history.time || now) <= 60 * 60 * 24 * 7) {
+        if (now - (history.time || now) <= 60 * 60 * 24 * 30) {
           // if the sale is hold in the last 7 days
           crrCollectionTradesVolume += crrValue; // calculate collection trades in the last 7 days
           tradesByNftResult[history.token_id] = {
@@ -133,7 +135,12 @@ const Home: React.FC = () => {
         (crrCollectionState?.totalNfts !== 0 &&
           crrCollectionState?.mintedNfts >= crrCollectionState?.totalNfts)
       ) {
-        mintSoldOutResult = collection;
+        mintSoldOutResult.push(collection);
+      } else if (
+        crrCollectionState?.mintedNfts < crrCollectionState?.totalNfts &&
+        crrCollectionState?.mintedNfts > 0
+      ) {
+        mintLiveResult.push(collection);
       }
     });
 
@@ -171,21 +178,26 @@ const Home: React.FC = () => {
           targetCollection.customTokenId
         )
       : highestSaleNftResult.tokenId;
-
+    const randMintResult =
+      mintLiveResult[Math.floor(Math.random() * mintLiveResult.length)];
+    const randSoldOutResult =
+      mintSoldOutResult[Math.floor(Math.random() * mintSoldOutResult.length)];
     return {
       tradesVolume: tradesVolumeResult,
       highestTradesCollection: highestTradeCollectionResult,
       totalItemsOnSale: totalItemsOnSaleResult,
-      lastCollection: Collections[Collections.length - 1],
-      mintSoldOutCollection: mintSoldOutResult,
+      // lastCollection: mintSoldOutResult[mintSoldOutResult.length - 1],
+      mintSoldOutCollection: randSoldOutResult,
+      mintLiveCollection: randMintResult,
       highestSaleNft: {
         imageUrl,
         tokenId,
         trades: highestSaleNftResult.trades,
       },
     };
-  }, [collectionStates, tokenPrices, totalMarketplaceNFTs]);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // }, [collectionStates, tokenPrices, totalMarketplaceNFTs]);
   const fontSizes = useMemo(() => {
     const { isXs, isSm } = breakpoints;
     if (isXs || isSm) {
@@ -276,13 +288,13 @@ const Home: React.FC = () => {
             >
               Swap
             </Button>
-            <Button
+            {/* <Button
               style={{ minWidth: isMobile ? "60px" : "" }}
               colored
               onClick={() => history.push("/ido")}
             >
               IDO
-            </Button>
+            </Button> */}
             <Button
               style={{ minWidth: isMobile ? "60px" : "" }}
               onClick={() => history.push("/collections/explore")}
@@ -383,7 +395,7 @@ const Home: React.FC = () => {
             </Text>
             <Flex gap="" width="100%">
               <NFTStatsItem>
-                <Text>Top Volume 7D</Text>
+                <Text>Top Volume 30D</Text>
                 <Text>{highestTradesCollection.collection?.title || ""}</Text>
                 <img
                   src={highestTradesCollection.collection?.logoUrl || ""}
@@ -395,10 +407,21 @@ const Home: React.FC = () => {
                 </Flex>
               </NFTStatsItem>
               <NFTStatsItem>
-                <Text>Highest Sale 7D</Text>
+                <Text>Highest Sale 30D</Text>
                 <Text>{highestSaleNft.tokenId || ""}</Text>
                 <img src={highestSaleNft.imageUrl || ""} alt="" />
                 <Text>{`$${addSuffix(highestSaleNft.trades)}`}</Text>
+              </NFTStatsItem>
+              <NFTStatsItem>
+                <Text>Mint Live Now</Text>
+                <Text>{mintLiveCollection?.title || ""}</Text>
+                <img src={mintLiveCollection?.logoUrl || ""} alt="" />
+                <Button
+                  colored
+                  onClick={() => history.push(`/collections/mint`)}
+                >
+                  Mint Now
+                </Button>
               </NFTStatsItem>
               <NFTStatsItem>
                 <Text>Mint Sold Out</Text>
@@ -413,17 +436,6 @@ const Home: React.FC = () => {
                   }
                 >
                   View Collection
-                </Button>
-              </NFTStatsItem>
-              <NFTStatsItem>
-                <Text>Last Collection</Text>
-                <Text>{lastCollection?.title || ""}</Text>
-                <img src={lastCollection?.logoUrl || ""} alt="" />
-                <Button
-                  colored
-                  onClick={() => history.push("/collections/mint")}
-                >
-                  Mint Now
                 </Button>
               </NFTStatsItem>
             </Flex>

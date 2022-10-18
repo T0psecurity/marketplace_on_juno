@@ -36,12 +36,14 @@ import { TokenType } from "../../types/tokens";
 import Text from "../../components/Text";
 import AcceptCollectionBidTooltip from "../../components/AcceptCollectionBidTooltip";
 import useHandleNftItem from "../../hook/useHandleNftItem";
+import useRefresh from "../../hook/useRefresh";
 
 const MAX_ITEM = 30;
 
 const Marketplace: React.FC = () => {
   const [collectionOffers, setCollectionOffers] = useState([]);
   const [selectedTab, setSelectedTab] = useState(MarketplaceTabs.ITEMS);
+
   const [expandedFilter, setExpandedFilter] = useState<boolean>(
     // isXs || isSm || isMd
     false
@@ -49,6 +51,7 @@ const Marketplace: React.FC = () => {
   const [filterOption, setFilterOption] = useState<FilterOptions>();
   const { isXs, isSm, isMd } = useMatchBreakpoints();
   const { runQuery } = useContract();
+  const { nftRefresh } = useRefresh();
   const { withdrawBid } = useHandleNftItem();
   const { search } = useLocation();
   const collectionId = new URLSearchParams(search).get("id") || "";
@@ -82,7 +85,7 @@ const Marketplace: React.FC = () => {
       await fetchCollectionBids();
       setCollectionOffers(offers);
     })();
-  }, [runQuery, targetCollection]);
+  }, [runQuery, targetCollection, nftRefresh]);
 
   const marketplaceNFTs = useAppSelector((state) => {
     // console.log("nfts", state.nfts);
