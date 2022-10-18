@@ -1,11 +1,5 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  padding: 0 5%;
-  padding-bottom: 10px;
-`;
-
 export const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
@@ -13,14 +7,13 @@ export const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 20px;
-  min-height: 60px;
+  min-height: 95px;
   overflow: auto;
 `;
 
 export const HorizontalDivider = styled.div<{ offset: number }>`
   background-color: #02e296;
-  // box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  opacity: 0.7;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   width: 100vw;
   height: 1px;
   margin: 5px 0 10px;

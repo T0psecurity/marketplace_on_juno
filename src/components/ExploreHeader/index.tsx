@@ -3,7 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { BasicProps } from "../../constants/BasicTypes";
 import { Title } from "../PageTitle";
 import { Tab, Tabs } from "../Tab";
-import { HorizontalDivider, Wrapper, Container } from "./styled";
+import { HorizontalDivider, Wrapper } from "./styled";
 
 type TabType = {
   title: string;
@@ -38,7 +38,7 @@ const ExploreHeader: React.FC<ExploreHeaderProps> = ({
   }, [wrapperElement]);
 
   return (
-    <Container>
+    <>
       <HorizontalDivider offset={wrapperPadding} />
       <Wrapper ref={(node) => setWrapperElement(node)} className={className}>
         {!!title ? (
@@ -67,7 +67,7 @@ const ExploreHeader: React.FC<ExploreHeaderProps> = ({
         {!!extra ? extra : <div />}
       </Wrapper>
       <HorizontalDivider offset={wrapperPadding} />
-    </Container>
+    </>
   );
 };
 
