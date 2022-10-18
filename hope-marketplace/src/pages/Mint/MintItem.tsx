@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TIME_DIFF_BETWEEN_ONCHAIN } from ".";
 import { useAppSelector } from "../../app/hooks";
+import { DiscordIcon, GlobeIcon, TwitterIcon } from "../../components/SvgIcons";
 import {
   getCollectionById,
   MarketplaceInfo,
@@ -37,6 +38,9 @@ import {
   LeftTimeContainer,
   MintImage,
   MintImageWrapper,
+  DetailContainer,
+  SocialLinks,
+  Status,
 } from "./styled";
 
 interface Props {
@@ -48,6 +52,7 @@ type NFT_DETAIL_KEY = {
   key?: "totalNfts" | "royalties";
   getFunc?: any;
   width?: string;
+  props?: any;
 };
 
 const NFT_DETAIL_KEYS: NFT_DETAIL_KEY[] = [
@@ -60,16 +65,32 @@ const NFT_DETAIL_KEYS: NFT_DETAIL_KEY[] = [
     key: "royalties",
   },
   {
-    title: "Number of Minted NFTs",
-    getFunc: (state: CollectionStateType): number => {
-      return state?.mintedNfts;
+    title: "Percent Minted",
+    getFunc: (state: CollectionStateType): string => {
+      return (
+        ((state?.mintedNfts * 100) / state?.totalNfts).toLocaleString("en-Us", {
+          maximumFractionDigits: 2,
+        }) + "%"
+      );
     },
+    props: (state: CollectionStateType): any => ({
+      percent: (state?.mintedNfts * 100) / state?.totalNfts,
+    }),
   },
 ];
 
 const MINT_DETAIL_OPERATION: NFT_DETAIL_KEY = {
   title: 1,
   width: "min(100%, 155px)",
+  props: (): any => ({
+    style: {
+      minWidth: "90px",
+      width: "max-content",
+      background: "rgba(2, 226, 150, 0.12)",
+      borderRadius: "10px",
+      justifyContent: "center",
+    },
+  }),
 };
 
 const ELEMENT_SIZE = {
@@ -86,6 +107,24 @@ const ELEMENT_SIZE = {
   },
 };
 
+const STATUS = {
+  live: {
+    title: "Live",
+    color: "#02e296",
+    background: "rgba(2, 226, 150, 0.12)",
+  },
+  scheduled: {
+    title: "Scheduled",
+    color: "#f7ed51",
+    background: "rgba(247, 237, 81, 0.25)",
+  },
+  soldout: {
+    title: "Sold Out",
+    color: "#ff0000",
+    background: "rgba(255, 0, 0, 0.25)",
+  },
+};
+
 const MintItem: React.FC<Props> = ({ mintItem }) => {
   const mintInfo: MarketplaceMintInfo = useMemo(
     () =>
@@ -98,7 +137,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     [mintItem]
   );
   const [crrTime, setCrrTime] = useState(new Date());
-  const { isXl } = useMatchBreakpoints();
+  const { isXl, isXxl, isXxxl, isXxxxl } = useMatchBreakpoints();
   const { runQuery, runExecute } = useContract();
   const history = useHistory();
   const { refresh } = useRefresh();
@@ -113,12 +152,43 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const now = new Date();
   const isLive = compareDate(now, mintDate) !== -1;
 
+  const isMobile = !isXl && !isXxl && !isXxxl && !isXxxxl;
+
   useEffect(() => {
     const interval = setInterval(() => setCrrTime(new Date()), 800);
     return () => {
       clearInterval(interval);
     };
   }, []);
+
+  const mintStatus = useMemo(() => {
+    let result: any = null;
+    const mintInfo = targetCollection.mintInfo;
+
+    let mintDate = mintInfo?.mintDate
+      ? new Date(mintInfo.mintDate)
+      : new Date();
+    if (collectionState.mintInfo?.startMintTime) {
+      mintDate = new Date(
+        (collectionState.mintInfo.startMintTime + TIME_DIFF_BETWEEN_ONCHAIN) *
+          1000
+      );
+    }
+    const now = new Date();
+    const isLive = compareDate(now, mintDate) !== -1;
+    if (
+      !mintInfo ||
+      (collectionState?.totalNfts !== 0 &&
+        collectionState?.mintedNfts >= collectionState?.totalNfts)
+    ) {
+      result = STATUS.soldout;
+    } else if (!mintInfo.mintDate || isLive) {
+      result = STATUS.live;
+    } else {
+      result = STATUS.scheduled;
+    }
+    return result;
+  }, [collectionState, targetCollection.mintInfo]);
 
   const fontSize = useResponsiveSize(
     ELEMENT_SIZE.DETAIL_BLOCK_TITLE
@@ -295,7 +365,10 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
 
   const renderDetailBlocks = (items: NFT_DETAIL_KEY[], width?: string) => {
     return items.map((item: NFT_DETAIL_KEY, index: any) => (
-      <DetailBlock width={item.width || width} key={index}>
+      <DetailBlock
+        key={index}
+        {...(item.props ? { ...item.props(collectionState) } : {})}
+      >
         <DetailBlockTitle fontSize={fontSize}>{item.title}</DetailBlockTitle>
         {item.key && !!mintInfo[item.key] && (
           <DetailBlockContent fontSize={fontSize}>
@@ -312,15 +385,15 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   };
 
   const renderMintImage = () => (
-    <MintImage isMobile={!isXl} alt="mint image" src={mintInfo.mintImage} />
+    <MintImage isMobile={isMobile} alt="mint image" src={mintInfo.mintImage} />
   );
 
   return (
-    <MintDetailContainer isMobile={!isXl}>
+    <MintDetailContainer isMobile={isMobile}>
       <MintDetailInfo>
         <DetailTitle
           bold
-          isMobile={!isXl}
+          isMobile={isMobile}
           onClick={() => {
             history.push(
               `/collections/marketplace?id=${mintItem.collectionId}`
@@ -328,48 +401,86 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
           }}
         >
           {mintItem.title}
+          <DetailContainer>
+            <Status background={mintStatus.background} color={mintStatus.color}>
+              {mintStatus.title}
+            </Status>
+            <SocialLinks>
+              <TwitterIcon
+                width={20}
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  window.open(targetCollection.socialLinks.twitter);
+                }}
+              />
+              <DiscordIcon
+                width={20}
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  window.open(targetCollection.socialLinks.discord);
+                }}
+              />
+              <GlobeIcon
+                width={20}
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  window.open(targetCollection.socialLinks.website);
+                }}
+              />
+            </SocialLinks>
+          </DetailContainer>
         </DetailTitle>
-        <DetailInfo isMobile={!isXl}>{mintItem.description}</DetailInfo>
-        {!isXl && <MintImageWrapper>{renderMintImage()}</MintImageWrapper>}
-        <DetailBlockContainer>
+        <DetailInfo isMobile={isMobile}>{mintItem.description}</DetailInfo>
+        {isMobile && <MintImageWrapper>{renderMintImage()}</MintImageWrapper>}
+        <DetailBlockContainer flexDirection="column">
+          <DetailBlock colored>
+            <DetailBlockContent>Mint Information</DetailBlockContent>
+          </DetailBlock>
           {renderDetailBlocks(NFT_DETAIL_KEYS, "25%")}
         </DetailBlockContainer>
-        <DetailTitle>Public Sale</DetailTitle>
+        {/* <DetailTitle>Public Sale</DetailTitle>
         <DetailInfo>{`Price ${
           collectionState.price
             ? `${collectionState.price} $${mintPriceDenom}`
             : mintItem.mintInfo?.price
-        }`}</DetailInfo>
-        <OperationContainer isMobile={!isXl}>
+        }`}</DetailInfo> */}
+        <OperationContainer isMobile={isMobile}>
           <FlexColumn width={operationItemSize}>
             <DetailInfo># to mint</DetailInfo>
             {renderDetailBlocks([MINT_DETAIL_OPERATION])}
           </FlexColumn>
-          <MintButton
-            isMobile={!isXl}
-            soldOut={isSoldOut}
-            backgroundColor={beforePrivateMint ? "#FCFF5C" : ""}
-            disabled={
-              !targetCollection.isLaunched ||
-              // (mintItem.mintContract &&
-              //   collectionState.myMintedNfts === null) ||
-              isSoldOut
-            }
-            width={operationItemSize}
-            onClick={handleMintNft}
-          >
-            {buttonString}
-            {timeLeft && (
-              <LeftTimeContainer>
-                {beforePrivateMint
-                  ? `TIME LEFT ${timeLeft}`
-                  : `ENDING IN ${timeLeft}`}
-              </LeftTimeContainer>
-            )}
-          </MintButton>
+          <FlexColumn>
+            <DetailInfo>
+              {collectionState.price
+                ? `${collectionState.price} $${mintPriceDenom}`
+                : mintItem.mintInfo?.price}
+            </DetailInfo>
+            <MintButton
+              isMobile={isMobile}
+              soldOut={isSoldOut}
+              backgroundColor={beforePrivateMint ? "#FCFF5C" : ""}
+              disabled={
+                !targetCollection.isLaunched ||
+                // (mintItem.mintContract &&
+                //   collectionState.myMintedNfts === null) ||
+                isSoldOut
+              }
+              width={operationItemSize}
+              onClick={handleMintNft}
+            >
+              {buttonString}
+              {timeLeft && (
+                <LeftTimeContainer>
+                  {beforePrivateMint
+                    ? `TIME LEFT ${timeLeft}`
+                    : `ENDING IN ${timeLeft}`}
+                </LeftTimeContainer>
+              )}
+            </MintButton>
+          </FlexColumn>
         </OperationContainer>
       </MintDetailInfo>
-      {isXl && renderMintImage()}
+      {!isMobile && renderMintImage()}
     </MintDetailContainer>
   );
 };
