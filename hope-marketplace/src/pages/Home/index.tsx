@@ -96,14 +96,14 @@ const Home: React.FC = () => {
           : (Number(history.amount) * crrUsd) / 1e6;
         // tradesVolumeResult += crrValue;
         if (now - (history.time || now) <= 60 * 60 * 24 * 30) {
-          // if the sale is hold in the last 7 days
-          crrCollectionTradesVolume += crrValue; // calculate collection trades in the last 7 days
+          // if the sale is hold in the last 30 days
+          crrCollectionTradesVolume += crrValue; // calculate collection trades in the last 30 days
           tradesByNftResult[history.token_id] = {
             trades:
               (tradesByNftResult[history.token_id]?.trades || 0) + crrValue,
             imageUrl: crrCollectionState?.imageUrl,
             collectionId: collection.collectionId,
-          }; // calculate the trades of nft in the last 7 days
+          }; // calculate the trades of nft in the last 30 days
         }
       });
 

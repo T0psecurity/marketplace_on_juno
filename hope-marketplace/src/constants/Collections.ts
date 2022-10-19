@@ -159,6 +159,7 @@ const Collections: MarketplaceInfo[] = [
     creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/Collection.png",
     backgroundUrl: "/marketplace-backgrounds/background.png",
+    logoUrl: "/logos/HOPE-image.png",
     collectionId: CollectionIds.MINTPASSI,
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmRnRFS19fbs8Bo9VxSKxR3DAJfBqmYNiXPapQKhDTDku6/_metadata.json",
