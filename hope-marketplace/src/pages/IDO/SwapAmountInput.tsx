@@ -80,10 +80,10 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
   }, [idoStatus.ratio]);
 
   const handleChangeSwapAmountInput = (amountType: SwapAmountType, e: any) => {
-    const { value } = e.target;
-    if (!Number.isNaN(Number(value))) {
-      handleChangeSwapAmount(amountType, value);
-    }
+    // const { value } = e.target;
+    // if (!Number.isNaN(Number(value))) {
+    //   handleChangeSwapAmount(amountType, value);
+    // }
   };
 
   const handleChangeSwapAmount = (amountType: SwapAmountType, amount: any) => {

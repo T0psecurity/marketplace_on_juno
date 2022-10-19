@@ -119,9 +119,9 @@ const HeaderLinks = [
   { title: "Mint", url: "/collections/mint", icon: MintIcon },
   {
     title: "IDO",
-    url: "/ido",
+    url: "soon",
     icon: ExploreIcon,
-    selectedUrl: ["/ido", "/ido/detail"],
+    // selectedUrl: ["/ido", "/ido/detail"],
   },
   // {
   //   title: "Launchpad",

@@ -3,14 +3,22 @@ import Text from "../../components/Text";
 
 export const Wrapper = styled.div`
   height: 100%;
-  padding: 0 5%;
+`;
+export const BackgroundWrapper = styled.div`
+  padding: 10px 5%;
+
   background: linear-gradient(
     180deg,
     rgba(2, 226, 150, 0.12) 0%,
     rgba(2, 226, 150, 0) 100%
   );
 `;
-
+export const HorizontalDivider = styled.div`
+  height: 1px;
+  background: #02e296;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 15px 0;
+`;
 export const IDOItemWrapper = styled.div`
   padding: 10px 20px;
   @media (max-width: 400px) {
@@ -47,6 +55,8 @@ export const TokenLogoContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 50px;
+  margin: 40px 0;
+
   /* min-width: 350px; */
   @media (min-width: 600px) {
     width: 20%;
@@ -124,6 +134,10 @@ export const TokenSwapAmountInputer = styled.div`
     font-size: 24px;
     text-align: right;
     padding: 0 10px;
+    @media (max-width: 480px) {
+      height: 40px;
+      width: 100px;
+    }
   }
 `;
 
@@ -253,6 +267,9 @@ export const IDODetailWrapper = styled.div`
     rgba(2, 226, 150, 0.12) 0%,
     rgba(2, 226, 150, 0) 100%
   );
+  @media (max-width: 480px) {
+    padding-bottom: 40px;
+  }
 `;
 
 export const DetailTitle = styled(Text)`
@@ -273,6 +290,11 @@ export const DetailHeader = styled.div`
   border-top: 1px solid #02e296;
   gap: 30px;
   grid-gap: 50px;
+
+  @media (max-width: 480px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export const StatusContent = styled.div`
@@ -326,6 +348,11 @@ export const ProjectDetailContent = styled.div`
   grid-gap: 100px;
   justify-content: space-between;
   align-items: flex-start;
+  @media (max-width: 480px) {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 20px;
+  }
 `;
 
 export const ProjectDetailContentTable = styled.div`
@@ -368,6 +395,7 @@ export const VestingDetailContainer = styled.div`
 
 export const VestingDetailItem = styled(Text)<{ border?: boolean }>`
   padding: 10px;
+  font-size: 14px;
   ${({ border }) =>
     border &&
     css`
