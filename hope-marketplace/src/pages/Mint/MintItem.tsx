@@ -142,7 +142,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   const history = useHistory();
   const { refresh } = useRefresh();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
-  const tokenBalances = useAppSelector((state) => state.balances);
+  // const tokenBalances = useAppSelector((state) => state.balances);
   const globalState = useAppSelector((state) => state);
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[mintItem.collectionId]
@@ -263,16 +263,16 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       toast.error(`Mint is not started. ${timeLeft} left!`);
       return;
     }
-    const targetBalances =
-      tokenBalances[targetCollection.mintInfo?.denom || TokenType.JUNO] || {};
-    if ((targetBalances.amount || 0) / 1e6 < collectionState.price) {
-      toast.error(
-        `Insufficient balance! You have only ${
-          (targetBalances.amount || 0) / 1e6
-        } ${mintPriceDenom}.`
-      );
-      return;
-    }
+    // const targetBalances =
+    //   tokenBalances[targetCollection.mintInfo?.denom || TokenType.JUNO] || {};
+    // if ((targetBalances.amount || 0) / 1e6 < collectionState.price) {
+    //   toast.error(
+    //     `Insufficient balance! You have only ${
+    //       (targetBalances.amount || 0) / 1e6
+    //     } ${mintPriceDenom}.`
+    //   );
+    //   return;
+    // }
     if (
       includesPrivateMint &&
       targetCollection.mintInfo?.isWhiteListMint &&
