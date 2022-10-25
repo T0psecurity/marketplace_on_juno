@@ -136,6 +136,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       },
     [mintItem]
   );
+  const [isMinting, setIsMinting] = useState(false);
   const [crrTime, setCrrTime] = useState(new Date());
   const { isXl, isXxl, isXxxl, isXxxxl } = useMatchBreakpoints();
   const { runQuery, runExecute } = useContract();
@@ -247,6 +248,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   })[0];
 
   const handleMintNft = async () => {
+    if (isMinting) return;
     if (!account) {
       toast.error("Connect wallet!");
       return;
@@ -317,6 +319,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       funds = customResult.funds;
     }
     if (!message) return;
+    setIsMinting(true);
     try {
       if (targetCollection.mintInfo?.mintLogic?.extraLogic) {
         await targetCollection.mintInfo.mintLogic.extraLogic({
@@ -345,6 +348,8 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     } catch (err) {
       console.error(err);
       toast.error("Fail!");
+    } finally {
+      setIsMinting(false);
     }
   };
 
@@ -483,7 +488,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
               width={operationItemSize}
               onClick={handleMintNft}
             >
-              {buttonString}
+              {isMinting ? "..." : buttonString}
               {timeLeft && (
                 <LeftTimeContainer>
                   {beforePrivateMint

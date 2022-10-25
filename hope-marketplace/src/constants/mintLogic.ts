@@ -113,9 +113,21 @@ export const MintLogics: {
     },
     getMintMessage: getMintMessageFunc1,
     extraLogic: async (params: ExtraLogicInterface) => {
-      const { collection, runExecute, state } = params;
+      const { collection, runExecute, runQuery, account, state } = params;
       const collectionState = state.collectionStates[collection.collectionId];
       if (!collectionState.tokenAddress) return;
+      const crrAllowance = await runQuery(collectionState.tokenAddress, {
+        allowance: {
+          owner: account,
+          spender: collection.mintContract,
+        },
+      });
+      if (
+        +(crrAllowance?.allowance || "0") >
+        (collectionState.tokenPrice || 0) * 1e6
+      )
+        return;
+      console.log("current allowance", crrAllowance);
       await runExecute(collectionState.tokenAddress, {
         increase_allowance: {
           spender: collection.mintContract,

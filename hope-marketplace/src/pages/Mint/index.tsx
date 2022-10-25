@@ -4,7 +4,10 @@ import Advertise, { Advertise1 } from "../../components/Advertise";
 import ExploreHeader from "../../components/ExploreHeader";
 
 // import { Title } from "../../components/PageTitle";
-import Collections, { MarketplaceInfo } from "../../constants/Collections";
+import Collections, {
+  CollectionIds,
+  MarketplaceInfo,
+} from "../../constants/Collections";
 import { TotalStateType } from "../../features/collections/collectionsSlice";
 import { compareDate } from "../../util/date";
 import MintItem from "./MintItem";
@@ -46,6 +49,8 @@ const FilterButtonOptions: {
 type FILTERED_RESULT = {
   [key in keyof typeof FILTER_TYPE]: MarketplaceInfo[];
 };
+
+const DISPLAY_ORDER = [CollectionIds.PUNKLAND];
 
 export const TIME_DIFF_BETWEEN_ONCHAIN = 100;
 
@@ -150,11 +155,23 @@ const Mint: React.FC = () => {
           }
         )}
       </ButtonContainer> */}
-      {filteredCollections?.map((collection: MarketplaceInfo, index: number) =>
-        collection.mintInfo ? (
-          <MintItem key={collection.collectionId} mintItem={collection} />
-        ) : null
-      )}
+      {filteredCollections
+        ?.sort((collection1, collection2) => {
+          const index1 =
+            DISPLAY_ORDER.findIndex(
+              (order) => order === collection1.collectionId
+            ) ?? -1;
+          const index2 =
+            DISPLAY_ORDER.findIndex(
+              (order) => order === collection2.collectionId
+            ) ?? -1;
+          return index2 - index1;
+        })
+        .map((collection: MarketplaceInfo, index: number) =>
+          collection.mintInfo ? (
+            <MintItem key={collection.collectionId} mintItem={collection} />
+          ) : null
+        )}
     </Wrapper>
   );
 };
