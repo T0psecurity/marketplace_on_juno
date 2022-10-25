@@ -16,7 +16,7 @@ import useContract from "../../hook/useContract";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import useRefresh from "../../hook/useRefresh";
 import useResponsiveSize from "../../hook/useResponsiveSize";
-import { TokenType } from "../../types/tokens";
+import { OtherTokens, TokenType } from "../../types/tokens";
 import {
   compareDate,
   convertDateToString,
@@ -318,6 +318,15 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     }
     if (!message) return;
     try {
+      if (targetCollection.mintInfo?.mintLogic?.extraLogic) {
+        await targetCollection.mintInfo.mintLogic.extraLogic({
+          collection: targetCollection,
+          account: account.address,
+          runQuery,
+          runExecute,
+          state: globalState,
+        });
+      }
       await runExecute(
         mintAddress || mintItem.mintContract || MintContracts[0],
         message,
@@ -452,7 +461,13 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
           <FlexColumn>
             <DetailInfo>
               {collectionState.price
-                ? `${collectionState.price} $${mintPriceDenom}`
+                ? `${collectionState.price} $${mintPriceDenom}${
+                    collectionState.tokenPrice
+                      ? ` + ${collectionState.tokenPrice} $${
+                          OtherTokens[collectionState.tokenAddress || ""]
+                        }`
+                      : ""
+                  }`
                 : mintItem.mintInfo?.price}
             </DetailInfo>
             <MintButton

@@ -40,6 +40,7 @@ export interface MarketplaceBasicInfo {
     denom: TokenType;
   };
   isLaunched: boolean;
+  disableMarketplace?: boolean; // define whether target collection has marketplace or not. if don't have marketplace, it only has mint page
 }
 export interface MarketplaceMintInfo {
   totalNfts: number;
@@ -74,9 +75,8 @@ export enum CollectionIds {
   BORED3D = "bored3d",
   GORILLA = "gorilla",
   LUNATICS = "lunatic",
-  // TESTI = "test1",
-  // TESTII = "test2",
   KOALA = "koala",
+  PUNKLAND = "punkland",
 }
 
 const Collections: MarketplaceInfo[] = [
@@ -614,36 +614,37 @@ const Collections: MarketplaceInfo[] = [
     },
     isLaunched: true,
   },
-  // {
-  //   title: "Test Collection I for Auction",
-  //   creator: "Jason",
-  //   imageUrl: "/backgrounds/bear.png",
-  //   backgroundUrl: "/marketplace-backgrounds/bear.png",
-  //   logoUrl: "/logos/bear.gif",
-  //   collectionId: CollectionIds.TESTI,
-  //   metaDataUrl: "",
-  //   nftContract:
-  //     "juno1fu5zz6u5h3gt3c9c5kxjkz8dr2q5swfcl2upegzw5sv7ng33wvxqwqs36p",
-  //   mintContract:
-  //     "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
-  //   marketplaceContract: [],
-  //   socialLinks: {
-  //     discord: "https://discord.gg/VEQtM2Hc",
-  //     website: "",
-  //     twitter: "https://twitter.com/LunaticsLoser",
-  //   },
-  //   description: "Test Collection for Auction",
-  //   mintInfo: {
-  //     totalNfts: 1000,
-  //     royalties: "2% + 3%",
-  //     price: "FREE",
-  //     mintImage: "/mint-images/bear.gif",
-  //     mintDate: "TBA",
-  //     mintLogic: MintLogics.logic1,
-  //     isWhiteListMint: true,
-  //   },
-  //   isLaunched: true,
-  // },
+  {
+    title: "PUNKLAND",
+    creator: "",
+    imageUrl: "",
+    backgroundUrl: "",
+    logoUrl: "/logos/punkland.gif",
+    collectionId: CollectionIds.PUNKLAND,
+    metaDataUrl: "",
+    nftContract:
+      "juno1alda6vay34klh5egemwhwks25ysy0xh6pas645sw7up4ualwep6qs0e340",
+    mintContract:
+      "juno1plpp2h78e36ry790cendjfaxpp7ksv463lncdjm8pfgltshlkahsp7nl7z",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.com/invite/BfKPacc5jF",
+      website: "https://punkland.online/",
+      twitter: "https://twitter.com/JunoPunksNFT",
+    },
+    description: "Test Collection for Auction",
+    mintInfo: {
+      totalNfts: 1200,
+      royalties: "9% + 3%",
+      price: "FREE",
+      mintImage: "/mint-images/punkland.gif",
+      mintDate: "TBA",
+      mintLogic: MintLogics.logic2,
+      isWhiteListMint: true,
+    },
+    isLaunched: true,
+    disableMarketplace: true,
+  },
   // {
   //   title: "Test Collection II for Auction",
   //   creator: "Jason",
