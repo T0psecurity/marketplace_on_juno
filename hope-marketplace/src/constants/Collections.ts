@@ -632,7 +632,8 @@ const Collections: MarketplaceInfo[] = [
       website: "https://punkland.online/",
       twitter: "https://twitter.com/JunoPunksNFT",
     },
-    description: "Test Collection for Auction",
+    description:
+      "Unique collection of the PunkLand plots upcoming Metaverse powered by $Juno living in the #Cosmos",
     mintInfo: {
       totalNfts: 1200,
       royalties: "9% + 3%",
