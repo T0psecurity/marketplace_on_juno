@@ -51,6 +51,7 @@ type FILTERED_RESULT = {
 };
 
 const DISPLAY_ORDER = [CollectionIds.PUNKLAND];
+const BANNED = [CollectionIds.CRYPTOGIRLS];
 
 export const TIME_DIFF_BETWEEN_ONCHAIN = 100;
 
@@ -168,7 +169,7 @@ const Mint: React.FC = () => {
           return index2 - index1;
         })
         .map((collection: MarketplaceInfo, index: number) =>
-          collection.mintInfo ? (
+          collection.mintInfo && !BANNED.includes(collection.collectionId) ? (
             <MintItem key={collection.collectionId} mintItem={collection} />
           ) : null
         )}
