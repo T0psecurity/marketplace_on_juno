@@ -224,7 +224,7 @@ const Home: React.FC = () => {
     };
   }, [breakpoints]);
 
-  const NotifyComingSoon = () => toast.info("Coming Soon!");
+  // const NotifyComingSoon = () => toast.info("Coming Soon!");
 
   // const HomeImage = () =>
   //   // <ImgWrapper src="/others/home.png" alt="home" isMobile={isMobile} />
@@ -284,7 +284,8 @@ const Home: React.FC = () => {
           <ButtonContainer>
             <Button
               style={{ minWidth: isMobile ? "60px" : "" }}
-              onClick={NotifyComingSoon}
+              // onClick={NotifyComingSoon}
+              disabled
             >
               Swap
             </Button>
@@ -315,10 +316,17 @@ const Home: React.FC = () => {
             Cosmos with the ability to distribute tokens and raise liquidity.
           </Text>
           <ButtonContainer>
-            <Button colored onClick={NotifyComingSoon}>
+            <Button
+              colored
+              disabled
+              // onClick={NotifyComingSoon}
+            >
               Explore
             </Button>
-            <Button onClick={() => window.open("https://launchpad.hopers.io/")}>
+            <Button
+              disabled
+              onClick={() => window.open("https://launchpad.hopers.io/")}
+            >
               Launchpad
             </Button>
           </ButtonContainer>
@@ -341,10 +349,19 @@ const Home: React.FC = () => {
               wallet.
             </Text>
             <ButtonContainer width="100%">
-              <Button colored onClick={NotifyComingSoon}>
+              <Button
+                colored
+                // onClick={NotifyComingSoon}
+                disabled
+              >
                 Swap Now
               </Button>
-              <Button onClick={NotifyComingSoon}>IDO</Button>
+              <Button
+                // onClick={NotifyComingSoon}
+                disabled
+              >
+                IDO
+              </Button>
             </ButtonContainer>
           </PanelContent>
           <StyledImg
@@ -486,10 +503,19 @@ const Home: React.FC = () => {
             Explore all the collections launched exclusively on hopers.io
           </Text>
           <ButtonContainer>
-            <Button colored onClick={NotifyComingSoon}>
+            <Button
+              colored
+              // onClick={NotifyComingSoon}
+              disabled
+            >
               Liquidity
             </Button>
-            <Button onClick={NotifyComingSoon}>Stake</Button>
+            <Button
+              // onClick={NotifyComingSoon}
+              disabled
+            >
+              Stake
+            </Button>
           </ButtonContainer>
         </FourthPanel>
         <HorizontalDivider />

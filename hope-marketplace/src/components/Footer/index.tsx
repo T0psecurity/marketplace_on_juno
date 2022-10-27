@@ -122,15 +122,17 @@ const Footer: React.FC = () => {
           <Text color="black">the</Text>
           <Text color="black">evolution</Text>
           <Text color="black">of</Text>
-          <Text bold color="white">
+          <Text bold color="black">
             DeFi
           </Text>
           <Text color="black">&</Text>
-          <Text bold color="white">
+          <Text bold color="black">
             NFTs
           </Text>
-          <Text>on</Text>
-          <Text bold>Juno</Text>
+          <Text color="black">on</Text>
+          <Text bold color="black">
+            Juno
+          </Text>
         </Text>
         <LaunchpadButton
           onClick={() => window.open("https://launchpad.hopers.io/")}

@@ -215,7 +215,7 @@ export const ButtonContainer = styled.div<{ width?: string }>`
     `}
 `;
 
-export const Button = styled.div<{ colored?: boolean }>`
+export const Button = styled.div<{ colored?: boolean; disabled?: boolean }>`
   min-width: 150px;
   background: ${({ colored }) =>
     colored
@@ -234,6 +234,12 @@ export const Button = styled.div<{ colored?: boolean }>`
   @media (max-width: 500px) {
     min-width: 100px;
   }
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      color: #acacac;
+      cursor: not-allowed;
+    `}
 `;
 
 export const NFTStatsItem = styled.div`
