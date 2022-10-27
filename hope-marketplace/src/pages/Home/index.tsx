@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { useAppSelector } from "../../app/hooks";
 import PriceStatistic from "../../components/PriceStatistic";
 
