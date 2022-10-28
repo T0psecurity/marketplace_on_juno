@@ -29,8 +29,8 @@ export const ChainConfigs: { [key in ChainTypes]: ConfigType } = {
   [ChainTypes.JUNO]: {
     chainName: "Juno Mainnet",
     chainId: "juno-1",
-    rpcEndpoint: "https://rpc-juno.itastakers.com/",
-    restEndpoint: "https://lcd-juno.itastakers.com/",
+    rpcEndpoint: "https://rpc.juno.strange.love/",
+    restEndpoint: "https://lcd-juno.strange.love/",
     faucetEndpoint: "",
     addressPrefix: "juno",
     microDenom: "ujuno",
