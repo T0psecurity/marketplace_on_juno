@@ -11,6 +11,11 @@ export const Advertise1: AdvertiseItemProps[] = [
     description:
       "Join the presale now and buy your $Hopers tokens which will power our Defi x NFT platform!",
   },
+  {
+    url: "/advertises/image_005.png",
+    description:
+      "PunkLand plots upcoming Metaverse powered by $Juno living in the #Cosmos!",
+  },
 ];
 
 export const Advertise2: AdvertiseItemProps[] = [
