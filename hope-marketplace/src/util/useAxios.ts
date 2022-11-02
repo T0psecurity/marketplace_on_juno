@@ -1,4 +1,5 @@
 import axios from "axios";
+import { headersType, methodType, urlType } from "../constants/BasicTypes";
 
 const fetch = ({
   method,
@@ -19,7 +20,15 @@ const fetch = ({
   });
 };
 
-const getQuery = async (url: string, method?: "post" | "get") => {
+const getQuery = async ({
+  url,
+  method,
+  headers,
+}: {
+  url: urlType;
+  method?: methodType;
+  headers?: headersType;
+}) => {
   try {
     const result = await fetch({
       url,
