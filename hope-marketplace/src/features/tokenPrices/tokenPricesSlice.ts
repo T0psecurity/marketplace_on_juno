@@ -13,6 +13,8 @@ export const TokenCoingeckoIds: { [key in TokenType]: string } = {
   [TokenType.ATOM]: "cosmos",
 };
 
+const CoinGeckoAPIKey = "CG-CV5rXz5JpbGcc36wL76u5gnd";
+
 export type TokenPriceType = {
   [key in TokenType]: any;
 };
@@ -67,11 +69,11 @@ export const fetchTokenPriceHistory = async (
 
   const fetchQueries = Object.keys(TokenCoingeckoIds).map((key: string) => {
     keys.push(key as TokenType);
-    return getQuery(
-      `https://api.coingecko.com/api/v3/coins/${
+    return getQuery({
+      url: `https://api.coingecko.com/api/v3/coins/${
         TokenCoingeckoIds[key as TokenType]
-      }/market_chart/range?vs_currency=usd&from=${from}&to=${to}`
-    );
+      }/market_chart/range?vs_currency=usd&from=${from}&to=${to}`,
+    });
   });
   try {
     let returnResult: any = {};
@@ -130,11 +132,16 @@ export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
   let keys: any = [];
   const fetchQueries = Object.keys(TokenCoingeckoIds).map((key: string) => {
     keys.push(key as TokenType);
-    return getQuery(
-      `https://api.coingecko.com/api/v3/coins/${
+    // return getQuery({
+    //   url: `https://api.coingecko.com/api/v3/coins/${
+    //     TokenCoingeckoIds[key as TokenType]
+    //   }`,
+    // });
+    return getQuery({
+      url: `https://pro-api.coingecko.com/api/v3/coins/${
         TokenCoingeckoIds[key as TokenType]
-      }`
-    );
+      }?x-cg-pro-api-key=${CoinGeckoAPIKey}`,
+    });
   });
   try {
     let tokenPrices: any = {};

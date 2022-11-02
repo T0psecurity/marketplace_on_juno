@@ -16,7 +16,7 @@ import useContract from "../../hook/useContract";
 import useMatchBreakpoints from "../../hook/useMatchBreakpoints";
 import useRefresh from "../../hook/useRefresh";
 import useResponsiveSize from "../../hook/useResponsiveSize";
-import { TokenType } from "../../types/tokens";
+import { OtherTokens, TokenType } from "../../types/tokens";
 import {
   compareDate,
   convertDateToString,
@@ -136,13 +136,14 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       },
     [mintItem]
   );
+  const [isMinting, setIsMinting] = useState(false);
   const [crrTime, setCrrTime] = useState(new Date());
   const { isXl, isXxl, isXxxl, isXxxxl } = useMatchBreakpoints();
   const { runQuery, runExecute } = useContract();
   const history = useHistory();
   const { refresh } = useRefresh();
   const account = useAppSelector((state) => state.accounts.keplrAccount);
-  const tokenBalances = useAppSelector((state) => state.balances);
+  // const tokenBalances = useAppSelector((state) => state.balances);
   const globalState = useAppSelector((state) => state);
   const collectionState: CollectionStateType = useAppSelector(
     (state: any) => state.collectionStates[mintItem.collectionId]
@@ -247,6 +248,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
   })[0];
 
   const handleMintNft = async () => {
+    if (isMinting) return;
     if (!account) {
       toast.error("Connect wallet!");
       return;
@@ -263,16 +265,16 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       toast.error(`Mint is not started. ${timeLeft} left!`);
       return;
     }
-    const targetBalances =
-      tokenBalances[targetCollection.mintInfo?.denom || TokenType.JUNO] || {};
-    if ((targetBalances.amount || 0) / 1e6 < collectionState.price) {
-      toast.error(
-        `Insufficient balance! You have only ${
-          (targetBalances.amount || 0) / 1e6
-        } ${mintPriceDenom}.`
-      );
-      return;
-    }
+    // const targetBalances =
+    //   tokenBalances[targetCollection.mintInfo?.denom || TokenType.JUNO] || {};
+    // if ((targetBalances.amount || 0) / 1e6 < collectionState.price) {
+    //   toast.error(
+    //     `Insufficient balance! You have only ${
+    //       (targetBalances.amount || 0) / 1e6
+    //     } ${mintPriceDenom}.`
+    //   );
+    //   return;
+    // }
     if (
       includesPrivateMint &&
       targetCollection.mintInfo?.isWhiteListMint &&
@@ -317,7 +319,17 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
       funds = customResult.funds;
     }
     if (!message) return;
+    setIsMinting(true);
     try {
+      if (targetCollection.mintInfo?.mintLogic?.extraLogic) {
+        await targetCollection.mintInfo.mintLogic.extraLogic({
+          collection: targetCollection,
+          account: account.address,
+          runQuery,
+          runExecute,
+          state: globalState,
+        });
+      }
       await runExecute(
         mintAddress || mintItem.mintContract || MintContracts[0],
         message,
@@ -336,6 +348,8 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
     } catch (err) {
       console.error(err);
       toast.error("Fail!");
+    } finally {
+      setIsMinting(false);
     }
   };
 
@@ -452,7 +466,13 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
           <FlexColumn>
             <DetailInfo>
               {collectionState.price
-                ? `${collectionState.price} $${mintPriceDenom}`
+                ? `${collectionState.price} $${mintPriceDenom}${
+                    collectionState.tokenPrice
+                      ? ` + ${collectionState.tokenPrice} $${
+                          OtherTokens[collectionState.tokenAddress || ""]
+                        }`
+                      : ""
+                  }`
                 : mintItem.mintInfo?.price}
             </DetailInfo>
             <MintButton
@@ -468,7 +488,7 @@ const MintItem: React.FC<Props> = ({ mintItem }) => {
               width={operationItemSize}
               onClick={handleMintNft}
             >
-              {buttonString}
+              {isMinting ? "..." : buttonString}
               {timeLeft && (
                 <LeftTimeContainer>
                   {beforePrivateMint

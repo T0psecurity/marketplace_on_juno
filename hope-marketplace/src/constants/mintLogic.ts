@@ -10,11 +10,9 @@ export interface LogicParamsInterface {
   account?: string;
 }
 
-export interface GetMintMessageInterface {
-  collection: MarketplaceInfo;
+export interface GetMintMessageInterface extends LogicParamsInterface {
   account: string;
   state: any;
-  runQuery: (contractAddress: string, queryMsg: any) => Promise<any>;
   runExecute: (
     contractAddress: string,
     executeMsg: any,
@@ -22,12 +20,19 @@ export interface GetMintMessageInterface {
   ) => Promise<any>;
 }
 
+export interface ExtraLogicInterface extends GetMintMessageInterface {}
+
 export interface MintLogicItemInterface {
   fetchInfo?: (params: LogicParamsInterface) => Promise<CollectionStateType>;
   getMintMessage?: (
     params: GetMintMessageInterface
   ) => Promise<{ message: any; address?: string; funds?: any }>;
+  extraLogic?: (params: ExtraLogicInterface) => void;
 }
+
+const getMintMessageFunc1 = async (params: GetMintMessageInterface) => ({
+  message: { mint: { address: params.collection.nftContract } },
+});
 
 export const MintLogics: {
   [key: string]: MintLogicItemInterface;
@@ -67,9 +72,69 @@ export const MintLogics: {
       } catch (e) {}
       return storeObject;
     },
-    getMintMessage: async (params: GetMintMessageInterface) => ({
-      message: { mint: { address: params.collection.nftContract } },
-    }),
+    getMintMessage: getMintMessageFunc1,
+  },
+  logic2: {
+    fetchInfo: async (params: LogicParamsInterface) => {
+      const { collection, runQuery, account } = params;
+      let storeObject: CollectionStateType = {
+        mintCheck: [],
+        mintedNfts: 0,
+        totalNfts: collection?.mintInfo?.totalNfts || 0,
+        maxNfts: 0,
+        imageUrl: "",
+        price: 0,
+        myMintedNfts: null,
+      };
+      try {
+        const queryResult = await runQuery(collection.mintContract, {
+          get_collection_info: {
+            nft_address: collection.nftContract,
+            address: account || "",
+          },
+        });
+        storeObject = {
+          mintCheck: queryResult.check_mint,
+          mintedNfts: +(queryResult.mint_count || "0"),
+          totalNfts: +(queryResult.total_nft || "0"),
+          maxNfts: +(queryResult.max_nft || queryResult.total_nft || "0"),
+          imageUrl: queryResult.image_url,
+          price: +(queryResult.price || "0") / 1e6,
+          tokenPrice: +(queryResult.token_public_price || "0") / 1e6,
+          tokenAddress: queryResult.token_contract || "",
+          myMintedNfts: null,
+          mintInfo: {
+            startMintTime: queryResult.start_mint_time || Number(new Date()),
+            mintPeriod: queryResult.private_mint_period || 0,
+          },
+        };
+      } catch (e) {}
+      return storeObject;
+    },
+    getMintMessage: getMintMessageFunc1,
+    extraLogic: async (params: ExtraLogicInterface) => {
+      const { collection, runExecute, runQuery, account, state } = params;
+      const collectionState = state.collectionStates[collection.collectionId];
+      if (!collectionState.tokenAddress) return;
+      const crrAllowance = await runQuery(collectionState.tokenAddress, {
+        allowance: {
+          owner: account,
+          spender: collection.mintContract,
+        },
+      });
+      if (
+        +(crrAllowance?.allowance || "0") >
+        (collectionState.tokenPrice || 0) * 1e6
+      )
+        return;
+      console.log("current allowance", crrAllowance);
+      await runExecute(collectionState.tokenAddress, {
+        increase_allowance: {
+          spender: collection.mintContract,
+          amount: `${(collectionState.tokenPrice || 0) * 1e6}`,
+        },
+      });
+    },
   },
   mintpass2Logic: {
     getMintMessage: async (params: GetMintMessageInterface) => {

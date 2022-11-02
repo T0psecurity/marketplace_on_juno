@@ -14,6 +14,8 @@ export type CollectionStateType = {
   imageUrl: string;
   myMintedNfts: number | null;
   price: number;
+  tokenPrice?: number;
+  tokenAddress?: string;
   // tradingInfo?: {
   //   junoMax?: number;
   //   junoMin?: number;

@@ -221,9 +221,12 @@ const ExploreMarketplace: React.FC = () => {
       </OperationPanel>
       <Advertise images={Advertise1} />
       <Flex>
-        {displayCollections.map((item: MarketplaceBasicInfo, index: number) => (
-          <MarketplaceItem key={item.collectionId} {...item} />
-        ))}
+        {displayCollections.map(
+          (item: MarketplaceBasicInfo, index: number) =>
+            !item?.disableMarketplace && (
+              <MarketplaceItem key={item.collectionId} {...item} />
+            )
+        )}
       </Flex>
     </PageWrapper>
   );

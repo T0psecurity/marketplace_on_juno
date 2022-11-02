@@ -10,4 +10,4 @@ romans, https://hopegalaxy.mypinata.cloud/ipfs/Qmf1hmTfjwtv1LynEvGUpXRQdterufhBN
 junopunks2, https://hopegalaxy.mypinata.cloud/ipfs/QmPXEd1xJeZnQmDkifH15WsYwfG8Pzm7EqcRmVA62Wn7Qo/_metadata.json
 bored3d, https://hopegalaxy.mypinata.cloud/ipfs/QmSiJT5Jz9w55G3S2QUq5ZHz8VxsUFDN7VFYmUGF5U9LYR/_metadata.json
 gorilla, https://hopegalaxy.mypinata.cloud/ipfs/QmX1i7DKeHyDHrnhFT8ab4E5mtfgtGH4XQ29ETi3WsGS5a/_metadata.json
-lunatic, https://hopegalaxy.mypinata.cloud/ipfs/QmdFPNR6uWtT6KHM4cmTjEM2L4J5HtbTjH2ugo9KoJK1rm
+punkland, https://hopegalaxy.mypinata.cloud/ipfs/QmVQvYRvE8R9tM7gGgfNmfET3Mh6C5G6uxiyXwCYa5NDEz/_metadata.json

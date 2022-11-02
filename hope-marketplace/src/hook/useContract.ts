@@ -46,7 +46,7 @@ const getQueryClient = async (
 export const getOfflineSigner = async (chainId: string) => {
   if (window.keplr) {
     await window.keplr.enable(chainId);
-    const signer: any = await window.keplr.getOfflineSigner(chainId);
+    const signer: any = await window.keplr.getOfflineSignerAuto(chainId);
     const signer1 = await window.keplr.getOfflineSignerOnlyAmino(chainId);
     const signer2 = await window.keplr.getOfflineSignerAuto(chainId);
     return signer || signer1 || signer2;

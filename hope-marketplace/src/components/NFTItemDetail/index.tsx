@@ -15,7 +15,6 @@ import {
   // NFTItemImage,
   NFTItemOperationButton,
   NFTItemOperationContainer,
-  NFTItemPriceInputer as NFTItemPriceInputerWrapper,
   NFTItemPriceType,
   CoinIcon,
   MainPriceContainer,
@@ -61,6 +60,7 @@ import { useHistory } from "react-router-dom";
 import { DiscordIcon, GlobeIcon, ShareIcon, TwitterIcon } from "../Icons";
 import ReactTooltip from "react-tooltip";
 import MakeOfferTooltip from "../MakeOfferTooltip";
+import NFTItemPriceInputer from "./NFTItemPriceInputer";
 
 interface NFTItemDetailProps {
   item?: any;
@@ -309,20 +309,6 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
   //   );
   // };
 
-  const NFTItemPriceInputer = ({ ...props }) => {
-    const { placeholder, value, onChange, key, width } = props;
-    return (
-      <NFTItemPriceInputerWrapper
-        key={key}
-        width={width}
-        hidePlaceholder={!!value}
-      >
-        <input value={value} onChange={onChange} />
-        <span>{placeholder}</span>
-      </NFTItemPriceInputerWrapper>
-    );
-  };
-
   return (
     <Wrapper isMobile={isMobile}>
       <MintVideoContainer>
@@ -509,7 +495,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
                 <NFTItemPriceInputer
                   placeholder="Maximum Price"
                   width="200px"
-                  key={item.token_id}
+                  key={item.token_id || "maximum price inputer"}
                   value={nftPrice}
                   onChange={handleChangeNFTPrice}
                 />
@@ -593,6 +579,7 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
           {status === "Sell" && (
             <NFTItemOperationContainer hasDivider justifyContent="center">
               <NFTItemPriceInputer
+                key="transfer target wallet address"
                 placeholder="Destination Wallet"
                 width="270px"
                 value={transferAdd}

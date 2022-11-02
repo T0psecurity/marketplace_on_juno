@@ -11,3 +11,13 @@ export enum WalletType {
 
 export const ConnectedWalletTypeLocalStorageKey =
   "connected_wallet_localStorage_key";
+
+// axios types
+
+export type urlType = string;
+
+export type methodType = "post" | "get";
+
+export type headersType = {
+  apiKey: string;
+};

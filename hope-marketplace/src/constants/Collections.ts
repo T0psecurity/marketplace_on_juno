@@ -40,6 +40,7 @@ export interface MarketplaceBasicInfo {
     denom: TokenType;
   };
   isLaunched: boolean;
+  disableMarketplace?: boolean; // define whether target collection has marketplace or not. if don't have marketplace, it only has mint page
 }
 export interface MarketplaceMintInfo {
   totalNfts: number;
@@ -74,9 +75,8 @@ export enum CollectionIds {
   BORED3D = "bored3d",
   GORILLA = "gorilla",
   LUNATICS = "lunatic",
-  // TESTI = "test1",
-  // TESTII = "test2",
   KOALA = "koala",
+  PUNKLAND = "punkland",
 }
 
 const Collections: MarketplaceInfo[] = [
@@ -159,6 +159,7 @@ const Collections: MarketplaceInfo[] = [
     creator: "Hope Galaxy NFT",
     imageUrl: "/backgrounds/Collection.png",
     backgroundUrl: "/marketplace-backgrounds/background.png",
+    logoUrl: "/logos/HOPE-image.png",
     collectionId: CollectionIds.MINTPASSI,
     metaDataUrl:
       "https://hopegalaxy.mypinata.cloud/ipfs/QmRnRFS19fbs8Bo9VxSKxR3DAJfBqmYNiXPapQKhDTDku6/_metadata.json",
@@ -582,67 +583,70 @@ const Collections: MarketplaceInfo[] = [
     },
     isLaunched: true,
   },
-  {
-    title: "Bipolar Koalas",
-    creator: "Bipolar Koalas",
-    imageUrl: "/backgrounds/koala.jpg",
-    backgroundUrl: "/marketplace-backgrounds/koala.png",
-    logoUrl: "/logos/koala.gif",
-    collectionId: CollectionIds.KOALA,
-    metaDataUrl:
-      "https://hopegalaxy.mypinata.cloud/ipfs/QmNqani8fNeCuiGoEniBMpoUPmG1etwedhvVkwNMknFGEd/_metadata.json",
-    nftContract:
-      "juno1s5l386y8kamfpl9zlxz8rh2d99n5wt533wef5med47g7teuer4tqyn99ct",
-    mintContract:
-      "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
-    marketplaceContract: [],
-    socialLinks: {
-      discord: "https://discord.gg/hM6b85qtfR",
-      website: "",
-      twitter: "https://twitter.com/BipolarKoala",
-    },
-    description:
-      "Bipolar Koalas/ unique innovative project/ IRL support for mental health disorders/",
-    mintInfo: {
-      totalNfts: 313,
-      royalties: "7.5% + 3%",
-      price: "4.77",
-      mintImage: "/mint-images/koala.gif",
-      mintDate: "2022-10-06",
-      mintLogic: MintLogics.logic1,
-    },
-    isLaunched: true,
-  },
   // {
-  //   title: "Test Collection I for Auction",
-  //   creator: "Jason",
-  //   imageUrl: "/backgrounds/bear.png",
-  //   backgroundUrl: "/marketplace-backgrounds/bear.png",
-  //   logoUrl: "/logos/bear.gif",
-  //   collectionId: CollectionIds.TESTI,
-  //   metaDataUrl: "",
+  //   title: "Bipolar Koalas",
+  //   creator: "Bipolar Koalas",
+  //   imageUrl: "/backgrounds/koala.jpg",
+  //   backgroundUrl: "/marketplace-backgrounds/koala.png",
+  //   logoUrl: "/logos/koala.gif",
+  //   collectionId: CollectionIds.KOALA,
+  //   metaDataUrl:
+  //     "https://hopegalaxy.mypinata.cloud/ipfs/QmNqani8fNeCuiGoEniBMpoUPmG1etwedhvVkwNMknFGEd/_metadata.json",
   //   nftContract:
-  //     "juno1fu5zz6u5h3gt3c9c5kxjkz8dr2q5swfcl2upegzw5sv7ng33wvxqwqs36p",
+  //     "juno1s5l386y8kamfpl9zlxz8rh2d99n5wt533wef5med47g7teuer4tqyn99ct",
   //   mintContract:
   //     "juno164sk3xk9ql84l350n446lzu5vef7vnupcmpwd54296zheslq3p9sdrqu79",
   //   marketplaceContract: [],
   //   socialLinks: {
-  //     discord: "https://discord.gg/VEQtM2Hc",
+  //     discord: "https://discord.gg/hM6b85qtfR",
   //     website: "",
-  //     twitter: "https://twitter.com/LunaticsLoser",
+  //     twitter: "https://twitter.com/BipolarKoala",
   //   },
-  //   description: "Test Collection for Auction",
+  //   description:
+  //     "Bipolar Koalas/ unique innovative project/ IRL support for mental health disorders/",
   //   mintInfo: {
-  //     totalNfts: 1000,
-  //     royalties: "2% + 3%",
-  //     price: "FREE",
-  //     mintImage: "/mint-images/bear.gif",
-  //     mintDate: "TBA",
+  //     totalNfts: 313,
+  //     royalties: "7.5% + 3%",
+  //     price: "4.77",
+  //     mintImage: "/mint-images/koala.gif",
+  //     mintDate: "2022-10-06",
   //     mintLogic: MintLogics.logic1,
-  //     isWhiteListMint: true,
   //   },
   //   isLaunched: true,
   // },
+  {
+    title: "PUNKLAND",
+    creator: "",
+    imageUrl: "",
+    backgroundUrl: "",
+    logoUrl: "/logos/punkland.gif",
+    collectionId: CollectionIds.PUNKLAND,
+    metaDataUrl:
+      "https://hopegalaxy.mypinata.cloud/ipfs/QmVQvYRvE8R9tM7gGgfNmfET3Mh6C5G6uxiyXwCYa5NDEz/_metadata.json",
+    nftContract:
+      "juno1alda6vay34klh5egemwhwks25ysy0xh6pas645sw7up4ualwep6qs0e340",
+    mintContract:
+      "juno1plpp2h78e36ry790cendjfaxpp7ksv463lncdjm8pfgltshlkahsp7nl7z",
+    marketplaceContract: [],
+    socialLinks: {
+      discord: "https://discord.com/invite/BfKPacc5jF",
+      website: "https://punkland.online/",
+      twitter: "https://twitter.com/JunoPunksNFT",
+    },
+    description:
+      "Unique collection of the PunkLand plots upcoming Metaverse powered by $Juno living in the #Cosmos",
+    mintInfo: {
+      totalNfts: 1200,
+      royalties: "9% + 3%",
+      price: "FREE",
+      mintImage: "/mint-images/punkland.gif",
+      mintDate: "TBA",
+      mintLogic: MintLogics.logic2,
+      isWhiteListMint: true,
+    },
+    isLaunched: true,
+    disableMarketplace: true,
+  },
   // {
   //   title: "Test Collection II for Auction",
   //   creator: "Jason",

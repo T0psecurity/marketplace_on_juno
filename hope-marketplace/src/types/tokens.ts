@@ -58,3 +58,7 @@ export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
     originChain: ChainTypes.COSMOS,
   },
 };
+
+export const OtherTokens: { [key: string]: string } = {
+  juno13926947pmrjly5p9hf5juey65c6rget0gqrnx3us3r6pvnpf4hwqm8mchy: "PUNK",
+};
