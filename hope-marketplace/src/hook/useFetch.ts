@@ -368,7 +368,7 @@ const useFetch = () => {
           );
         }
         let metaData = collection.metaDataUrl
-          ? await getQuery(collection.metaDataUrl)
+          ? await getQuery({ url: collection.metaDataUrl })
           : null;
         if (metaData) {
           metaData = metaData?.sort((item1: any, item2: any) => {
