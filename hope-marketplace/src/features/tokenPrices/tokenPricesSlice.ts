@@ -8,7 +8,7 @@ import moment from "moment";
 export const TokenCoingeckoIds: { [key in TokenType]: string } = {
   [TokenType.HOPE]: "hope-galaxy",
   [TokenType.JUNO]: "juno-network",
-  [TokenType.RAW]: "junoswap-raw-dao",
+  [TokenType.RAW]: "", // junoswap-raw-dao
   [TokenType.NETA]: "neta",
   [TokenType.ATOM]: "cosmos",
 };
@@ -67,13 +67,15 @@ export const fetchTokenPriceHistory = async (
   const from = getUnixTimeStamp(getFromFunctions[period]());
   const to = getUnixTimeStamp(new Date());
 
-  const fetchQueries = Object.keys(TokenCoingeckoIds).map((key: string) => {
-    keys.push(key as TokenType);
-    return getQuery({
-      url: `https://api.coingecko.com/api/v3/coins/${
-        TokenCoingeckoIds[key as TokenType]
-      }/market_chart/range?vs_currency=usd&from=${from}&to=${to}`,
-    });
+  const fetchQueries: any[] = [];
+  Object.keys(TokenCoingeckoIds).forEach((key: string) => {
+    const crrCoingeckoId = TokenCoingeckoIds[key as TokenType];
+    if (crrCoingeckoId) {
+      keys.push(key as TokenType);
+      return getQuery({
+        url: `https://pro-api.coingecko.com/api/v3/coins/${crrCoingeckoId}/market_chart/range?vs_currency=usd&from=${from}&to=${to}&x_cg_pro_api_key=${CoinGeckoAPIKey}`,
+      });
+    }
   });
   try {
     let returnResult: any = {};
@@ -130,18 +132,22 @@ export const fetchTokenPriceHistory = async (
 
 export const fetchTokenPrices = createAsyncThunk("tokenPrices", async () => {
   let keys: any = [];
-  const fetchQueries = Object.keys(TokenCoingeckoIds).map((key: string) => {
-    keys.push(key as TokenType);
-    // return getQuery({
-    //   url: `https://api.coingecko.com/api/v3/coins/${
-    //     TokenCoingeckoIds[key as TokenType]
-    //   }`,
-    // });
-    return getQuery({
-      url: `https://pro-api.coingecko.com/api/v3/coins/${
-        TokenCoingeckoIds[key as TokenType]
-      }?x-cg-pro-api-key=${CoinGeckoAPIKey}`,
-    });
+  const fetchQueries: any[] = [];
+  Object.keys(TokenCoingeckoIds).forEach((key: string) => {
+    const crrCoingeckoId = TokenCoingeckoIds[key as TokenType];
+    if (crrCoingeckoId) {
+      keys.push(key as TokenType);
+      // return getQuery({
+      //   url: `https://api.coingecko.com/api/v3/coins/${
+      //     TokenCoingeckoIds[key as TokenType]
+      //   }`,
+      // });
+      fetchQueries.push(
+        getQuery({
+          url: `https://pro-api.coingecko.com/api/v3/coins/${crrCoingeckoId}?x_cg_pro_api_key=${CoinGeckoAPIKey}`,
+        })
+      );
+    }
   });
   try {
     let tokenPrices: any = {};

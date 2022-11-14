@@ -7,8 +7,8 @@ const fetch = ({
   headers,
   data,
 }: {
-  method: "post" | "get";
-  url: string;
+  method: methodType;
+  url: urlType;
   headers?: any;
   data?: any;
 }) => {
@@ -37,7 +37,7 @@ const getQuery = async ({
     });
     return result.data;
   } catch (err) {
-    console.error("axios error at", url, method);
+    console.error("axios error at", url, method, err);
     return null;
   }
 };
