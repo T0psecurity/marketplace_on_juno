@@ -9,8 +9,9 @@ import Home from "../Home";
 import Mint from "../Mint";
 import Activity from "../Activity";
 import IDO from "../IDO";
-import { Wrapper } from "./styled";
 import IDODetail from "../IDO/IDODetail";
+import Swap from '../Swap'
+import { Wrapper } from "./styled";
 
 const Main: React.FC = () => {
   return (
@@ -32,6 +33,7 @@ const Main: React.FC = () => {
         <Route exact={false} path="/activity" component={Activity} />
         <Route exact path="/ido" component={IDO} />
         <Route exact path="/ido/detail" component={IDODetail} />
+        <Route exact path="/swap" component={Swap} />
         <Route exact path="/" component={Home} />
         <Redirect to="/" />
       </Switch>
