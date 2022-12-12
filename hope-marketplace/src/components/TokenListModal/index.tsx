@@ -22,7 +22,12 @@ import {
 	Wrapper,
 } from "./styled";
 
+interface ITokenListModal extends IModal {
+	onSelectToken: (token: TokenType) => void;
+}
+
 type TTokenListItem = {
+	token: TokenType;
 	name: string;
 	imageUrl: string;
 	balance: number;
@@ -41,7 +46,11 @@ const CommonTokens: TokenType[] = [
 	TokenType.HOPE,
 ];
 
-const TokenListModal: React.FC<IModal> = ({ isOpen, onClose }) => {
+const TokenListModal: React.FC<ITokenListModal> = ({
+	isOpen,
+	onClose,
+	onSelectToken,
+}) => {
 	const [searchValue, setSearchValue] = useState("");
 	const [addedTokenAddress, setAddedTokenAddress] = useState("");
 	const [addedTokenStatus, setAddedTokenStatus] = useState<TAddedTokenStatus>(
@@ -58,6 +67,7 @@ const TokenListModal: React.FC<IModal> = ({ isOpen, onClose }) => {
 			const tokenType = TokenType[key];
 			return {
 				name: key as string,
+				token: TokenType[key],
 				imageUrl: `/coin-images/${tokenType.replace(/\//g, "")}.png`,
 				balance: +(balances?.[tokenType]?.amount || 0) / 1e6,
 				contract: TokenStatus[tokenType].contractAddress || "",
@@ -92,7 +102,8 @@ const TokenListModal: React.FC<IModal> = ({ isOpen, onClose }) => {
 	};
 
 	const handleClickToken = (tokenItem: TTokenListItem) => {
-		console.log("token clicked", tokenItem);
+		onSelectToken(tokenItem.token);
+		handleOnClose();
 	};
 
 	const handleImportToken = async () => {
