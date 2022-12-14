@@ -17,7 +17,6 @@ import {
 	LiquiditiesTableHeaderRow,
 	LiquiditiesTableRow,
 	LiquidityHeader,
-	LiquidityImage,
 	LiquidityList,
 	LiquidityPoolName,
 	LiquidityTableContent,
@@ -29,6 +28,10 @@ import {
 	ListBody,
 	ListHeader,
 	MessageContainer,
+	MyPoolContentItem,
+	MyPoolItem,
+	MyPoolItemRow,
+	MyPoolsContainer,
 	StyledGearIcon as GearIcon,
 	StyledText,
 	Wrapper,
@@ -36,6 +39,8 @@ import {
 import TokenListModal from "../../components/TokenListModal";
 import { getTokenName, TokenType } from "../../types/tokens";
 import { CancelIcon, VerifiedBadge } from "../../components/SvgIcons";
+import PoolImage from "./PoolImage";
+import { addSuffix } from "../../util/string";
 
 const TempLiquidities = [
 	{
@@ -148,6 +153,57 @@ const Liquidity: React.FC = () => {
 						justifyContent="flex-start"
 						margin="20px 0"
 					>
+						My Pools
+					</Text>
+					<MyPoolsContainer>
+						{TempLiquidities.map((liquidity, index: number) => (
+							<MyPoolItem key={index}>
+								<MyPoolItemRow>
+									<PoolImage
+										token1={liquidity.token1}
+										token2={liquidity.token2}
+									/>
+									<LiquidityPoolName poolId={liquidity.id}>{`${getTokenName(
+										liquidity.token1
+									)}-${getTokenName(liquidity.token2)}`}</LiquidityPoolName>
+								</MyPoolItemRow>
+								<MyPoolItemRow>
+									<MyPoolContentItem>
+										<Text bold color="#c5c5c5">
+											APR
+										</Text>
+										<Text bold color="black">
+											{liquidity.apr}
+										</Text>
+									</MyPoolContentItem>
+									<MyPoolContentItem>
+										<Text bold color="#c5c5c5">
+											Pool Liquidity
+										</Text>
+										<Text bold color="black">
+											{`$${addSuffix(liquidity.pool)}`}
+										</Text>
+									</MyPoolContentItem>
+									<MyPoolContentItem>
+										<Text bold color="#c5c5c5">
+											Bonded
+										</Text>
+										<Text bold color="black">
+											{`$${addSuffix(0)}`}
+										</Text>
+									</MyPoolContentItem>
+								</MyPoolItemRow>
+							</MyPoolItem>
+						))}
+					</MyPoolsContainer>
+				</LiquiditiesContainer>
+				<LiquiditiesContainer>
+					<Text
+						bold
+						fontSize="20px"
+						justifyContent="flex-start"
+						margin="20px 0"
+					>
 						All Pools
 					</Text>
 					<LiquidityTableControlPanel>
@@ -183,22 +239,10 @@ const Liquidity: React.FC = () => {
 							{TempLiquidities.map((liquidity, index: number) => (
 								<LiquiditiesTableRow key={index}>
 									<LiquidityTableContent>
-										<LiquidityImage>
-											<img
-												alt=""
-												src={`/coin-images/${liquidity.token2.replace(
-													/\//g,
-													""
-												)}.png`}
-											/>
-											<img
-												alt=""
-												src={`/coin-images/${liquidity.token1.replace(
-													/\//g,
-													""
-												)}.png`}
-											/>
-										</LiquidityImage>
+										<PoolImage
+											token1={liquidity.token1}
+											token2={liquidity.token2}
+										/>
 									</LiquidityTableContent>
 									<LiquidityTableContent>
 										<LiquidityPoolName poolId={liquidity.id}>{`${getTokenName(
