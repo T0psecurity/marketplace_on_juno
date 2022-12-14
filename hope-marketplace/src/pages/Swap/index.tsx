@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useAppSelector } from "../../app/hooks";
+import ExploreHeader from "../../components/ExploreHeader";
+import PageWrapper from "../../components/PageWrapper";
 import PriceTable from "../../components/PriceStatistic/PriceTable";
 import {
 	DropDownIcon,
@@ -184,112 +186,123 @@ const Swap: React.FC = () => {
 	};
 
 	return (
-		<Wrapper>
-			<MainPart>
-				<ChartArea />
-				<SwapArea>
-					<SwapAreaHeader>
-						<Text bold alignItems="center" cursor="pointer">
-							Swap{" "}
-							<GearIcon
-								onClick={() => setShowSlippageSelector((prev) => !prev)}
-							/>
-						</Text>
-						<Text>Trade tokens in an instant</Text>
-					</SwapAreaHeader>
-					<SwapAreaBody>
-						<SlippageSelector expanded={showSlippageSelector}>
-							<Text fontSize="18px" justifyContent="flex-start">
-								Slippage tolerance
-							</Text>
-							<SlippageItemsContainer>
-								{AvailableSlippage.map((slippage, index: number) => (
-									<SlippageItem
-										key={index}
-										onClick={() => setSlippage(slippage)}
-									>{`${slippage}%`}</SlippageItem>
-								))}
-							</SlippageItemsContainer>
-						</SlippageSelector>
-						<SwapItem>
-							<Text
-								bold
-								alignItems="center"
-								justifyContent="flex-start"
-								cursor="pointer"
-							>
-								<img alt="" src={displaySwapInfo.from.icon} />
-								{displaySwapInfo.from.name}
-								<DropDownIcon onClick={() => handleClickTokenSelect("from")} />
-							</Text>
-							<AmountInputer>
-								<input
-									value={displaySwapInfo.from.amount}
-									onChange={(e) => handleChangeSwapAmount(e, "from")}
-								/>
-								<SelectMaxButton
-									onClick={() =>
-										changeSwapAmountLogic(
-											displaySwapInfo.from.rawBalance,
-											"from"
-										)
-									}
-								>
-									Select Max
-								</SelectMaxButton>
-							</AmountInputer>
-							<Text
-								color="#787878"
-								justifyContent="flex-end"
-								margin="10px 0"
-							>{`Balance ${displaySwapInfo.from.balance} (${displaySwapInfo.from.price}$)`}</Text>
-						</SwapItem>
-						<SwapTokenIcon onClick={handleConvertSwapInfo} />
-						<SwapItem>
-							<Text
-								bold
-								alignItems="center"
-								justifyContent="flex-start"
-								cursor="pointer"
-							>
-								<img alt="" src={displaySwapInfo.to.icon} />
-								{displaySwapInfo.to.name}
-								<DropDownIcon onClick={() => handleClickTokenSelect("to")} />
-							</Text>
-							<AmountInputer>
-								<input
-									value={displaySwapInfo.to.amount}
-									onChange={(e) => handleChangeSwapAmount(e, "to")}
-								/>
-								<SelectMaxButton
-									onClick={() =>
-										changeSwapAmountLogic(displaySwapInfo.to.rawBalance, "to")
-									}
-								>
-									Select Max
-								</SelectMaxButton>
-							</AmountInputer>
-							<Text
-								color="#787878"
-								justifyContent="flex-end"
-								margin="10px 0"
-							>{`Balance ${displaySwapInfo.to.balance} (${displaySwapInfo.to.price}$)`}</Text>
-						</SwapItem>
-						<Text width="100%" justifyContent="space-between">
-							<Text>Slippage Tolerance</Text>
-							<Text>{`${slippage}%`}</Text>
-						</Text>
-						<SwapButton>Swap</SwapButton>
-					</SwapAreaBody>
-				</SwapArea>
-			</MainPart>
-			<PriceTable disableSearch />
-			<TokenListModal
-				isOpen={showTokenListModal}
-				onClose={() => setShowTokenListModal(false)}
-				onSelectToken={handleSelectToken}
+		<PageWrapper>
+			<ExploreHeader
+				title="Swap"
+				tabs={[
+					{ title: "Swap", url: "/swap" },
+					{ title: "Liquidity", url: "/liquidity" },
+				]}
 			/>
-		</Wrapper>
+			<Wrapper>
+				<MainPart>
+					<ChartArea />
+					<SwapArea>
+						<SwapAreaHeader>
+							<Text bold alignItems="center" cursor="pointer">
+								Swap{" "}
+								<GearIcon
+									onClick={() => setShowSlippageSelector((prev) => !prev)}
+								/>
+							</Text>
+							<Text>Trade tokens in an instant</Text>
+						</SwapAreaHeader>
+						<SwapAreaBody>
+							<SlippageSelector expanded={showSlippageSelector}>
+								<Text fontSize="18px" justifyContent="flex-start">
+									Slippage tolerance
+								</Text>
+								<SlippageItemsContainer>
+									{AvailableSlippage.map((slippage, index: number) => (
+										<SlippageItem
+											key={index}
+											onClick={() => setSlippage(slippage)}
+										>{`${slippage}%`}</SlippageItem>
+									))}
+								</SlippageItemsContainer>
+							</SlippageSelector>
+							<SwapItem>
+								<Text
+									bold
+									alignItems="center"
+									justifyContent="flex-start"
+									cursor="pointer"
+								>
+									<img alt="" src={displaySwapInfo.from.icon} />
+									{displaySwapInfo.from.name}
+									<DropDownIcon
+										onClick={() => handleClickTokenSelect("from")}
+									/>
+								</Text>
+								<AmountInputer>
+									<input
+										value={displaySwapInfo.from.amount}
+										onChange={(e) => handleChangeSwapAmount(e, "from")}
+									/>
+									<SelectMaxButton
+										onClick={() =>
+											changeSwapAmountLogic(
+												displaySwapInfo.from.rawBalance,
+												"from"
+											)
+										}
+									>
+										Select Max
+									</SelectMaxButton>
+								</AmountInputer>
+								<Text
+									color="#787878"
+									justifyContent="flex-end"
+									margin="10px 0"
+								>{`Balance ${displaySwapInfo.from.balance} (${displaySwapInfo.from.price}$)`}</Text>
+							</SwapItem>
+							<SwapTokenIcon onClick={handleConvertSwapInfo} />
+							<SwapItem>
+								<Text
+									bold
+									alignItems="center"
+									justifyContent="flex-start"
+									cursor="pointer"
+								>
+									<img alt="" src={displaySwapInfo.to.icon} />
+									{displaySwapInfo.to.name}
+									<DropDownIcon onClick={() => handleClickTokenSelect("to")} />
+								</Text>
+								<AmountInputer>
+									<input
+										value={displaySwapInfo.to.amount}
+										onChange={(e) => handleChangeSwapAmount(e, "to")}
+									/>
+									<SelectMaxButton
+										onClick={() =>
+											changeSwapAmountLogic(displaySwapInfo.to.rawBalance, "to")
+										}
+									>
+										Select Max
+									</SelectMaxButton>
+								</AmountInputer>
+								<Text
+									color="#787878"
+									justifyContent="flex-end"
+									margin="10px 0"
+								>{`Balance ${displaySwapInfo.to.balance} (${displaySwapInfo.to.price}$)`}</Text>
+							</SwapItem>
+							<Text width="100%" justifyContent="space-between">
+								<Text>Slippage Tolerance</Text>
+								<Text>{`${slippage}%`}</Text>
+							</Text>
+							<SwapButton>Swap</SwapButton>
+						</SwapAreaBody>
+					</SwapArea>
+				</MainPart>
+				<PriceTable disableSearch />
+				<TokenListModal
+					isOpen={showTokenListModal}
+					onClose={() => setShowTokenListModal(false)}
+					onSelectToken={handleSelectToken}
+				/>
+			</Wrapper>
+		</PageWrapper>
 	);
 };
 
