@@ -13,6 +13,9 @@ import IDODetail from "../IDO/IDODetail";
 import Swap from "../Swap";
 import { Wrapper } from "./styled";
 import Liquidity from "../Liquidity";
+import Bond from "../Bond";
+import Stake from "../Stake";
+import Airdrop from "../Airdrop";
 
 const Main: React.FC = () => {
 	return (
@@ -36,6 +39,9 @@ const Main: React.FC = () => {
 				<Route exact path="/ido/detail" component={IDODetail} />
 				<Route exact path="/swap" component={Swap} />
 				<Route exact path="/liquidity" component={Liquidity} />
+				<Route exact path="/bond" component={Bond} />
+				<Route exact path="/stake" component={Stake} />
+				<Route exact path="/airdrop" component={Airdrop} />
 				<Route exact path="/" component={Home} />
 				<Redirect to="/" />
 			</Switch>

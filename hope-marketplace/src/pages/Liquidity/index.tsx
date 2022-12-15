@@ -39,8 +39,8 @@ import {
 import TokenListModal from "../../components/TokenListModal";
 import { getTokenName, TokenType } from "../../types/tokens";
 import { CancelIcon, VerifiedBadge } from "../../components/SvgIcons";
-import PoolImage from "./PoolImage";
 import { addSuffix } from "../../util/string";
+import PoolImage from "../../components/PoolImage";
 
 const TempLiquidities = [
 	{
