@@ -42,7 +42,7 @@ const AvailableSlippage = [2, 5, 10, 15] as const;
 
 const Swap: React.FC = () => {
 	const [showTokenListModal, setShowTokenListModal] = useState(false);
-	const [showSlippageSelector, setShowSlippageSelector] = useState(false);
+	const [showSlippageSelector, setShowSlippageSelector] = useState<boolean | null>(null);
 	const [selectedTokenType, setSelectedTokenType] = useState<"from" | "to">(
 		"from"
 	);

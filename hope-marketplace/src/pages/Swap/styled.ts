@@ -68,15 +68,18 @@ const expandAnimation = keyframes`
     }
 `;
 
-export const SlippageSelector = styled.div<{ expanded: boolean }>`
+export const SlippageSelector = styled.div<{ expanded: boolean | null }>`
 	width: 100%;
 	overflow: hidden;
 	box-sizing: border-box;
+	height: 0;
 	animation: ${({ expanded }) =>
 		expanded
 			? css`
 					${expandAnimation} 500ms linear forwards
 			  `
+			: expanded === null
+			? null
 			: css`
 					${collapseAnimation} 500ms linear forwards
 			  `};
