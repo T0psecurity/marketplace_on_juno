@@ -7,10 +7,15 @@ export const Wrapper = styled.div<TextProps>`
 	flex-wrap: wrap;
 	align-items: ${({ alignItems }) => alignItems ?? "baseline"};
 	justify-content: ${({ justifyContent }) => justifyContent ?? "center"};
-	gap: 0.5ex;
+	gap: ${({ gap }) => gap ?? "0.5ex"};
 	overflow-wrap: ${({ overflowWrap }) => overflowWrap ?? "break-word"};
 	font-weight: ${({ bold }) => (bold ? "bold" : "normal")};
 	color: ${({ color, theme }) => color ?? theme.colors.fontColor};
+	${({ flexDirection }) =>
+		flexDirection &&
+		css`
+			flex-direction: ${flexDirection};
+		`}
 	${({ fontSize }) =>
 		fontSize &&
 		css`
