@@ -11,9 +11,8 @@ export const Wrapper = styled.div`
 
 export const MainPart = styled.div`
 	width: 100%;
-	display: grid;
-	grid-template-columns: auto 430px;
-	grid-gap: 30px;
+	display: flex;
+	justify-content: center;
 	padding: 10px;
 	box-sizing: border-box;
 `;

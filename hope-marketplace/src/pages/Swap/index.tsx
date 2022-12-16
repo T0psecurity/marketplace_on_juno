@@ -2,7 +2,6 @@ import React, { useMemo, useState } from "react";
 import { useAppSelector } from "../../app/hooks";
 import ExploreHeader from "../../components/ExploreHeader";
 import PageWrapper from "../../components/PageWrapper";
-import PriceTable from "../../components/PriceStatistic/PriceTable";
 import {
 	DropDownIcon,
 	GearIcon,
@@ -42,7 +41,9 @@ const AvailableSlippage = [2, 5, 10, 15] as const;
 
 const Swap: React.FC = () => {
 	const [showTokenListModal, setShowTokenListModal] = useState(false);
-	const [showSlippageSelector, setShowSlippageSelector] = useState<boolean | null>(null);
+	const [showSlippageSelector, setShowSlippageSelector] = useState<
+		boolean | null
+	>(null);
 	const [selectedTokenType, setSelectedTokenType] = useState<"from" | "to">(
 		"from"
 	);
@@ -196,7 +197,6 @@ const Swap: React.FC = () => {
 			/>
 			<Wrapper>
 				<MainPart>
-					<ChartArea />
 					<SwapArea>
 						<SwapAreaHeader>
 							<Text bold alignItems="center" cursor="pointer">
@@ -295,7 +295,7 @@ const Swap: React.FC = () => {
 						</SwapAreaBody>
 					</SwapArea>
 				</MainPart>
-				<PriceTable disableSearch />
+				<ChartArea />
 				<TokenListModal
 					isOpen={showTokenListModal}
 					onClose={() => setShowTokenListModal(false)}
