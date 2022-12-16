@@ -2,33 +2,12 @@ import React from "react";
 import ExploreHeader from "../../components/ExploreHeader";
 import PageWrapper from "../../components/PageWrapper";
 import PoolImage from "../../components/PoolImage";
+import PoolName from "../../components/PoolName";
 import { CancelIcon, VerifiedBadge } from "../../components/SvgIcons";
 import Table, { ColumnTypes, TColumns } from "../../components/Table";
 import Text from "../../components/Text";
-import { TPool } from "../../types/pools";
-import { getTokenName, TokenType } from "../../types/tokens";
-import { LiquidityPoolName, Wrapper } from "./styled";
-
-const TempLiquidities: TPool[] = [
-	{
-		id: 1,
-		token1: TokenType.HOPE,
-		token2: TokenType.JUNO,
-		isVerified: true,
-		apr: "180%",
-		pool: 18000000,
-		ratio: 0.11,
-	},
-	{
-		id: 2,
-		token1: TokenType.ATOM,
-		token2: TokenType.JUNO,
-		isVerified: true,
-		apr: "180%",
-		pool: 18000000,
-		ratio: 0.11,
-	},
-];
+import { TempLiquidities, TPool } from "../../types/pools";
+import { Wrapper } from "./styled";
 
 const Bond: React.FC = () => {
 	const Columns: TColumns<TPool>[] = [
@@ -42,11 +21,7 @@ const Bond: React.FC = () => {
 		{
 			name: "",
 			title: "Pool Name",
-			render: (value: any, data: TPool) => (
-				<LiquidityPoolName poolId={data.id}>{`${getTokenName(
-					data.token1
-				)}-${getTokenName(data.token2)}`}</LiquidityPoolName>
-			),
+			render: (value: any, data: TPool) => <PoolName pool={data} />,
 		},
 		{
 			name: "isVerified",

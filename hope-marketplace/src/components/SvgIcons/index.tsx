@@ -1436,3 +1436,34 @@ export const VerifiedBadge = ({ ...props }) => (
 		/>
 	</svg>
 );
+
+export const PlusInGreenCircleIcon = ({ ...props }) => (
+	<svg
+		width="34"
+		height="34"
+		viewBox="0 0 34 34"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		{...props}
+	>
+		<circle cx="17" cy="17" r="17" fill="#02E296" />
+		<path
+			d="M16.888 25.082C15.7547 25.082 15.188 24.742 15.188 24.062V18.894H10.02C9.34 18.894 9 18.3273 9 17.194V16.956C9 15.8227 9.34 15.256 10.02 15.256H15.188V10.02C15.188 9.34 15.7547 9 16.888 9H17.364C18.4973 9 19.064 9.34 19.064 10.02V15.256H24.3C24.98 15.256 25.32 15.8227 25.32 16.956V17.194C25.32 18.3273 24.98 18.894 24.3 18.894H19.064V24.062C19.064 24.742 18.4973 25.082 17.364 25.082H16.888Z"
+			fill="white"
+		/>
+	</svg>
+);
+
+export const MinusInGreenCircleIcon = ({ ...props }) => (
+	<svg
+		width="34"
+		height="34"
+		viewBox="0 0 34 34"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		{...props}
+	>
+		<circle cx="17" cy="17" r="17" fill="#02E296" />
+		<rect x="9" y="15" width="17" height="4" rx="1" fill="white" />
+	</svg>
+);

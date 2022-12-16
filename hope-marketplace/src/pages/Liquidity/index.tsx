@@ -12,16 +12,9 @@ import { CosmostationWalletContext } from "../../context/Wallet";
 import {
 	ConnectWalletButton,
 	LiquiditiesContainer,
-	LiquiditiesTable,
-	LiquiditiesTableBody,
-	LiquiditiesTableHeaderRow,
-	LiquiditiesTableRow,
 	LiquidityHeader,
 	LiquidityList,
-	LiquidityPoolName,
-	LiquidityTableContent,
 	LiquidityTableControlPanel,
-	LiquidityTableHeader,
 	LiquidityTableSearchInputer,
 	LiquidityTableTab,
 	LiquidityTableTabContainer,
@@ -32,54 +25,56 @@ import {
 	MyPoolItem,
 	MyPoolItemRow,
 	MyPoolsContainer,
-	StyledGearIcon as GearIcon,
-	StyledText,
 	Wrapper,
 } from "./styled";
 import TokenListModal from "../../components/TokenListModal";
-import { getTokenName, TokenType } from "../../types/tokens";
+import { TokenType } from "../../types/tokens";
 import { CancelIcon, VerifiedBadge } from "../../components/SvgIcons";
 import { addSuffix } from "../../util/string";
 import PoolImage from "../../components/PoolImage";
-import { TPool } from "../../types/pools";
-
-const TempLiquidities: TPool[] = [
-	{
-		id: 1,
-		token1: TokenType.HOPE,
-		token2: TokenType.JUNO,
-		isVerified: true,
-		apr: "180%",
-		pool: 18000000,
-		ratio: 0.11,
-	},
-	{
-		id: 2,
-		token1: TokenType.ATOM,
-		token2: TokenType.JUNO,
-		isVerified: true,
-		apr: "180%",
-		pool: 18000000,
-		ratio: 0.11,
-	},
-];
-
-enum PoolType {
-	"INCENTIVIZED" = "Incentivized",
-	"ALL" = "All Pools",
-}
+import { TempLiquidities, TPool } from "../../types/pools";
+import Table, { ColumnTypes, TColumns } from "../../components/Table";
+import PoolName from "../../components/PoolName";
+import AddLiquidity from "./AddLiquidity";
+import { ModalType, PoolType } from "./type";
+import CreateLiquidity from "./CreateLiquidity";
 
 const Liquidity: React.FC = () => {
 	const [showTokenListModal, setShowTokenListModal] = useState(false);
 	const [selectedPoolType, setSelectedPoolType] = useState<PoolType>(
 		PoolType.INCENTIVIZED
 	);
+	const [modalType, setModalType] = useState<ModalType>(ModalType.ADD);
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
 	// const { connect: connectWithCosmodal } = useCosmodal();
 	const { connect: connectKeplr } = useWalletManager();
 	const { connect: connectCosmostation } = useContext(
 		CosmostationWalletContext
 	);
+
+	const Columns: TColumns<TPool>[] = [
+		{
+			name: "",
+			title: "",
+			render: (value: any, data: TPool) => (
+				<PoolImage token1={data.token1} token2={data.token2} />
+			),
+		},
+		{
+			name: "",
+			title: "Pool Name",
+			render: (value: any, data: TPool) => <PoolName pool={data} />,
+		},
+		{
+			name: "isVerified",
+			title: "Verified",
+			render: (value, data) => (value ? <VerifiedBadge /> : <CancelIcon />),
+		},
+		{ name: "volume", title: "Volume", type: ColumnTypes.NUMBER },
+		{ name: "apr", title: "APR Rewards" },
+		{ name: "pool", title: "Liquidity Pool" },
+		{ name: "ratio", title: "Value" },
+	];
 
 	const handleClickConnectWalletButton = () => {
 		const connectedWalletType = localStorage.getItem(
@@ -119,34 +114,37 @@ const Liquidity: React.FC = () => {
 						Add your liquidity
 					</Text>
 				</LiquidityHeader>
-				<LiquidityList>
-					<ListHeader>
-						<Text
-							justifyContent="flex-start"
-							color="black"
-							bold
-							fontSize="20px"
-						>
-							Your Liquidity
-						</Text>
-						<Text justifyContent="flex-start" color="black">
-							Remove liquidity to receive tokens back
-						</Text>
-						<GearIcon />
-					</ListHeader>
-					<ListBody>
-						{!account && (
+				{!account && (
+					<LiquidityList>
+						<ListHeader>
+							<Text
+								justifyContent="flex-start"
+								color="black"
+								bold
+								fontSize="20px"
+							>
+								Your Liquidity
+							</Text>
+							<Text justifyContent="flex-start" color="black">
+								Remove liquidity to receive tokens back
+							</Text>
+						</ListHeader>
+						<ListBody>
 							<MessageContainer>
 								Connect to a wallet to view your liquidity
 							</MessageContainer>
-						)}
-					</ListBody>
-					{!account && (
+						</ListBody>
 						<ConnectWalletButton onClick={handleClickConnectWalletButton}>
 							Connect Wallet
 						</ConnectWalletButton>
-					)}
-				</LiquidityList>
+					</LiquidityList>
+				)}
+				{account && modalType === ModalType.ADD && (
+					<AddLiquidity onChangeModalType={setModalType} />
+				)}
+				{account && modalType === ModalType.CREATE && (
+					<CreateLiquidity onChangeModalType={setModalType} />
+				)}
 				<LiquiditiesContainer>
 					<Text
 						bold
@@ -164,9 +162,7 @@ const Liquidity: React.FC = () => {
 										token1={liquidity.token1}
 										token2={liquidity.token2}
 									/>
-									<LiquidityPoolName poolId={liquidity.id}>{`${getTokenName(
-										liquidity.token1
-									)}-${getTokenName(liquidity.token2)}`}</LiquidityPoolName>
+									<PoolName pool={liquidity} />
 								</MyPoolItemRow>
 								<MyPoolItemRow>
 									<MyPoolContentItem>
@@ -225,7 +221,8 @@ const Liquidity: React.FC = () => {
 						</LiquidityTableTabContainer>
 						<LiquidityTableSearchInputer placeholder="Search" />
 					</LiquidityTableControlPanel>
-					<LiquiditiesTable>
+					<Table<TPool> data={TempLiquidities} columns={Columns} />
+					{/* <LiquiditiesTable>
 						<LiquiditiesTableHeaderRow>
 							<LiquidityTableHeader />
 							<LiquidityTableHeader>Pool Name</LiquidityTableHeader>
@@ -246,9 +243,7 @@ const Liquidity: React.FC = () => {
 										/>
 									</LiquidityTableContent>
 									<LiquidityTableContent>
-										<LiquidityPoolName poolId={liquidity.id}>{`${getTokenName(
-											liquidity.token1
-										)}-${getTokenName(liquidity.token2)}`}</LiquidityPoolName>
+										<PoolName pool={liquidity} />
 									</LiquidityTableContent>
 									<LiquidityTableContent>
 										{liquidity.isVerified ? <VerifiedBadge /> : <CancelIcon />}
@@ -271,7 +266,7 @@ const Liquidity: React.FC = () => {
 								</LiquiditiesTableRow>
 							))}
 						</LiquiditiesTableBody>
-					</LiquiditiesTable>
+					</LiquiditiesTable> */}
 				</LiquiditiesContainer>
 				<TokenListModal
 					isOpen={showTokenListModal}

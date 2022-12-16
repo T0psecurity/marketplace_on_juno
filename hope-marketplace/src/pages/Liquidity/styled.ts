@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import Button from "../../components/Button";
+import Flex from "../../components/Flex";
 import { GearIcon } from "../../components/SvgIcons";
 import Text from "../../components/Text";
 
@@ -25,6 +26,13 @@ export const ListHeader = styled.div`
 	padding: 20px;
 	border-bottom: 1px solid #000;
 	position: relative;
+	.remove-button {
+		position: absolute;
+		right: 10px;
+		top: 10px;
+		color: #02e296;
+		cursor: pointer;
+	}
 `;
 
 export const StyledGearIcon = styled(GearIcon)`
@@ -63,7 +71,7 @@ export const ConnectWalletButton = styled(Button)`
 
 export const LiquiditiesContainer = styled.div`
 	width: 100%;
-	margin: 100px 0;
+	margin: 50px 0 100px;
 `;
 
 export const LiquiditiesTable = styled.div`
@@ -147,24 +155,6 @@ export const LiquiditiesTableRow = styled.div`
 				border-bottom-right-radius: ${tableBorderRadius};
 			}
 		}
-	}
-`;
-
-export const LiquidityPoolName = styled(Text)<{ poolId: number }>`
-	position: relative;
-	color: black;
-	font-size: 18px;
-	font-weight: bold;
-	height: max-content;
-	justify-content: flex-start;
-	&::after {
-		content: ${({ poolId }) =>
-			`"Pool #${poolId > 99 ? "" : poolId > 9 ? "0" : "00"}${poolId}"`};
-		position: absolute;
-		left: 0;
-		top: 100%;
-		width: max-content;
-		color: #c5c5c5;
 	}
 `;
 
@@ -272,4 +262,107 @@ export const MyPoolContentItem = styled.div`
 	flex-direction: column;
 	align-items: flex-start;
 	gap: 10px;
+`;
+
+export const AddRemoveLiquidityWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	padding: 10px;
+	box-sizing: border-box;
+	position: relative;
+	& > svg {
+		cursor: pointer;
+		position: absolute;
+		right: 5px;
+		top: 5px;
+	}
+`;
+
+export const AddRemoveLiquidityFooter = styled(Flex)`
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	padding: 10px;
+`;
+
+export const AddRemoveLiquidityActionButton = styled(Button)`
+	width: 350px;
+	background: rgba(2, 226, 150, 0.15);
+	border: 1px solid black;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 15px;
+	color: black;
+	font-weight: bold;
+	font-size: 20px;
+`;
+
+export const SelectAddPoolItem = styled.div<{ checked?: boolean }>`
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px;
+	${({ checked }) =>
+		checked &&
+		css`
+			background-color: rgba(2, 226, 150, 0.5);
+		`}
+	&:hover {
+		background-color: rgba(2, 226, 150, 0.15);
+	}
+`;
+
+export const SelectPoolContainer = styled.div`
+	display: flex;
+	${SelectAddPoolItem} {
+		&:hover {
+			background-color: unset;
+		}
+	}
+`;
+
+export const TokenAmountInputerWrapper = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5px;
+	padding: 10px;
+`;
+
+export const TokenAmountInput = styled(Flex)`
+	width: 100%;
+	height: 70px;
+	align-items: center;
+	justify-content: space-between;
+	padding: 5px 10px;
+	background-color: rgba(2, 226, 150, 0.15);
+	border: 1px solid black;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 15px;
+	box-sizing: border-box;
+
+	& > input {
+		width: 50%;
+		height: 100%;
+		border: none;
+		background: transparent;
+		text-align: right;
+	}
+`;
+
+export const TokenImage = styled(Flex)<{ horizontalName?: boolean }>`
+	flex-direction: ${({ horizontalName }) =>
+		horizontalName ? "row" : "column"};
+	align-items: center;
+	gap: 2px;
+	font-weight: bold;
+	font-size: 14px;
+	width: max-content;
+
+	& > img {
+		width: 40px;
+		height: 40px;
+	}
 `;
