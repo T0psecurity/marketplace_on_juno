@@ -41,8 +41,9 @@ import { getTokenName, TokenType } from "../../types/tokens";
 import { CancelIcon, VerifiedBadge } from "../../components/SvgIcons";
 import { addSuffix } from "../../util/string";
 import PoolImage from "../../components/PoolImage";
+import { TPool } from "../../types/pools";
 
-const TempLiquidities = [
+const TempLiquidities: TPool[] = [
 	{
 		id: 1,
 		token1: TokenType.HOPE,
@@ -50,7 +51,7 @@ const TempLiquidities = [
 		isVerified: true,
 		apr: "180%",
 		pool: 18000000,
-		value: 0.11,
+		ratio: 0.11,
 	},
 	{
 		id: 2,
@@ -59,7 +60,7 @@ const TempLiquidities = [
 		isVerified: true,
 		apr: "180%",
 		pool: 18000000,
-		value: 0.11,
+		ratio: 0.11,
 	},
 ];
 
@@ -263,7 +264,7 @@ const Liquidity: React.FC = () => {
 									</LiquidityTableContent>
 									<LiquidityTableContent>
 										<StyledText>{`1${getTokenName(liquidity.token1)} = ${
-											liquidity.value
+											liquidity.ratio
 										}${getTokenName(liquidity.token2)}`}</StyledText>
 									</LiquidityTableContent>
 									<LiquidityTableContent />
