@@ -9,9 +9,10 @@ import { TokenType } from "../types/tokens";
 // };
 
 export const LineColors = {
-  [TokenType.JUNO]: "red",
-  [TokenType.HOPE]: "pink",
-  [TokenType.NETA]: "brown",
-  [TokenType.RAW]: "yellow",
-  [TokenType.ATOM]: "blue", // "#bdcf32", "#87bc45", "#27aeef", "#b33dc6"
+	[TokenType.JUNO]: "red",
+	[TokenType.HOPE]: "pink",
+	[TokenType.NETA]: "brown",
+	[TokenType.RAW]: "yellow",
+	[TokenType.ATOM]: "blue",
+	[TokenType.AXELAR]: "#bdcf32", // "#87bc45", "#27aeef", "#b33dc6"
 };
