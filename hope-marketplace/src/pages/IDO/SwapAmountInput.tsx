@@ -31,12 +31,14 @@ import { toast } from "react-toastify";
 
 interface SwapAmountInputProps extends BasicProps {
 	idoInfo: IDOInterface;
+	isMobile?: boolean;
 	buyCallback?: any;
 }
 
 const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 	idoInfo,
 	buyCallback,
+	isMobile,
 }) => {
 	const [swapAmount, setSwapAmount] = useState<any>({
 		[SwapAmountType.ORIGIN]: 0,
@@ -131,7 +133,7 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 	};
 
 	const CustomSelectItem = ({ ...props }) => {
-		const { selectOption, option } = props;
+		const { selectOption, option, container } = props;
 		return (
 			<SelectItem
 				onClick={() => {
@@ -143,7 +145,14 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 					alt=""
 					src={`/coin-images/${option.value.replace(/\//g, "")}.png`}
 				/>
-				<Text color="black">{getTokenName(option.value)}</Text>
+				{!isMobile && (
+					<Text
+						color={container ? "white" : "black"}
+						fontSize={isMobile ? "12px" : "18px"}
+					>
+						{getTokenName(option.value)}
+					</Text>
+				)}
 			</SelectItem>
 		);
 	};
@@ -165,7 +174,7 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 	}: ControlProps<any, false>) => {
 		return (
 			<CustomControl>
-				<CustomSelectItem option={{ value: selectedTokenType }} />
+				<CustomSelectItem option={{ value: selectedTokenType }} container />
 				{children}
 			</CustomControl>
 		);
@@ -188,6 +197,7 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 							}),
 							dropdownIndicator: (provided, state) => ({
 								...provided,
+								padding: 0,
 								color: "black",
 							}),
 							menu: (provided, state) => ({
@@ -200,6 +210,7 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 							MenuList: CustomMenuList,
 							Control: CustomControlItem,
 							ValueContainer: () => null,
+							IndicatorSeparator: () => null,
 						}}
 					/>
 					<TokenSwapAmountInputer>
@@ -251,12 +262,41 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 								handleChangeSwapAmountInput(SwapAmountType.ORIGIN, e)
 							}
 						/>
-						<Text>{`Balance ${idoStatus.balance}`}</Text>
+						{isMobile ? (
+							<TokenAmountAutoInputItem alignItems="center">
+								{`Balance ${idoStatus.tokenBalance.toLocaleString("en-Us", {
+									maximumFractionDigits: 2,
+								})}`}
+								<TokenImage
+									src={`/coin-images/${selectedTokenType.replace(
+										/\//g,
+										""
+									)}.png`}
+									alt=""
+								/>
+							</TokenAmountAutoInputItem>
+						) : (
+							<TokenAmountAutoInputItem>{`Balance ${idoStatus.balance}`}</TokenAmountAutoInputItem>
+						)}
 					</TokenSwapAmountInputer>
 				</TokenSwapAmountItem>
-				<SwapCrossIcon width={30} />
+				<SwapCrossIcon width={isMobile ? 20 : 30} />
 				<Flex flexDirection="column" alignItems="center" gap="5px">
-					<Text>{`1 ${AvailableTokens[selectedTokenType].symbol} = ${idoStatus.ratio} ${idoInfo.symbol}`}</Text>
+					{isMobile ? (
+						<Text fontSize={isMobile ? "12px" : "18px"} alignItems="center">
+							1
+							<TokenImage
+								src={`/coin-images/${selectedTokenType.replace(/\//g, "")}.png`}
+								alt=""
+							/>
+							{` = ${idoStatus.ratio}`}
+							<TokenImage src={`/token-logos/${idoInfo.id}.png`} alt="" />
+						</Text>
+					) : (
+						<Text
+							fontSize={isMobile ? "12px" : "18px"}
+						>{`1 ${AvailableTokens[selectedTokenType].symbol} = ${idoStatus.ratio} ${idoInfo.symbol}`}</Text>
+					)}
 					<TokenSwapAmountItem style={{ alignItems: "flex-start" }}>
 						<TokenSwapAmountInputer>
 							<input
@@ -265,7 +305,9 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 									handleChangeSwapAmountInput(SwapAmountType.TARGET, e)
 								}
 							/>
-							<Text>{idoInfo.symbol}</Text>
+							<Text fontSize={isMobile ? "12px" : "18px"}>
+								{idoInfo.symbol}
+							</Text>
 						</TokenSwapAmountInputer>
 						<TokenImage
 							style={{ marginTop: 10 }}

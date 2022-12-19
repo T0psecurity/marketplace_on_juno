@@ -109,7 +109,7 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
 							>{`${idoStatus.percentageSold}%`}</TokenPercentageSoldValue>
 						</TokenSoldStatusItem>
 					</TokenSoldStatus>
-					<SwapAmountInput idoInfo={idoInfo} />
+					<SwapAmountInput idoInfo={idoInfo} isMobile={isMobile} />
 				</TokenOperationPanel>
 				<ClearDiv />
 				<OtherInfoContainer>
