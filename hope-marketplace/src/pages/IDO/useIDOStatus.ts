@@ -32,11 +32,9 @@ const useIDOStatus = (id: IDOIds) => {
 			const stateQueryResult = await runQuery(contractAddress, {
 				get_state_info: {},
 			});
-			console.log("ido state info", stateQueryResult);
 			const saleQueryResult = await runQuery(contractAddress, {
 				get_sale_info: {},
 			});
-			console.log("ido sale info", saleQueryResult);
 			setFetchResult({
 				stateInfo: stateQueryResult || {},
 				// stateInfo: tempIdoContractInfo || {},

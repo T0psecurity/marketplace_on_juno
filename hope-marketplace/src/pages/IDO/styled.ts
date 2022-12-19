@@ -70,6 +70,9 @@ export const TokenLogoContainer = styled.div`
 
 export const TokenLogo = styled.img`
 	width: 100%;
+	@media (max-width: 600px) {
+		width: 50%;
+	}
 `;
 
 export const TokenOperationPanel = styled.div`

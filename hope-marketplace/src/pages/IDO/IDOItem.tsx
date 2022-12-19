@@ -11,6 +11,9 @@ import {
 import Text from "../../components/Text";
 import { BasicProps } from "../../constants/BasicTypes";
 import { IDOInterface } from "../../constants/IDOs";
+import SwapAmountInput from "./SwapAmountInput";
+import useIDOStatus from "./useIDOStatus";
+import useWindowSize from "../../hook/useWindowSize";
 
 import {
 	Button,
@@ -29,8 +32,6 @@ import {
 	TokenSoldStatus,
 	TokenSoldStatusItem,
 } from "./styled";
-import SwapAmountInput from "./SwapAmountInput";
-import useIDOStatus from "./useIDOStatus";
 
 interface IDOItemProps extends BasicProps {
 	idoInfo: IDOInterface;
@@ -40,6 +41,25 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
 	const { idoStatus } = useIDOStatus(idoInfo.id);
 	// console.log("idoStatus: ", idoStatus, idoInfo);
 	const history = useHistory();
+	const { isMobile } = useWindowSize(600);
+
+	const Logo = () => (
+		<TokenLogoContainer>
+			<TokenLogo src={`/token-logos/${idoInfo.id}.png`} alt="" />
+			<Button
+				color="white"
+				onClick={() => history.push(`/ido/detail?id=${idoInfo.id}`)}
+			>
+				Details
+			</Button>
+		</TokenLogoContainer>
+	);
+
+	const Description = () => (
+		<Text justifyContent="flex-start" textAlign="left">
+			{idoInfo.description}
+		</Text>
+	);
 
 	return (
 		<Wrapper>
@@ -63,18 +83,17 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
 				</IDOItemSocialLinkContainer>
 			</IDOItemHeader>
 			<IDOItemContent>
-				<TokenLogoContainer>
-					<TokenLogo src={`/token-logos/${idoInfo.id}.png`} alt="" />
-					<Button
-						color="white"
-						onClick={() => history.push(`/ido/detail?id=${idoInfo.id}`)}
-					>
-						Details
-					</Button>
-				</TokenLogoContainer>
-				<Text justifyContent="flex-start" textAlign="left">
-					{idoInfo.description}
-				</Text>
+				{isMobile ? (
+					<>
+						<Description />
+						<Logo />
+					</>
+				) : (
+					<>
+						<Logo />
+						<Description />
+					</>
+				)}
 				<TokenOperationPanel>
 					<TokenSoldStatus>
 						<TokenSoldStatusItem>
