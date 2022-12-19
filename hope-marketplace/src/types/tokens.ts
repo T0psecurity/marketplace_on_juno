@@ -9,6 +9,11 @@ export enum TokenType {
 	AXELAR = "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
 }
 
+export const getTokenName = (tokenType: TokenType): string =>
+	(Object.keys(TokenType) as Array<keyof typeof TokenType>).filter(
+		(key) => TokenType[key] === tokenType
+	)[0];
+
 export const TokenFullName: { [key in TokenType]: string } = {
 	[TokenType.JUNO]: "JUNO",
 	[TokenType.HOPE]: "HOPE GALAXY",

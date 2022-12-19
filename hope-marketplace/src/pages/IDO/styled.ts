@@ -70,6 +70,9 @@ export const TokenLogoContainer = styled.div`
 
 export const TokenLogo = styled.img`
 	width: 100%;
+	@media (max-width: 600px) {
+		width: 50%;
+	}
 `;
 
 export const TokenOperationPanel = styled.div`
@@ -117,6 +120,9 @@ export const TokenSwapAmountItem = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 10px;
+	@media (max-width: 600px) {
+		gap: 5px;
+	}
 `;
 
 export const TokenSwapAmountInputer = styled.div`
@@ -134,10 +140,6 @@ export const TokenSwapAmountInputer = styled.div`
 		font-size: 24px;
 		text-align: right;
 		padding: 0 10px;
-		@media (max-width: 480px) {
-			height: 40px;
-			width: 100px;
-		}
 	}
 `;
 
@@ -150,10 +152,18 @@ export const TokenAmountAutoInputer = styled.div`
 
 export const TokenAmountAutoInputItem = styled(Text)`
 	cursor: pointer;
+	font-size: 18px;
+	align-items: center;
+	@media (max-width: 600px) {
+		font-size: 12px;
+	}
 `;
 
 export const TokenImage = styled.img`
 	width: 30px;
+	@media (max-width: 600px) {
+		width: 20px;
+	}
 `;
 
 export const SwapAmountInputWrapper = styled.div`
@@ -170,12 +180,13 @@ export const TokenSwapAmountPanel = styled.div`
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 5px;
-	@media (max-width: 400px) {
+	@media (max-width: 600px) {
 		gap: 5px;
 		${TokenSwapAmountInputer} {
 			& > input {
-				width: 130px;
+				width: 80px;
 				height: 30px;
+				font-size: 12px;
 			}
 		}
 		${TokenAmountAutoInputer} {
@@ -195,6 +206,8 @@ export const OtherInfoContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-evenly;
+	flex-wrap: wrap;
+	gap: 20px;
 `;
 
 export const RememberMe = styled.div`
@@ -217,6 +230,7 @@ export const SelectItem = styled.div<{ checked?: boolean }>`
 	padding: 5px;
 	cursor: pointer;
 	transition: 0.3s;
+	gap: 5px;
 	${({ checked }) =>
 		checked &&
 		css`
