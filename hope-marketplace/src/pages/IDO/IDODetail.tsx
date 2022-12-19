@@ -127,14 +127,16 @@ const IDODetail: React.FC = () => {
 			totalClaimAmount,
 			claimedAmount,
 			claimableAmount,
-			claimedPercent:
-				claimedPercent.toLocaleString("en-Us", {
-					maximumFractionDigits: 2,
-				}) + "%",
-			claimablePercent:
-				claimablePercent.toLocaleString("en-Us", {
-					maximumFractionDigits: 2,
-				}) + "%",
+			claimedPercent: totalClaimAmount
+				? claimedPercent.toLocaleString("en-Us", {
+						maximumFractionDigits: 2,
+				  }) + "%"
+				: "0%",
+			claimablePercent: totalClaimAmount
+				? claimablePercent.toLocaleString("en-Us", {
+						maximumFractionDigits: 2,
+				  }) + "%"
+				: "0%",
 			claimableTime: claimableTimeResult.claimable_time
 				? new Date(claimableTimeResult.claimable_time * 1000)
 				: null,
