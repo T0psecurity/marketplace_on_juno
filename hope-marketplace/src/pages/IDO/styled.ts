@@ -206,6 +206,8 @@ export const OtherInfoContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-evenly;
+	flex-wrap: wrap;
+	gap: 20px;
 `;
 
 export const RememberMe = styled.div`
