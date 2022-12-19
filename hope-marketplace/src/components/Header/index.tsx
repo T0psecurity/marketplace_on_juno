@@ -48,7 +48,7 @@ import ToggleThemeButton from "../ToogleThemeButton";
 import {
 	ActivityMenuIcon,
 	EarnIcon,
-	// ExploreIcon,
+	ExploreIcon,
 	HomeIcon,
 	// LaunchpadIcon,
 	MintIcon,
@@ -120,7 +120,7 @@ const HeaderLinks = [
 	{
 		title: "IDO",
 		url: "/ido",
-		// icon: ExploreIcon,
+		icon: ExploreIcon,
 		selectedUrl: ["/ido", "/ido/detail"],
 	},
 	// {
