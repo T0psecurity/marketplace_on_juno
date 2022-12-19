@@ -23,7 +23,7 @@ import { useAppSelector } from "../../app/hooks";
 import { BasicProps } from "../../constants/BasicTypes";
 import { IDOInterface } from "../../constants/IDOs";
 import useIDOStatus from "./useIDOStatus";
-import { TokenType } from "../../types/tokens";
+import { getTokenName, TokenType } from "../../types/tokens";
 import Text from "../../components/Text";
 import { SwapCrossIcon } from "../../components/SvgIcons";
 import useContract from "../../hook/useContract";
@@ -143,6 +143,7 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 					alt=""
 					src={`/coin-images/${option.value.replace(/\//g, "")}.png`}
 				/>
+				<Text color="black">{getTokenName(option.value)}</Text>
 			</SelectItem>
 		);
 	};
@@ -198,6 +199,7 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 						components={{
 							MenuList: CustomMenuList,
 							Control: CustomControlItem,
+							ValueContainer: () => null,
 						}}
 					/>
 					<TokenSwapAmountInputer>
