@@ -31,7 +31,7 @@ import {
 	MenuHeader,
 	MenuFooter,
 	MenuFooterLinkItem,
-	HeaderBackground,
+	// HeaderBackground,
 	HorizontalDivider,
 	LinkContainer,
 	SubMenuContainer,
@@ -40,6 +40,7 @@ import {
 	Container,
 	WalletImage,
 	WalletItem,
+	Wrapper,
 } from "./styled";
 import { coin } from "@cosmjs/proto-signing";
 import useRefresh from "../../hook/useRefresh";
@@ -65,6 +66,7 @@ import {
 } from "../../constants/BasicTypes";
 import { CosmostationWalletContext } from "../../context/Wallet";
 import Text from "../Text";
+import HeaderBanner from "../HeaderBanner";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
@@ -143,7 +145,7 @@ const SocialIcons = [
 ];
 
 const Header: React.FC = () => {
-	const [headerHeight, setHeaderHeight] = useState(0);
+	// const [headerHeight, setHeaderHeight] = useState(0);
 	const [isOpenMenu, setIsOpenMenu] = useState(false);
 	const [openedSubMenu, setOpenedSubMenu] = useState<any>({});
 	// const [runningFetch, setRunningFetch] = useState(false);
@@ -205,12 +207,12 @@ const Header: React.FC = () => {
 	}, [connectedWallet, dispatch, config, refresh]);
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	useEffect(() => {
-		const headerElement = document.getElementById("header");
-		const headerElementHeight = headerElement?.clientHeight || 0;
-		if (headerElementHeight !== headerHeight)
-			setHeaderHeight(headerElementHeight);
-	});
+	// useEffect(() => {
+	// 	const headerElement = document.getElementById("header");
+	// 	const headerElementHeight = headerElement?.clientHeight || 0;
+	// 	if (headerElementHeight !== headerHeight)
+	// 		setHeaderHeight(headerElementHeight);
+	// });
 
 	const clickWalletButton = (walletType: WalletType | null) => {
 		if (!account) {
@@ -327,8 +329,9 @@ const Header: React.FC = () => {
 	);
 
 	return (
-		<>
-			<HeaderBackground height={headerHeight} />
+		<Wrapper>
+			{/* <HeaderBackground height={headerHeight} /> */}
+			<HeaderBanner />
 			<HeaderWrapper id="header">
 				<LogoContainer>
 					<HeaderLogo
@@ -444,7 +447,7 @@ const Header: React.FC = () => {
 					</ButtonContainer>
 				)}
 			</HeaderWrapper>
-		</>
+		</Wrapper>
 	);
 };
 
