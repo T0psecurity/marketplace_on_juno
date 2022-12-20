@@ -331,7 +331,7 @@ const Header: React.FC = () => {
 	return (
 		<Wrapper>
 			{/* <HeaderBackground height={headerHeight} /> */}
-			<HeaderBanner />
+			{!isMobile && <HeaderBanner />}
 			<HeaderWrapper id="header">
 				<LogoContainer>
 					<HeaderLogo
