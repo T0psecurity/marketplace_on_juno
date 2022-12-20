@@ -119,17 +119,17 @@ const HeaderLinks = [
 		isDivider: true,
 	},
 	{ title: "Mint", url: "/collections/mint", icon: MintIcon },
-	{
-		title: "IDO",
-		url: "soon",
-		icon: ExploreIcon,
-		// selectedUrl: ["/ido", "/ido/detail"],
-	},
 	// {
 	//   title: "Launchpad",
 	//   url: "http://launchpad.hopers.io/",
 	//   icon: LaunchpadIcon,
 	// },
+	{
+		title: "IDO",
+		url: "/ido",
+		icon: ExploreIcon,
+		selectedUrl: ["/ido", "/ido/detail"],
+	},
 ];
 
 const SocialIcons = [

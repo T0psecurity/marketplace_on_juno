@@ -6,6 +6,7 @@ export enum TokenType {
 	RAW = "raw",
 	NETA = "neta",
 	ATOM = "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
+	AXELAR = "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
 }
 
 export const getTokenName = (tokenType: TokenType): string =>
@@ -19,6 +20,7 @@ export const TokenFullName: { [key in TokenType]: string } = {
 	[TokenType.RAW]: "JunoSwap Raw Dao",
 	[TokenType.NETA]: "NETA",
 	[TokenType.ATOM]: "COSMOS HUB",
+	[TokenType.AXELAR]: "Axelar",
 };
 
 export type TokenStatusType = {
@@ -61,6 +63,12 @@ export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
 		isIBCCOin: true,
 		chain: ChainTypes.COSMOS,
 		originChain: ChainTypes.COSMOS,
+	},
+	[TokenType.AXELAR]: {
+		isNativeCoin: true,
+		isIBCCOin: true,
+		chain: ChainTypes.AXELAR,
+		originChain: ChainTypes.AXELAR,
 	},
 };
 

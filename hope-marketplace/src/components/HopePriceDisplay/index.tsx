@@ -1,46 +1,50 @@
-import React from "react";
-// import { useAppSelector } from "../../app/hooks";
-// import { TokenType } from "../../types/tokens";
+import React, { useMemo } from "react";
+import { IDOIds } from "../../constants/IDOs";
+import useIDOStatus from "../../pages/IDO/useIDOStatus";
+import { useAppSelector } from "../../app/hooks";
+import { TokenType } from "../../types/tokens";
+import { addSuffix } from "../../util/string";
+import { PresaleState } from "../../pages/IDO/type";
 import {
-  HopeName,
-  HopePrice,
-  // PercentageChange,
-  Wrapper,
+	HopeName,
+	HopePrice,
+	// PercentageChange,
+	Wrapper,
 } from "./styled";
 
 const HopeIcon = () => (
-  <svg
-    width="26"
-    height="31"
-    viewBox="0 0 26 31"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M26 23.2516V7.74845L12.9969 0L0 7.74845V23.2516L12.9969 31L26 23.2516Z"
-      fill="#02E296"
-    />
-    <path
-      d="M13.0031 0.000623078L0 7.74907V23.246L13.0031 30.982V0.702768C13.0031 0.702768 13.0031 -0.0242316 13.0031 0.000623078Z"
-      fill="#0FCE89"
-    />
-    <path
-      d="M8.41235 5.67969L2.78516 11.3217L6.27014 14.907L12.1721 15.6464L7.02585 9.89877L12.8904 14.9256L12.066 9.08478L8.41235 5.67969Z"
-      fill="white"
-    />
-    <path
-      d="M17.5561 25.8359L23.1771 20.1876L19.6984 16.6024L13.7964 15.8691L18.9426 21.6106L13.0781 16.5899L13.8963 22.4308L17.5561 25.8359Z"
-      fill="white"
-    />
-    <path
-      d="M2.85352 20.3068L8.52443 25.8991L12.1281 22.4381L12.8713 16.5661L7.09421 21.6862L12.1468 15.8516L6.27605 16.6656L2.85352 20.3068Z"
-      fill="white"
-    />
-    <path
-      d="M23.1135 11.2036L17.4426 5.61133L13.8327 9.07856L13.0957 14.9505L18.8728 9.83041L13.8202 15.665L19.6909 14.8448L23.1135 11.2036Z"
-      fill="white"
-    />
-  </svg>
+	<svg
+		width="26"
+		height="31"
+		viewBox="0 0 26 31"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path
+			d="M26 23.2516V7.74845L12.9969 0L0 7.74845V23.2516L12.9969 31L26 23.2516Z"
+			fill="#02E296"
+		/>
+		<path
+			d="M13.0031 0.000623078L0 7.74907V23.246L13.0031 30.982V0.702768C13.0031 0.702768 13.0031 -0.0242316 13.0031 0.000623078Z"
+			fill="#0FCE89"
+		/>
+		<path
+			d="M8.41235 5.67969L2.78516 11.3217L6.27014 14.907L12.1721 15.6464L7.02585 9.89877L12.8904 14.9256L12.066 9.08478L8.41235 5.67969Z"
+			fill="white"
+		/>
+		<path
+			d="M17.5561 25.8359L23.1771 20.1876L19.6984 16.6024L13.7964 15.8691L18.9426 21.6106L13.0781 16.5899L13.8963 22.4308L17.5561 25.8359Z"
+			fill="white"
+		/>
+		<path
+			d="M2.85352 20.3068L8.52443 25.8991L12.1281 22.4381L12.8713 16.5661L7.09421 21.6862L12.1468 15.8516L6.27605 16.6656L2.85352 20.3068Z"
+			fill="white"
+		/>
+		<path
+			d="M23.1135 11.2036L17.4426 5.61133L13.8327 9.07856L13.0957 14.9505L18.8728 9.83041L13.8202 15.665L19.6909 14.8448L23.1135 11.2036Z"
+			fill="white"
+		/>
+	</svg>
 );
 
 // const ArrowIcon = () => (
@@ -59,34 +63,50 @@ const HopeIcon = () => (
 // );
 
 const HopePriceDisplay: React.FC = () => {
-  // const hopePrice = useAppSelector(
-  //   (state) => state.tokenPrices[TokenType.HOPE]
-  // );
-  // const priceInfo = useMemo(() => {
-  //   const marketData = hopePrice?.market_data;
-  //   return {
-  //     price: marketData?.current_price?.usd || 0,
-  //     percentage: (marketData?.price_change_percentage_24h || 0).toLocaleString(
-  //       "en-US",
-  //       {
-  //         maximumFractionDigits: 2,
-  //       }
-  //     ),
-  //   };
-  // }, [hopePrice]);
+	const { idoStatus } = useIDOStatus(IDOIds.HOPERS);
+	const junoPrice = useAppSelector(
+		(state) => state.tokenPrices[TokenType.JUNO]
+	);
 
-  return (
-    <Wrapper>
-      <HopeIcon />
-      <HopeName>$HOPERS</HopeName>
-      <HopePrice>soon</HopePrice>
-      {/* <HopePrice>{`${priceInfo.price}$`}</HopePrice>
+	const hopersPrice = useMemo(() => {
+		const junoPriceInUsd =
+			Number(junoPrice?.market_data?.current_price?.usd) || 0;
+		const hopersPriceInJuno = Number(idoStatus?.costs[TokenType.JUNO]) || 0;
+		return hopersPriceInJuno ? junoPriceInUsd / hopersPriceInJuno : 0;
+	}, [idoStatus, junoPrice]);
+
+	// const hopePrice = useAppSelector(
+	//   (state) => state.tokenPrices[TokenType.HOPE]
+	// );
+	// const priceInfo = useMemo(() => {
+	//   const marketData = hopePrice?.market_data;
+	//   return {
+	//     price: marketData?.current_price?.usd || 0,
+	//     percentage: (marketData?.price_change_percentage_24h || 0).toLocaleString(
+	//       "en-US",
+	//       {
+	//         maximumFractionDigits: 2,
+	//       }
+	//     ),
+	//   };
+	// }, [hopePrice]);
+
+	return (
+		<Wrapper>
+			<HopeIcon />
+			<HopeName>$HOPERS</HopeName>
+			<HopePrice
+				status={
+					idoStatus.crrState === PresaleState.BEFORE ? "IDO SCHEDULED" : ""
+				}
+			>{`${addSuffix(hopersPrice)}$`}</HopePrice>
+			{/* <HopePrice>{`${priceInfo.price}$`}</HopePrice>
       <PercentageChange isNegative={priceInfo.percentage < 0}>
         {`(${priceInfo.percentage}%)`}
         <ArrowIcon />
       </PercentageChange> */}
-    </Wrapper>
-  );
+		</Wrapper>
+	);
 };
 
 export default HopePriceDisplay;
