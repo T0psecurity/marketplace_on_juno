@@ -38,6 +38,7 @@ import PoolName from "../../components/PoolName";
 import AddLiquidity from "./AddLiquidity";
 import { ModalType, PoolType } from "./type";
 import CreateLiquidity from "./CreateLiquidity";
+import RemoveLiquidity from "./RemoveLiquidity";
 
 const Liquidity: React.FC = () => {
 	const [showTokenListModal, setShowTokenListModal] = useState(false);
@@ -144,6 +145,9 @@ const Liquidity: React.FC = () => {
 				)}
 				{account && modalType === ModalType.CREATE && (
 					<CreateLiquidity onChangeModalType={setModalType} />
+				)}
+				{account && modalType === ModalType.REMOVE && (
+					<RemoveLiquidity onChangeModalType={setModalType} />
 				)}
 				<LiquiditiesContainer>
 					<Text

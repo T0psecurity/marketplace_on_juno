@@ -12,4 +12,5 @@ export interface TFlex extends BasicProps {
 	gap?: string;
 	flexDirection?: "column" | "row";
 	width?: string;
+	margin?: string;
 }

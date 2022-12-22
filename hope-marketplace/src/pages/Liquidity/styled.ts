@@ -273,6 +273,7 @@ export const AddRemoveLiquidityWrapper = styled.div`
 	padding: 10px;
 	box-sizing: border-box;
 	position: relative;
+	gap: 10px;
 	& > svg {
 		cursor: pointer;
 		position: absolute;
@@ -365,4 +366,55 @@ export const TokenImage = styled(Flex)<{ horizontalName?: boolean }>`
 		width: 40px;
 		height: 40px;
 	}
+`;
+
+export const SelectRemovePoolContainer = styled.div`
+	background-color: rgba(2, 226, 150, 0.15);
+	border: 1px solid black;
+	border-radius: 15px;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	padding: 10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+`;
+
+export const SelectRemovePoolItem = styled.div<{ checked?: boolean }>`
+	display: flex;
+	flex-direction: column;
+	padding: 10px 0;
+	${({ checked }) =>
+		checked &&
+		css`
+			background-color: rgba(2, 226, 150, 0.5);
+		`}
+	&:hover {
+		background-color: rgba(2, 226, 150, 0.15);
+	}
+`;
+
+export const RemovePoolName = styled(Text)`
+	font-size: 10px;
+	color: black;
+	font-weight: bold;
+`;
+
+export const RemovePoolTotalValueContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`;
+
+export const RemoveAmountAutoInput = styled(Text)<{ checked: boolean }>`
+	width: 60px;
+	height: 30px;
+	align-items: center;
+	cursor: pointer;
+	border: 0.3px solid #000000;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 4px;
+	font-weight: bold;
+	color: ${({ checked }) => (checked ? "white" : "#787878")};
+	background-color: ${({ checked }) =>
+		checked ? "#02e296" : "rgba(2, 226, 150, 0.15)"};
 `;

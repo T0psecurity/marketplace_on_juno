@@ -1,16 +1,27 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-export const LiquidityImage = styled.div`
+type TLiquidityImage = {
+	size?: {
+		token1: string;
+		token2: string;
+	};
+};
+
+export const LiquidityImage = styled.div<TLiquidityImage>`
 	display: flex;
 	align-items: center;
+	width: ${({ size }) =>
+		size
+			? css`calc(${size.token1} + ${size.token2} - ${size.token2} * 0.3)`
+			: "100px"};
 	img {
 		&:nth-child(1) {
-			width: 40px;
-			height: 40px;
+			width: ${({ size }) => (size ? size.token1 : "40px")};
+			height: ${({ size }) => (size ? size.token1 : "40px")};
 		}
 		&:nth-child(2) {
-			width: 60px;
-			height: 60px;
+			width: ${({ size }) => (size ? size.token2 : "60px")};
+			height: ${({ size }) => (size ? size.token2 : "60px")};
 			transform: translate(-30%, 0);
 		}
 	}
