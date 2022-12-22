@@ -61,14 +61,28 @@ export const HeaderLogo = styled.div<{ isMobile: boolean }>`
 	cursor: pointer;
 `;
 
+// export const ProfileIcon = styled.div`
+// 	background: url("/others/user-hopers.png");
+// 	background-size: cover;
+// 	background-color: ${({ theme }) => theme.colors.backgroundColor};
+// 	width: 40px;
+// 	height: 40px;
+// 	margin: 0 10px;
+// 	cursor: pointer;
+// `;
+
 export const ProfileIcon = styled.div`
-	background: url("/others/user-hopers.png");
-	background-size: cover;
-	background-color: ${({ theme }) => theme.colors.backgroundColor};
-	width: 40px;
 	height: 40px;
-	margin: 0 10px;
 	cursor: pointer;
+	margin: 0 10px;
+	background: linear-gradient(90deg, #02e296 0%, rgba(2, 226, 150, 0) 114.55%);
+	border: 0.3px solid #02e296;
+	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+	border-radius: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0 10px;
 `;
 
 export const ButtonContainer = styled.div<{ isMobile: boolean }>`
