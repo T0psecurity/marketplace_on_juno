@@ -51,6 +51,7 @@ import {
 	EarnIcon,
 	ExploreIcon,
 	HomeIcon,
+	HopersUserIcon,
 	// LaunchpadIcon,
 	MintIcon,
 	NFTMenuIcon,
@@ -439,7 +440,10 @@ const Header: React.FC = () => {
 						<LinkContainer>
 							<HopePriceDisplay />
 							<div style={{ display: "flex", alignItems: "center" }}>
-								<ProfileIcon onClick={() => handleClickLink("/profile")} />
+								{/* <ProfileIcon onClick={() => handleClickLink("/profile")} /> */}
+								<ProfileIcon onClick={() => handleClickLink("/profile")}>
+									<HopersUserIcon />
+								</ProfileIcon>
 								<ToggleThemeButton />
 								<ConnectButton />
 							</div>
