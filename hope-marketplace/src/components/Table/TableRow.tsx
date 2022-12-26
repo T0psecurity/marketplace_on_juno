@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import {
 	TableContent,
 	TableDetailRow,
@@ -31,13 +31,15 @@ const Row = <T extends object>({
 		setExpanded((prev) => !prev);
 	};
 
-	const height = useMemo(() => element?.scrollHeight || 0, [element]);
+	const detailRowHeight = element?.scrollHeight || 0;
+
+	// const height = useMemo(() => element?.scrollHeight || 0, [element]);
 
 	return (
 		<TableRow
 			expanded={expanded}
 			finishedExpanded={finishedExpanding}
-			detailRowHeight={height}
+			detailRowHeight={detailRowHeight}
 			animationTime={AnimationTime}
 		>
 			<TableRowMainContent onClick={() => handleClickRow()}>

@@ -3,6 +3,7 @@ import { TFlex } from "./type";
 
 export const Wrapper = styled.div<TFlex>`
 	display: flex;
+	box-sizing: border-box;
 	${({ justifyContent }) =>
 		justifyContent &&
 		css`
@@ -32,5 +33,15 @@ export const Wrapper = styled.div<TFlex>`
 		margin &&
 		css`
 			margin: ${margin};
+		`}
+	${({ padding }) =>
+		padding &&
+		css`
+			padding: ${padding};
+		`}
+	${({ backgroundColor }) =>
+		backgroundColor &&
+		css`
+			background-color: ${backgroundColor};
 		`}
 `;

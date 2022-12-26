@@ -6,6 +6,7 @@ export const Wrapper = styled.div<{ imageLoaded: boolean }>`
 	width: 100%;
 	height: ${({ imageLoaded }) => (imageLoaded ? "max-content" : "0px")};
 	min-height: ${({ imageLoaded }) => (imageLoaded ? "35px" : "0px")};
+	max-height: 80px;
 	overflow: hidden;
 	display: grid;
 	align-items: center;
@@ -33,6 +34,7 @@ export const CloseIcon = styled.div`
 const Image = styled.img`
 	width: 60%;
 	margin: 10px 0;
+	max-width: 110px;
 `;
 
 export const RightImage = styled(Image)`
@@ -46,6 +48,7 @@ export const LeftImage = styled(Image)`
 export const MainContent = styled.div`
 	width: 100%;
 	height: 100%;
+	max-height: 80px;
 `;
 
 export const HopersBannerWrapper = styled.div`
