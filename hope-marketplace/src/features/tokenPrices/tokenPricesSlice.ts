@@ -12,6 +12,7 @@ export const TokenCoingeckoIds: { [key in TokenType]: string } = {
 	[TokenType.NETA]: "neta",
 	[TokenType.ATOM]: "cosmos",
 	[TokenType.AXELAR]: "axlusdc",
+	[TokenType.HOPERS]: "",
 };
 
 const CoinGeckoAPIKey = "CG-CV5rXz5JpbGcc36wL76u5gnd";
@@ -31,6 +32,7 @@ let initialState: TokenPriceType = {
 	[TokenType.NETA]: null,
 	[TokenType.ATOM]: null,
 	[TokenType.AXELAR]: null,
+	[TokenType.HOPERS]: null,
 };
 
 export enum TokenHistoryPeriod {

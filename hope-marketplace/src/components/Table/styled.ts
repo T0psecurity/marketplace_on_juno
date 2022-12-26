@@ -162,6 +162,6 @@ export const TableRow = styled.div<{
                         }
                     `
 					: null}
-			${({ animationTime }) => animationTime ?? 500}ms linear forwards;
+			${({ animationTime }) => animationTime ?? 500}ms ease-in-out forwards;
 	}
 `;
