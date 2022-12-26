@@ -14,6 +14,7 @@ import tokenPricesReducer from "../features/tokenPrices/tokenPricesSlice";
 import rarityRankReducer from "../features/rarityRanks/rarityRanksSlice";
 import balancesReducer from "../features/balances/balancesSlice";
 import bannersReducer from "../features/banners/bannersSlice";
+import liquiditiesReducer from "../features/liquidities/liquiditiesSlice";
 
 const persistConfig = {
 	key: "root",
@@ -31,6 +32,7 @@ const reducer = persistReducer(
 		rarityRank: rarityRankReducer,
 		balances: balancesReducer,
 		banners: bannersReducer,
+		liquidities: liquiditiesReducer,
 	})
 );
 

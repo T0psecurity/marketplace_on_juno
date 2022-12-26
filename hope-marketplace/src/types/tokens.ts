@@ -77,7 +77,7 @@ export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
 		isIBCCoin: false,
 		chain: ChainTypes.JUNO,
 		contractAddress:
-			"juno1xwhtuw6k3n2nl7sxdkmc9vapkeeap8kz0emvl3jukqatnz3w27ksfkvk7s",
+			"juno1e2hv5j7dphfgj0ytjw2vrt3g5kylrventqvns4su64jhrd4aq3xsy53snk",
 	},
 };
 

@@ -13,7 +13,7 @@ import {
 } from "../../components/SvgIcons";
 import Table, { ColumnTypes, TColumns } from "../../components/Table";
 import Text from "../../components/Text";
-import { TempLiquidities, TPool } from "../../types/pools";
+import { TPool } from "../../types/pools";
 import { getTokenName } from "../../types/tokens";
 import {
 	BondAmountInputer,
@@ -31,6 +31,7 @@ const AutoBondAmounts = [0.25, 0.5, 0.75, 1];
 
 const Bond: React.FC = () => {
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
+	const liquidities = useAppSelector((state) => state.liquidities);
 	const Columns: TColumns<TPool>[] = [
 		{
 			name: "",
@@ -99,7 +100,7 @@ const Bond: React.FC = () => {
 					</Text>
 				</Text>
 				<Table<TPool>
-					data={TempLiquidities}
+					data={liquidities}
 					columns={Columns}
 					renderDetailRow={(rowData) => (
 						<Flex

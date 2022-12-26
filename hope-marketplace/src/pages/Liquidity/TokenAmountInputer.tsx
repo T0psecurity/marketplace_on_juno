@@ -146,7 +146,13 @@ const TokenAmountInputer: React.FC<TTokenAmountInputer> = ({
 					<TokenImageItem token={token} />
 				)}
 				<input
-					value={amount ?? ""}
+					value={
+						amount
+							? amount.toLocaleString(undefined, {
+									maximumFractionDigits: 2,
+							  })
+							: ""
+					}
 					onChange={(e) => onAmountChange && onAmountChange(e.target.value)}
 				/>
 			</TokenAmountInput>

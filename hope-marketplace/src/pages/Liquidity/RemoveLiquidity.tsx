@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import ReactSelect, { ControlProps, components } from "react-select";
+import { useAppSelector } from "../../app/hooks";
 import Flex from "../../components/Flex";
 import PoolImage from "../../components/PoolImage";
 import { DropDownIcon } from "../../components/SvgIcons";
 import Text from "../../components/Text";
-import { TempLiquidities, TPool } from "../../types/pools";
+import { TPool } from "../../types/pools";
 import { getTokenName } from "../../types/tokens";
 
 import {
@@ -26,7 +27,8 @@ import { IBasicModal, ModalType } from "./type";
 const RemoveAutoInputValues = [0.25, 0.5, 0.75, 1];
 
 const RemoveLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
-	const [pool, setPool] = useState<TPool>(TempLiquidities[0]);
+	const liquidities = useAppSelector((state) => state.liquidities);
+	const [pool, setPool] = useState<TPool>(liquidities[0]);
 	const [removeAmountAuto, setRemoveAmountAuto] = useState<number>(0);
 
 	const handleChangePool = (item: any) => {
@@ -101,7 +103,7 @@ const RemoveLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 						<ReactSelect
 							value={pool}
 							onChange={handleChangePool}
-							options={TempLiquidities}
+							options={liquidities}
 							isSearchable={false}
 							styles={{
 								indicatorsContainer: (provided, state) => ({

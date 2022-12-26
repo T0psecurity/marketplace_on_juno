@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import ReactSelect, { ControlProps, components } from "react-select";
+import { coins } from "@cosmjs/proto-signing";
+import { useAppSelector } from "../../app/hooks";
 import Flex from "../../components/Flex";
 import PoolImage from "../../components/PoolImage";
 import PoolName from "../../components/PoolName";
 import { DropDownIcon, PlusInGreenCircleIcon } from "../../components/SvgIcons";
 import Text from "../../components/Text";
-import { TempLiquidities, TPool } from "../../types/pools";
+import { TPool } from "../../types/pools";
 
 import {
 	AddRemoveLiquidityActionButton,
@@ -19,10 +21,19 @@ import {
 } from "./styled";
 import TokenAmountInputer from "./TokenAmountInputer";
 import { IBasicModal, ModalType, TAddAmount } from "./type";
+import { TokenStatus } from "../../types/tokens";
+import useContract from "../../hook/useContract";
+import { toMicroAmount } from "../../util/coins";
+import { ChainConfigs } from "../../constants/ChainTypes";
+import { toast } from "react-toastify";
 
 const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
-	const [pool, setPool] = useState<TPool>(TempLiquidities[0]);
+	const account = useAppSelector((state) => state.accounts.keplrAccount);
+	const liquidities = useAppSelector((state) => state.liquidities);
+	const [isPending, setIsPending] = useState(false);
+	const [pool, setPool] = useState<TPool>(liquidities[0]);
 	const [addAmount, setAddAmount] = useState<TAddAmount>({} as TAddAmount);
+	const { createExecuteMessage, getExecuteClient } = useContract();
 
 	const handleChangePool = (item: any) => {
 		setPool(item);
@@ -35,14 +46,106 @@ const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 	};
 
 	const handleChangeAddAmount = (value: string, type: keyof TAddAmount) => {
+		const slippage = 0.99;
 		if (!isNaN(Number(value))) {
 			setAddAmount({
 				[type]: value,
 				[type === "token1" ? "token2" : "token1"]:
 					type === "token1"
-						? Number(value) * pool.ratio
-						: Number(value) / pool.ratio,
+						? (Number(value) * pool.ratio) / slippage
+						: (Number(value) * slippage) / pool.ratio,
 			} as TAddAmount);
+		}
+	};
+
+	const handleAddLiquidity = async () => {
+		if (!account || isPending) return;
+		let transactions = [];
+		let token1Amount = Number(addAmount.token1);
+		token1Amount = isNaN(token1Amount) ? 0 : token1Amount;
+		let token2Amount = Number(addAmount.token2);
+		token2Amount = isNaN(token2Amount) ? 0 : token2Amount;
+
+		if (!token1Amount || !token2Amount) return;
+		setIsPending(true);
+
+		let funds: any[] = [];
+
+		if (!TokenStatus[pool.token1].isNativeCoin) {
+			transactions.push(
+				createExecuteMessage({
+					senderAddress: account.address,
+					contractAddress: TokenStatus[pool.token1].contractAddress || "",
+					message: {
+						increase_allowance: {
+							spender: pool.contract,
+							amount: `${Math.ceil(token1Amount * 1e6)}`,
+						},
+					},
+				})
+			);
+		} else {
+			funds = [
+				...funds,
+				...coins(
+					toMicroAmount(
+						"" + token1Amount,
+						ChainConfigs[TokenStatus[pool.token1].chain]["coinDecimals"]
+					),
+					ChainConfigs[TokenStatus[pool.token1].chain]["microDenom"]
+				),
+			];
+		}
+		if (!TokenStatus[pool.token2].isNativeCoin) {
+			transactions.push(
+				createExecuteMessage({
+					senderAddress: account.address,
+					contractAddress: TokenStatus[pool.token2].contractAddress || "",
+					message: {
+						increase_allowance: {
+							spender: pool.contract,
+							amount: `${Math.ceil(token2Amount * 1e6)}`,
+						},
+					},
+				})
+			);
+		} else {
+			funds = [
+				...funds,
+				...coins(
+					toMicroAmount(
+						"" + token2Amount,
+						ChainConfigs[TokenStatus[pool.token2].chain]["coinDecimals"]
+					),
+					ChainConfigs[TokenStatus[pool.token2].chain]["microDenom"]
+				),
+			];
+		}
+
+		transactions.push(
+			createExecuteMessage({
+				senderAddress: account.address,
+				contractAddress: pool.contract,
+				message: {
+					add_liquidity: {
+						token1_amount: "" + Math.ceil(token1Amount * 1e6),
+						min_liquidity: "0",
+						max_token2: "" + Math.ceil(token2Amount * 1e6),
+					},
+				},
+				funds,
+			})
+		);
+
+		try {
+			const client = await getExecuteClient();
+			await client.signAndBroadcast(account.address, transactions, "auto");
+			toast.success("Added Liquidity Successfully!");
+		} catch (err) {
+			console.log(err);
+			toast.error("Add Liquidity Failed");
+		} finally {
+			setIsPending(false);
 		}
 	};
 
@@ -110,7 +213,7 @@ const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 					<ReactSelect
 						value={pool}
 						onChange={handleChangePool}
-						options={TempLiquidities}
+						options={liquidities}
 						isSearchable={false}
 						styles={{
 							container: (provided, state) => ({
@@ -164,8 +267,8 @@ const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 						/>
 					</Flex>
 					<AddRemoveLiquidityFooter>
-						<AddRemoveLiquidityActionButton>
-							Add Liquidity
+						<AddRemoveLiquidityActionButton onClick={handleAddLiquidity}>
+							{`${isPending ? "Adding" : "Add"} Liquidity`}
 						</AddRemoveLiquidityActionButton>
 					</AddRemoveLiquidityFooter>
 				</AddRemoveLiquidityWrapper>

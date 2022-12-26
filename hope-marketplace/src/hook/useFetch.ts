@@ -21,6 +21,9 @@ import {
 	clearBalances,
 	setTokenBalances,
 } from "../features/balances/balancesSlice";
+import { Liquidities } from "../constants/Liquidities";
+import { TPool } from "../types/pools";
+import { setLiquidityInfo } from "../features/liquidities/liquiditiesSlice";
 
 type AttributeType = {
 	trait_type: string;
@@ -517,6 +520,41 @@ const useFetch = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const fetchLiquidities = useCallback(() => {
+		const queries = Liquidities.map((liquidity) =>
+			runQuery(liquidity.contractAddress, { info: {} })
+		);
+		Promise.all(queries)
+			.then((results) => {
+				const liquidities: TPool[] = results.map((result, index) => {
+					let pool = Number(result.lp_token_supply);
+					pool = isNaN(pool) ? 0 : pool;
+
+					let token1Reserve = Number(result.token1_reserve);
+					let token2Reserve = Number(result.token2_reserve);
+					token1Reserve = isNaN(token1Reserve) ? 0 : token1Reserve;
+					token2Reserve = isNaN(token2Reserve) ? 0 : token2Reserve;
+
+					return {
+						id: index + 1,
+						token1: Liquidities[index].tokenA,
+						token2: Liquidities[index].tokenB,
+						isVerified: true,
+						apr: "180%",
+						pool,
+						contract: Liquidities[index].contractAddress,
+						lpAddress: result.lp_token_address || "",
+						volume: 18000,
+						token1Reserve,
+						token2Reserve,
+						ratio: token1Reserve ? token2Reserve / token1Reserve : 0,
+					};
+				});
+				dispatch(setLiquidityInfo(liquidities));
+			})
+			.catch((err) => console.log(err));
+	}, [dispatch, runQuery]);
+
 	return {
 		fetchAllNFTs,
 		fetchCollectionInfo,
@@ -524,6 +562,7 @@ const useFetch = () => {
 		fetchMyNFTs,
 		getTokenBalances,
 		clearAllNFTs,
+		fetchLiquidities,
 	};
 };
 

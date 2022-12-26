@@ -28,11 +28,11 @@ import {
 	Wrapper,
 } from "./styled";
 import TokenListModal from "../../components/TokenListModal";
-import { TokenType } from "../../types/tokens";
+import { getTokenName, TokenType } from "../../types/tokens";
 import { CancelIcon, VerifiedBadge } from "../../components/SvgIcons";
 import { addSuffix } from "../../util/string";
 import PoolImage from "../../components/PoolImage";
-import { TempLiquidities, TPool } from "../../types/pools";
+import { TPool } from "../../types/pools";
 import Table, { ColumnTypes, TColumns } from "../../components/Table";
 import PoolName from "../../components/PoolName";
 import AddLiquidity from "./AddLiquidity";
@@ -47,6 +47,7 @@ const Liquidity: React.FC = () => {
 	);
 	const [modalType, setModalType] = useState<ModalType>(ModalType.ADD);
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
+	const liquidities = useAppSelector((state) => state.liquidities);
 	// const { connect: connectWithCosmodal } = useCosmodal();
 	const { connect: connectKeplr } = useWalletManager();
 	const { connect: connectCosmostation } = useContext(
@@ -74,7 +75,15 @@ const Liquidity: React.FC = () => {
 		{ name: "volume", title: "Volume", type: ColumnTypes.NUMBER },
 		{ name: "apr", title: "APR Rewards" },
 		{ name: "pool", title: "Liquidity Pool" },
-		{ name: "ratio", title: "Value" },
+		{
+			name: "ratio",
+			title: "Value",
+			render: (value, data) => (
+				<Text bold color="black">{`1${getTokenName(data.token1)} = ${addSuffix(
+					value || 0
+				)}${getTokenName(data.token2)}`}</Text>
+			),
+		},
 	];
 
 	const handleClickConnectWalletButton = () => {
@@ -159,7 +168,7 @@ const Liquidity: React.FC = () => {
 						My Pools
 					</Text>
 					<MyPoolsContainer>
-						{TempLiquidities.map((liquidity, index: number) => (
+						{liquidities.map((liquidity, index: number) => (
 							<MyPoolItem key={index}>
 								<MyPoolItemRow>
 									<PoolImage
@@ -225,7 +234,7 @@ const Liquidity: React.FC = () => {
 						</LiquidityTableTabContainer>
 						<LiquidityTableSearchInputer placeholder="Search" />
 					</LiquidityTableControlPanel>
-					<Table<TPool> data={TempLiquidities} columns={Columns} />
+					<Table<TPool> data={liquidities} columns={Columns} />
 					{/* <LiquiditiesTable>
 						<LiquiditiesTableHeaderRow>
 							<LiquidityTableHeader />
