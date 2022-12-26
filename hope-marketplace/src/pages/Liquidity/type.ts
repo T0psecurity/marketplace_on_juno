@@ -22,3 +22,7 @@ export type TAddAmount = {
 };
 
 export type TCreateInfo = { [key in keyof TAddAmount]: TokenType };
+
+export type TPoolInfo = {
+	balance: number;
+};

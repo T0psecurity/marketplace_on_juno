@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import ReactSelect, { ControlProps, components } from "react-select";
+import { toast } from "react-toastify";
 import { useAppSelector } from "../../app/hooks";
 import Flex from "../../components/Flex";
 import PoolImage from "../../components/PoolImage";
 import { DropDownIcon } from "../../components/SvgIcons";
 import Text from "../../components/Text";
+import useContract from "../../hook/useContract";
 import { TPool } from "../../types/pools";
 import { getTokenName } from "../../types/tokens";
+import { useLiquidityInfo } from "./hooks";
 
 import {
 	AddRemoveLiquidityActionButton,
@@ -29,7 +32,11 @@ const RemoveAutoInputValues = [0.25, 0.5, 0.75, 1];
 const RemoveLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 	const liquidities = useAppSelector((state) => state.liquidities);
 	const [pool, setPool] = useState<TPool>(liquidities[0]);
+	const [isPending, setIsPending] = useState(false);
 	const [removeAmountAuto, setRemoveAmountAuto] = useState<number>(0);
+	const poolInfo = useLiquidityInfo(pool);
+	const account = useAppSelector((state) => state.accounts.keplrAccount);
+	const { createExecuteMessage, getExecuteClient } = useContract();
 
 	const handleChangePool = (item: any) => {
 		setPool(item);
@@ -37,6 +44,47 @@ const RemoveLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 
 	const handleSetRemoveAutoAmount = (amount: number) => {
 		setRemoveAmountAuto((prev) => (prev === amount ? 0 : amount));
+	};
+
+	const handleRemoveLiquidity = async () => {
+		if (!account || !removeAmountAuto || isPending) return;
+		setIsPending(true);
+		let transactions = [];
+		transactions.push(
+			createExecuteMessage({
+				senderAddress: account.address,
+				contractAddress: pool.lpAddress,
+				message: {
+					increase_allowance: {
+						spender: pool.contract,
+						amount: `${Math.ceil(poolInfo.balance * removeAmountAuto * 1e6)}`,
+					},
+				},
+			})
+		);
+		transactions.push(
+			createExecuteMessage({
+				senderAddress: account.address,
+				contractAddress: pool.contract,
+				message: {
+					remove_liquidity: {
+						amount: `${Math.ceil(poolInfo.balance * removeAmountAuto * 1e6)}`,
+						min_token1: "0",
+						min_token2: "0",
+					},
+				},
+			})
+		);
+		try {
+			const client = await getExecuteClient();
+			await client.signAndBroadcast(account.address, transactions, "auto");
+			toast.success("Removed Liquidity Successfully!");
+		} catch (err) {
+			console.log(err);
+			toast.error("Remove Liquidity Failed");
+		} finally {
+			setIsPending(false);
+		}
 	};
 
 	const CustomPoolSelectItem = ({ ...props }) => {
@@ -135,7 +183,7 @@ const RemoveLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 						<RemovePoolTotalValueContainer>
 							<Text color="#787878">Total Pool Value</Text>
 							<Text color="black" bold>
-								1.2k $
+								{poolInfo.balance}
 							</Text>
 						</RemovePoolTotalValueContainer>
 					</SelectRemovePoolContainer>
@@ -156,13 +204,13 @@ const RemoveLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 					<Text gap="20px">
 						<Text color="#787878">Total Remove Value</Text>
 						<Text color="black" bold fontSize="22px">
-							0.6k $
+							{poolInfo.balance * removeAmountAuto}
 						</Text>
 					</Text>
 					{/* !!Todo: One UI part is missed here!! */}
 					<AddRemoveLiquidityFooter>
-						<AddRemoveLiquidityActionButton>
-							Remove Liquidity
+						<AddRemoveLiquidityActionButton onClick={handleRemoveLiquidity}>
+							{`${isPending ? "Removing" : "Remove"} Liquidity`}
 						</AddRemoveLiquidityActionButton>
 					</AddRemoveLiquidityFooter>
 				</AddRemoveLiquidityWrapper>
