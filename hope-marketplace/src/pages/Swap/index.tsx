@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { coins } from "@cosmjs/proto-signing";
 import { useAppSelector } from "../../app/hooks";
 import ExploreHeader from "../../components/ExploreHeader";
 import PageWrapper from "../../components/PageWrapper";
@@ -9,7 +10,7 @@ import {
 } from "../../components/SvgIcons";
 import Text from "../../components/Text";
 import TokenListModal from "../../components/TokenListModal";
-import { TokenType } from "../../types/tokens";
+import { TokenStatus, TokenType } from "../../types/tokens";
 import {
 	AmountInputer,
 	ChartArea,
@@ -25,11 +26,16 @@ import {
 	SwapItem,
 	Wrapper,
 } from "./styled";
+import { toast } from "react-toastify";
+import { useValidPool } from "./hook";
+import useContract from "../../hook/useContract";
+import { toMicroAmount } from "../../util/coins";
+import { ChainConfigs } from "../../constants/ChainTypes";
 
 type TSwapInfo = {
 	from: {
 		token: TokenType;
-		amount: number;
+		amount: number | string;
 	};
 	to: {
 		token: TokenType;
@@ -40,6 +46,7 @@ type TSwapInfo = {
 const AvailableSlippage = [2, 5, 10, 15] as const;
 
 const Swap: React.FC = () => {
+	const [isPending, setIsPending] = useState(false);
 	const [showTokenListModal, setShowTokenListModal] = useState(false);
 	const [showSlippageSelector, setShowSlippageSelector] = useState<
 		boolean | null
@@ -58,9 +65,13 @@ const Swap: React.FC = () => {
 		},
 	});
 	const [slippage, setSlippage] = useState<typeof AvailableSlippage[number]>(2);
+	const validPair = useValidPool(swapInfo.from.token, swapInfo.to.token);
 
 	const balances = useAppSelector((state) => state.balances);
 	const tokenPrices = useAppSelector((state) => state.tokenPrices);
+	const account = useAppSelector((state) => state.accounts.keplrAccount);
+
+	const { runQuery, createExecuteMessage, getExecuteClient } = useContract();
 
 	const displaySwapInfo = useMemo(() => {
 		const fromToken = swapInfo.from.token;
@@ -116,49 +127,66 @@ const Swap: React.FC = () => {
 		};
 	}, [balances, swapInfo, tokenPrices]);
 
+	useEffect(() => {
+		if (!swapInfo.from.amount || !validPair) {
+			setSwapInfo((prev) => ({
+				...prev,
+				to: {
+					...prev.to,
+					amount: 0,
+				},
+			}));
+			return;
+		}
+		setTimeout(async () => {
+			const queryResult = await runQuery(validPair.pool.contractAddress, {
+				[validPair.reverse
+					? "token2_for_token1_price"
+					: "token1_for_token2_price"]: {
+					[validPair.reverse ? "token2_amount" : "token1_amount"]:
+						"" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
+				},
+			});
+			let amount = Number(
+				queryResult[validPair.reverse ? "token1_amount" : "token2_amount"]
+			);
+			amount = isNaN(amount) ? 0 : amount / 1e6;
+			setSwapInfo((prev) => ({
+				...prev,
+				to: {
+					...prev.to,
+					amount,
+				},
+			}));
+		}, 500);
+	}, [swapInfo.from, validPair, runQuery]);
+
 	const handleClickTokenSelect = (type: "from" | "to") => {
 		setSelectedTokenType(type);
 		setShowTokenListModal(true);
 	};
 
-	const changeSwapAmountLogic = (
-		value: string | number,
-		type: "from" | "to"
-	) => {
+	const changeSwapAmountLogic = async (value: string | number) => {
 		if (!isNaN(Number(value))) {
-			const oppositeField = type === "from" ? "to" : "from";
-			let oppositeAmount = 0;
-			if (displaySwapInfo[oppositeField].tokenPrice) {
-				oppositeAmount =
-					(Number(value) * displaySwapInfo[type].tokenPrice) /
-					displaySwapInfo[oppositeField].tokenPrice;
-			}
 			setSwapInfo((prev) => ({
 				...prev,
-				[type]: {
-					...prev[type],
+				from: {
+					...prev.from,
 					amount: value,
-				},
-				[oppositeField]: {
-					...prev[oppositeField],
-					amount: oppositeAmount,
 				},
 			}));
 		}
 	};
 
-	const handleChangeSwapAmount = (
-		e: React.ChangeEvent<HTMLInputElement>,
-		type: "from" | "to"
-	) => {
+	const handleChangeSwapAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
-		changeSwapAmountLogic(value, type);
+		changeSwapAmountLogic(value);
 	};
 
 	const handleConvertSwapInfo = () => {
 		setSwapInfo((prev) => ({
 			from: prev.to,
-			to: prev.from,
+			to: { ...prev.from, amount: 0 },
 		}));
 	};
 
@@ -172,7 +200,7 @@ const Swap: React.FC = () => {
 		const toTokenPrice =
 			tokenPrices[toToken]?.market_data?.current_price?.usd || 0;
 		if (toTokenPrice) {
-			toAmount = (swapInfo.from.amount * fromTokenPrice) / toTokenPrice;
+			toAmount = (Number(swapInfo.from.amount) * fromTokenPrice) / toTokenPrice;
 		}
 		let newSwapInfo = {
 			...swapInfo,
@@ -184,6 +212,66 @@ const Swap: React.FC = () => {
 		newSwapInfo.to.amount = toAmount;
 
 		setSwapInfo(newSwapInfo);
+	};
+
+	const handleSwap = async () => {
+		if (!swapInfo.from.amount || !account || isPending) return;
+		if (!validPair) {
+			toast.error("Invalid Pair!");
+			return;
+		}
+		setIsPending(true);
+		let transactions = [],
+			funds: any[] = [];
+		if (!TokenStatus[swapInfo.from.token].isNativeCoin) {
+			transactions.push(
+				createExecuteMessage({
+					senderAddress: account.address,
+					contractAddress:
+						TokenStatus[swapInfo.from.token].contractAddress || "",
+					message: {
+						increase_allowance: {
+							spender: validPair.pool.contractAddress,
+							amount: `${Math.ceil(Number(swapInfo.from.amount) * 1e6)}`,
+						},
+					},
+				})
+			);
+		} else {
+			funds = coins(
+				toMicroAmount(
+					"" + swapInfo.from.amount,
+					ChainConfigs[TokenStatus[swapInfo.from.token].chain]["coinDecimals"]
+				),
+				ChainConfigs[TokenStatus[swapInfo.from.token].chain]["microDenom"]
+			);
+		}
+		transactions.push(
+			createExecuteMessage({
+				senderAddress: account.address,
+				contractAddress: validPair.pool.contractAddress,
+				message: {
+					swap: {
+						input_token: validPair.reverse ? "Token2" : "Token1",
+						input_amount: "" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
+						min_output:
+							"" +
+							Math.ceil((Number(swapInfo.from.amount) * 1e6 * slippage) / 1e2),
+					},
+				},
+				funds,
+			})
+		);
+		try {
+			const client = await getExecuteClient();
+			await client.signAndBroadcast(account.address, transactions, "auto");
+			toast.success("Swapped Successfully!");
+		} catch (err) {
+			console.log(err);
+			toast.error("Swap Failed!");
+		} finally {
+			setIsPending(false);
+		}
 	};
 
 	return (
@@ -237,14 +325,11 @@ const Swap: React.FC = () => {
 								<AmountInputer>
 									<input
 										value={displaySwapInfo.from.amount}
-										onChange={(e) => handleChangeSwapAmount(e, "from")}
+										onChange={handleChangeSwapAmount}
 									/>
 									<SelectMaxButton
 										onClick={() =>
-											changeSwapAmountLogic(
-												displaySwapInfo.from.rawBalance,
-												"from"
-											)
+											changeSwapAmountLogic(displaySwapInfo.from.rawBalance)
 										}
 									>
 										Select Max
@@ -269,17 +354,14 @@ const Swap: React.FC = () => {
 									<DropDownIcon onClick={() => handleClickTokenSelect("to")} />
 								</Text>
 								<AmountInputer>
-									<input
-										value={displaySwapInfo.to.amount}
-										onChange={(e) => handleChangeSwapAmount(e, "to")}
-									/>
-									<SelectMaxButton
+									<input value={displaySwapInfo.to.amount} />
+									{/* <SelectMaxButton
 										onClick={() =>
 											changeSwapAmountLogic(displaySwapInfo.to.rawBalance, "to")
 										}
 									>
 										Select Max
-									</SelectMaxButton>
+									</SelectMaxButton> */}
 								</AmountInputer>
 								<Text
 									color="#787878"
@@ -291,7 +373,9 @@ const Swap: React.FC = () => {
 								<Text>Slippage Tolerance</Text>
 								<Text>{`${slippage}%`}</Text>
 							</Text>
-							<SwapButton>Swap</SwapButton>
+							<SwapButton onClick={handleSwap}>{`${
+								isPending ? "Swapping" : "Swap"
+							}`}</SwapButton>
 						</SwapAreaBody>
 					</SwapArea>
 				</MainPart>
