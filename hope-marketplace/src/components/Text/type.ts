@@ -9,7 +9,9 @@ export interface TextProps extends BasicProps {
 	cursor?: string;
 	width?: string;
 	justifyContent?: string;
+	alignItems?: string;
 	style?: any;
 	textAlign?: string;
-	alignItems?: string;
+	flexDirection?: string;
+	gap?: string;
 }

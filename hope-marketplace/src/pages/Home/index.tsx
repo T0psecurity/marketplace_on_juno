@@ -284,18 +284,11 @@ const Home: React.FC = () => {
 					<ButtonContainer>
 						<Button
 							style={{ minWidth: isMobile ? "60px" : "" }}
-							// onClick={NotifyComingSoon}
-							disabled
+							onClick={() => history.push("/swap")}
+							// disabled
 						>
 							Swap
 						</Button>
-						{/* <Button
-              style={{ minWidth: isMobile ? "60px" : "" }}
-              colored
-              onClick={() => history.push("/ido")}
-            >
-              IDO
-            </Button> */}
 						<Button
 							style={{ minWidth: isMobile ? "60px" : "" }}
 							onClick={() => history.push("/collections/explore")}

@@ -31,7 +31,7 @@ import {
 	MenuHeader,
 	MenuFooter,
 	MenuFooterLinkItem,
-	HeaderBackground,
+	// HeaderBackground,
 	HorizontalDivider,
 	LinkContainer,
 	SubMenuContainer,
@@ -40,6 +40,7 @@ import {
 	Container,
 	WalletImage,
 	WalletItem,
+	Wrapper,
 } from "./styled";
 import { coin } from "@cosmjs/proto-signing";
 import useRefresh from "../../hook/useRefresh";
@@ -50,6 +51,7 @@ import {
 	EarnIcon,
 	ExploreIcon,
 	HomeIcon,
+	HopersUserIcon,
 	// LaunchpadIcon,
 	MintIcon,
 	NFTMenuIcon,
@@ -65,13 +67,15 @@ import {
 } from "../../constants/BasicTypes";
 import { CosmostationWalletContext } from "../../context/Wallet";
 import Text from "../Text";
+import HeaderBanner from "../HeaderBanner";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
 	{
 		title: "Swap",
 		icon: SwapIcon,
-		url: "soon",
+		url: "/swap",
+		selectedUrl: ["/swap", "/liquidity"],
 		children: [
 			{
 				title: "Swap",
@@ -110,24 +114,25 @@ const HeaderLinks = [
 	},
 	{
 		title: "Earn",
-		url: "soon",
+		url: "/bond",
+		selectedUrl: ["/bond", "/stake", "/airdrop"],
 		icon: EarnIcon,
 	},
 	{
 		isDivider: true,
 	},
 	{ title: "Mint", url: "/collections/mint", icon: MintIcon },
+	// {
+	//   title: "Launchpad",
+	//   url: "http://launchpad.hopers.io/",
+	//   icon: LaunchpadIcon,
+	// },
 	{
 		title: "IDO",
 		url: "/ido",
 		icon: ExploreIcon,
 		selectedUrl: ["/ido", "/ido/detail"],
 	},
-	// {
-	//   title: "Launchpad",
-	//   url: "http://launchpad.hopers.io/",
-	//   icon: LaunchpadIcon,
-	// },
 ];
 
 const SocialIcons = [
@@ -143,7 +148,7 @@ const SocialIcons = [
 ];
 
 const Header: React.FC = () => {
-	const [headerHeight, setHeaderHeight] = useState(0);
+	// const [headerHeight, setHeaderHeight] = useState(0);
 	const [isOpenMenu, setIsOpenMenu] = useState(false);
 	const [openedSubMenu, setOpenedSubMenu] = useState<any>({});
 	// const [runningFetch, setRunningFetch] = useState(false);
@@ -205,12 +210,12 @@ const Header: React.FC = () => {
 	}, [connectedWallet, dispatch, config, refresh]);
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	useEffect(() => {
-		const headerElement = document.getElementById("header");
-		const headerElementHeight = headerElement?.clientHeight || 0;
-		if (headerElementHeight !== headerHeight)
-			setHeaderHeight(headerElementHeight);
-	});
+	// useEffect(() => {
+	// 	const headerElement = document.getElementById("header");
+	// 	const headerElementHeight = headerElement?.clientHeight || 0;
+	// 	if (headerElementHeight !== headerHeight)
+	// 		setHeaderHeight(headerElementHeight);
+	// });
 
 	const clickWalletButton = (walletType: WalletType | null) => {
 		if (!account) {
@@ -327,8 +332,9 @@ const Header: React.FC = () => {
 	);
 
 	return (
-		<>
-			<HeaderBackground height={headerHeight} />
+		<Wrapper>
+			{/* <HeaderBackground height={headerHeight} /> */}
+			{!isMobile && <HeaderBanner />}
 			<HeaderWrapper id="header">
 				<LogoContainer>
 					<HeaderLogo
@@ -436,7 +442,10 @@ const Header: React.FC = () => {
 						<LinkContainer>
 							<HopePriceDisplay />
 							<div style={{ display: "flex", alignItems: "center" }}>
-								<ProfileIcon onClick={() => handleClickLink("/profile")} />
+								{/* <ProfileIcon onClick={() => handleClickLink("/profile")} /> */}
+								<ProfileIcon onClick={() => handleClickLink("/profile")}>
+									<HopersUserIcon />
+								</ProfileIcon>
 								<ToggleThemeButton />
 								<ConnectButton />
 							</div>
@@ -444,7 +453,7 @@ const Header: React.FC = () => {
 					</ButtonContainer>
 				)}
 			</HeaderWrapper>
-		</>
+		</Wrapper>
 	);
 };
 

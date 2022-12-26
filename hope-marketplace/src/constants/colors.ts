@@ -14,5 +14,6 @@ export const LineColors = {
 	[TokenType.NETA]: "brown",
 	[TokenType.RAW]: "yellow",
 	[TokenType.ATOM]: "blue",
-	[TokenType.AXELAR]: "#bdcf32", // "#87bc45", "#27aeef", "#b33dc6"
+	[TokenType.AXELAR]: "#bdcf32",
+	[TokenType.HOPERS]: "#87bc45", // "#27aeef", "#b33dc6"
 };
