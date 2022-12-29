@@ -138,27 +138,66 @@ const Swap: React.FC = () => {
 			}));
 			return;
 		}
-		setTimeout(async () => {
-			const queryResult = await runQuery(validPair.pool.contractAddress, {
-				[validPair.reverse
-					? "token2_for_token1_price"
-					: "token1_for_token2_price"]: {
-					[validPair.reverse ? "token2_amount" : "token1_amount"]:
-						"" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
-				},
-			});
-			let amount = Number(
-				queryResult[validPair.reverse ? "token1_amount" : "token2_amount"]
-			);
-			amount = isNaN(amount) ? 0 : amount / 1e6;
-			setSwapInfo((prev) => ({
-				...prev,
-				to: {
-					...prev.to,
-					amount,
-				},
-			}));
-		}, 500);
+		if (!validPair.subPools) {
+			setTimeout(async () => {
+				const queryResult = await runQuery(validPair.pool.contractAddress, {
+					[validPair.reverse
+						? "token2_for_token1_price"
+						: "token1_for_token2_price"]: {
+						[validPair.reverse ? "token2_amount" : "token1_amount"]:
+							"" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
+					},
+				});
+				let amount = Number(
+					queryResult[validPair.reverse ? "token1_amount" : "token2_amount"]
+				);
+				amount = isNaN(amount) ? 0 : amount / 1e6;
+				setSwapInfo((prev) => ({
+					...prev,
+					to: {
+						...prev.to,
+						amount,
+					},
+				}));
+			}, 500);
+		} else {
+			setTimeout(async () => {
+				const firstPool = validPair.subPools?.[0];
+				const secondPool = validPair.subPools?.[1];
+				if (!firstPool || !secondPool) return;
+				const queryResult1 = await runQuery(firstPool.pool.contractAddress, {
+					[firstPool.reverse
+						? "token2_for_token1_price"
+						: "token1_for_token2_price"]: {
+						[firstPool.reverse ? "token2_amount" : "token1_amount"]:
+							"" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
+					},
+				});
+				const middleAmount = Number(
+					queryResult1[firstPool.reverse ? "token1_amount" : "token2_amount"]
+				);
+				if (isNaN(middleAmount) || !middleAmount) return;
+				const queryResult2 = await runQuery(secondPool.pool.contractAddress, {
+					[secondPool.reverse
+						? "token2_for_token1_price"
+						: "token1_for_token2_price"]: {
+						[secondPool.reverse ? "token2_amount" : "token1_amount"]:
+							"" + middleAmount,
+					},
+				});
+				let amount = Number(
+					queryResult2[secondPool.reverse ? "token1_amount" : "token2_amount"]
+				);
+				amount = isNaN(amount) ? 0 : amount / 1e6;
+				setSwapInfo((prev) => ({
+					...prev,
+					to: {
+						...prev.to,
+						amount,
+					},
+				}));
+			}, 500);
+		}
 	}, [swapInfo.from, validPair, runQuery]);
 
 	const handleClickTokenSelect = (type: "from" | "to") => {
@@ -216,7 +255,9 @@ const Swap: React.FC = () => {
 
 	const handleSwap = async () => {
 		if (!swapInfo.from.amount || !account || isPending) return;
-		if (!validPair) {
+		const firstPool = validPair?.subPools?.[0];
+		const secondPool = validPair?.subPools?.[1];
+		if (!validPair || (validPair.subPools && (!firstPool || !secondPool))) {
 			toast.error("Invalid Pair!");
 			return;
 		}
@@ -246,22 +287,42 @@ const Swap: React.FC = () => {
 				ChainConfigs[TokenStatus[swapInfo.from.token].chain]["microDenom"]
 			);
 		}
-		transactions.push(
-			createExecuteMessage({
-				senderAddress: account.address,
-				contractAddress: validPair.pool.contractAddress,
-				message: {
+		const finalMessage: any = validPair.subPools
+			? {
+					pass_through_swap: {
+						output_amm_address: secondPool?.pool.contractAddress,
+						input_token: firstPool?.reverse ? "Token2" : "Token1",
+						input_token_amount:
+							"" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
+						output_min_token:
+							"" +
+							Math.ceil(
+								(Number(swapInfo.to.amount) * 1e6 * (100 - slippage)) / 1e2
+							),
+					},
+			  }
+			: {
 					swap: {
 						input_token: validPair.reverse ? "Token2" : "Token1",
 						input_amount: "" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
 						min_output:
 							"" +
-							Math.ceil((Number(swapInfo.from.amount) * 1e6 * slippage) / 1e2),
+							Math.ceil(
+								(Number(swapInfo.to.amount) * 1e6 * (100 - slippage)) / 1e2
+							),
 					},
-				},
+			  };
+		console.log("debug", finalMessage);
+
+		transactions.push(
+			createExecuteMessage({
+				senderAddress: account.address,
+				contractAddress: validPair.pool.contractAddress,
+				message: finalMessage,
 				funds,
 			})
 		);
+
 		try {
 			const client = await getExecuteClient();
 			await client.signAndBroadcast(account.address, transactions, "auto");
