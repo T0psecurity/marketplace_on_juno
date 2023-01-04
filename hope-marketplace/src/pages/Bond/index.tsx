@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { useWalletManager } from "@noahsaso/cosmodal";
 import { useAppSelector } from "../../app/hooks";
 import ExploreHeader from "../../components/ExploreHeader";
@@ -17,6 +17,8 @@ import { TPool } from "../../types/pools";
 import { getTokenName } from "../../types/tokens";
 import {
 	BondAmountInputer,
+	BondTableControlPanel,
+	BondTableSearchInputer,
 	DetailRowBlock,
 	StyledButton as Button,
 	Wrapper,
@@ -26,12 +28,14 @@ import {
 	ConnectedWalletTypeLocalStorageKey,
 	WalletType,
 } from "../../constants/BasicTypes";
+import { addSuffix } from "../../util/string";
 
 const AutoBondAmounts = [0.25, 0.5, 0.75, 1];
 
 const Bond: React.FC = () => {
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
 	const liquidities = useAppSelector((state) => state.liquidities);
+	const [searchValue, setSearchValue] = useState("");
 	const Columns: TColumns<TPool>[] = [
 		{
 			name: "",
@@ -43,6 +47,22 @@ const Bond: React.FC = () => {
 		{
 			name: "",
 			title: "Pool Name",
+			sort: (data1, data2, direction) => {
+				const name1 = `${getTokenName(data1.token1)}-${getTokenName(
+					data1.token2
+				)}`;
+				const name2 = `${getTokenName(data2.token1)}-${getTokenName(
+					data2.token2
+				)}`;
+
+				return direction === "up"
+					? name1 > name2
+						? 1
+						: -1
+					: name2 > name1
+					? 1
+					: -1;
+			},
 			render: (value: any, data: TPool) => <PoolName pool={data} />,
 		},
 		{
@@ -50,15 +70,33 @@ const Bond: React.FC = () => {
 			title: "Verified",
 			render: (value, data) => (value ? <VerifiedBadge /> : <CancelIcon />),
 		},
-		{ name: "earned", title: "Earned", type: ColumnTypes.NUMBER },
-		{ name: "apr", title: "APR Rewards" },
-		{ name: "pool", title: "Liquidity Pool" },
-		{ name: "ratio", title: "Value" },
+		{ name: "earned", title: "Earned", type: ColumnTypes.NUMBER, sort: true },
+		{ name: "apr", title: "APR Rewards", sort: true },
+		{ name: "pool", title: "Liquidity Pool", sort: true },
+		{
+			name: "ratio",
+			title: "Value",
+			sort: true,
+			render: (value, data) => (
+				<Text bold color="black">{`1${getTokenName(data.token1)} = ${addSuffix(
+					value || 0
+				)}${getTokenName(data.token2)}`}</Text>
+			),
+		},
 	];
 	const { connect: connectKeplr } = useWalletManager();
 	const { connect: connectCosmostation } = useContext(
 		CosmostationWalletContext
 	);
+
+	const searchedLiquidities = useMemo(() => {
+		return liquidities.filter(
+			(liquidity) =>
+				!searchValue ||
+				liquidity.token1.toLowerCase().includes(searchValue.toLowerCase()) ||
+				liquidity.token2.toLowerCase().includes(searchValue.toLowerCase())
+		);
+	}, [searchValue, liquidities]);
 
 	const handleClickConnectWalletButton = () => {
 		const ConnectedWalletType = localStorage.getItem(
@@ -73,6 +111,11 @@ const Bond: React.FC = () => {
 			);
 			connectKeplr();
 		}
+	};
+
+	const handleChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { value } = e.target;
+		setSearchValue(value);
 	};
 
 	return (
@@ -99,8 +142,15 @@ const Bond: React.FC = () => {
 						Bond LP Token to earn
 					</Text>
 				</Text>
+				<BondTableControlPanel>
+					<BondTableSearchInputer
+						placeholder="Search"
+						value={searchValue}
+						onChange={handleChangeSearchValue}
+					/>
+				</BondTableControlPanel>
 				<Table<TPool>
-					data={liquidities}
+					data={searchedLiquidities}
 					columns={Columns}
 					renderDetailRow={(rowData) => (
 						<Flex

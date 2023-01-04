@@ -221,7 +221,8 @@ export const LiquidityTableSearchInputer = styled.input`
 	border: none;
 	font-size: 16px;
 	padding: 0 20px;
-	color: white;
+	/* color: white; */
+	color: ${({ theme }) => theme.colors.fontColor};
 	&:focus {
 		width: 200px;
 		opacity: 1;
