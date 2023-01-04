@@ -1,7 +1,12 @@
+type TTableOption = {
+	emptyString?: string;
+};
+
 export interface TTable<T extends object> {
 	data: T[];
 	columns: TColumns<T>[];
 	layout?: string;
+	option?: TTableOption;
 	renderDetailRow?: TRenderDetailRow<T>;
 }
 
@@ -21,9 +26,15 @@ export type TColumns<T extends object> = {
 		name: K | "";
 		type?: ColumnTypes;
 		title?: string;
+		sort?: boolean | ((data1: T, data2: T, direction: "up" | "down") => number);
 		render?: (value: T[K] | "" | 0, data: T) => JSX.Element | null;
 	};
 }[keyof T];
+
+export type TSortDirection = {
+	field: string;
+	direction: "up" | "down";
+};
 
 export enum ColumnTypes {
 	NUMBER,

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { useWalletManager } from "@noahsaso/cosmodal";
 import { useAppSelector } from "../../app/hooks";
 import ExploreHeader from "../../components/ExploreHeader";
@@ -41,6 +41,7 @@ import CreateLiquidity from "./CreateLiquidity";
 import RemoveLiquidity from "./RemoveLiquidity";
 
 const Liquidity: React.FC = () => {
+	const [searchValue, setSearchValue] = useState("");
 	const [showTokenListModal, setShowTokenListModal] = useState(false);
 	const [selectedPoolType, setSelectedPoolType] = useState<PoolType>(
 		PoolType.INCENTIVIZED
@@ -54,6 +55,15 @@ const Liquidity: React.FC = () => {
 		CosmostationWalletContext
 	);
 
+	const searchedLiquidities = useMemo(() => {
+		return liquidities.filter(
+			(liquidity) =>
+				!searchValue ||
+				liquidity.token1.toLowerCase().includes(searchValue.toLowerCase()) ||
+				liquidity.token2.toLowerCase().includes(searchValue.toLowerCase())
+		);
+	}, [searchValue, liquidities]);
+
 	const Columns: TColumns<TPool>[] = [
 		{
 			name: "",
@@ -65,6 +75,22 @@ const Liquidity: React.FC = () => {
 		{
 			name: "",
 			title: "Pool Name",
+			sort: (data1, data2, direction) => {
+				const name1 = `${getTokenName(data1.token1)}-${getTokenName(
+					data1.token2
+				)}`;
+				const name2 = `${getTokenName(data2.token1)}-${getTokenName(
+					data2.token2
+				)}`;
+
+				return direction === "up"
+					? name1 > name2
+						? 1
+						: -1
+					: name2 > name1
+					? 1
+					: -1;
+			},
 			render: (value: any, data: TPool) => <PoolName pool={data} />,
 		},
 		{
@@ -72,12 +98,13 @@ const Liquidity: React.FC = () => {
 			title: "Verified",
 			render: (value, data) => (value ? <VerifiedBadge /> : <CancelIcon />),
 		},
-		{ name: "volume", title: "Volume", type: ColumnTypes.NUMBER },
-		{ name: "apr", title: "APR Rewards" },
-		{ name: "pool", title: "Liquidity Pool" },
+		{ name: "volume", title: "Volume", type: ColumnTypes.NUMBER, sort: true },
+		{ name: "apr", title: "APR Rewards", sort: true },
+		{ name: "pool", title: "Liquidity Pool", sort: true },
 		{
 			name: "ratio",
 			title: "Value",
+			sort: true,
 			render: (value, data) => (
 				<Text bold color="black">{`1${getTokenName(data.token1)} = ${addSuffix(
 					value || 0
@@ -85,6 +112,11 @@ const Liquidity: React.FC = () => {
 			),
 		},
 	];
+
+	const handleChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { value } = e.target;
+		setSearchValue(value);
+	};
 
 	const handleClickConnectWalletButton = () => {
 		const connectedWalletType = localStorage.getItem(
@@ -232,9 +264,17 @@ const Liquidity: React.FC = () => {
 								)
 							)}
 						</LiquidityTableTabContainer>
-						<LiquidityTableSearchInputer placeholder="Search" />
+						<LiquidityTableSearchInputer
+							placeholder="Search"
+							value={searchValue}
+							onChange={handleChangeSearchValue}
+						/>
 					</LiquidityTableControlPanel>
-					<Table<TPool> data={liquidities} columns={Columns} />
+					<Table<TPool>
+						data={searchedLiquidities}
+						columns={Columns}
+						option={{ emptyString: "No Liquidities" }}
+					/>
 					{/* <LiquiditiesTable>
 						<LiquiditiesTableHeaderRow>
 							<LiquidityTableHeader />

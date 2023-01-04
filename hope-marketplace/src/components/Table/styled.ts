@@ -14,6 +14,24 @@ export const TableHeaderRow = styled.div`
 const tableBodyBorderColor = "#02e296";
 const tableBorderRadius = "15px";
 
+export const EmptyRow = styled.div<{ columnsCount: number }>`
+	background: white;
+	width: 100%;
+	height: 70px;
+	grid-area: ${({ columnsCount }) => css`2/1/3/${columnsCount + 1}`};
+	border-radius: ${tableBorderRadius};
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
+
+export const SortHeaderIcon = styled.i<{ visible?: string }>`
+	margin: 0 10px;
+	opacity: ${({ visible }) => (visible ? 1 : 0)};
+	transition: opacity 0.5s;
+`;
+
 export const TableHeader = styled.div`
 	display: flex;
 	align-items: center;
@@ -24,6 +42,7 @@ export const TableHeader = styled.div`
 	font-weight: bold;
 	background: rgba(15, 206, 137, 0.4);
 	color: ${({ theme }) => theme.colors.fontColor};
+	cursor: pointer;
 	&:first-child {
 		border-bottom-left-radius: ${tableBorderRadius};
 		border-top-left-radius: ${tableBorderRadius};
@@ -31,6 +50,11 @@ export const TableHeader = styled.div`
 	&:last-child {
 		border-bottom-right-radius: ${tableBorderRadius};
 		border-top-right-radius: ${tableBorderRadius};
+	}
+	&:hover {
+		${SortHeaderIcon} {
+			opacity: 1;
+		}
 	}
 `;
 
