@@ -4,6 +4,7 @@ import {
 	SortHeaderIcon,
 	TableBody,
 	TableHeader,
+	TableHeaderContent,
 	TableHeaderRow,
 	Wrapper,
 } from "./styled";
@@ -72,16 +73,18 @@ const Table = <T extends object>({
 							: "";
 					return (
 						<TableHeader key={index}>
-							{column.title ?? column.name ?? ""}
-							{column.sort && (
-								<SortHeaderIcon
-									className={`fa fa-sort${
-										sortedDirection ? `-${sortedDirection}` : ""
-									}`}
-									visible={sortedDirection}
-									onClick={() => handleClickSortDirectionButton(directionKey)}
-								/>
-							)}
+							<TableHeaderContent>
+								{column.title ?? column.name ?? ""}
+								{column.sort && (
+									<SortHeaderIcon
+										className={`fa fa-sort${
+											sortedDirection ? `-${sortedDirection}` : ""
+										}`}
+										visible={sortedDirection}
+										onClick={() => handleClickSortDirectionButton(directionKey)}
+									/>
+								)}
+							</TableHeaderContent>
 						</TableHeader>
 					);
 				})}

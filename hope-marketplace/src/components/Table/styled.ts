@@ -27,7 +27,8 @@ export const EmptyRow = styled.div<{ columnsCount: number }>`
 `;
 
 export const SortHeaderIcon = styled.i<{ visible?: string }>`
-	margin: 0 10px;
+	position: absolute;
+	right: -15px;
 	opacity: ${({ visible }) => (visible ? 1 : 0)};
 	transition: opacity 0.5s;
 `;
@@ -42,6 +43,7 @@ export const TableHeader = styled.div`
 	font-weight: bold;
 	background: rgba(15, 206, 137, 0.4);
 	color: ${({ theme }) => theme.colors.fontColor};
+	position: relative;
 	cursor: pointer;
 	&:first-child {
 		border-bottom-left-radius: ${tableBorderRadius};
@@ -56,6 +58,10 @@ export const TableHeader = styled.div`
 			opacity: 1;
 		}
 	}
+`;
+
+export const TableHeaderContent = styled.div`
+	position: relative;
 `;
 
 export const TableContent = styled.div`
