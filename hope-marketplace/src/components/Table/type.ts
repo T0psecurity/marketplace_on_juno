@@ -1,12 +1,19 @@
-type TTableOption = {
+type TTableOption<T extends object> = {
 	emptyString?: string;
+	tab?: {
+		tabs: string[];
+	};
+	search?: {
+		placeholder?: string;
+		onChange: (searchValue: string, data: T[]) => T[];
+	};
 };
 
 export interface TTable<T extends object> {
 	data: T[];
 	columns: TColumns<T>[];
 	layout?: string;
-	option?: TTableOption;
+	option?: TTableOption<T>;
 	renderDetailRow?: TRenderDetailRow<T>;
 }
 

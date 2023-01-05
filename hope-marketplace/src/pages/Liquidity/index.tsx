@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useWalletManager } from "@noahsaso/cosmodal";
 import { useAppSelector } from "../../app/hooks";
 import ExploreHeader from "../../components/ExploreHeader";
@@ -14,10 +14,6 @@ import {
 	LiquiditiesContainer,
 	LiquidityHeader,
 	LiquidityList,
-	LiquidityTableControlPanel,
-	LiquidityTableSearchInputer,
-	LiquidityTableTab,
-	LiquidityTableTabContainer,
 	ListBody,
 	ListHeader,
 	MessageContainer,
@@ -41,11 +37,8 @@ import CreateLiquidity from "./CreateLiquidity";
 import RemoveLiquidity from "./RemoveLiquidity";
 
 const Liquidity: React.FC = () => {
-	const [searchValue, setSearchValue] = useState("");
 	const [showTokenListModal, setShowTokenListModal] = useState(false);
-	const [selectedPoolType, setSelectedPoolType] = useState<PoolType>(
-		PoolType.INCENTIVIZED
-	);
+
 	const [modalType, setModalType] = useState<ModalType>(ModalType.ADD);
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
 	const liquidities = useAppSelector((state) => state.liquidities);
@@ -54,15 +47,6 @@ const Liquidity: React.FC = () => {
 	const { connect: connectCosmostation } = useContext(
 		CosmostationWalletContext
 	);
-
-	const searchedLiquidities = useMemo(() => {
-		return liquidities.filter(
-			(liquidity) =>
-				!searchValue ||
-				liquidity.token1.toLowerCase().includes(searchValue.toLowerCase()) ||
-				liquidity.token2.toLowerCase().includes(searchValue.toLowerCase())
-		);
-	}, [searchValue, liquidities]);
 
 	const Columns: TColumns<TPool>[] = [
 		{
@@ -112,11 +96,6 @@ const Liquidity: React.FC = () => {
 			),
 		},
 	];
-
-	const handleChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { value } = e.target;
-		setSearchValue(value);
-	};
 
 	const handleClickConnectWalletButton = () => {
 		const connectedWalletType = localStorage.getItem(
@@ -248,32 +227,30 @@ const Liquidity: React.FC = () => {
 					>
 						All Pools
 					</Text>
-					<LiquidityTableControlPanel>
-						<LiquidityTableTabContainer
-							isRight={selectedPoolType === PoolType.ALL}
-						>
-							{(Object.keys(PoolType) as Array<keyof typeof PoolType>).map(
-								(key, index) => (
-									<LiquidityTableTab
-										key={index}
-										checked={selectedPoolType === PoolType[key]}
-										onClick={() => setSelectedPoolType(PoolType[key])}
-									>
-										{PoolType[key]}
-									</LiquidityTableTab>
-								)
-							)}
-						</LiquidityTableTabContainer>
-						<LiquidityTableSearchInputer
-							placeholder="Search"
-							value={searchValue}
-							onChange={handleChangeSearchValue}
-						/>
-					</LiquidityTableControlPanel>
 					<Table<TPool>
-						data={searchedLiquidities}
+						data={liquidities}
 						columns={Columns}
-						option={{ emptyString: "No Liquidities" }}
+						option={{
+							emptyString: "No Liquidities",
+							tab: {
+								tabs: (
+									Object.keys(PoolType) as Array<keyof typeof PoolType>
+								).map((key) => PoolType[key]),
+							},
+							search: {
+								onChange: (searchValue, liquidities) =>
+									liquidities.filter(
+										(liquidity) =>
+											!searchValue ||
+											liquidity.token1
+												.toLowerCase()
+												.includes(searchValue.toLowerCase()) ||
+											liquidity.token2
+												.toLowerCase()
+												.includes(searchValue.toLowerCase())
+									),
+							},
+						}}
 					/>
 					{/* <LiquiditiesTable>
 						<LiquiditiesTableHeaderRow>

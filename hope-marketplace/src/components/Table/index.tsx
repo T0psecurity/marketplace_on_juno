@@ -3,9 +3,14 @@ import {
 	EmptyRow,
 	SortHeaderIcon,
 	TableBody,
+	TableControlPanel,
 	TableHeader,
 	TableHeaderContent,
 	TableHeaderRow,
+	TableSearchInputer,
+	TableTab,
+	TableTabContainer,
+	TableWrapper,
 	Wrapper,
 } from "./styled";
 import Row from "./TableRow";
@@ -21,6 +26,8 @@ const Table = <T extends object>({
 	const [sortDirections, setSortDirections] = useState<TSortDirection>(
 		{} as TSortDirection
 	);
+	const [selectedTab, setSelectedTab] = useState<string>("");
+	const [searchValue, setSearchValue] = useState<string>("");
 
 	const handleClickSortDirectionButton = (columnName: string) => {
 		if (!columnName) return;
@@ -31,15 +38,28 @@ const Table = <T extends object>({
 		}));
 	};
 
+	const handleChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { value } = e.target;
+		setSearchValue(value);
+	};
+
+	const searchedData = useMemo(
+		() =>
+			option?.search?.onChange
+				? option.search?.onChange(searchValue, data)
+				: data,
+		[option?.search, searchValue, data]
+	);
+
 	const sortedData = useMemo(() => {
-		if (!sortDirections?.field) return data;
+		if (!sortDirections?.field) return searchedData;
 		const sortedColumn = columns.find((column) =>
 			((column?.name || column?.title || "") as string).includes(
 				sortDirections.field
 			)
 		);
-		if (!sortedColumn || !sortedColumn.sort) return data;
-		return data.sort((data1, data2) => {
+		if (!sortedColumn || !sortedColumn.sort) return searchedData;
+		return searchedData.sort((data1, data2) => {
 			const defaultValue = sortedColumn.type === ColumnTypes.NUMBER ? 0 : "";
 			const value1 = sortedColumn.name
 				? data1[sortedColumn.name] || defaultValue
@@ -60,51 +80,81 @@ const Table = <T extends object>({
 				? sortedColumn.sort(data1, data2, sortDirections.direction)
 				: 0;
 		});
-	}, [columns, data, sortDirections]);
+	}, [columns, searchedData, sortDirections]);
+
+	const hasControlPanel = !!option?.tab || !!option?.search;
 
 	return (
-		<Wrapper columnsCount={columns.length} layout={layout}>
-			<TableHeaderRow>
-				{columns.map((column, index) => {
-					const directionKey = (column.name || column.title) as string;
-					const sortedDirection =
-						sortDirections.field === directionKey
-							? sortDirections.direction
-							: "";
-					return (
-						<TableHeader key={index}>
-							<TableHeaderContent>
-								{column.title ?? column.name ?? ""}
-								{column.sort && (
-									<SortHeaderIcon
-										className={`fa fa-sort${
-											sortedDirection ? `-${sortedDirection}` : ""
-										}`}
-										visible={sortedDirection}
-										onClick={() => handleClickSortDirectionButton(directionKey)}
-									/>
-								)}
-							</TableHeaderContent>
-						</TableHeader>
-					);
-				})}
-			</TableHeaderRow>
-			<TableBody>
-				{sortedData.map((dataItem, dataIndex) => (
-					<Row<T>
-						key={dataIndex}
-						columns={columns}
-						renderDetailRow={renderDetailRow}
-						data={dataItem}
-						index={dataIndex}
-					/>
-				))}
-				{!data?.length && (
-					<EmptyRow columnsCount={columns.length}>
-						{option?.emptyString || "No Data"}
-					</EmptyRow>
-				)}
-			</TableBody>
+		<Wrapper>
+			{hasControlPanel && (
+				<TableControlPanel>
+					{!!option?.tab && (
+						<TableTabContainer isRight={selectedTab !== option.tab.tabs[0]}>
+							{option.tab.tabs.map((tab, index) => (
+								<TableTab
+									key={index}
+									checked={selectedTab === tab}
+									onClick={() => setSelectedTab(tab)}
+								>
+									{tab}
+								</TableTab>
+							))}
+						</TableTabContainer>
+					)}
+					{!!option?.search && (
+						<TableSearchInputer
+							placeholder={option.search.placeholder ?? "Search"}
+							value={searchValue}
+							onChange={handleChangeSearchValue}
+						/>
+					)}
+				</TableControlPanel>
+			)}
+			<TableWrapper columnsCount={columns.length} layout={layout}>
+				<TableHeaderRow>
+					{columns.map((column, index) => {
+						const directionKey = (column.name || column.title) as string;
+						const sortedDirection =
+							sortDirections.field === directionKey
+								? sortDirections.direction
+								: "";
+						return (
+							<TableHeader key={index}>
+								<TableHeaderContent>
+									{column.title ?? column.name ?? ""}
+									{column.sort && (
+										<SortHeaderIcon
+											className={`fa fa-sort${
+												sortedDirection ? `-${sortedDirection}` : ""
+											}`}
+											visible={sortedDirection}
+											onClick={() =>
+												handleClickSortDirectionButton(directionKey)
+											}
+										/>
+									)}
+								</TableHeaderContent>
+							</TableHeader>
+						);
+					})}
+				</TableHeaderRow>
+				<TableBody>
+					{sortedData.map((dataItem, dataIndex) => (
+						<Row<T>
+							key={dataIndex}
+							columns={columns}
+							renderDetailRow={renderDetailRow}
+							data={dataItem}
+							index={dataIndex}
+						/>
+					))}
+					{!data?.length && (
+						<EmptyRow columnsCount={columns.length}>
+							{option?.emptyString || "No Data"}
+						</EmptyRow>
+					)}
+				</TableBody>
+			</TableWrapper>
 		</Wrapper>
 	);
 };
