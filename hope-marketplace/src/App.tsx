@@ -49,6 +49,7 @@ const GlobalStyle = createGlobalStyle<{ isMobile: boolean }>`
 		css`
 			*::-webkit-scrollbar {
 				width: 5px;
+				height: 5px;
 				position: absolute;
 			}
 
