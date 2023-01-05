@@ -17,10 +17,6 @@ import {
 	ListBody,
 	ListHeader,
 	MessageContainer,
-	MyPoolContentItem,
-	MyPoolItem,
-	MyPoolItemRow,
-	MyPoolsContainer,
 	Wrapper,
 } from "./styled";
 import TokenListModal from "../../components/TokenListModal";
@@ -169,55 +165,6 @@ const Liquidity: React.FC = () => {
 				{account && modalType === ModalType.REMOVE && (
 					<RemoveLiquidity onChangeModalType={setModalType} />
 				)}
-				<LiquiditiesContainer>
-					<Text
-						bold
-						fontSize="20px"
-						justifyContent="flex-start"
-						margin="20px 0"
-					>
-						My Pools
-					</Text>
-					<MyPoolsContainer>
-						{liquidities.map((liquidity, index: number) => (
-							<MyPoolItem key={index}>
-								<MyPoolItemRow>
-									<PoolImage
-										token1={liquidity.token1}
-										token2={liquidity.token2}
-									/>
-									<PoolName pool={liquidity} />
-								</MyPoolItemRow>
-								<MyPoolItemRow>
-									<MyPoolContentItem>
-										<Text bold color="#c5c5c5">
-											APR
-										</Text>
-										<Text bold color="black">
-											{liquidity.apr}
-										</Text>
-									</MyPoolContentItem>
-									<MyPoolContentItem>
-										<Text bold color="#c5c5c5">
-											Pool Liquidity
-										</Text>
-										<Text bold color="black">
-											{`$${addSuffix(liquidity.pool)}`}
-										</Text>
-									</MyPoolContentItem>
-									<MyPoolContentItem>
-										<Text bold color="#c5c5c5">
-											Bonded
-										</Text>
-										<Text bold color="black">
-											{`$${addSuffix(0)}`}
-										</Text>
-									</MyPoolContentItem>
-								</MyPoolItemRow>
-							</MyPoolItem>
-						))}
-					</MyPoolsContainer>
-				</LiquiditiesContainer>
 				<LiquiditiesContainer>
 					<Text
 						bold

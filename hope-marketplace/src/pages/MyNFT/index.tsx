@@ -67,6 +67,7 @@ import useContract from "../../hook/useContract";
 import moment from "moment";
 import usePickNFT from "../../hook/usePickNFT";
 import useHandleNftItem from "../../hook/useHandleNftItem";
+import MyPools from "../../components/MyPools";
 // import { getCustomTokenId } from "../../hook/useFetch";
 
 enum TAB_TYPE {
@@ -595,6 +596,8 @@ const MyNFT: React.FC = () => {
 					)}
 				</TokenBalancesWrapper>
 			</MyAssetsArea>
+			<StyledExploreHeader title="My Pools" />
+			<MyPools />
 			<StyledExploreHeader
 				title={`My ${selectedPageTab}`}
 				tabs={(Object.keys(TAB_TYPE) as Array<keyof typeof TAB_TYPE>).map(
