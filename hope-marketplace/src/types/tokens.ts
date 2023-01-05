@@ -51,7 +51,8 @@ export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
 		isIBCCoin: false,
 		chain: ChainTypes.JUNO,
 		contractAddress:
-			"juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
+			// "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
+			"juno1sn67lmh4gzx8kcz9cpek4suyglvley2vnksj7tdadfeamfe4089ssvfkgx", // this is only for swap testing
 	},
 	[TokenType.NETA]: {
 		isNativeCoin: false,

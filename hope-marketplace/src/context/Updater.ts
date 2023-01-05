@@ -13,8 +13,8 @@ export default function Updater(): null {
 	const { fetchAllNFTs, clearAllNFTs, fetchLiquidities } = useFetch();
 
 	useEffect(() => {
-		fetchLiquidities();
-	}, [account, fetchLiquidities]);
+		fetchLiquidities(account);
+	}, [account, fetchLiquidities, nftRefresh]);
 
 	useEffect(() => {
 		fetchAllNFTs(account);

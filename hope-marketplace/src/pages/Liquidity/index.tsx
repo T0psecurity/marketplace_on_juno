@@ -14,17 +14,9 @@ import {
 	LiquiditiesContainer,
 	LiquidityHeader,
 	LiquidityList,
-	LiquidityTableControlPanel,
-	LiquidityTableSearchInputer,
-	LiquidityTableTab,
-	LiquidityTableTabContainer,
 	ListBody,
 	ListHeader,
 	MessageContainer,
-	MyPoolContentItem,
-	MyPoolItem,
-	MyPoolItemRow,
-	MyPoolsContainer,
 	Wrapper,
 } from "./styled";
 import TokenListModal from "../../components/TokenListModal";
@@ -42,9 +34,7 @@ import RemoveLiquidity from "./RemoveLiquidity";
 
 const Liquidity: React.FC = () => {
 	const [showTokenListModal, setShowTokenListModal] = useState(false);
-	const [selectedPoolType, setSelectedPoolType] = useState<PoolType>(
-		PoolType.INCENTIVIZED
-	);
+
 	const [modalType, setModalType] = useState<ModalType>(ModalType.ADD);
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
 	const liquidities = useAppSelector((state) => state.liquidities);
@@ -65,6 +55,22 @@ const Liquidity: React.FC = () => {
 		{
 			name: "",
 			title: "Pool Name",
+			sort: (data1, data2, direction) => {
+				const name1 = `${getTokenName(data1.token1)}-${getTokenName(
+					data1.token2
+				)}`;
+				const name2 = `${getTokenName(data2.token1)}-${getTokenName(
+					data2.token2
+				)}`;
+
+				return direction === "up"
+					? name1 > name2
+						? 1
+						: -1
+					: name2 > name1
+					? 1
+					: -1;
+			},
 			render: (value: any, data: TPool) => <PoolName pool={data} />,
 		},
 		{
@@ -72,12 +78,13 @@ const Liquidity: React.FC = () => {
 			title: "Verified",
 			render: (value, data) => (value ? <VerifiedBadge /> : <CancelIcon />),
 		},
-		{ name: "volume", title: "Volume", type: ColumnTypes.NUMBER },
-		{ name: "apr", title: "APR Rewards" },
-		{ name: "pool", title: "Liquidity Pool" },
+		{ name: "volume", title: "Volume", type: ColumnTypes.NUMBER, sort: true },
+		{ name: "apr", title: "APR Rewards", sort: true },
+		{ name: "pool", title: "Liquidity Pool", sort: true },
 		{
 			name: "ratio",
 			title: "Value",
+			sort: true,
 			render: (value, data) => (
 				<Text bold color="black">{`1${getTokenName(data.token1)} = ${addSuffix(
 					value || 0
@@ -165,76 +172,33 @@ const Liquidity: React.FC = () => {
 						justifyContent="flex-start"
 						margin="20px 0"
 					>
-						My Pools
-					</Text>
-					<MyPoolsContainer>
-						{liquidities.map((liquidity, index: number) => (
-							<MyPoolItem key={index}>
-								<MyPoolItemRow>
-									<PoolImage
-										token1={liquidity.token1}
-										token2={liquidity.token2}
-									/>
-									<PoolName pool={liquidity} />
-								</MyPoolItemRow>
-								<MyPoolItemRow>
-									<MyPoolContentItem>
-										<Text bold color="#c5c5c5">
-											APR
-										</Text>
-										<Text bold color="black">
-											{liquidity.apr}
-										</Text>
-									</MyPoolContentItem>
-									<MyPoolContentItem>
-										<Text bold color="#c5c5c5">
-											Pool Liquidity
-										</Text>
-										<Text bold color="black">
-											{`$${addSuffix(liquidity.pool)}`}
-										</Text>
-									</MyPoolContentItem>
-									<MyPoolContentItem>
-										<Text bold color="#c5c5c5">
-											Bonded
-										</Text>
-										<Text bold color="black">
-											{`$${addSuffix(0)}`}
-										</Text>
-									</MyPoolContentItem>
-								</MyPoolItemRow>
-							</MyPoolItem>
-						))}
-					</MyPoolsContainer>
-				</LiquiditiesContainer>
-				<LiquiditiesContainer>
-					<Text
-						bold
-						fontSize="20px"
-						justifyContent="flex-start"
-						margin="20px 0"
-					>
 						All Pools
 					</Text>
-					<LiquidityTableControlPanel>
-						<LiquidityTableTabContainer
-							isRight={selectedPoolType === PoolType.ALL}
-						>
-							{(Object.keys(PoolType) as Array<keyof typeof PoolType>).map(
-								(key, index) => (
-									<LiquidityTableTab
-										key={index}
-										checked={selectedPoolType === PoolType[key]}
-										onClick={() => setSelectedPoolType(PoolType[key])}
-									>
-										{PoolType[key]}
-									</LiquidityTableTab>
-								)
-							)}
-						</LiquidityTableTabContainer>
-						<LiquidityTableSearchInputer placeholder="Search" />
-					</LiquidityTableControlPanel>
-					<Table<TPool> data={liquidities} columns={Columns} />
+					<Table<TPool>
+						data={liquidities}
+						columns={Columns}
+						option={{
+							emptyString: "No Liquidities",
+							tab: {
+								tabs: (
+									Object.keys(PoolType) as Array<keyof typeof PoolType>
+								).map((key) => PoolType[key]),
+							},
+							search: {
+								onChange: (searchValue, liquidities) =>
+									liquidities.filter(
+										(liquidity) =>
+											!searchValue ||
+											liquidity.token1
+												.toLowerCase()
+												.includes(searchValue.toLowerCase()) ||
+											liquidity.token2
+												.toLowerCase()
+												.includes(searchValue.toLowerCase())
+									),
+							},
+						}}
+					/>
 					{/* <LiquiditiesTable>
 						<LiquiditiesTableHeaderRow>
 							<LiquidityTableHeader />

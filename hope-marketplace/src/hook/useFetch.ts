@@ -520,40 +520,90 @@ const useFetch = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const fetchLiquidities = useCallback(() => {
-		const queries = Liquidities.map((liquidity) =>
-			runQuery(liquidity.contractAddress, { info: {} })
-		);
-		Promise.all(queries)
-			.then((results) => {
-				const liquidities: TPool[] = results.map((result, index) => {
-					let pool = Number(result.lp_token_supply);
-					pool = isNaN(pool) ? 0 : pool;
+	const fetchLiquidities = useCallback(
+		(account) => {
+			const fetchLiquiditiesInfoQueries = Liquidities.map((liquidity) =>
+				runQuery(liquidity.contractAddress, { info: {} })
+			);
 
-					let token1Reserve = Number(result.token1_reserve);
-					let token2Reserve = Number(result.token2_reserve);
-					token1Reserve = isNaN(token1Reserve) ? 0 : token1Reserve;
-					token2Reserve = isNaN(token2Reserve) ? 0 : token2Reserve;
+			Promise.all(fetchLiquiditiesInfoQueries)
+				.then(async (liquiditiesInfoResult) => {
+					let fetchLPBalanceQueries: any[] = [],
+						fetchRewardQueries: any[] = [];
+					let balances: any[] = [],
+						rewards: any[] = [];
+					let liquidities: TPool[] = liquiditiesInfoResult.map(
+						(liquidityInfo, index) => {
+							let pool = Number(liquidityInfo.lp_token_supply);
+							pool = isNaN(pool) ? 0 : pool;
 
-					return {
-						id: index + 1,
-						token1: Liquidities[index].tokenA,
-						token2: Liquidities[index].tokenB,
-						isVerified: true,
-						apr: "180%",
-						pool,
-						contract: Liquidities[index].contractAddress,
-						lpAddress: result.lp_token_address || "",
-						volume: 18000,
-						token1Reserve,
-						token2Reserve,
-						ratio: token1Reserve ? token2Reserve / token1Reserve : 0,
-					};
-				});
-				dispatch(setLiquidityInfo(liquidities));
-			})
-			.catch((err) => console.log(err));
-	}, [dispatch, runQuery]);
+							let token1Reserve = Number(liquidityInfo.token1_reserve);
+							let token2Reserve = Number(liquidityInfo.token2_reserve);
+							token1Reserve = isNaN(token1Reserve) ? 0 : token1Reserve;
+							token2Reserve = isNaN(token2Reserve) ? 0 : token2Reserve;
+							const lpAddress = liquidityInfo.lp_token_address || "";
+							fetchLPBalanceQueries.push(
+								runQuery(lpAddress, {
+									balance: { address: account?.address },
+								})
+							);
+							const stakingAddress = Liquidities[index].stakingAddress;
+							fetchRewardQueries.push(
+								runQuery(stakingAddress, {
+									staker_info: {
+										staker: account?.address,
+										block_time: Math.floor(Number(new Date()) / 1e3),
+									},
+								})
+							);
+
+							return {
+								id: index + 1,
+								token1: Liquidities[index].tokenA,
+								token2: Liquidities[index].tokenB,
+								isVerified: true,
+								apr: "180%",
+								pool,
+								contract: Liquidities[index].contractAddress,
+								lpAddress,
+								stakingAddress,
+								volume: 18000,
+								token1Reserve,
+								token2Reserve,
+								ratio: token1Reserve ? token2Reserve / token1Reserve : 0,
+							};
+						}
+					);
+					if (account) {
+						await Promise.all(fetchLPBalanceQueries)
+							.then((balanceResult) => (balances = balanceResult))
+							.catch((err1) => console.log(err1));
+						await Promise.all(fetchRewardQueries)
+							.then((rewardResult) => (rewards = rewardResult))
+							.catch((err2) => console.log(err2));
+					}
+					if (balances.length) {
+						for (let index = 0; index < balances.length; index++) {
+							let balance = balances[index]?.balance;
+							balance = Number(balance);
+							balance = isNaN(balance) ? 0 : balance / 1e6;
+							liquidities[index].balance = balance;
+						}
+					}
+					if (rewards.length) {
+						for (let index = 0; index < rewards.length; index++) {
+							let reward = rewards[index]?.pending_reward;
+							reward = Number(reward);
+							reward = isNaN(reward) ? 0 : reward / 1e6;
+							liquidities[index].pendingReward = reward;
+						}
+					}
+					dispatch(setLiquidityInfo(liquidities));
+				})
+				.catch((err) => console.log(err));
+		},
+		[dispatch, runQuery]
+	);
 
 	return {
 		fetchAllNFTs,

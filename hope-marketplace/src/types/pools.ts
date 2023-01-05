@@ -10,10 +10,13 @@ export type TPool = {
 	apr: string;
 	contract: string;
 	lpAddress: string;
+	stakingAddress: string;
 	pool: number;
 	ratio: number;
 	volume?: number;
 	earned?: number;
+	balance?: number;
+	pendingReward?: number;
 };
 
 // export const TempLiquidities: TPool[] = [

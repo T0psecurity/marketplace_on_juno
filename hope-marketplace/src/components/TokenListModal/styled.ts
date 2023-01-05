@@ -12,6 +12,14 @@ export const Wrapper = styled(Modal)`
 	border: 1px solid #02e296;
 	border-radius: 30px;
 	padding: 20px 30px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	@media (max-width: 700px) {
+		width: 60vw;
+	}
+	@media (max-width: 500px) {
+		width: 70vw;
+	}
 `;
 
 export const SearchInputBox = styled.input`
@@ -32,6 +40,8 @@ export const CommonTokensContainer = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	gap: 10px;
+	overflow: auto;
 `;
 
 export const CommonTokenItem = styled.div`
