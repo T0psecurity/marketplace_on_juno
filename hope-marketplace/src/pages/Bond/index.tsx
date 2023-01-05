@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext } from "react";
 import { useWalletManager } from "@noahsaso/cosmodal";
 import { useAppSelector } from "../../app/hooks";
 import ExploreHeader from "../../components/ExploreHeader";
@@ -17,8 +17,6 @@ import { TPool } from "../../types/pools";
 import { getTokenName } from "../../types/tokens";
 import {
 	BondAmountInputer,
-	BondTableControlPanel,
-	BondTableSearchInputer,
 	DetailRowBlock,
 	StyledButton as Button,
 	Wrapper,
@@ -29,13 +27,13 @@ import {
 	WalletType,
 } from "../../constants/BasicTypes";
 import { addSuffix } from "../../util/string";
+import { PoolType } from "../Liquidity/type";
 
 const AutoBondAmounts = [0.25, 0.5, 0.75, 1];
 
 const Bond: React.FC = () => {
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
 	const liquidities = useAppSelector((state) => state.liquidities);
-	const [searchValue, setSearchValue] = useState("");
 	const Columns: TColumns<TPool>[] = [
 		{
 			name: "",
@@ -89,15 +87,6 @@ const Bond: React.FC = () => {
 		CosmostationWalletContext
 	);
 
-	const searchedLiquidities = useMemo(() => {
-		return liquidities.filter(
-			(liquidity) =>
-				!searchValue ||
-				liquidity.token1.toLowerCase().includes(searchValue.toLowerCase()) ||
-				liquidity.token2.toLowerCase().includes(searchValue.toLowerCase())
-		);
-	}, [searchValue, liquidities]);
-
 	const handleClickConnectWalletButton = () => {
 		const ConnectedWalletType = localStorage.getItem(
 			ConnectedWalletTypeLocalStorageKey
@@ -111,11 +100,6 @@ const Bond: React.FC = () => {
 			);
 			connectKeplr();
 		}
-	};
-
-	const handleChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { value } = e.target;
-		setSearchValue(value);
 	};
 
 	return (
@@ -142,15 +126,8 @@ const Bond: React.FC = () => {
 						Bond LP Token to earn
 					</Text>
 				</Text>
-				<BondTableControlPanel>
-					<BondTableSearchInputer
-						placeholder="Search"
-						value={searchValue}
-						onChange={handleChangeSearchValue}
-					/>
-				</BondTableControlPanel>
 				<Table<TPool>
-					data={searchedLiquidities}
+					data={liquidities}
 					columns={Columns}
 					renderDetailRow={(rowData) => (
 						<Flex
@@ -271,6 +248,27 @@ const Bond: React.FC = () => {
 							</DetailRowBlock>
 						</Flex>
 					)}
+					option={{
+						emptyString: "No Liquidities",
+						tab: {
+							tabs: (Object.keys(PoolType) as Array<keyof typeof PoolType>).map(
+								(key) => PoolType[key]
+							),
+						},
+						search: {
+							onChange: (searchValue, liquidities) =>
+								liquidities.filter(
+									(liquidity) =>
+										!searchValue ||
+										liquidity.token1
+											.toLowerCase()
+											.includes(searchValue.toLowerCase()) ||
+										liquidity.token2
+											.toLowerCase()
+											.includes(searchValue.toLowerCase())
+								),
+						},
+					}}
 				/>
 			</Wrapper>
 		</PageWrapper>

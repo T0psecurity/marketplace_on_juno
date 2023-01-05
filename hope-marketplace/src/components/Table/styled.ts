@@ -1,7 +1,9 @@
 import styled, { css, keyframes } from "styled-components";
 import Text from "../Text";
 
-export const Wrapper = styled.div``;
+export const Wrapper = styled.div`
+	width: 100%;
+`;
 
 export const TableControlPanel = styled.div`
 	display: flex;
