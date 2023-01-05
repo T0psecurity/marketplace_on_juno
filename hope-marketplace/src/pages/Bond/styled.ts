@@ -19,9 +19,8 @@ export const DetailRowBlock = styled.div`
 `;
 
 export const StyledButton = styled(Button)<{ colored?: boolean }>`
-	width: max-content;
+	width: 150px;
 	height: 40px;
-	padding: 0 50px;
 	background-color: ${({ colored }) =>
 		colored ? "#02e296" : "rgba(2, 226, 150, 0.12)"};
 	border: 1px solid #787878;
@@ -29,10 +28,12 @@ export const StyledButton = styled(Button)<{ colored?: boolean }>`
 	border-radius: 10px;
 	color: ${({ colored }) => (colored ? "white" : "black")};
 	margin: 0;
+	font-size: 16px;
+	text-align: center;
 `;
 
 export const BondAmountInputer = styled.input`
-	width: 60px;
+	width: 50%;
 	height: 25px;
 	background-color: white;
 	border: 1px solid #02e296;

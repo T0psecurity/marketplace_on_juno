@@ -26,7 +26,9 @@ const Table = <T extends object>({
 	const [sortDirections, setSortDirections] = useState<TSortDirection>(
 		{} as TSortDirection
 	);
-	const [selectedTab, setSelectedTab] = useState<string>("");
+	const [selectedTab, setSelectedTab] = useState<string>(
+		option?.tab?.tabs[0] || ""
+	);
 	const [searchValue, setSearchValue] = useState<string>("");
 
 	const handleClickSortDirectionButton = (columnName: string) => {
