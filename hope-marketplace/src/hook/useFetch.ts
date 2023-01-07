@@ -529,13 +529,15 @@ const useFetch = () => {
 			Promise.all(fetchLiquiditiesInfoQueries)
 				.then(async (liquiditiesInfoResult) => {
 					let fetchLPBalanceQueries: any[] = [],
-						fetchRewardQueries: any[] = [];
+						fetchRewardQueries: any[] = [],
+						fetchConfigQueries: any[] = [];
 					let balances: any[] = [],
-						rewards: any[] = [];
+						rewards: any[] = [],
+						configs: any[] = [];
 					let liquidities: TPool[] = liquiditiesInfoResult.map(
 						(liquidityInfo, index) => {
 							let pool = Number(liquidityInfo.lp_token_supply);
-							pool = isNaN(pool) ? 0 : pool;
+							pool = isNaN(pool) ? 0 : pool / 1e6;
 
 							let token1Reserve = Number(liquidityInfo.token1_reserve);
 							let token2Reserve = Number(liquidityInfo.token2_reserve);
@@ -556,6 +558,7 @@ const useFetch = () => {
 									},
 								})
 							);
+							fetchConfigQueries.push(runQuery(stakingAddress, { config: {} }));
 
 							return {
 								id: index + 1,
@@ -574,6 +577,16 @@ const useFetch = () => {
 							};
 						}
 					);
+					await Promise.all(fetchConfigQueries)
+						.then((configResult) => (configs = configResult))
+						.catch((err2) => console.log(err2));
+					for (let index = 0; index < configs.length; index++) {
+						let config = balances[index];
+						liquidities[index].config = {
+							lockDuration: (config?.lock_duration || 0) * 1e3,
+						};
+					}
+
 					if (account) {
 						await Promise.all(fetchLPBalanceQueries)
 							.then((balanceResult) => (balances = balanceResult))
@@ -595,7 +608,16 @@ const useFetch = () => {
 							let reward = rewards[index]?.pending_reward;
 							reward = Number(reward);
 							reward = isNaN(reward) ? 0 : reward / 1e6;
-							liquidities[index].pendingReward = reward;
+
+							let bonded = rewards[index]?.bond_amount;
+							bonded = Number(bonded);
+							bonded = isNaN(bonded) ? 0 : bonded / 1e6;
+							liquidities[index].bonded = bonded;
+
+							let totalEarned = rewards[index]?.bond_amount;
+							totalEarned = Number(totalEarned);
+							totalEarned = isNaN(totalEarned) ? 0 : totalEarned / 1e6;
+							liquidities[index].totalEarned = totalEarned;
 						}
 					}
 					dispatch(setLiquidityInfo(liquidities));

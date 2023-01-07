@@ -51,7 +51,12 @@ const Bond: React.FC = () => {
 			title: "Verified",
 			render: (value, data) => (value ? <VerifiedBadge /> : <CancelIcon />),
 		},
-		{ name: "earned", title: "Earned", type: ColumnTypes.NUMBER, sort: true },
+		{
+			name: "totalEarned",
+			title: "Earned",
+			type: ColumnTypes.NUMBER,
+			sort: true,
+		},
 		{ name: "apr", title: "APR Rewards", sort: true },
 		{ name: "pool", title: "Liquidity Pool", sort: true },
 		{
