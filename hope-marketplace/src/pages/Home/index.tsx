@@ -345,7 +345,8 @@ const Home: React.FC = () => {
 							<Button
 								colored
 								// onClick={NotifyComingSoon}
-								disabled
+								onClick={() => history.push("/swap")}
+								// disabled
 							>
 								Swap Now
 							</Button>
@@ -494,13 +495,15 @@ const Home: React.FC = () => {
 						<Button
 							colored
 							// onClick={NotifyComingSoon}
-							disabled
+							// disabled
+							onClick={() => history.push(`/liquidity`)}
 						>
 							Liquidity
 						</Button>
 						<Button
 							// onClick={NotifyComingSoon}
-							disabled
+							// disabled
+							onClick={() => history.push(`/bond`)}
 						>
 							Stake
 						</Button>
