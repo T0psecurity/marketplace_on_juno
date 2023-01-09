@@ -12,7 +12,7 @@ export const TableControlPanel = styled.div`
 	margin: 20px 0;
 `;
 
-export const TableTabContainer = styled.div<{ isRight: boolean }>`
+export const TableTabContainer = styled.div<{ left: number; width: number }>`
 	display: flex;
 	align-items: center;
 	position: relative;
@@ -21,18 +21,12 @@ export const TableTabContainer = styled.div<{ isRight: boolean }>`
 		position: absolute;
 		background: #02e296;
 		height: 100%;
-		width: 165px;
 		border-radius: 15px;
 		transition: all 0.5s;
-		${({ isRight }) =>
-			isRight
-				? css`
-						left: 143px;
-						width: 138px;
-				  `
-				: css`
-						left: 0;
-				  `}
+		${({ left, width }) => css`
+			left: ${left}px;
+			width: ${width}px;
+		`}
 	}
 `;
 
@@ -46,6 +40,8 @@ export const TableTab = styled(Text)<{ checked: boolean }>`
 	text-align: center;
 	color: ${({ checked }) => (checked ? "white" : "#7e7e7e")};
 	background: rgba(15, 206, 137, 0.4);
+	align-self: stretch;
+	align-items: center;
 	/* width: 165px; */
 	&:last-child {
 		left: -20px;
@@ -83,6 +79,7 @@ export const TableWrapper = styled.div<{
 	display: grid;
 	grid-template-columns: ${({ layout, columnsCount }) =>
 		layout || `repeat(${columnsCount}, auto)`};
+	overflow: auto;
 `;
 
 export const TableHeaderRow = styled.div`
@@ -106,7 +103,9 @@ export const EmptyRow = styled.div<{ columnsCount: number }>`
 
 export const SortHeaderIcon = styled.i<{ visible?: string }>`
 	position: absolute;
-	right: -15px;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
 	opacity: ${({ visible }) => (visible ? 1 : 0)};
 	transition: opacity 0.5s;
 `;
@@ -140,6 +139,7 @@ export const TableHeader = styled.div`
 
 export const TableHeaderContent = styled.div`
 	position: relative;
+	padding: 0 15px;
 `;
 
 export const TableContent = styled.div`

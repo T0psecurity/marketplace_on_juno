@@ -18,7 +18,10 @@ export const LiquidityList = styled.div`
 	background: white;
 	border: 1px solid #02e296;
 	border-radius: 15px;
-	width: 430px;
+	width: 420px;
+	@media (max-width: 600px) {
+		width: 380px;
+	}
 `;
 
 export const ListHeader = styled.div`

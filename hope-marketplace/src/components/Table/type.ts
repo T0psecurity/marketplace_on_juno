@@ -1,3 +1,4 @@
+import { BasicProps } from "../../constants/BasicTypes";
 type TTableOption<T extends object> = {
 	emptyString?: string;
 	tab?: {
@@ -47,4 +48,8 @@ export enum ColumnTypes {
 	NUMBER,
 	STRING,
 	DATE,
+}
+
+export interface ITableTab extends BasicProps {
+	tabs: string[];
 }
