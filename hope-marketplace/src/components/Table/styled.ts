@@ -148,6 +148,7 @@ export const TableContent = styled.div`
 	justify-content: center;
 	width: 100%;
 	height: 95px;
+	padding: 10px;
 	background: white;
 	color: black;
 	cursor: pointer;

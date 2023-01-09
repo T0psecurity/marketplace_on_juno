@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import ReactSelect, { ControlProps, components } from "react-select";
 import { coins } from "@cosmjs/proto-signing";
 import { useAppSelector } from "../../app/hooks";
@@ -34,6 +35,13 @@ const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 	const [pool, setPool] = useState<TPool>(liquidities[0]);
 	const [addAmount, setAddAmount] = useState<TAddAmount>({} as TAddAmount);
 	const { createExecuteMessage, getExecuteClient } = useContract();
+	const { search } = useLocation();
+	const poolId = new URLSearchParams(search).get("poolId");
+
+	useEffect(() => {
+		const targetPool = liquidities.find((pool) => pool.id === Number(poolId));
+		if (targetPool) setPool(targetPool);
+	}, [liquidities, poolId]);
 
 	const handleChangePool = (item: any) => {
 		setPool(item);

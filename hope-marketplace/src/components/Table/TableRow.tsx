@@ -45,12 +45,16 @@ const Row = <T extends object>({
 			<TableRowMainContent onClick={() => handleClickRow()}>
 				{columns.map((column, columnIndex) => {
 					const defaultValue = column.type === ColumnTypes.NUMBER ? 0 : "";
+					const format = column.format || ((value, data) => "" + value);
 					const value = column.name
 						? data[column.name] || defaultValue
 						: defaultValue;
+					const displayValue = column.name
+						? format(data[column.name], data)
+						: defaultValue;
 					return (
 						<TableContent key={columnIndex}>
-							{column.render ? column.render(value, data) : value}
+							{column.render ? column.render(value, data) : displayValue}
 						</TableContent>
 					);
 				})}

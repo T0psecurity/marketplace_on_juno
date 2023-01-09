@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { useWalletManager } from "@noahsaso/cosmodal";
 import { useAppSelector } from "../../app/hooks";
 import Flex from "../../components/Flex";
@@ -28,6 +29,7 @@ const BondTableDetailRow: React.FC<{ rowData: TPool }> = ({ rowData }) => {
 	);
 	const { runExecute } = useContract();
 	const { refresh } = useRefresh();
+	const history = useHistory();
 
 	const handleClickConnectWalletButton = () => {
 		const ConnectedWalletType = localStorage.getItem(
@@ -77,16 +79,34 @@ const BondTableDetailRow: React.FC<{ rowData: TPool }> = ({ rowData }) => {
 				backgroundColor="white"
 			>
 				<Flex alignItems="flex-start" flexDirection="column" gap="10px">
-					<Text color="black" gap="30px" alignItems="center" cursor="pointer">
+					<Text
+						color="black"
+						gap="5px 30px"
+						alignItems="center"
+						cursor="pointer"
+						onClick={() =>
+							history.push(`/liquidity?type=add&poolId=${rowData.id}`)
+						}
+					>
 						{`Get ${getTokenName(rowData.token1)}-${getTokenName(
 							rowData.token2
 						)} LP`}{" "}
 						<ExternalLinkIcon />
 					</Text>
-					<Text color="black" gap="30px" alignItems="center" cursor="pointer">
+					<Text
+						color="black"
+						gap="5px 30px"
+						alignItems="center"
+						cursor="pointer"
+					>
 						View Contract <ExternalLinkIcon />
 					</Text>
-					<Text color="black" gap="30px" alignItems="center" cursor="pointer">
+					<Text
+						color="black"
+						gap="5px 30px"
+						alignItems="center"
+						cursor="pointer"
+					>
 						See Pair Info <ExternalLinkIcon />
 					</Text>
 				</Flex>

@@ -35,6 +35,7 @@ export type TColumns<T extends object> = {
 		type?: ColumnTypes;
 		title?: string;
 		sort?: boolean | ((data1: T, data2: T, direction: "up" | "down") => number);
+		format?: (value: T[K], data: T) => string | number;
 		render?: (value: T[K] | "" | 0, data: T) => JSX.Element | null;
 	};
 }[keyof T];

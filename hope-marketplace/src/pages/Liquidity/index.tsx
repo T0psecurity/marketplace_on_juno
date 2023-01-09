@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useWalletManager } from "@noahsaso/cosmodal";
 import { useAppSelector } from "../../app/hooks";
 import ExploreHeader from "../../components/ExploreHeader";
@@ -43,6 +44,12 @@ const Liquidity: React.FC = () => {
 	const { connect: connectCosmostation } = useContext(
 		CosmostationWalletContext
 	);
+	const { search } = useLocation();
+	const type = new URLSearchParams(search).get("type");
+
+	useEffect(() => {
+		if (type === "add") setModalType(ModalType.ADD);
+	}, [type]);
 
 	const Columns: TColumns<TPool>[] = [
 		{
@@ -80,7 +87,12 @@ const Liquidity: React.FC = () => {
 		},
 		{ name: "volume", title: "Volume", type: ColumnTypes.NUMBER, sort: true },
 		{ name: "apr", title: "APR Rewards", sort: true },
-		{ name: "pool", title: "Liquidity Pool", sort: true },
+		{
+			name: "pool",
+			title: "Liquidity Pool",
+			sort: true,
+			format: (value) => addSuffix(value),
+		},
 		{
 			name: "ratio",
 			title: "Value",
