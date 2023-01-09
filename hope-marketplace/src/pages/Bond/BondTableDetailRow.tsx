@@ -98,6 +98,11 @@ const BondTableDetailRow: React.FC<{ rowData: TPool }> = ({ rowData }) => {
 						gap="5px 30px"
 						alignItems="center"
 						cursor="pointer"
+						onClick={() =>
+							window.open(
+								`https://mintscan.io/juno/account/${rowData.contract}`
+							)
+						}
 					>
 						View Contract <ExternalLinkIcon />
 					</Text>
@@ -106,6 +111,9 @@ const BondTableDetailRow: React.FC<{ rowData: TPool }> = ({ rowData }) => {
 						gap="5px 30px"
 						alignItems="center"
 						cursor="pointer"
+						onClick={() =>
+							history.push(`/liquidity?type=add&poolId=${rowData.id}`)
+						}
 					>
 						See Pair Info <ExternalLinkIcon />
 					</Text>
