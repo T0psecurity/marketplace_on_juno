@@ -84,7 +84,7 @@ const Bond: React.FC = () => {
 				tabs={[
 					{ title: "Bond", url: "/bond" },
 					{ title: "Stake", url: "/stake" },
-					{ title: "Airdrop", url: "/airdrop" },
+					// { title: "Airdrop", url: "/airdrop" },
 				]}
 			/>
 			<Wrapper>
@@ -104,6 +104,7 @@ const Bond: React.FC = () => {
 				<Table<TPool>
 					data={liquidities}
 					columns={Columns}
+					defaultExpanded={(rowData) => rowData.id === 1}
 					renderDetailRow={(rowData) => (
 						<BondTableDetailRow rowData={rowData} />
 					)}

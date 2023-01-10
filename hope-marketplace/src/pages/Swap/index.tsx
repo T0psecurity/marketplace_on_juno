@@ -13,7 +13,7 @@ import TokenListModal from "../../components/TokenListModal";
 import { TokenStatus, TokenType } from "../../types/tokens";
 import {
 	AmountInputer,
-	ChartArea,
+	// ChartArea,
 	MainPart,
 	SelectMaxButton,
 	SlippageItem,
@@ -440,7 +440,7 @@ const Swap: React.FC = () => {
 						</SwapAreaBody>
 					</SwapArea>
 				</MainPart>
-				<ChartArea />
+				{/* <ChartArea /> */}
 				<TokenListModal
 					isOpen={showTokenListModal}
 					onClose={() => setShowTokenListModal(false)}

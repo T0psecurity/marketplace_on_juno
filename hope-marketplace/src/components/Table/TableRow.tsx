@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	TableContent,
 	TableDetailRow,
@@ -14,10 +14,15 @@ const Row = <T extends object>({
 	columns,
 	index,
 	data,
+	defaultExpanded,
 }: TRow<T>) => {
 	const [expanded, setExpanded] = useState<boolean | undefined>(undefined);
 	const [finishedExpanding, setFinishedExpanding] = useState<boolean>(false);
 	const [element, setElement] = useState<HTMLDivElement | null>(null);
+
+	useEffect(() => {
+		if (defaultExpanded) setExpanded(defaultExpanded);
+	}, [defaultExpanded]);
 
 	const handleClickRow = () => {
 		if (!renderDetailRow) {

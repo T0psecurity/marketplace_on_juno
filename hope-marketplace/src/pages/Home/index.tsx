@@ -309,11 +309,7 @@ const Home: React.FC = () => {
 						Cosmos with the ability to distribute tokens and raise liquidity.
 					</Text>
 					<ButtonContainer>
-						<Button
-							colored
-							disabled
-							// onClick={NotifyComingSoon}
-						>
+						<Button colored onClick={() => history.push("/ido")}>
 							Explore
 						</Button>
 						<Button

@@ -147,7 +147,7 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 				/>
 				{!isMobile && (
 					<Text
-						color={container ? "white" : "black"}
+						color={container ? undefined : "black"}
 						fontSize={isMobile ? "12px" : "18px"}
 					>
 						{getTokenName(option.value)}

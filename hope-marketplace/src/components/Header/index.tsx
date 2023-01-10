@@ -79,12 +79,12 @@ const HeaderLinks = [
 		children: [
 			{
 				title: "Swap",
-				url: "soon",
+				url: "/swap",
 				icon: SwapIcon,
 			},
 			{
 				title: "Liquidity",
-				url: "soon",
+				url: "/liquidity",
 				icon: SwapIcon,
 			},
 		],

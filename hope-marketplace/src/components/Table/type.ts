@@ -15,6 +15,7 @@ export interface TTable<T extends object> {
 	columns: TColumns<T>[];
 	layout?: string;
 	option?: TTableOption<T>;
+	defaultExpanded?: (data: T) => boolean;
 	renderDetailRow?: TRenderDetailRow<T>;
 }
 
@@ -22,6 +23,7 @@ export interface TRow<T extends object> {
 	data: T;
 	renderDetailRow?: TRenderDetailRow<T>;
 	columns: TColumns<T>[];
+	defaultExpanded?: boolean;
 	index: number;
 }
 

@@ -28,7 +28,10 @@ import { toMicroAmount } from "../../util/coins";
 import { ChainConfigs } from "../../constants/ChainTypes";
 import { toast } from "react-toastify";
 
-const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
+const AddLiquidity: React.FC<IBasicModal> = ({
+	selectedPool,
+	onChangeModalType,
+}) => {
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
 	const liquidities = useAppSelector((state) => state.liquidities);
 	const [isPending, setIsPending] = useState(false);
@@ -40,8 +43,18 @@ const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 
 	useEffect(() => {
 		const targetPool = liquidities.find((pool) => pool.id === Number(poolId));
-		if (targetPool) setPool(targetPool);
+		if (targetPool) {
+			setPool(targetPool);
+			setAddAmount({} as TAddAmount);
+		}
 	}, [liquidities, poolId]);
+
+	useEffect(() => {
+		if (selectedPool) {
+			setPool(selectedPool);
+			setAddAmount({} as TAddAmount);
+		}
+	}, [selectedPool]);
 
 	const handleChangePool = (item: any) => {
 		setPool(item);

@@ -13,16 +13,23 @@ import { CosmostationWalletContext } from "../../context/Wallet";
 import {
 	ConnectWalletButton,
 	LiquiditiesContainer,
-	LiquidityHeader,
+	// LiquidityHeader,
 	LiquidityList,
 	ListBody,
 	ListHeader,
 	MessageContainer,
 	Wrapper,
 } from "./styled";
-import TokenListModal from "../../components/TokenListModal";
-import { getTokenName, TokenType } from "../../types/tokens";
-import { CancelIcon, VerifiedBadge } from "../../components/SvgIcons";
+// import TokenListModal from "../../components/TokenListModal";
+import {
+	getTokenName,
+	//  TokenType
+} from "../../types/tokens";
+import {
+	CancelIcon,
+	PlusInGreenCircleIcon,
+	VerifiedBadge,
+} from "../../components/SvgIcons";
 import { addSuffix } from "../../util/string";
 import PoolImage from "../../components/PoolImage";
 import { TPool } from "../../types/pools";
@@ -34,7 +41,11 @@ import CreateLiquidity from "./CreateLiquidity";
 import RemoveLiquidity from "./RemoveLiquidity";
 
 const Liquidity: React.FC = () => {
-	const [showTokenListModal, setShowTokenListModal] = useState(false);
+	// const [showTokenListModal, setShowTokenListModal] = useState(false);
+	const [wrapperElement, setWrapperElement] = useState<HTMLDivElement | null>(
+		null
+	);
+	const [addingPool, setAddingPool] = useState<TPool | undefined>();
 
 	const [modalType, setModalType] = useState<ModalType>(ModalType.ADD);
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
@@ -103,6 +114,13 @@ const Liquidity: React.FC = () => {
 				)}${getTokenName(data.token2)}`}</Text>
 			),
 		},
+		{
+			name: "",
+			title: "",
+			render: (value: any, data: TPool) => (
+				<PlusInGreenCircleIcon onClick={() => handleClickPlusButton(data)} />
+			),
+		},
 	];
 
 	const handleClickConnectWalletButton = () => {
@@ -116,9 +134,22 @@ const Liquidity: React.FC = () => {
 		}
 	};
 
-	const handleSelectToken = (token: TokenType) => {
-		console.log("selected token", token);
+	const handleClickPlusButton = (pool: TPool) => {
+		setModalType(ModalType.ADD);
+		setAddingPool(pool);
+		if (wrapperElement) {
+			const headerElement = document.getElementById("header");
+			const headerHeight = headerElement?.clientHeight || 0;
+			// wrapperElement.style.scrollMargin = `${headerHeight}px`;
+			wrapperElement.style.cssText = `scroll-margin-top: ${headerHeight}px`;
+			wrapperElement.scrollIntoView({ behavior: "smooth" });
+			// window.scrollTo(0, 0);
+		}
 	};
+
+	// const handleSelectToken = (token: TokenType) => {
+	// 	console.log("debug selected token", token);
+	// };
 
 	return (
 		<PageWrapper>
@@ -129,8 +160,8 @@ const Liquidity: React.FC = () => {
 					{ title: "Liquidity", url: "/liquidity" },
 				]}
 			/>
-			<Wrapper>
-				<LiquidityHeader>
+			<Wrapper ref={(node) => setWrapperElement(node)}>
+				{/* <LiquidityHeader>
 					<Text bold fontSize="35px" justifyContent="flex-start">
 						Liquidity
 					</Text>
@@ -142,7 +173,7 @@ const Liquidity: React.FC = () => {
 					>
 						Add your liquidity
 					</Text>
-				</LiquidityHeader>
+				</LiquidityHeader> */}
 				{!account && (
 					<LiquidityList>
 						<ListHeader>
@@ -169,7 +200,10 @@ const Liquidity: React.FC = () => {
 					</LiquidityList>
 				)}
 				{account && modalType === ModalType.ADD && (
-					<AddLiquidity onChangeModalType={setModalType} />
+					<AddLiquidity
+						onChangeModalType={setModalType}
+						selectedPool={addingPool}
+					/>
 				)}
 				{account && modalType === ModalType.CREATE && (
 					<CreateLiquidity onChangeModalType={setModalType} />
@@ -257,11 +291,11 @@ const Liquidity: React.FC = () => {
 						</LiquiditiesTableBody>
 					</LiquiditiesTable> */}
 				</LiquiditiesContainer>
-				<TokenListModal
+				{/* <TokenListModal
 					isOpen={showTokenListModal}
 					onClose={() => setShowTokenListModal(false)}
 					onSelectToken={handleSelectToken}
-				/>
+				/> */}
 			</Wrapper>
 		</PageWrapper>
 	);
