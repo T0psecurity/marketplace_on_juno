@@ -15,6 +15,7 @@ export const MainPart = styled.div`
 	justify-content: center;
 	padding: 10px;
 	box-sizing: border-box;
+	margin-bottom: 30px;
 `;
 
 export const ChartArea = styled.div`

@@ -407,6 +407,20 @@ export const VestingDetailContainer = styled.div`
 	border: 1px solid #02e296;
 `;
 
+export const VestingDetailRow = styled.div`
+	/* display: flex;
+	justify-content: space-between;
+	align-items: center;
+	&:first-child {
+		border-bottom: 1px solid #02e296;
+	}
+	& > div {
+		width: 33%;
+		height: 100%;
+	} */
+	display: contents;
+`;
+
 export const VestingDetailItem = styled(Text)<{ border?: boolean }>`
 	padding: 10px;
 	font-size: 14px;
