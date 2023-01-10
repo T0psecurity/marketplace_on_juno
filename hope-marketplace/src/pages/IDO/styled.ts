@@ -341,7 +341,10 @@ export const ProgressBar = styled.div<{ value: number }>`
 	}
 `;
 
-export const ProjectDetail = styled.div``;
+export const ProjectDetail = styled.div`
+	/* width: 100%;
+	overflow: auto; */
+`;
 
 export const ProjectDetailHeader = styled.div`
 	width: 100%;
@@ -421,9 +424,16 @@ export const VestingDetailRow = styled.div`
 	display: contents;
 `;
 
-export const VestingDetailItem = styled(Text)<{ border?: boolean }>`
+export const VestingDetailItem = styled(Text)<{
+	border?: boolean;
+}>`
 	padding: 10px;
 	font-size: 14px;
+	/* height: 100%; */
+	height: 55px;
+	box-sizing: border-box;
+	align-items: center;
+
 	${({ border }) =>
 		border &&
 		css`
@@ -434,8 +444,10 @@ export const VestingDetailItem = styled(Text)<{ border?: boolean }>`
 export const VestingDetailClaimed = styled(Text)<{ percent: string }>`
 	border-left: 1px solid #02e296;
 	background: #d2faec;
+	box-sizing: border-box;
 	width: 100%;
-	height: 100%;
+	/* height: 100%; */
+	height: 55px;
 	align-items: center;
 	& > span {
 		z-index: 1;
