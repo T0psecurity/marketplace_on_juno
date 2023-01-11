@@ -13,6 +13,7 @@ export const TokenCoingeckoIds: { [key in TokenType]: string } = {
 	[TokenType.ATOM]: "cosmos",
 	[TokenType.AXELAR]: "axlusdc",
 	[TokenType.HOPERS]: "",
+	[TokenType.PUNK]: "",
 };
 
 const CoinGeckoAPIKey = "CG-CV5rXz5JpbGcc36wL76u5gnd";
@@ -25,15 +26,12 @@ export const DEFAULT_COLLECTION_STATE = {
 	total: 0,
 };
 
-let initialState: TokenPriceType = {
-	[TokenType.HOPE]: null,
-	[TokenType.JUNO]: null,
-	[TokenType.RAW]: null,
-	[TokenType.NETA]: null,
-	[TokenType.ATOM]: null,
-	[TokenType.AXELAR]: null,
-	[TokenType.HOPERS]: null,
-};
+const initialState: TokenPriceType = (
+	Object.keys(TokenType) as Array<keyof typeof TokenType>
+).reduce(
+	(result, key) => ({ ...result, [TokenType[key]]: null }),
+	{}
+) as TokenPriceType;
 
 export enum TokenHistoryPeriod {
 	"DAILY",
