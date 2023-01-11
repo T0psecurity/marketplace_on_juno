@@ -44,4 +44,9 @@ export const Wrapper = styled.div<TFlex>`
 		css`
 			background-color: ${backgroundColor};
 		`}
+	${({ flexWrap }) =>
+		flexWrap &&
+		css`
+			flex-wrap: ${flexWrap};
+		`}
 `;

@@ -582,7 +582,6 @@ const useFetch = () => {
 						.catch((err2) => console.log(err2));
 					for (let index = 0; index < configs.length; index++) {
 						let config = configs[index];
-						console.log("debug", index, liquidities[index], config);
 						liquidities[index].config = {
 							lockDuration: (config?.lock_duration || 0) * 1e3,
 						};

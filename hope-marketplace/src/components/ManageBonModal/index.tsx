@@ -20,6 +20,8 @@ import {
 	StyledButton as Button,
 	UnbondHistoryContainer,
 	UnbondHistoryTable,
+	UnbondingPeriodContainer,
+	UnbondingPeriodItem,
 	UnbondItem,
 } from "./styled";
 import { useAppSelector } from "../../app/hooks";
@@ -33,6 +35,12 @@ enum ModalTabs {
 	BOND = "Bond",
 	UNBOND = "Unbond",
 }
+
+const UnbondingPeriods = [
+	{ day: 1, available: false },
+	{ day: 7, available: false },
+	{ day: 14, available: true },
+];
 
 const AutoBondAmounts = [0.25, 0.5, 0.75, 1];
 
@@ -200,23 +208,38 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 				</Text>
 			</ModalHeader>
 			<ModalBody>
-				<ModalTabContainer isRight={selectedTab !== ModalTabs.BOND}>
-					{(Object.keys(ModalTabs) as Array<keyof typeof ModalTabs>).map(
-						(key, index) => (
-							<ModalTab
-								key={index}
-								checked={selectedTab === ModalTabs[key]}
-								onClick={() =>
-									!isPendingAction &&
-									!isPendingRedeem &&
-									setSelectedTab(ModalTabs[key])
-								}
-							>
-								{ModalTabs[key]}
-							</ModalTab>
-						)
-					)}
-				</ModalTabContainer>
+				<Flex
+					width="100%"
+					flexWrap="wrap"
+					gap="10px"
+					justifyContent="space-evenly"
+					alignItems="center"
+				>
+					<ModalTabContainer isRight={selectedTab !== ModalTabs.BOND}>
+						{(Object.keys(ModalTabs) as Array<keyof typeof ModalTabs>).map(
+							(key, index) => (
+								<ModalTab
+									key={index}
+									checked={selectedTab === ModalTabs[key]}
+									onClick={() =>
+										!isPendingAction &&
+										!isPendingRedeem &&
+										setSelectedTab(ModalTabs[key])
+									}
+								>
+									{ModalTabs[key]}
+								</ModalTab>
+							)
+						)}
+					</ModalTabContainer>
+					<UnbondingPeriodContainer>
+						{UnbondingPeriods.map((period, index) => (
+							<UnbondingPeriodItem key={index} disabled={!period.available}>{`${
+								period.day
+							} ${period.day > 1 ? "days" : "day"}`}</UnbondingPeriodItem>
+						))}
+					</UnbondingPeriodContainer>
+				</Flex>
 				<Text color="black" bold fontSize="18px" justifyContent="flex-start">
 					{selectedTab === ModalTabs.BOND
 						? `Available LP: ${addSuffix(

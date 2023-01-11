@@ -90,6 +90,35 @@ export const ModalTab = styled(Text)<{ checked: boolean }>`
 	}
 `;
 
+export const UnbondingPeriodContainer = styled(Flex)`
+	justify-content: center;
+	align-items: center;
+	gap: 5px;
+	margin: 10px 0;
+	position: relative;
+	&::before {
+		content: "Unbonding Period";
+		position: absolute;
+		top: 0;
+		left: 50%;
+		color: #aaa;
+		width: max-content;
+		font-size: 14px;
+		transform: translate(-50%, -100%);
+	}
+`;
+
+export const UnbondingPeriodItem = styled.div<{ disabled: boolean }>`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	background-color: ${({ disabled }) => (disabled ? "#d9d9d9" : "#64d797")};
+	border-radius: 15px;
+	color: ${({ disabled }) => (disabled ? "#aaa" : "white")};
+	cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+`;
+
 export const UnbondHistoryContainer = styled.div``;
 
 export const UnbondHistoryTable = styled.div`
