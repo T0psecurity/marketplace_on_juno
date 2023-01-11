@@ -212,10 +212,9 @@ export const SelectAddPoolItem = styled.div<{ checked?: boolean }>`
 		checked &&
 		css`
 			background-color: rgba(2, 226, 150, 0.5);
-		`}
-	&:hover {
+		`}/* &:hover {
 		background-color: rgba(2, 226, 150, 0.15);
-	}
+	} */
 `;
 
 export const SelectPoolContainer = styled.div`
