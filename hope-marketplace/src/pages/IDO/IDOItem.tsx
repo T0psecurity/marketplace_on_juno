@@ -39,7 +39,7 @@ interface IDOItemProps extends BasicProps {
 
 const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
 	const { idoStatus } = useIDOStatus(idoInfo.id);
-	// console.log("idoStatus: ", idoStatus, idoInfo);
+	// console.log("debug idoStatus: ", idoStatus, idoInfo);
 	const history = useHistory();
 	const { isMobile } = useWindowSize(600);
 
@@ -99,7 +99,7 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
 						<TokenSoldStatusItem>
 							<Text>Number of Tokens in Presale</Text>
 							{/* <Text bold>{`${idoStatus.total} ${idoInfo.symbol}`}</Text> */}
-							<Text bold>{`000000 ${idoInfo.symbol}`}</Text>
+							<Text bold>{`${idoStatus.total} ${idoInfo.symbol}`}</Text>
 						</TokenSoldStatusItem>
 						<TokenSoldStatusItem>
 							<Text>Percentage Sold</Text>
