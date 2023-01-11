@@ -596,7 +596,9 @@ const useFetch = () => {
 						const hopersReserve = liquidities[index].token1Reserve;
 						if (hopersReserve) {
 							const apr = (100 * totalSupplyInPresale) / (2 * hopersReserve);
-							liquidities[index].apr = `${apr}%`;
+							liquidities[index].apr = `${apr.toLocaleString(undefined, {
+								maximumFractionDigits: 2,
+							})}%`;
 						}
 					}
 
