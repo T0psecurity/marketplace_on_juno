@@ -11,9 +11,9 @@ export const TokenCoingeckoIds: { [key in TokenType]: string } = {
 	[TokenType.RAW]: "", // junoswap-raw-dao
 	[TokenType.NETA]: "neta",
 	[TokenType.ATOM]: "cosmos",
-	[TokenType.AXELAR]: "axlusdc",
+	[TokenType.USDC]: "axlusdc",
 	[TokenType.HOPERS]: "",
-	[TokenType.PUNK]: "",
+	[TokenType.PUNK]: "juno-punk",
 };
 
 const CoinGeckoAPIKey = "CG-CV5rXz5JpbGcc36wL76u5gnd";

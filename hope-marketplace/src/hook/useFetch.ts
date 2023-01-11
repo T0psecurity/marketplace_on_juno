@@ -565,7 +565,7 @@ const useFetch = () => {
 								token1: Liquidities[index].tokenA,
 								token2: Liquidities[index].tokenB,
 								isVerified: true,
-								apr: "180%",
+								apr: "",
 								pool,
 								contract: Liquidities[index].contractAddress,
 								lpAddress,
@@ -581,10 +581,24 @@ const useFetch = () => {
 						.then((configResult) => (configs = configResult))
 						.catch((err2) => console.log(err2));
 					for (let index = 0; index < configs.length; index++) {
-						let config = balances[index];
+						let config = configs[index];
+						console.log("debug", index, liquidities[index], config);
 						liquidities[index].config = {
 							lockDuration: (config?.lock_duration || 0) * 1e3,
 						};
+
+						let totalSupplyInPresale =
+							config?.distribution_schedule?.[0]?.[2] || 0;
+						totalSupplyInPresale = Number(totalSupplyInPresale);
+						totalSupplyInPresale = isNaN(totalSupplyInPresale)
+							? 0
+							: totalSupplyInPresale;
+
+						const hopersReserve = liquidities[index].token1Reserve;
+						if (hopersReserve) {
+							const apr = (100 * totalSupplyInPresale) / (2 * hopersReserve);
+							liquidities[index].apr = `${apr}%`;
+						}
 					}
 
 					if (account) {
