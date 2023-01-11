@@ -82,7 +82,7 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 				fetchedUnbondHistory = fetchedUnbondHistory.concat(
 					fetchedResult.map((resultItem: any) => {
 						const unlockTime = new Date(
-							(resultItem.time + liquidity.config?.lockDuration || 0) * 1e3
+							resultItem.time * 1e3 + (liquidity.config?.lockDuration || 0)
 						);
 						redeemAvailability =
 							redeemAvailability || Number(unlockTime) < Number(now);
@@ -212,7 +212,7 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 					width="100%"
 					flexWrap="wrap"
 					gap="10px"
-					justifyContent="space-evenly"
+					justifyContent="space-between"
 					alignItems="center"
 				>
 					<ModalTabContainer isRight={selectedTab !== ModalTabs.BOND}>
@@ -232,13 +232,20 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 							)
 						)}
 					</ModalTabContainer>
-					<UnbondingPeriodContainer>
-						{UnbondingPeriods.map((period, index) => (
-							<UnbondingPeriodItem key={index} disabled={!period.available}>{`${
-								period.day
-							} ${period.day > 1 ? "days" : "day"}`}</UnbondingPeriodItem>
-						))}
-					</UnbondingPeriodContainer>
+					{selectedTab === ModalTabs.UNBOND ? (
+						<UnbondingPeriodContainer>
+							{UnbondingPeriods.map((period, index) => (
+								<UnbondingPeriodItem
+									key={index}
+									disabled={!period.available}
+								>{`${period.day} ${
+									period.day > 1 ? "days" : "day"
+								}`}</UnbondingPeriodItem>
+							))}
+						</UnbondingPeriodContainer>
+					) : (
+						<div />
+					)}
 				</Flex>
 				<Text color="black" bold fontSize="18px" justifyContent="flex-start">
 					{selectedTab === ModalTabs.BOND

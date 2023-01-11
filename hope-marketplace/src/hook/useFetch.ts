@@ -529,9 +529,11 @@ const useFetch = () => {
 			Promise.all(fetchLiquiditiesInfoQueries)
 				.then(async (liquiditiesInfoResult) => {
 					let fetchLPBalanceQueries: any[] = [],
+						fetchStakedLPBalanceQueries: any[] = [],
 						fetchRewardQueries: any[] = [],
 						fetchConfigQueries: any[] = [];
 					let balances: any[] = [],
+						stakedLPBalances: any[] = [],
 						rewards: any[] = [],
 						configs: any[] = [];
 					let liquidities: TPool[] = liquiditiesInfoResult.map(
@@ -550,6 +552,11 @@ const useFetch = () => {
 								})
 							);
 							const stakingAddress = Liquidities[index].stakingAddress;
+							fetchStakedLPBalanceQueries.push(
+								runQuery(lpAddress, {
+									balance: { address: stakingAddress },
+								})
+							);
 							fetchRewardQueries.push(
 								runQuery(stakingAddress, {
 									staker_info: {
@@ -577,6 +584,12 @@ const useFetch = () => {
 							};
 						}
 					);
+					await Promise.all(fetchStakedLPBalanceQueries)
+						.then(
+							(stakedLPBalanceResults) =>
+								(stakedLPBalances = stakedLPBalanceResults)
+						)
+						.catch((err2) => console.log(err2));
 					await Promise.all(fetchConfigQueries)
 						.then((configResult) => (configs = configResult))
 						.catch((err2) => console.log(err2));
@@ -594,8 +607,14 @@ const useFetch = () => {
 							: totalSupplyInPresale;
 
 						const hopersReserve = liquidities[index].token1Reserve;
-						if (hopersReserve) {
-							const apr = (100 * totalSupplyInPresale) / (2 * hopersReserve);
+						const totalLPBalance = liquidities[index].pool * 1e6;
+						let stakedLPBalance = Number(stakedLPBalances[index]?.balance || 0);
+						stakedLPBalance = isNaN(stakedLPBalance) ? 0 : stakedLPBalance;
+
+						if (hopersReserve && stakedLPBalance && totalLPBalance) {
+							const apr =
+								(100 * totalSupplyInPresale) /
+								((2 * hopersReserve * stakedLPBalance) / totalLPBalance);
 							liquidities[index].apr = `${apr.toLocaleString(undefined, {
 								maximumFractionDigits: 2,
 							})}%`;

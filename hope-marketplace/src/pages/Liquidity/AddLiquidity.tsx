@@ -4,8 +4,8 @@ import ReactSelect, { ControlProps, components } from "react-select";
 import { coins } from "@cosmjs/proto-signing";
 import { useAppSelector } from "../../app/hooks";
 import Flex from "../../components/Flex";
-import PoolImage from "../../components/PoolImage";
-import PoolName from "../../components/PoolName";
+// import PoolImage from "../../components/PoolImage";
+// import PoolName from "../../components/PoolName";
 import { DropDownIcon, PlusInGreenCircleIcon } from "../../components/SvgIcons";
 import Text from "../../components/Text";
 import { TPool } from "../../types/pools";
@@ -17,7 +17,7 @@ import {
 	LiquidityList,
 	ListBody,
 	ListHeader,
-	SelectAddPoolItem,
+	// SelectAddPoolItem,
 	SelectPoolContainer,
 } from "./styled";
 import TokenAmountInputer from "./TokenAmountInputer";
@@ -27,6 +27,7 @@ import useContract from "../../hook/useContract";
 import { toMicroAmount } from "../../util/coins";
 import { ChainConfigs } from "../../constants/ChainTypes";
 import { toast } from "react-toastify";
+import CustomPoolSelectItem from "./CustomPoolSelectItem";
 
 const AddLiquidity: React.FC<IBasicModal> = ({
 	selectedPool,
@@ -170,21 +171,21 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 		}
 	};
 
-	const CustomPoolSelectItem = ({ ...props }) => {
-		const { selectOption, option, checked } = props;
-		if (!option) return null;
-		return (
-			<SelectAddPoolItem
-				onClick={() => {
-					if (selectOption) selectOption(option);
-				}}
-				checked={checked}
-			>
-				<PoolImage token1={option.token1} token2={option.token2} />
-				<PoolName pool={option} />
-			</SelectAddPoolItem>
-		);
-	};
+	// const CustomPoolSelectItem = ({ ...props }) => {
+	// 	const { selectOption, option, checked } = props;
+	// 	if (!option) return null;
+	// 	return (
+	// 		<SelectAddPoolItem
+	// 			onClick={() => {
+	// 				if (selectOption) selectOption(option);
+	// 			}}
+	// 			checked={checked}
+	// 		>
+	// 			<PoolImage token1={option.token1} token2={option.token2} />
+	// 			<PoolName pool={option} />
+	// 		</SelectAddPoolItem>
+	// 	);
+	// };
 
 	const CustomPoolsList = (props: any) => {
 		const { options, selectOption } = props;
