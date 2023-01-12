@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useAppSelector } from "../../app/hooks";
 import { addSuffix } from "../../util/string";
 import PoolImage from "../PoolImage";
@@ -15,11 +15,19 @@ import {
 
 const MyPools: React.FC = () => {
 	const liquidities = useAppSelector((state) => state.liquidities);
+	const myLiquidities = useMemo(
+		() =>
+			liquidities.filter((liquidity) => {
+				// console.log("debug liquidity", liquidity);
+				return !!liquidity.bonded;
+			}),
+		[liquidities]
+	);
 	return (
 		<LiquiditiesContainer>
 			{/* <Title>My Pools</Title> */}
 			<MyPoolsContainer>
-				{liquidities.map((liquidity, index: number) => (
+				{myLiquidities.map((liquidity, index: number) => (
 					<MyPoolItem key={index}>
 						<MyPoolItemRow>
 							<PoolImage token1={liquidity.token1} token2={liquidity.token2} />
@@ -39,7 +47,7 @@ const MyPools: React.FC = () => {
 									Pool Liquidity
 								</Text>
 								<Text bold color="black">
-									{`$${addSuffix(liquidity.pool)}`}
+									{`${addSuffix(liquidity.pool)}`}
 								</Text>
 							</MyPoolContentItem>
 							<MyPoolContentItem>
@@ -47,7 +55,7 @@ const MyPools: React.FC = () => {
 									Bonded
 								</Text>
 								<Text bold color="black">
-									{`$${addSuffix(0)}`}
+									{`${addSuffix(liquidity.bonded || 0)}`}
 								</Text>
 							</MyPoolContentItem>
 						</MyPoolItemRow>

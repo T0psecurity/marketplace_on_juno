@@ -6,8 +6,9 @@ export enum TokenType {
 	RAW = "raw",
 	NETA = "neta",
 	ATOM = "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
-	AXELAR = "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
+	USDC = "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
 	HOPERS = "hopers",
+	PUNK = "punk",
 }
 
 export const getTokenName = (tokenType: TokenType): string =>
@@ -21,8 +22,9 @@ export const TokenFullName: { [key in TokenType]: string } = {
 	[TokenType.RAW]: "JunoSwap Raw Dao",
 	[TokenType.NETA]: "NETA",
 	[TokenType.ATOM]: "COSMOS HUB",
-	[TokenType.AXELAR]: "Axelar",
+	[TokenType.USDC]: "USDC",
 	[TokenType.HOPERS]: "HOPERS",
+	[TokenType.PUNK]: "PUNK",
 };
 
 export type TokenStatusType = {
@@ -31,6 +33,7 @@ export type TokenStatusType = {
 	contractAddress?: string;
 	originChain?: ChainTypes;
 	chain: ChainTypes;
+	coinName?: string;
 };
 
 export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
@@ -51,8 +54,8 @@ export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
 		isIBCCoin: false,
 		chain: ChainTypes.JUNO,
 		contractAddress:
-			// "juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
-			"juno1sn67lmh4gzx8kcz9cpek4suyglvley2vnksj7tdadfeamfe4089ssvfkgx", // this is only for swap testing
+			"juno15u3dt79t6sxxa3x3kpkhzsy56edaa5a66wvt3kxmukqjz2sx0hes5sn38g",
+		// "juno1sn67lmh4gzx8kcz9cpek4suyglvley2vnksj7tdadfeamfe4089ssvfkgx", // this is only for swap testing
 	},
 	[TokenType.NETA]: {
 		isNativeCoin: false,
@@ -67,7 +70,7 @@ export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
 		chain: ChainTypes.COSMOS,
 		originChain: ChainTypes.COSMOS,
 	},
-	[TokenType.AXELAR]: {
+	[TokenType.USDC]: {
 		isNativeCoin: true,
 		isIBCCoin: true,
 		chain: ChainTypes.AXELAR,
@@ -78,7 +81,14 @@ export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
 		isIBCCoin: false,
 		chain: ChainTypes.JUNO,
 		contractAddress:
-			"juno1e2hv5j7dphfgj0ytjw2vrt3g5kylrventqvns4su64jhrd4aq3xsy53snk",
+			"juno1u45shlp0q4gcckvsj06ss4xuvsu0z24a0d0vr9ce6r24pht4e5xq7q995n",
+	},
+	[TokenType.PUNK]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno13926947pmrjly5p9hf5juey65c6rget0gqrnx3us3r6pvnpf4hwqm8mchy",
 	},
 };
 

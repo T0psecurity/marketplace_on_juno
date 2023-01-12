@@ -22,6 +22,7 @@ import {
 	VestingDetailClaimed,
 	VestingDetailContainer,
 	VestingDetailItem,
+	// VestingDetailRow,
 	VestingPeriodItem,
 } from "./styled";
 import Text from "../../components/Text";

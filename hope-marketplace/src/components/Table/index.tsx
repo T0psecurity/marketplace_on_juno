@@ -8,12 +8,11 @@ import {
 	TableHeaderContent,
 	TableHeaderRow,
 	TableSearchInputer,
-	TableTab,
-	TableTabContainer,
 	TableWrapper,
 	Wrapper,
 } from "./styled";
 import Row from "./TableRow";
+import TableTabs from "./TableTabs";
 import { ColumnTypes, TSortDirection, TTable } from "./type";
 
 const Table = <T extends object>({
@@ -22,12 +21,10 @@ const Table = <T extends object>({
 	renderDetailRow,
 	layout,
 	option,
+	defaultExpanded,
 }: TTable<T>) => {
 	const [sortDirections, setSortDirections] = useState<TSortDirection>(
 		{} as TSortDirection
-	);
-	const [selectedTab, setSelectedTab] = useState<string>(
-		option?.tab?.tabs[0] || ""
 	);
 	const [searchValue, setSearchValue] = useState<string>("");
 
@@ -90,19 +87,7 @@ const Table = <T extends object>({
 		<Wrapper>
 			{hasControlPanel && (
 				<TableControlPanel>
-					{!!option?.tab && (
-						<TableTabContainer isRight={selectedTab !== option.tab.tabs[0]}>
-							{option.tab.tabs.map((tab, index) => (
-								<TableTab
-									key={index}
-									checked={selectedTab === tab}
-									onClick={() => setSelectedTab(tab)}
-								>
-									{tab}
-								</TableTab>
-							))}
-						</TableTabContainer>
-					)}
+					{!!option?.tab && <TableTabs tabs={option.tab.tabs} />}
 					{!!option?.search && (
 						<TableSearchInputer
 							placeholder={option.search.placeholder ?? "Search"}
@@ -141,15 +126,21 @@ const Table = <T extends object>({
 					})}
 				</TableHeaderRow>
 				<TableBody>
-					{sortedData.map((dataItem, dataIndex) => (
-						<Row<T>
-							key={dataIndex}
-							columns={columns}
-							renderDetailRow={renderDetailRow}
-							data={dataItem}
-							index={dataIndex}
-						/>
-					))}
+					{sortedData.map((dataItem, dataIndex) => {
+						const expanded = defaultExpanded
+							? defaultExpanded(dataItem)
+							: false;
+						return (
+							<Row<T>
+								key={dataIndex}
+								columns={columns}
+								renderDetailRow={renderDetailRow}
+								data={dataItem}
+								defaultExpanded={expanded}
+								index={dataIndex}
+							/>
+						);
+					})}
 					{!data?.length && (
 						<EmptyRow columnsCount={columns.length}>
 							{option?.emptyString || "No Data"}

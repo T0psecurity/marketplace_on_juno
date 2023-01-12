@@ -10,7 +10,7 @@ const Stake: React.FC = () => {
 				tabs={[
 					{ title: "Bond", url: "/bond" },
 					{ title: "Stake", url: "/stake" },
-					{ title: "Airdrop", url: "/airdrop" },
+					// { title: "Airdrop", url: "/airdrop" },
 				]}
 			/>
 		</PageWrapper>

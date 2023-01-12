@@ -309,11 +309,7 @@ const Home: React.FC = () => {
 						Cosmos with the ability to distribute tokens and raise liquidity.
 					</Text>
 					<ButtonContainer>
-						<Button
-							colored
-							disabled
-							// onClick={NotifyComingSoon}
-						>
+						<Button colored onClick={() => history.push("/ido")}>
 							Explore
 						</Button>
 						<Button
@@ -345,7 +341,8 @@ const Home: React.FC = () => {
 							<Button
 								colored
 								// onClick={NotifyComingSoon}
-								disabled
+								onClick={() => history.push("/swap")}
+								// disabled
 							>
 								Swap Now
 							</Button>
@@ -494,13 +491,15 @@ const Home: React.FC = () => {
 						<Button
 							colored
 							// onClick={NotifyComingSoon}
-							disabled
+							// disabled
+							onClick={() => history.push(`/liquidity`)}
 						>
 							Liquidity
 						</Button>
 						<Button
 							// onClick={NotifyComingSoon}
-							disabled
+							// disabled
+							onClick={() => history.push(`/bond`)}
 						>
 							Stake
 						</Button>

@@ -8,6 +8,7 @@ export const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	padding: 10px;
 `;
 
 export const LiquidityHeader = styled.div`
@@ -18,7 +19,10 @@ export const LiquidityList = styled.div`
 	background: white;
 	border: 1px solid #02e296;
 	border-radius: 15px;
-	width: 430px;
+	width: 420px;
+	@media (max-width: 600px) {
+		width: 380px;
+	}
 `;
 
 export const ListHeader = styled.div`
@@ -203,14 +207,14 @@ export const SelectAddPoolItem = styled.div<{ checked?: boolean }>`
 	align-items: center;
 	gap: 10px;
 	padding: 10px;
+	cursor: pointer;
 	${({ checked }) =>
 		checked &&
 		css`
 			background-color: rgba(2, 226, 150, 0.5);
-		`}
-	&:hover {
+		`}/* &:hover {
 		background-color: rgba(2, 226, 150, 0.15);
-	}
+	} */
 `;
 
 export const SelectPoolContainer = styled.div`

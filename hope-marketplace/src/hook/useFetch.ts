@@ -529,13 +529,17 @@ const useFetch = () => {
 			Promise.all(fetchLiquiditiesInfoQueries)
 				.then(async (liquiditiesInfoResult) => {
 					let fetchLPBalanceQueries: any[] = [],
-						fetchRewardQueries: any[] = [];
+						fetchStakedLPBalanceQueries: any[] = [],
+						fetchRewardQueries: any[] = [],
+						fetchConfigQueries: any[] = [];
 					let balances: any[] = [],
-						rewards: any[] = [];
+						stakedLPBalances: any[] = [],
+						rewards: any[] = [],
+						configs: any[] = [];
 					let liquidities: TPool[] = liquiditiesInfoResult.map(
 						(liquidityInfo, index) => {
 							let pool = Number(liquidityInfo.lp_token_supply);
-							pool = isNaN(pool) ? 0 : pool;
+							pool = isNaN(pool) ? 0 : pool / 1e6;
 
 							let token1Reserve = Number(liquidityInfo.token1_reserve);
 							let token2Reserve = Number(liquidityInfo.token2_reserve);
@@ -548,6 +552,11 @@ const useFetch = () => {
 								})
 							);
 							const stakingAddress = Liquidities[index].stakingAddress;
+							fetchStakedLPBalanceQueries.push(
+								runQuery(lpAddress, {
+									balance: { address: stakingAddress },
+								})
+							);
 							fetchRewardQueries.push(
 								runQuery(stakingAddress, {
 									staker_info: {
@@ -556,13 +565,14 @@ const useFetch = () => {
 									},
 								})
 							);
+							fetchConfigQueries.push(runQuery(stakingAddress, { config: {} }));
 
 							return {
 								id: index + 1,
 								token1: Liquidities[index].tokenA,
 								token2: Liquidities[index].tokenB,
 								isVerified: true,
-								apr: "180%",
+								apr: "",
 								pool,
 								contract: Liquidities[index].contractAddress,
 								lpAddress,
@@ -574,6 +584,43 @@ const useFetch = () => {
 							};
 						}
 					);
+					await Promise.all(fetchStakedLPBalanceQueries)
+						.then(
+							(stakedLPBalanceResults) =>
+								(stakedLPBalances = stakedLPBalanceResults)
+						)
+						.catch((err2) => console.log(err2));
+					await Promise.all(fetchConfigQueries)
+						.then((configResult) => (configs = configResult))
+						.catch((err2) => console.log(err2));
+					for (let index = 0; index < configs.length; index++) {
+						let config = configs[index];
+						liquidities[index].config = {
+							lockDuration: (config?.lock_duration || 0) * 1e3,
+						};
+
+						let totalSupplyInPresale =
+							config?.distribution_schedule?.[0]?.[2] || 0;
+						totalSupplyInPresale = Number(totalSupplyInPresale);
+						totalSupplyInPresale = isNaN(totalSupplyInPresale)
+							? 0
+							: totalSupplyInPresale;
+
+						const hopersReserve = liquidities[index].token1Reserve;
+						const totalLPBalance = liquidities[index].pool * 1e6;
+						let stakedLPBalance = Number(stakedLPBalances[index]?.balance || 0);
+						stakedLPBalance = isNaN(stakedLPBalance) ? 0 : stakedLPBalance;
+
+						if (hopersReserve && stakedLPBalance && totalLPBalance) {
+							const apr =
+								(100 * totalSupplyInPresale) /
+								((2 * hopersReserve * stakedLPBalance) / totalLPBalance);
+							liquidities[index].apr = `${apr.toLocaleString(undefined, {
+								maximumFractionDigits: 2,
+							})}%`;
+						}
+					}
+
 					if (account) {
 						await Promise.all(fetchLPBalanceQueries)
 							.then((balanceResult) => (balances = balanceResult))
@@ -595,7 +642,16 @@ const useFetch = () => {
 							let reward = rewards[index]?.pending_reward;
 							reward = Number(reward);
 							reward = isNaN(reward) ? 0 : reward / 1e6;
-							liquidities[index].pendingReward = reward;
+
+							let bonded = rewards[index]?.bond_amount;
+							bonded = Number(bonded);
+							bonded = isNaN(bonded) ? 0 : bonded / 1e6;
+							liquidities[index].bonded = bonded;
+
+							let totalEarned = rewards[index]?.bond_amount;
+							totalEarned = Number(totalEarned);
+							totalEarned = isNaN(totalEarned) ? 0 : totalEarned / 1e6;
+							liquidities[index].totalEarned = totalEarned;
 						}
 					}
 					dispatch(setLiquidityInfo(liquidities));

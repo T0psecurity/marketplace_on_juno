@@ -59,12 +59,12 @@ const useIDOStatus = (id: IDOIds) => {
 				: Number(now) < Number(endTime)
 				? PresaleState.PRESALE
 				: PresaleState.ENDED;
-		const tokenSoldAmount = 0;
-		// Number(fetchResult.saleInfo.token_sold_amount || 0) / 1e6;
-		// const percentageSold = Number(
-		//   ((tokenSoldAmount / totalAmount) * 100).toFixed(2)
-		// );
-		const percentageSold = 0;
+		const tokenSoldAmount =
+			Number(fetchResult.saleInfo.token_sold_amount || 0) / 1e6;
+		const percentageSold = Number(
+			((tokenSoldAmount / totalAmount) * 100).toFixed(2)
+		);
+		// const percentageSold = 0;
 
 		let costs: any = {};
 		(

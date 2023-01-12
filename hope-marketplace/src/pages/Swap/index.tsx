@@ -13,7 +13,7 @@ import TokenListModal from "../../components/TokenListModal";
 import { TokenStatus, TokenType } from "../../types/tokens";
 import {
 	AmountInputer,
-	ChartArea,
+	// ChartArea,
 	MainPart,
 	SelectMaxButton,
 	SlippageItem,
@@ -284,7 +284,8 @@ const Swap: React.FC = () => {
 					"" + swapInfo.from.amount,
 					ChainConfigs[TokenStatus[swapInfo.from.token].chain]["coinDecimals"]
 				),
-				ChainConfigs[TokenStatus[swapInfo.from.token].chain]["microDenom"]
+				swapInfo.from.token
+				// ChainConfigs[TokenStatus[swapInfo.from.token].chain]["microDenom"]
 			);
 		}
 		const finalMessage: any = validPair.subPools
@@ -312,7 +313,6 @@ const Swap: React.FC = () => {
 							),
 					},
 			  };
-		console.log("debug", finalMessage);
 
 		transactions.push(
 			createExecuteMessage({
@@ -440,7 +440,7 @@ const Swap: React.FC = () => {
 						</SwapAreaBody>
 					</SwapArea>
 				</MainPart>
-				<ChartArea />
+				{/* <ChartArea /> */}
 				<TokenListModal
 					isOpen={showTokenListModal}
 					onClose={() => setShowTokenListModal(false)}

@@ -1,3 +1,4 @@
+import { BasicProps } from "../../constants/BasicTypes";
 type TTableOption<T extends object> = {
 	emptyString?: string;
 	tab?: {
@@ -14,6 +15,7 @@ export interface TTable<T extends object> {
 	columns: TColumns<T>[];
 	layout?: string;
 	option?: TTableOption<T>;
+	defaultExpanded?: (data: T) => boolean;
 	renderDetailRow?: TRenderDetailRow<T>;
 }
 
@@ -21,6 +23,7 @@ export interface TRow<T extends object> {
 	data: T;
 	renderDetailRow?: TRenderDetailRow<T>;
 	columns: TColumns<T>[];
+	defaultExpanded?: boolean;
 	index: number;
 }
 
@@ -34,6 +37,7 @@ export type TColumns<T extends object> = {
 		type?: ColumnTypes;
 		title?: string;
 		sort?: boolean | ((data1: T, data2: T, direction: "up" | "down") => number);
+		format?: (value: T[K], data: T) => string | number;
 		render?: (value: T[K] | "" | 0, data: T) => JSX.Element | null;
 	};
 }[keyof T];
@@ -47,4 +51,8 @@ export enum ColumnTypes {
 	NUMBER,
 	STRING,
 	DATE,
+}
+
+export interface ITableTab extends BasicProps {
+	tabs: string[];
 }

@@ -14,4 +14,5 @@ export interface TextProps extends BasicProps {
 	textAlign?: string;
 	flexDirection?: string;
 	gap?: string;
+	id?: string;
 }

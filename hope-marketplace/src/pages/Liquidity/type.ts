@@ -1,7 +1,9 @@
 import { BasicProps } from "../../constants/BasicTypes";
+import { TPool } from "../../types/pools";
 import { TokenType } from "../../types/tokens";
 
 export interface IBasicModal extends BasicProps {
+	selectedPool?: TPool;
 	onChangeModalType: React.Dispatch<React.SetStateAction<ModalType>>;
 }
 

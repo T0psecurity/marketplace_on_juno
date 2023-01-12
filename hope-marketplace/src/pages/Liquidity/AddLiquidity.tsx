@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import ReactSelect, { ControlProps, components } from "react-select";
 import { coins } from "@cosmjs/proto-signing";
 import { useAppSelector } from "../../app/hooks";
 import Flex from "../../components/Flex";
-import PoolImage from "../../components/PoolImage";
-import PoolName from "../../components/PoolName";
+// import PoolImage from "../../components/PoolImage";
+// import PoolName from "../../components/PoolName";
 import { DropDownIcon, PlusInGreenCircleIcon } from "../../components/SvgIcons";
 import Text from "../../components/Text";
 import { TPool } from "../../types/pools";
@@ -16,7 +17,7 @@ import {
 	LiquidityList,
 	ListBody,
 	ListHeader,
-	SelectAddPoolItem,
+	// SelectAddPoolItem,
 	SelectPoolContainer,
 } from "./styled";
 import TokenAmountInputer from "./TokenAmountInputer";
@@ -26,14 +27,35 @@ import useContract from "../../hook/useContract";
 import { toMicroAmount } from "../../util/coins";
 import { ChainConfigs } from "../../constants/ChainTypes";
 import { toast } from "react-toastify";
+import CustomPoolSelectItem from "./CustomPoolSelectItem";
 
-const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
+const AddLiquidity: React.FC<IBasicModal> = ({
+	selectedPool,
+	onChangeModalType,
+}) => {
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
 	const liquidities = useAppSelector((state) => state.liquidities);
 	const [isPending, setIsPending] = useState(false);
 	const [pool, setPool] = useState<TPool>(liquidities[0]);
 	const [addAmount, setAddAmount] = useState<TAddAmount>({} as TAddAmount);
 	const { createExecuteMessage, getExecuteClient } = useContract();
+	const { search } = useLocation();
+	const poolId = new URLSearchParams(search).get("poolId");
+
+	useEffect(() => {
+		const targetPool = liquidities.find((pool) => pool.id === Number(poolId));
+		if (targetPool) {
+			setPool(targetPool);
+			setAddAmount({} as TAddAmount);
+		}
+	}, [liquidities, poolId]);
+
+	useEffect(() => {
+		if (selectedPool) {
+			setPool(selectedPool);
+			setAddAmount({} as TAddAmount);
+		}
+	}, [selectedPool]);
 
 	const handleChangePool = (item: any) => {
 		setPool(item);
@@ -92,7 +114,7 @@ const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 						"" + token1Amount,
 						ChainConfigs[TokenStatus[pool.token1].chain]["coinDecimals"]
 					),
-					ChainConfigs[TokenStatus[pool.token1].chain]["microDenom"]
+					pool.token1
 				),
 			];
 		}
@@ -117,7 +139,7 @@ const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 						"" + token2Amount,
 						ChainConfigs[TokenStatus[pool.token2].chain]["coinDecimals"]
 					),
-					ChainConfigs[TokenStatus[pool.token2].chain]["microDenom"]
+					pool.token2
 				),
 			];
 		}
@@ -149,21 +171,21 @@ const AddLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 		}
 	};
 
-	const CustomPoolSelectItem = ({ ...props }) => {
-		const { selectOption, option, checked } = props;
-		if (!option) return null;
-		return (
-			<SelectAddPoolItem
-				onClick={() => {
-					if (selectOption) selectOption(option);
-				}}
-				checked={checked}
-			>
-				<PoolImage token1={option.token1} token2={option.token2} />
-				<PoolName pool={option} />
-			</SelectAddPoolItem>
-		);
-	};
+	// const CustomPoolSelectItem = ({ ...props }) => {
+	// 	const { selectOption, option, checked } = props;
+	// 	if (!option) return null;
+	// 	return (
+	// 		<SelectAddPoolItem
+	// 			onClick={() => {
+	// 				if (selectOption) selectOption(option);
+	// 			}}
+	// 			checked={checked}
+	// 		>
+	// 			<PoolImage token1={option.token1} token2={option.token2} />
+	// 			<PoolName pool={option} />
+	// 		</SelectAddPoolItem>
+	// 	);
+	// };
 
 	const CustomPoolsList = (props: any) => {
 		const { options, selectOption } = props;

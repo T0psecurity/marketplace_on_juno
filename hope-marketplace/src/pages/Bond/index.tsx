@@ -51,9 +51,20 @@ const Bond: React.FC = () => {
 			title: "Verified",
 			render: (value, data) => (value ? <VerifiedBadge /> : <CancelIcon />),
 		},
-		{ name: "earned", title: "Earned", type: ColumnTypes.NUMBER, sort: true },
+		{
+			name: "totalEarned",
+			title: "Earned",
+			type: ColumnTypes.NUMBER,
+			sort: true,
+			format: (value) => addSuffix(value || 0),
+		},
 		{ name: "apr", title: "APR Rewards", sort: true },
-		{ name: "pool", title: "Liquidity Pool", sort: true },
+		{
+			name: "pool",
+			title: "Liquidity Pool",
+			sort: true,
+			format: (value) => addSuffix(value || 0),
+		},
 		{
 			name: "ratio",
 			title: "Value",
@@ -73,7 +84,7 @@ const Bond: React.FC = () => {
 				tabs={[
 					{ title: "Bond", url: "/bond" },
 					{ title: "Stake", url: "/stake" },
-					{ title: "Airdrop", url: "/airdrop" },
+					// { title: "Airdrop", url: "/airdrop" },
 				]}
 			/>
 			<Wrapper>
@@ -93,6 +104,7 @@ const Bond: React.FC = () => {
 				<Table<TPool>
 					data={liquidities}
 					columns={Columns}
+					defaultExpanded={(rowData) => rowData.id === 1}
 					renderDetailRow={(rowData) => (
 						<BondTableDetailRow rowData={rowData} />
 					)}

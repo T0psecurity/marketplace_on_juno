@@ -1,5 +1,9 @@
 import { TokenType } from "./tokens";
 
+type TPoolConfig = {
+	lockDuration: number;
+};
+
 export type TPool = {
 	id: number;
 	token1: TokenType;
@@ -17,6 +21,9 @@ export type TPool = {
 	earned?: number;
 	balance?: number;
 	pendingReward?: number;
+	bonded?: number;
+	totalEarned?: number;
+	config?: TPoolConfig;
 };
 
 // export const TempLiquidities: TPool[] = [
