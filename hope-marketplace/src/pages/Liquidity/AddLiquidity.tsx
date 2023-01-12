@@ -114,7 +114,7 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 						"" + token1Amount,
 						ChainConfigs[TokenStatus[pool.token1].chain]["coinDecimals"]
 					),
-					ChainConfigs[TokenStatus[pool.token1].chain]["microDenom"]
+					pool.token1
 				),
 			];
 		}
@@ -139,7 +139,7 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 						"" + token2Amount,
 						ChainConfigs[TokenStatus[pool.token2].chain]["coinDecimals"]
 					),
-					ChainConfigs[TokenStatus[pool.token2].chain]["microDenom"]
+					pool.token2
 				),
 			];
 		}
