@@ -284,7 +284,8 @@ const Swap: React.FC = () => {
 					"" + swapInfo.from.amount,
 					ChainConfigs[TokenStatus[swapInfo.from.token].chain]["coinDecimals"]
 				),
-				ChainConfigs[TokenStatus[swapInfo.from.token].chain]["microDenom"]
+				swapInfo.from.token
+				// ChainConfigs[TokenStatus[swapInfo.from.token].chain]["microDenom"]
 			);
 		}
 		const finalMessage: any = validPair.subPools
@@ -312,7 +313,6 @@ const Swap: React.FC = () => {
 							),
 					},
 			  };
-		console.log("debug", finalMessage);
 
 		transactions.push(
 			createExecuteMessage({
