@@ -12,7 +12,13 @@ import {
 // import useContract from "../../hook/useContract";
 import useOnClickOutside from "../../hook/useOnClickOutside";
 import useWindowSize from "../../hook/useWindowSize";
-import { DiscordIcon, ListIcon, MediumIcon, TwitterIcon } from "../Icons";
+import {
+	DiscordIcon,
+	ListIcon,
+	MediumIcon,
+	TelegramIcon,
+	TwitterIcon,
+} from "../Icons";
 import { MarketplaceInfo } from "../../constants/Collections";
 import {
 	HeaderWrapper,
@@ -68,6 +74,12 @@ import {
 import { CosmostationWalletContext } from "../../context/Wallet";
 import Text from "../Text";
 import HeaderBanner from "../HeaderBanner";
+import {
+	DiscordLink,
+	MediumLink,
+	TelegramLink,
+	TwitterLink,
+} from "../../constants/SocialLinks";
 // import { useCosmodal } from "../../features/accounts/useCosmodal";
 
 const HeaderLinks = [
@@ -88,6 +100,12 @@ const HeaderLinks = [
 				icon: SwapIcon,
 			},
 		],
+	},
+	{
+		title: "Earn",
+		url: "/bond",
+		selectedUrl: ["/bond", "/stake", "/airdrop"],
+		icon: EarnIcon,
 	},
 	{
 		title: "NFT",
@@ -113,12 +131,6 @@ const HeaderLinks = [
 		],
 	},
 	{
-		title: "Earn",
-		url: "/bond",
-		selectedUrl: ["/bond", "/stake", "/airdrop"],
-		icon: EarnIcon,
-	},
-	{
 		isDivider: true,
 	},
 	{ title: "Mint", url: "/collections/mint", icon: MintIcon },
@@ -136,14 +148,19 @@ const HeaderLinks = [
 ];
 
 const SocialIcons = [
-	{ Icon: MediumIcon, link: "https://hopegalaxy.medium.com/" },
+	{ Icon: MediumIcon, link: MediumLink },
 	{
 		Icon: TwitterIcon,
-		link: "https://twitter.com/Hopers_io",
+		link: TwitterLink,
+	},
+	{
+		Icon: TelegramIcon,
+		link: TelegramLink,
+		style: { backgroundColor: "white" },
 	},
 	{
 		Icon: DiscordIcon,
-		link: "https://discord.com/invite/BfKPacc5jF",
+		link: DiscordLink,
 	},
 ];
 
@@ -355,6 +372,7 @@ const Header: React.FC = () => {
 									<ConnectButton />
 									<ToggleThemeButton />
 								</MenuHeader>
+								<HopePriceDisplay />
 								<MenuItem onClick={() => handleClickLink("/")}>
 									<HomeIcon width={20} height={20} />
 									Home
@@ -404,6 +422,7 @@ const Header: React.FC = () => {
 								<MenuFooter>
 									{SocialIcons.map((icon, index) => (
 										<MenuFooterLinkItem
+											style={icon.style ?? {}}
 											key={index}
 											onClick={() => openNewUrl(icon.link)}
 										>

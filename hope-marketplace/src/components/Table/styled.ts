@@ -10,6 +10,8 @@ export const TableControlPanel = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	margin: 20px 0;
+	width: 100%;
+	overflow: auto;
 `;
 
 export const TableTabContainer = styled.div<{ left: number; width: number }>`

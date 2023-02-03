@@ -14,6 +14,20 @@ export const TokenCoingeckoIds: { [key in TokenType]: string } = {
 	[TokenType.USDC]: "axlusdc",
 	[TokenType.HOPERS]: "",
 	[TokenType.PUNK]: "juno-punk",
+	[TokenType.HUAHUA]: "chihuahua-token",
+	[TokenType.CANLAB]: "",
+	[TokenType.RED]: "",
+	[TokenType.BLUE]: "",
+	[TokenType.WYND]: "",
+	[TokenType.SGNL]: "signal",
+	[TokenType.RACOON]: "",
+	[TokenType.GLTO]: "",
+	[TokenType.AQUA]: "",
+	[TokenType.OSMO]: "osmosis",
+	[TokenType.DRGN]: "",
+	[TokenType.BANANA]: "",
+	[TokenType.CZAR]: "",
+	[TokenType.KUJIRA]: "kujira",
 };
 
 const CoinGeckoAPIKey = "CG-CV5rXz5JpbGcc36wL76u5gnd";
@@ -96,7 +110,9 @@ export const fetchTokenPriceHistory = async (
 				};
 				result.prices.forEach((historyItem: any) => {
 					const crrHistory = {
-						label: moment(new Date(historyItem[0])).format(TimeFormats[period]),
+						label: moment(new Date(historyItem[0])).format(
+							TimeFormats[period]
+						),
 						value: historyItem[1],
 					};
 					if (
@@ -113,7 +129,8 @@ export const fetchTokenPriceHistory = async (
 						//     previousHistoryOption.totalValue / previousHistoryOption.count,
 						// });
 						priceHistories[previousHistoryOption.label] =
-							previousHistoryOption.totalValue / previousHistoryOption.count;
+							previousHistoryOption.totalValue /
+							previousHistoryOption.count;
 						previousHistoryOption = {
 							label: crrHistory.label,
 							totalValue: crrHistory.value,
@@ -177,6 +194,10 @@ export const tokenPricesSlice = createSlice({
 				}
 			);
 		},
+		setTokenPrice: (state, action: PayloadAction<[TokenType, any]>) => {
+			const [key, data] = action.payload;
+			state[key] = data;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(fetchTokenPrices.fulfilled, (state, action) => {
@@ -188,6 +209,6 @@ export const tokenPricesSlice = createSlice({
 	},
 });
 
-export const { clearTokenPrice } = tokenPricesSlice.actions;
+export const { clearTokenPrice, setTokenPrice } = tokenPricesSlice.actions;
 
 export default tokenPricesSlice.reducer;

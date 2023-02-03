@@ -4,13 +4,13 @@ import { TextProps } from "./type";
 export const Wrapper = styled.div<TextProps>`
 	position: relative;
 	display: flex;
-	flex-wrap: wrap;
 	align-items: ${({ alignItems }) => alignItems ?? "baseline"};
 	justify-content: ${({ justifyContent }) => justifyContent ?? "center"};
 	gap: ${({ gap }) => gap ?? "0.5ex"};
 	overflow-wrap: ${({ overflowWrap }) => overflowWrap ?? "break-word"};
 	font-weight: ${({ bold }) => (bold ? "bold" : "normal")};
 	color: ${({ color, theme }) => color ?? theme.colors.fontColor};
+	flex-wrap: ${({ flexWrap }) => flexWrap ?? "wrap"};
 	${({ flexDirection }) =>
 		flexDirection &&
 		css`
@@ -40,5 +40,10 @@ export const Wrapper = styled.div<TextProps>`
 		textAlign &&
 		css`
 			text-align: ${textAlign};
+		`}
+  ${({ letterSpacing }) =>
+		letterSpacing &&
+		css`
+			letter-spacing: ${letterSpacing};
 		`}
 `;

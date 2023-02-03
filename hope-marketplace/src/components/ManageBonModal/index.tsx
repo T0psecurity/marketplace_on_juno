@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import Flex from "../Flex";
 import { IModal } from "../Modal";
@@ -7,7 +7,7 @@ import PoolName from "../PoolName";
 import Text from "../Text";
 import useContract from "../../hook/useContract";
 import useRefresh from "../../hook/useRefresh";
-import { TPool } from "../../types/pools";
+import { TPool, TPoolConfig } from "../../types/pools";
 import { getTokenName } from "../../types/tokens";
 import { addSuffix } from "../../util/string";
 import {
@@ -54,6 +54,7 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 	const [isAvailableRedeem, setIsAvailableRedeem] = useState(false);
 	const [unbondHistory, setUnbondHistory] = useState<any[]>([]);
 	const [selectedTab, setSelectedTab] = useState(ModalTabs.BOND);
+	const [selectedUnbondLP, setSelectedUnbondLP] = useState<number>(0);
 	const [bondAmount, setBondAmount] = useState<number | string>();
 	const [unbondAmount, setUnbondAmount] = useState<number | string>();
 	const [isPendingAction, setIsPendingAction] = useState(false);
@@ -64,14 +65,20 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 	const { refresh } = useRefresh();
 
 	useEffect(() => {
-		if (!account) return;
+		const stakingAddress = liquidity.stakingAddress;
+		if (!account || !stakingAddress) return;
 		const now = new Date();
 
 		(async () => {
 			let fetchedUnbondHistory: any[] = [],
 				redeemAvailability = false;
-			const fetchUnbondHistory = async (startAfter = 0) => {
-				const result = await runQuery(liquidity.stakingAddress, {
+			const fetchUnbondHistory = async (
+				address: string,
+				config: TPoolConfig,
+				startAfter = 0
+			) => {
+				if (!liquidity.stakingAddress) return;
+				const result = await runQuery(address, {
 					unbonding_info: {
 						staker: account?.address,
 						start_after: startAfter,
@@ -82,7 +89,7 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 				fetchedUnbondHistory = fetchedUnbondHistory.concat(
 					fetchedResult.map((resultItem: any) => {
 						const unlockTime = new Date(
-							resultItem.time * 1e3 + (liquidity.config?.lockDuration || 0)
+							resultItem.time * 1e3 + (config?.lockDuration || 0)
 						);
 						redeemAvailability =
 							redeemAvailability || Number(unlockTime) < Number(now);
@@ -108,15 +115,58 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 				);
 				if (fetchedResult.length === fetchingLimit) {
 					await fetchUnbondHistory(
+						address,
+						config,
 						fetchedResult[fetchedResult.length - 1].time
 					);
 				}
 			};
-			await fetchUnbondHistory();
+			if (typeof stakingAddress === "string") {
+				await fetchUnbondHistory(
+					stakingAddress,
+					liquidity.config as TPoolConfig
+				);
+			} else {
+				stakingAddress.forEach(async (address, index) => {
+					await fetchUnbondHistory(
+						address,
+						((liquidity.config || []) as TPoolConfig[])[index]
+					);
+				});
+			}
 			setUnbondHistory(fetchedUnbondHistory);
 			setIsAvailableRedeem(redeemAvailability);
 		})();
 	}, [account, liquidity, runQuery]);
+
+	useEffect(() => {
+		setBondAmount("");
+		setUnbondAmount("");
+	}, [selectedTab]);
+
+	const stakingContracts = useMemo(() => {
+		const stakingAddress = liquidity.stakingAddress;
+		if (!stakingAddress) return [];
+		if (typeof stakingAddress === "string") {
+			const config = liquidity.config as TPoolConfig;
+			const bonded = (liquidity.bonded || 0) as number;
+			return [
+				{
+					address: stakingAddress,
+					bonded,
+					rewardToken: config.rewardToken || "",
+				},
+			];
+		} else {
+			const config = liquidity.config as TPoolConfig[];
+			const bonded = (liquidity.bonded || []) as number[];
+			return stakingAddress.map((address, index) => ({
+				address,
+				bonded: bonded[index] || 0,
+				rewardToken: config[index]?.rewardToken || "",
+			}));
+		}
+	}, [liquidity.bonded, liquidity.config, liquidity.stakingAddress]);
 
 	const handleCloseModal = () => {
 		if (isPendingAction || isPendingRedeem) return;
@@ -137,13 +187,17 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 		}
 	};
 
-	const handleClickBond = async () => {
-		if (isPendingAction || !bondAmount) return;
+	const handleClickBond = async (address: string) => {
+		if (isPendingAction || !bondAmount || !address) return;
+		if (Number(bondAmount) > (liquidity.balance || 0)) {
+			toast.error("Invalid Amount");
+			return;
+		}
 		setIsPendingAction(true);
 		try {
 			await runExecute(liquidity.lpAddress, {
 				send: {
-					contract: liquidity.stakingAddress,
+					contract: address,
 					amount: "" + Math.floor(Number(bondAmount) * 1e6),
 					msg: btoa(
 						JSON.stringify({
@@ -163,10 +217,15 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 	};
 
 	const handleClickUnBond = async () => {
-		if (isPendingAction || !unbondAmount) return;
+		const address = stakingContracts[selectedUnbondLP].address;
+		if (isPendingAction || !unbondAmount || !address) return;
+		if (Number(unbondAmount) > (liquidity.bonded || 0)) {
+			toast.error("Invalid Amount");
+			return;
+		}
 		setIsPendingAction(true);
 		try {
-			await runExecute(liquidity.stakingAddress, {
+			await runExecute(address, {
 				unbond: {
 					amount: "" + Math.floor(Number(unbondAmount) * 1e6),
 				},
@@ -182,20 +241,28 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 	};
 
 	const handleClickRedeem = async () => {
-		if (isPendingRedeem || !isAvailableRedeem) return;
-		setIsPendingRedeem(true);
-		try {
-			await runExecute(liquidity.stakingAddress, {
+		const stakingAddress = liquidity.stakingAddress;
+		if (isPendingRedeem || !isAvailableRedeem || !stakingAddress) return;
+		const stakingAddressArray =
+			typeof stakingAddress === "string" ? [stakingAddress] : stakingAddress;
+		const queries = stakingAddressArray.map((address) =>
+			runExecute(address, {
 				redeem: {},
+			})
+		);
+		setIsPendingRedeem(true);
+		Promise.all(queries)
+			.then(() => {
+				toast.success("Successfully Redeem!");
+			})
+			.catch((err) => {
+				console.log(err);
+				toast.error("Redeem Failed!");
+			})
+			.finally(() => {
+				refresh();
+				setIsPendingRedeem(false);
 			});
-			toast.success("Successfully Redeem!");
-			refresh();
-		} catch (err) {
-			console.log(err);
-			toast.error("Redeem Failed!");
-		} finally {
-			setIsPendingRedeem(false);
-		}
 	};
 
 	return (
@@ -248,13 +315,28 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 					)}
 				</Flex>
 				<Text color="black" bold fontSize="18px" justifyContent="flex-start">
-					{selectedTab === ModalTabs.BOND
-						? `Available LP: ${addSuffix(
-								liquidity.balance || 0
-						  )} ${getTokenName(liquidity.token1)}-${getTokenName(
-								liquidity.token2
-						  )}`
-						: `${addSuffix(liquidity.bonded || 0)} LP Bonded`}
+					{selectedTab === ModalTabs.BOND ? (
+						`Available LP: ${addSuffix(liquidity.balance || 0)} ${getTokenName(
+							liquidity.token1
+						)}-${getTokenName(liquidity.token2)}`
+					) : (
+						<Flex alignItems="center" gap="10px">
+							<Text color="black">LP Bonded</Text>
+							{stakingContracts.map((contract, index) => (
+								<Text key={index} color="black" alignItems="center">
+									{addSuffix(contract.bonded || 0)} in{" "}
+									<img
+										width={25}
+										alt=""
+										src={`/coin-images/${contract.rewardToken.replace(
+											/\//g,
+											""
+										)}.png`}
+									/>
+								</Text>
+							))}
+						</Flex>
+					)}
 				</Text>
 				<Flex width="100%" justifyContent="space-evenly" margin="20px 0">
 					{AutoBondAmounts.map((amount, index) => (
@@ -265,28 +347,78 @@ const ManageBondModal: React.FC<IMangeBondModal> = ({
 							onClick={() =>
 								selectedTab === ModalTabs.BOND
 									? setBondAmount((liquidity.balance || 0) * amount)
-									: setUnbondAmount((liquidity.bonded || 0) * amount)
+									: setUnbondAmount(
+											(stakingContracts[selectedUnbondLP].bonded || 0) * amount
+									  )
 							}
 						>{`${amount * 100}%`}</Text>
 					))}
 				</Flex>
 				<BondAmountInputer
+					hasError={
+						Number(
+							(selectedTab === ModalTabs.BOND ? bondAmount : unbondAmount) || 0
+						) >
+						((selectedTab === ModalTabs.BOND
+							? liquidity.balance
+							: stakingContracts[selectedUnbondLP].bonded) || 0)
+					}
 					value={selectedTab === ModalTabs.BOND ? bondAmount : unbondAmount}
 					onChange={handleChangeBondAmount}
 				/>
-				<Button
-					onClick={
-						selectedTab === ModalTabs.BOND ? handleClickBond : handleClickUnBond
-					}
+				<Flex
+					alignItems="center"
+					justifyContent="center"
+					gap="20px"
+					margin="10px 0 0 0"
 				>
-					{isPendingAction
-						? selectedTab === ModalTabs.BOND
-							? "Bonding"
-							: "Unbonding"
-						: selectedTab === ModalTabs.BOND
-						? "Bond"
-						: "Unbond"}
-				</Button>
+					{selectedTab === ModalTabs.BOND ? (
+						<>
+							{stakingContracts.map((contract, index) => (
+								<Button
+									key={index}
+									onClick={() => {
+										handleClickBond(contract.address);
+									}}
+								>
+									<img
+										width={25}
+										alt=""
+										src={`/coin-images/${contract.rewardToken.replace(
+											/\//g,
+											""
+										)}.png`}
+									/>
+									{isPendingAction ? "Bonding" : "Bond"}
+								</Button>
+							))}
+						</>
+					) : (
+						<Flex alignItems="center" gap="30px">
+							<Flex alignItems="center" gap="10px">
+								{stakingContracts.map((contract, index) => (
+									<img
+										style={{
+											cursor: "pointer",
+											filter:
+												selectedUnbondLP === index ? "none" : "grayscale(1)",
+										}}
+										width={25}
+										alt=""
+										src={`/coin-images/${contract.rewardToken.replace(
+											/\//g,
+											""
+										)}.png`}
+										onClick={() => setSelectedUnbondLP(index)}
+									/>
+								))}
+							</Flex>
+							<Button onClick={handleClickUnBond}>
+								{isPendingAction ? "Unbonding" : "Unbond"}
+							</Button>
+						</Flex>
+					)}
+				</Flex>
 				{selectedTab === ModalTabs.UNBOND && unbondHistory.length > 0 && (
 					<UnbondHistoryContainer>
 						<Flex justifyContent="flex-end">

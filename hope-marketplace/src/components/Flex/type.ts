@@ -23,4 +23,6 @@ export interface TFlex extends BasicProps {
 	margin?: string;
 	padding?: string;
 	backgroundColor?: string;
+	onMouseDown?: React.MouseEventHandler<HTMLDivElement>;
+	onTouchEnd?: React.TouchEventHandler<HTMLDivElement>;
 }

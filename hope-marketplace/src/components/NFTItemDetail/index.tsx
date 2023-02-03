@@ -40,7 +40,7 @@ import {
 	// CustomAuctionPeriodControl,
 } from "./styled";
 import ReactSelect, { ControlProps } from "react-select";
-import { TokenType } from "../../types/tokens";
+import { TokenStatus, TokenType } from "../../types/tokens";
 import {
 	CollectionIds,
 	getCollectionById,
@@ -169,8 +169,6 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 
 	const handleNFTItem = async () => {
 		if (status === "Sell") {
-			// const expire =
-			//   (Number(new Date()) + auctionPeriod.value * 24 * 3600 * 1000) * 1e6;
 			await sellNft(item, nftPrice, nftPriceType.value, 0);
 		} else if (status === "Withdraw") {
 			await withdrawNft(item);
@@ -242,8 +240,11 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 		children,
 		...props
 	}: ControlProps<any, false>) => {
+		const {
+			innerProps: { onMouseDown, onTouchEnd },
+		} = props;
 		return (
-			<CustomControl>
+			<CustomControl onMouseDown={onMouseDown} onTouchEnd={onTouchEnd}>
 				<CustomSelectItem option={selectValue} />
 				{children}
 			</CustomControl>
@@ -284,8 +285,11 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 		children,
 		...props
 	}: ControlProps<any, false>) => {
+		const {
+			innerProps: { onMouseDown, onTouchEnd },
+		} = props;
 		return (
-			<CustomControl>
+			<CustomControl onMouseDown={onMouseDown} onTouchEnd={onTouchEnd}>
 				{nftPriceType && (
 					<StatisticIcon
 						alt=""
@@ -403,7 +407,13 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 									alt=""
 									src={`/coin-images/${price.denom.replace(/\//g, "")}.png`}
 								/>
-								<MainPriceContainer>{`${+(price?.amount || 0) / 1e6} ${
+								<MainPriceContainer>{`${
+									+(price?.amount || 0) /
+									Math.pow(
+										10,
+										TokenStatus[price.denom as TokenType].decimal || 6
+									)
+								} ${
 									price.denom
 										? `${(
 												Object.keys(TokenType) as Array<keyof typeof TokenType>
@@ -414,9 +424,14 @@ const NFTItemDetail: React.FC<NFTItemDetailProps> = ({ item }) => {
 								}`}</MainPriceContainer>
 								<UsdPriceContainer>
 									{tokenPrice &&
-										`(${((+(price?.amount || 0) / 1e6) * tokenPrice).toFixed(
-											2
-										)}$)`}
+										`(${(
+											(+(price?.amount || 0) /
+												Math.pow(
+													10,
+													TokenStatus[price.denom as TokenType].decimal || 6
+												)) *
+											tokenPrice
+										).toFixed(2)}$)`}
 								</UsdPriceContainer>
 							</DetailContent>
 						</>

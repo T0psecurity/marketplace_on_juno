@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Button from "../../components/Button";
+import Text from "../../components/Text";
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -32,4 +33,8 @@ export const StyledButton = styled(Button)<{ colored?: boolean }>`
 	margin: auto;
 	font-size: 16px;
 	text-align: center;
+`;
+
+export const SmallText = styled(Text)`
+	font-size: 15px;
 `;

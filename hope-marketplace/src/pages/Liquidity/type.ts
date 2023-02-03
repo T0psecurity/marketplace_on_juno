@@ -23,8 +23,21 @@ export type TAddAmount = {
 	token2: string | number;
 };
 
+export type THasError = {
+	token1: boolean;
+	token2: boolean;
+};
+
 export type TCreateInfo = { [key in keyof TAddAmount]: TokenType };
 
 export type TPoolInfo = {
 	balance: number;
 };
+
+export interface TTokenAmountInputer {
+	token?: TokenType;
+	hasSelect?: boolean;
+	amount?: any;
+	onSelectToken?: (token: TokenType) => void;
+	onAmountChange?: (amount: string) => void;
+}

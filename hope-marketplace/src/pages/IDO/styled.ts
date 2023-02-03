@@ -1,9 +1,15 @@
 import styled, { css } from "styled-components";
 import Text from "../../components/Text";
+import ExploreHeader from "../../components/ExploreHeader";
 
 export const Wrapper = styled.div`
 	height: 100%;
 `;
+
+export const StyledExploreHeader = styled(ExploreHeader)`
+	padding: 0 5%;
+`;
+
 export const BackgroundWrapper = styled.div`
 	padding: 10px 5%;
 
@@ -227,7 +233,7 @@ export const SelectItem = styled.div<{ checked?: boolean }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 5px;
+	padding: 10px;
 	cursor: pointer;
 	transition: 0.3s;
 	gap: 5px;
@@ -275,7 +281,7 @@ export const PresaleStatus = styled.div<{ backgroundColor: string }>`
 
 export const IDODetailWrapper = styled.div`
 	height: 100%;
-	padding: 0 5%;
+	padding: 20px 5%;
 	background: linear-gradient(
 		180deg,
 		rgba(2, 226, 150, 0.12) 0%,

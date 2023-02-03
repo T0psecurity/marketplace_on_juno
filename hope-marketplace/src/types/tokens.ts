@@ -1,14 +1,28 @@
 import { ChainTypes } from "../constants/ChainTypes";
 
 export enum TokenType {
+	HOPERS = "hopers",
 	JUNO = "ujuno",
-	HOPE = "hope",
-	RAW = "raw",
-	NETA = "neta",
 	ATOM = "ibc/C4CFF46FD6DE35CA4CF4CE031E643C8FDC9BA4B99AE598E9B0ED98FE3A2319F9",
 	USDC = "ibc/EAC38D55372F38F1AFD68DF7FE9EF762DCF69F26520643CF3F9D292A738D8034",
-	HOPERS = "hopers",
+	OSMO = "ibc/ED07A3391A112B175915CD8FAF43A2DA8E4790EDE12566649D0C2F97716B8518",
+	KUJIRA = "ibc/7F7D3698E2E3484D576001608BB84D13F5C8B02B97359716ECC60A29A7523BF3",
+	HUAHUA = "ibc/D836B191CDAE8EDACDEBE7B64B504C5E06CC17C6A072DAF278F9A96DF66F6241",
+	HOPE = "hope",
+	NETA = "neta",
 	PUNK = "punk",
+	RACOON = "racoon",
+	WYND = "wynd",
+	BLUE = "blue",
+	RED = "red",
+	CANLAB = "canlab",
+	SGNL = "sgnl",
+	AQUA = "aqua",
+	GLTO = "glto",
+	RAW = "raw",
+	DRGN = "drgn",
+	BANANA = "banana",
+	CZAR = "czar",
 }
 
 export const getTokenName = (tokenType: TokenType): string =>
@@ -25,6 +39,20 @@ export const TokenFullName: { [key in TokenType]: string } = {
 	[TokenType.USDC]: "USDC",
 	[TokenType.HOPERS]: "HOPERS",
 	[TokenType.PUNK]: "PUNK",
+	[TokenType.HUAHUA]: "HUAHUA",
+	[TokenType.CANLAB]: "CANLAB",
+	[TokenType.RED]: "RED",
+	[TokenType.BLUE]: "BLUE",
+	[TokenType.WYND]: "WYND",
+	[TokenType.SGNL]: "SGNL",
+	[TokenType.RACOON]: "RACOON",
+	[TokenType.GLTO]: "GLTO",
+	[TokenType.AQUA]: "AQUA",
+	[TokenType.OSMO]: "OSMO",
+	[TokenType.DRGN]: "DRGN",
+	[TokenType.BANANA]: "BANANA",
+	[TokenType.CZAR]: "CZAR",
+	[TokenType.KUJIRA]: "KUJI",
 };
 
 export type TokenStatusType = {
@@ -34,6 +62,8 @@ export type TokenStatusType = {
 	originChain?: ChainTypes;
 	chain: ChainTypes;
 	coinName?: string;
+	decimal?: number;
+	denom?: string;
 };
 
 export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
@@ -71,10 +101,11 @@ export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
 		originChain: ChainTypes.COSMOS,
 	},
 	[TokenType.USDC]: {
-		isNativeCoin: true,
+		isNativeCoin: false,
 		isIBCCoin: true,
 		chain: ChainTypes.AXELAR,
 		originChain: ChainTypes.AXELAR,
+		denom: "uusdc",
 	},
 	[TokenType.HOPERS]: {
 		isNativeCoin: false,
@@ -89,6 +120,102 @@ export const TokenStatus: { [key in TokenType]: TokenStatusType } = {
 		chain: ChainTypes.JUNO,
 		contractAddress:
 			"juno13926947pmrjly5p9hf5juey65c6rget0gqrnx3us3r6pvnpf4hwqm8mchy",
+	},
+	[TokenType.HUAHUA]: {
+		isNativeCoin: true,
+		isIBCCoin: true,
+		chain: ChainTypes.CHIHUAHUA,
+		originChain: ChainTypes.CHIHUAHUA,
+	},
+	[TokenType.CANLAB]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno1vn38rzq0wc7zczp4dhy0h5y5kxh2jjzeahwe30c9cc6dw3lkyk5qn5rmfa",
+		decimal: 3,
+	},
+	[TokenType.RED]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno1g647t78y2ulqlm3lss8rs3d0spzd0teuwhdvnqn92tr79yltk9dq2h24za",
+	},
+	[TokenType.BLUE]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno14q8kk464fafql2fwmlsgvgcdl6h2csqpzv4hr025fmcvgjahpess32k0j7",
+	},
+	[TokenType.WYND]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno1mkw83sv6c7sjdvsaplrzc8yaes9l42p4mhy0ssuxjnyzl87c9eps7ce3m9",
+	},
+	[TokenType.SGNL]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno14lycavan8gvpjn97aapzvwmsj8kyrvf644p05r0hu79namyj3ens87650k",
+	},
+	[TokenType.RACOON]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno1r4pzw8f9z0sypct5l9j906d47z998ulwvhvqe5xdwgy8wf84583sxwh0pa",
+	},
+	[TokenType.GLTO]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno1j0a9ymgngasfn3l5me8qpd53l5zlm9wurfdk7r65s5mg6tkxal3qpgf5se",
+	},
+	[TokenType.AQUA]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno1hnftys64ectjfynm6qjk9my8jd3f6l9dq9utcd3dy8ehwrsx9q4q7n9uxt",
+	},
+	[TokenType.OSMO]: {
+		isNativeCoin: true,
+		isIBCCoin: true,
+		chain: ChainTypes.OSMOSIS,
+		originChain: ChainTypes.OSMOSIS,
+	},
+	[TokenType.DRGN]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno147t4fd3tny6hws6rha9xs5gah9qa6g7hrjv9tuvv6ce6m25sy39sq6yv52",
+	},
+	[TokenType.BANANA]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno1s2dp05rspeuzzpzyzdchk262szehrtfpz847uvf98cnwh53ulx4qg20qwj",
+	},
+	[TokenType.CZAR]: {
+		isNativeCoin: false,
+		isIBCCoin: false,
+		chain: ChainTypes.JUNO,
+		contractAddress:
+			"juno1x02k67asfmjawgc96dj8nxq6se3fmx36gedgs5hvkjegdhfy97rs3jgj2h",
+	},
+	[TokenType.KUJIRA]: {
+		isNativeCoin: true,
+		isIBCCoin: true,
+		chain: ChainTypes.KUJIRA,
+		originChain: ChainTypes.KUJIRA,
 	},
 };
 

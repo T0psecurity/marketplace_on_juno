@@ -87,7 +87,7 @@ const Table = <T extends object>({
 		<Wrapper>
 			{hasControlPanel && (
 				<TableControlPanel>
-					{!!option?.tab && <TableTabs tabs={option.tab.tabs} />}
+					{!!option?.tab && <TableTabs {...option.tab} />}
 					{!!option?.search && (
 						<TableSearchInputer
 							placeholder={option.search.placeholder ?? "Search"}

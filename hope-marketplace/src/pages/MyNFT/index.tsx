@@ -18,7 +18,7 @@ import {
 	TokenBalance,
 	TokenTypeString,
 	CoinIconWrapper,
-	WithdrawButton,
+	// WithdrawButton,
 	MyNftsHeader,
 	Tab,
 	SearchWrapper,
@@ -33,6 +33,10 @@ import {
 	TokenNameContainer,
 	AcceptWithdrawBidButton,
 	MyOfferButton,
+	StyledToggleButton as ToggleButton,
+	Balances,
+	IBCDepositWithdrawButtons,
+	IBCDepositWithdrawButton,
 } from "./styled";
 
 import { useAppSelector } from "../../app/hooks";
@@ -119,7 +123,10 @@ const MyNFT: React.FC = () => {
 	);
 	const [isReceivedOffer, setIsReceivedOffer] = useState(false);
 	const [myOffers, setMyOffers] = useState([]);
-	const [selectedNftTab, setSelectedNftTab] = useState<NFT_TYPE>(NFT_TYPE.ALL);
+	const [hideZeroAssets, setHideZeroAssets] = useState<boolean>(true);
+	const [selectedNftTab, setSelectedNftTab] = useState<NFT_TYPE>(
+		NFT_TYPE.ALL
+	);
 	const [searchValue, setSearchValue] = useState<string>("");
 	const [searchActivityValue, setSearchActivityValue] = useState("");
 	const [selectedTokenType, setSelectedTokenType] = useState<
@@ -147,13 +154,16 @@ const MyNFT: React.FC = () => {
 			let offers: any = [];
 			const fetchBidsToMyNft = async (startAfter?: any) => {
 				if (!account?.address) return;
-				const fetchedBidsResult = await runQuery(MarketplaceContracts[0], {
-					bids_by_seller: {
-						seller: account.address,
-						start_after: startAfter,
-						limit: MAX_ITEM,
-					},
-				});
+				const fetchedBidsResult = await runQuery(
+					MarketplaceContracts[0],
+					{
+						bids_by_seller: {
+							seller: account.address,
+							start_after: startAfter,
+							limit: MAX_ITEM,
+						},
+					}
+				);
 				const fetchedBids = fetchedBidsResult?.bids || [];
 				offers = offers.concat(fetchedBids);
 				if (fetchedBids.length === MAX_ITEM) {
@@ -166,13 +176,16 @@ const MyNFT: React.FC = () => {
 			};
 			const fetchMyBids = async (startAfter?: any) => {
 				if (!account?.address) return;
-				const fetchedBidsResult = await runQuery(MarketplaceContracts[0], {
-					bids_by_bidder: {
-						bidder: account.address,
-						start_after: startAfter,
-						limit: MAX_ITEM,
-					},
-				});
+				const fetchedBidsResult = await runQuery(
+					MarketplaceContracts[0],
+					{
+						bids_by_bidder: {
+							bidder: account.address,
+							start_after: startAfter,
+							limit: MAX_ITEM,
+						},
+					}
+				);
 				const fetchedBids = fetchedBidsResult?.bids || [];
 				offers = offers.concat(fetchedBids);
 				if (fetchedBids.length === MAX_ITEM) {
@@ -184,13 +197,16 @@ const MyNFT: React.FC = () => {
 			};
 			const fetchMyCollectionBids = async (startAfter?: any) => {
 				if (!account?.address) return;
-				const fetchedBidsResult = await runQuery(MarketplaceContracts[0], {
-					collection_bids_by_bidder: {
-						bidder: account.address,
-						start_after: startAfter,
-						limit: MAX_ITEM,
-					},
-				});
+				const fetchedBidsResult = await runQuery(
+					MarketplaceContracts[0],
+					{
+						collection_bids_by_bidder: {
+							bidder: account.address,
+							start_after: startAfter,
+							limit: MAX_ITEM,
+						},
+					}
+				);
 				const fetchedBids = fetchedBidsResult?.bids || [];
 				offers = offers.concat(fetchedBids);
 				if (fetchedBids.length === MAX_ITEM) {
@@ -234,7 +250,9 @@ const MyNFT: React.FC = () => {
 				nfts[collectionId] &&
 				nfts[collectionId].length &&
 				(!searchValue ||
-					collection.title.toLowerCase().includes(searchValue.toLowerCase()))
+					collection.title
+						.toLowerCase()
+						.includes(searchValue.toLowerCase()))
 			) {
 				// nfts[collectionId].forEach((item: any) => {
 				//   if (
@@ -252,7 +270,9 @@ const MyNFT: React.FC = () => {
 				(nfts as any)[listedKey] &&
 				(nfts as any)[listedKey].length &&
 				(!searchValue ||
-					collection.title.toLowerCase().includes(searchValue.toLowerCase()))
+					collection.title
+						.toLowerCase()
+						.includes(searchValue.toLowerCase()))
 			) {
 				// (nfts as any)[listedKey].forEach((item: any) => {
 				//   if (
@@ -274,17 +294,26 @@ const MyNFT: React.FC = () => {
 		};
 	}, [nfts, searchValue]);
 
-	const handleClickBalanceItem = (tokenType: TokenType) => {
+	const handleClickBalanceItem = (
+		tokenType: TokenType,
+		swapType = SwapType.WITHDRAW
+	) => {
 		const tokenStatus = TokenStatus[tokenType];
 		if (!tokenStatus.isIBCCoin) return;
 		popoutQuickSwap(
 			{
-				swapType: SwapType.WITHDRAW,
+				swapType,
 				denom: tokenType,
-				swapChains: {
-					origin: tokenStatus.chain,
-					foreign: ChainTypes.JUNO,
-				},
+				swapChains:
+					swapType === SwapType.DEPOSIT
+						? {
+								origin: tokenStatus.chain,
+								foreign: ChainTypes.JUNO,
+						  }
+						: {
+								origin: ChainTypes.JUNO,
+								foreign: tokenStatus.chain,
+						  },
 			},
 			true,
 			(status: any) => {
@@ -328,7 +357,8 @@ const MyNFT: React.FC = () => {
 				activities.forEach((activityItem: any) => {
 					let filtered =
 						!selectCollectionValue.value ||
-						selectCollectionValue.value === activityItem.collectionId;
+						selectCollectionValue.value ===
+							activityItem.collectionId;
 					if (searchActivityValue) {
 						const targetCollection = getCollectionById(
 							activityItem.collectionId as CollectionIds
@@ -341,11 +371,15 @@ const MyNFT: React.FC = () => {
 							: activityItem.token_id;
 						filtered =
 							filtered &&
-							tokenId.toLowerCase().includes(searchActivityValue.toLowerCase());
+							tokenId
+								.toLowerCase()
+								.includes(searchActivityValue.toLowerCase());
 					}
 					if (selectedTokenType) {
 						filtered =
-							filtered && activityItem.denom === (selectedTokenType as string);
+							filtered &&
+							activityItem.denom ===
+								(selectedTokenType as string);
 					}
 					if (filtered) {
 						result = [...result, activityItem];
@@ -360,11 +394,11 @@ const MyNFT: React.FC = () => {
 					sortDirection === SortDirectionType.desc
 				) {
 					const tokenPrice1 =
-						tokenPrices[item1.denom as TokenType]?.market_data.current_price
-							?.usd || 0;
+						tokenPrices[item1.denom as TokenType]?.market_data
+							.current_price?.usd || 0;
 					const tokenPrice2 =
-						tokenPrices[item2.denom as TokenType]?.market_data.current_price
-							?.usd || 0;
+						tokenPrices[item2.denom as TokenType]?.market_data
+							.current_price?.usd || 0;
 
 					const price1 = tokenPrice1 * Number(item1.amount);
 					const price2 = tokenPrice2 * Number(item2.amount);
@@ -387,16 +421,19 @@ const MyNFT: React.FC = () => {
 	);
 
 	const { totalBalanceInUsd, chartData } = useMemo(() => {
-		const chartDataResult: any = [];
+		const chartDataMidResult: any = [];
+		let chartDataResult: any = [];
 		const totalBalance = (
 			Object.keys(TokenType) as Array<keyof typeof TokenType>
 		).reduce((result, key) => {
 			const denom = TokenType[key];
-			const crrBalance = (balances?.[denom]?.amount || 0) / 1e6;
+			const crrBalance =
+				(balances?.[denom]?.amount || 0) /
+				Math.pow(10, TokenStatus[denom].decimal || 6);
 			const crrTokenPrice =
 				tokenPrices[denom]?.market_data.current_price?.usd || 0;
 			if (crrBalance * crrTokenPrice > 0)
-				chartDataResult.push({
+				chartDataMidResult.push({
 					name: key,
 					tokenFullName: TokenFullName[denom],
 					token: denom,
@@ -404,6 +441,25 @@ const MyNFT: React.FC = () => {
 				});
 			return result + crrBalance * crrTokenPrice;
 		}, 0);
+
+		let chartOtherPrices = 0;
+		for (let chartDataMidItem of chartDataMidResult) {
+			if (chartDataMidItem.price > 0.05 * totalBalance) {
+				chartDataResult = [...chartDataResult, chartDataMidItem];
+			} else {
+				chartOtherPrices += chartDataMidItem.price;
+			}
+		}
+		chartDataResult = [
+			...chartDataResult,
+			{
+				name: "Others",
+				tokenFullName: "Others",
+				token: "Others",
+				price: chartOtherPrices,
+			},
+		];
+
 		return {
 			totalBalanceInUsd: totalBalance.toLocaleString("en-US", {
 				maximumFractionDigits: 2,
@@ -510,7 +566,11 @@ const MyNFT: React.FC = () => {
 									return (
 										<Cell
 											key={`cell-${index}`}
-											fill={LineColors[entry.token as TokenType]}
+											fill={
+												LineColors[
+													entry.token as TokenType
+												]
+											}
 										/>
 									);
 								})}
@@ -520,23 +580,42 @@ const MyNFT: React.FC = () => {
 				</ChartArea>
 				<TokenTypeString>JUNO Chain Assets</TokenTypeString>
 				<TokenBalancesWrapper>
-					{(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
-						(key) => {
+					<ToggleButton
+						defaultChecked
+						label={{ title: "Hide 0 Balances:" }}
+						onChange={(checked) => setHideZeroAssets(checked)}
+					/>
+					<Balances>
+						{(
+							Object.keys(TokenType) as Array<
+								keyof typeof TokenType
+							>
+						).map((key) => {
 							const denom = TokenType[key];
 							const tokenStatus = TokenStatus[denom];
 							if (tokenStatus.isIBCCoin) return null;
-							const tokenBalance = (balances?.[denom]?.amount || 0) / 1e6;
+							const tokenBalance =
+								(balances?.[denom]?.amount || 0) /
+								Math.pow(10, TokenStatus[denom].decimal || 6);
+							if (hideZeroAssets && tokenBalance === 0)
+								return null;
 							const tokenPrice =
-								tokenPrices[denom]?.market_data.current_price?.usd || 0;
+								tokenPrices[denom]?.market_data.current_price
+									?.usd || 0;
 							return (
 								<TokenBalanceItem
 									key={denom}
-									onClick={() => handleClickBalanceItem(denom)}
+									onClick={() =>
+										handleClickBalanceItem(denom)
+									}
 								>
 									<CoinIconWrapper>
 										<CoinIcon
 											alt=""
-											src={`/coin-images/${denom.replace(/\//g, "")}.png`}
+											src={`/coin-images/${denom.replace(
+												/\//g,
+												""
+											)}.png`}
 										/>
 										<TokenBalance>{key}</TokenBalance>
 									</CoinIconWrapper>
@@ -545,38 +624,82 @@ const MyNFT: React.FC = () => {
 											maximumFractionDigits: 3,
 										})}
 										<Text style={{ fontSize: "0.8em" }}>
-											{`${(tokenBalance * tokenPrice).toLocaleString("en-US", {
+											{`${(
+												tokenBalance * tokenPrice
+											).toLocaleString("en-US", {
 												maximumFractionDigits: 3,
 											})}$`}
 										</Text>
 									</TokenBalance>
 								</TokenBalanceItem>
 							);
-						}
-					)}
+						})}
+					</Balances>
 				</TokenBalancesWrapper>
 				<TokenTypeString>
 					IBC Assets
 					{/* <span>(Click Asset to Withdraw)</span> */}
+					<IBCDepositWithdrawButtons>
+						<IBCDepositWithdrawButton
+							onClick={() =>
+								handleClickBalanceItem(
+									TokenType.ATOM,
+									SwapType.DEPOSIT
+								)
+							}
+						>
+							Deposit
+						</IBCDepositWithdrawButton>
+						<IBCDepositWithdrawButton
+							onClick={() =>
+								handleClickBalanceItem(
+									TokenType.ATOM,
+									SwapType.WITHDRAW
+								)
+							}
+						>
+							Withdraw
+						</IBCDepositWithdrawButton>
+					</IBCDepositWithdrawButtons>
 				</TokenTypeString>
 				<TokenBalancesWrapper>
-					{(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
-						(key) => {
+					<Balances>
+						{(
+							Object.keys(TokenType) as Array<
+								keyof typeof TokenType
+							>
+						).map((key) => {
 							const denom = TokenType[key];
 							const tokenStatus = TokenStatus[denom];
 							if (!tokenStatus.isIBCCoin) return null;
-							const tokenBalance = (balances?.[denom]?.amount || 0) / 1e6;
+							const tokenBalance =
+								(balances?.[denom]?.amount || 0) /
+								Math.pow(10, TokenStatus[denom].decimal || 6);
 							const tokenPrice =
-								tokenPrices[denom]?.market_data.current_price?.usd || 0;
+								tokenPrices[denom]?.market_data.current_price
+									?.usd || 0;
 							const chain = tokenStatus.chain;
 							return (
-								<TokenBalanceItem key={denom} marginBottom="20px">
+								<TokenBalanceItem
+									key={denom}
+									marginBottom="20px"
+									onClick={() =>
+										handleClickBalanceItem(denom)
+									}
+								>
 									<CoinIconWrapper>
 										<CoinIcon
 											alt=""
-											src={`/coin-images/${denom.replace(/\//g, "")}.png`}
+											src={`/coin-images/${denom.replace(
+												/\//g,
+												""
+											)}.png`}
 										/>
-										<TokenBalance chainName={ChainConfigs[chain].chainName}>
+										<TokenBalance
+											chainName={
+												ChainConfigs[chain].chainName
+											}
+										>
 											{key}
 										</TokenBalance>
 									</CoinIconWrapper>
@@ -585,35 +708,43 @@ const MyNFT: React.FC = () => {
 											maximumFractionDigits: 3,
 										})}
 										<Text style={{ fontSize: "0.9em" }}>
-											{`${(tokenBalance * tokenPrice).toLocaleString("en-US", {
+											{`${(
+												tokenBalance * tokenPrice
+											).toLocaleString("en-US", {
 												maximumFractionDigits: 3,
 											})}$`}
 										</Text>
 									</TokenBalance>
-									<WithdrawButton onClick={() => handleClickBalanceItem(denom)}>
-										Withdraw / Deposit
-									</WithdrawButton>
+									{/* <WithdrawButton
+											onClick={() => handleClickBalanceItem(denom)}
+										>
+											Withdraw / Deposit
+										</WithdrawButton> */}
 								</TokenBalanceItem>
 							);
-						}
-					)}
+						})}
+					</Balances>
 				</TokenBalancesWrapper>
 			</MyAssetsArea>
 			<StyledExploreHeader title="My Pools" />
 			<MyPools />
 			<StyledExploreHeader
 				title={`My ${selectedPageTab}`}
-				tabs={(Object.keys(TAB_TYPE) as Array<keyof typeof TAB_TYPE>).map(
-					(key) => ({
-						title: key,
-						onClick: () => setSelectedPageTab(TAB_TYPE[key]),
-						selected: () => selectedPageTab === TAB_TYPE[key],
-					})
-				)}
+				tabs={(
+					Object.keys(TAB_TYPE) as Array<keyof typeof TAB_TYPE>
+				).map((key) => ({
+					title: key,
+					onClick: () => setSelectedPageTab(TAB_TYPE[key]),
+					selected: () => selectedPageTab === TAB_TYPE[key],
+				}))}
 				extra={
 					isReceivedOffer ? (
 						<ReceivedOfferBanner>
-							<MyOfferButton onClick={() => setSelectedPageTab(TAB_TYPE.OFFER)}>
+							<MyOfferButton
+								onClick={() =>
+									setSelectedPageTab(TAB_TYPE.OFFER)
+								}
+							>
 								My Offer
 							</MyOfferButton>
 						</ReceivedOfferBanner>
@@ -624,18 +755,22 @@ const MyNFT: React.FC = () => {
 				<>
 					<MyNftsHeader>
 						<Tabs flexWrap="wrap">
-							{(Object.keys(NFT_TYPE) as Array<keyof typeof NFT_TYPE>).map(
-								(key) => (
-									<Tab
-										key={key}
-										selected={selectedNftTab === NFT_TYPE[key]}
-										onClick={() => setSelectedNftTab(NFT_TYPE[key])}
-										title={`${NFT_TYPE[key]} (${
-											myNfts[NFT_TYPE[key]].length || 0
-										})`}
-									/>
-								)
-							)}
+							{(
+								Object.keys(NFT_TYPE) as Array<
+									keyof typeof NFT_TYPE
+								>
+							).map((key) => (
+								<Tab
+									key={key}
+									selected={selectedNftTab === NFT_TYPE[key]}
+									onClick={() =>
+										setSelectedNftTab(NFT_TYPE[key])
+									}
+									title={`${NFT_TYPE[key]} (${
+										myNfts[NFT_TYPE[key]].length || 0
+									})`}
+								/>
+							))}
 						</Tabs>
 						<CollectionSelect />
 						<SearchWrapper>
@@ -653,23 +788,27 @@ const MyNFT: React.FC = () => {
 				<>
 					<ActivityHeader>
 						<TokenContainer>
-							{(Object.keys(TokenType) as Array<keyof typeof TokenType>).map(
-								(key) => (
-									<CoinIcon
-										alt=""
-										src={`/coin-images/${TokenType[key].replace(
-											/\//g,
-											""
-										)}.png`}
-										size="50px"
-										onClick={() => {
-											setSelectedTokenType((prev) =>
-												prev === TokenType[key] ? undefined : TokenType[key]
-											);
-										}}
-									/>
-								)
-							)}
+							{(
+								Object.keys(TokenType) as Array<
+									keyof typeof TokenType
+								>
+							).map((key) => (
+								<CoinIcon
+									alt=""
+									src={`/coin-images/${TokenType[key].replace(
+										/\//g,
+										""
+									)}.png`}
+									size="50px"
+									onClick={() => {
+										setSelectedTokenType((prev) =>
+											prev === TokenType[key]
+												? undefined
+												: TokenType[key]
+										);
+									}}
+								/>
+							))}
 						</TokenContainer>
 						<ReactSelect
 							defaultValue={SortDirectionSelectOptions[0]}
@@ -678,7 +817,9 @@ const MyNFT: React.FC = () => {
 							styles={{
 								menu: (provided, state) => ({
 									...provided,
-									backgroundColor: isDark ? "#838383" : "white",
+									backgroundColor: isDark
+										? "#838383"
+										: "white",
 								}),
 								control: (provided, state) => ({
 									...provided,
@@ -696,7 +837,9 @@ const MyNFT: React.FC = () => {
 						/>
 						<CollectionSelect />
 						<SearchWrapper>
-							<SearchInputer onChange={handleChangeActivitySearchValue} />
+							<SearchInputer
+								onChange={handleChangeActivitySearchValue}
+							/>
 						</SearchWrapper>
 					</ActivityHeader>
 					<ActivityList
@@ -727,38 +870,66 @@ const MyNFT: React.FC = () => {
 									);
 									const targetCollection =
 										(offer?.token_id
-											? getCollectionById(currentNft.collectionId || "")
-											: getCollectionByNftContract(offer?.collection || "")) ||
-										{};
+											? getCollectionById(
+													currentNft.collectionId ||
+														""
+											  )
+											: getCollectionByNftContract(
+													offer?.collection || ""
+											  )) || {};
 									const tokenName = (
-										Object.keys(TokenType) as Array<keyof typeof TokenType>
-									).filter((key) => TokenType[key] === listPrice?.denom)[0];
+										Object.keys(TokenType) as Array<
+											keyof typeof TokenType
+										>
+									).filter(
+										(key) =>
+											TokenType[key] === listPrice?.denom
+									)[0];
 									const tokenPrice =
-										tokenPrices[listPrice?.denom as TokenType]?.market_data
-											.current_price?.usd || 0;
+										tokenPrices[
+											listPrice?.denom as TokenType
+										]?.market_data.current_price?.usd || 0;
 									const priceInUsd = (
 										(+listPrice.amount * tokenPrice) /
-										1e6
+										Math.pow(
+											10,
+											TokenStatus[
+												listPrice?.denom as TokenType
+											].decimal || 6
+										)
 									).toLocaleString("en-US", {
 										maximumFractionDigits: 2,
 									});
 									const expirationDate = moment(
-										new Date(+(offer?.expires_at || "0") / 1e6)
+										new Date(
+											+(offer?.expires_at || "0") / 1e6
+										)
 									).format("YYYY-MM-DD hh:mm:ss");
 									const collectionState =
-										collectionStates[targetCollection.collectionId] || {};
+										collectionStates[
+											targetCollection.collectionId
+										] || {};
 
 									let url = "";
-									if (currentNft.collectionId === "mintpass1") {
+									if (
+										currentNft.collectionId === "mintpass1"
+									) {
 										url = "/others/mint_pass.png";
-									} else if (currentNft.collectionId === "mintpass2") {
+									} else if (
+										currentNft.collectionId === "mintpass2"
+									) {
 										url = "/others/mint_pass2.png";
-									} else if (currentNft.collectionId === "hopegalaxy1") {
+									} else if (
+										currentNft.collectionId ===
+										"hopegalaxy1"
+									) {
 										url = `https://hopegalaxy.mypinata.cloud/ipfs/QmP7jDG2k92Y7cmpa7iz2vhFG1xp7DNss7vuwUpNaDd7xf/${getTokenIdNumber(
 											currentNft.token_id
 										)}.png`;
 									} else if (collectionState.imageUrl) {
-										url = `${collectionState.imageUrl}${getTokenIdNumber(
+										url = `${
+											collectionState.imageUrl
+										}${getTokenIdNumber(
 											currentNft.token_id
 										)}.png`;
 									}
@@ -770,7 +941,11 @@ const MyNFT: React.FC = () => {
 												<ItemTd>
 													<img alt="" src={url} />
 													<TokenNameContainer>
-														<Text>{targetCollection.title}</Text>
+														<Text>
+															{
+																targetCollection.title
+															}
+														</Text>
 														{!!offer?.token_id ? (
 															<Text>
 																{targetCollection.customTokenId
@@ -781,7 +956,9 @@ const MyNFT: React.FC = () => {
 																	: currentNft.token_id}
 															</Text>
 														) : (
-															<Text>Collection Offer</Text>
+															<Text>
+																Collection Offer
+															</Text>
 														)}
 													</TokenNameContainer>
 												</ItemTd>
@@ -795,22 +972,38 @@ const MyNFT: React.FC = () => {
 															""
 														)}.png`}
 													/>
-													<Text>{Number(listPrice.amount) / 1e6}</Text>
+													<Text>
+														{Number(
+															listPrice.amount
+														) /
+															Math.pow(
+																10,
+																TokenStatus[
+																	listPrice?.denom as TokenType
+																].decimal || 6
+															)}
+													</Text>
 													<Text>{tokenName}</Text>
 													<Text>{`($${priceInUsd})`}</Text>
 												</CoinIconWrapper>
 											</td>
 											<td title={offer.bidder}>
-												{offer.bidder === account?.address
+												{offer.bidder ===
+												account?.address
 													? "YOU"
 													: offer.bidder}
 											</td>
 											<td>
 												{account?.address ? (
 													<AcceptWithdrawBidButton
-														onClick={() => handleAcceptWithdrawOffer(offer)}
+														onClick={() =>
+															handleAcceptWithdrawOffer(
+																offer
+															)
+														}
 													>
-														{account.address === offer.bidder
+														{account.address ===
+														offer.bidder
 															? "Withdraw"
 															: "Accept"}
 													</AcceptWithdrawBidButton>

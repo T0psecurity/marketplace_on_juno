@@ -23,7 +23,7 @@ import { useAppSelector } from "../../app/hooks";
 import { BasicProps } from "../../constants/BasicTypes";
 import { IDOInterface } from "../../constants/IDOs";
 import useIDOStatus from "./useIDOStatus";
-import { getTokenName, TokenType } from "../../types/tokens";
+import { getTokenName, TokenStatus, TokenType } from "../../types/tokens";
 import Text from "../../components/Text";
 import { SwapCrossIcon } from "../../components/SvgIcons";
 import useContract from "../../hook/useContract";
@@ -59,7 +59,9 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 
 	const balances = useAppSelector((state) => state.balances);
 	const idoStatus = useMemo(() => {
-		const tokenBalance = (balances[selectedTokenType]?.amount || 0) / 1e6;
+		const tokenBalance =
+			(balances[selectedTokenType]?.amount || 0) /
+			Math.pow(10, TokenStatus[selectedTokenType as TokenType].decimal || 6);
 
 		let ratio = basicIdoStatus.costs[selectedTokenType];
 
@@ -172,8 +174,11 @@ const SwapAmountInput: React.FC<SwapAmountInputProps> = ({
 		children,
 		...props
 	}: ControlProps<any, false>) => {
+		const {
+			innerProps: { onMouseDown, onTouchEnd },
+		} = props;
 		return (
-			<CustomControl>
+			<CustomControl onMouseDown={onMouseDown} onTouchEnd={onTouchEnd}>
 				<CustomSelectItem option={{ value: selectedTokenType }} container />
 				{children}
 			</CustomControl>

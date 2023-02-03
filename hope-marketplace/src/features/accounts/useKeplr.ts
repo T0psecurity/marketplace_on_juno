@@ -4,7 +4,11 @@ import { useAppDispatch } from "../../app/hooks";
 import { AccountType, setKeplrAccount } from "../accounts/accountsSlice";
 import { ChainInfo, Keplr } from "@keplr-wallet/types";
 import { fromMicroDenom } from "../../util/coins";
-import { ChainConfigs, ChainTypes } from "../../constants/ChainTypes";
+import {
+	ChainConfigs,
+	ChainTypes,
+	ConfigType,
+} from "../../constants/ChainTypes";
 
 export const CosmosCoinType = 118;
 
@@ -101,6 +105,8 @@ export async function getKeplr(): Promise<Keplr> {
 
 export function useKeplr(): {
 	connect: () => Promise<void>;
+	suggestToken: (chain: ConfigType, tokenAddress: string) => Promise<void>;
+	suggestChain: () => Promise<void>;
 } {
 	const config = ChainConfigs[ChainTypes.JUNO];
 	const dispatch = useAppDispatch();
@@ -134,6 +140,16 @@ export function useKeplr(): {
 		await keplr.experimentalSuggestChain(getChainConfig(config));
 	}, [config]);
 
+	const suggestToken = useCallback(
+		async (chain: ConfigType, tokenAddress: string): Promise<void> => {
+			if (!tokenAddress) return;
+			const keplr = await getKeplr();
+
+			await keplr.suggestToken(chain.chainId, tokenAddress);
+		},
+		[]
+	);
+
 	const connect = useCallback(async (): Promise<void> => {
 		try {
 			await suggestChain();
@@ -141,5 +157,5 @@ export function useKeplr(): {
 		} catch (e) {}
 	}, [getAccount, suggestChain]);
 
-	return { connect };
+	return { connect, suggestToken, suggestChain };
 }

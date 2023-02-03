@@ -203,8 +203,12 @@ const IDODetail: React.FC = () => {
 							<Text>{`Status: ${
 								FilterButtonOptions[idoStatus.crrState].title
 							}`}</Text>
-							<Text>{`Presale progress: ${idoStatus.percentageSold}%`}</Text>
-							<Text>{`${idoStatus.totalSold} / ${idoStatus.total}`}</Text>
+							{!idoInfo.visibleOption?.hideSoldAmount &&
+                <>
+                  <Text>{`Presale progress: ${idoStatus.percentageSold}%`}</Text>
+							    <Text>{`${idoStatus.totalSold} / ${idoStatus.total}`}</Text>
+                </>
+              }
 						</StatusContent>
 						<TokenLogo
 							style={{ height: 100, width: "unset" }}
@@ -212,9 +216,9 @@ const IDODetail: React.FC = () => {
 							alt=""
 						/>
 					</Flex>
-					<ProgressBar value={idoStatus.percentageSold}>
+					{!idoInfo.visibleOption?.hideSoldAmount && <ProgressBar value={idoStatus.percentageSold}>
 						<Text>{`${idoStatus.percentageSold}%`}</Text>
-					</ProgressBar>
+					</ProgressBar>}
 				</Flex>
 			</DetailHeader>
 			<ProjectDetail>

@@ -21,6 +21,7 @@ import {
 	TokensTableTokenNameContainer,
 	Wrapper,
 } from "./styled";
+import ToggleButton from "../ToggleButton";
 
 interface ITokenListModal extends IModal {
 	onSelectToken: (token: TokenType) => void;
@@ -44,6 +45,7 @@ const CommonTokens: TokenType[] = [
 	TokenType.JUNO,
 	TokenType.ATOM,
 	TokenType.HOPE,
+	TokenType.HOPERS,
 ];
 
 const TokenListModal: React.FC<ITokenListModal> = ({
@@ -56,31 +58,39 @@ const TokenListModal: React.FC<ITokenListModal> = ({
 	const [addedTokenStatus, setAddedTokenStatus] = useState<TAddedTokenStatus>(
 		{}
 	);
+	const [hideZeroAssets, setHideZeroAssets] = useState(false);
 	const [showSecond, setShowSecond] = useState(false);
 	const balances = useAppSelector((state) => state.balances);
 	const { runQuery } = useContract();
 
 	const tokenList: TTokenListItem[] = useMemo(() => {
-		const result = (
-			Object.keys(TokenType) as Array<keyof typeof TokenType>
-		).map((key) => {
-			const tokenType = TokenType[key];
-			return {
-				name: key as string,
-				token: TokenType[key],
-				imageUrl: `/coin-images/${tokenType.replace(/\//g, "")}.png`,
-				balance: +(balances?.[tokenType]?.amount || 0) / 1e6,
-				contract: TokenStatus[tokenType].contractAddress || "",
-			};
-		});
+		const result = (Object.keys(TokenType) as Array<keyof typeof TokenType>)
+			.map((key) => {
+				const tokenType = TokenType[key];
+				return {
+					name: key as string,
+					token: TokenType[key],
+					imageUrl: `/coin-images/${tokenType.replace(
+						/\//g,
+						""
+					)}.png`,
+					balance:
+						+(balances?.[tokenType]?.amount || 0) /
+						Math.pow(10, TokenStatus[tokenType].decimal || 6),
+					contract: TokenStatus[tokenType].contractAddress || "",
+				};
+			})
+			.filter((item) => !hideZeroAssets || item.balance > 0);
 		return searchValue
 			? result.filter(
 					(item) =>
-						item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+						item.name
+							.toLowerCase()
+							.includes(searchValue.toLowerCase()) ||
 						item.contract === searchValue
 			  )
 			: result;
-	}, [balances, searchValue]);
+	}, [balances, hideZeroAssets, searchValue]);
 
 	const handleOnClose = () => {
 		setTimeout(() => {
@@ -89,7 +99,9 @@ const TokenListModal: React.FC<ITokenListModal> = ({
 		onClose();
 	};
 
-	const handleChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChangeSearchValue = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
 		const { value } = e.target;
 		setSearchValue(value);
 	};
@@ -101,8 +113,8 @@ const TokenListModal: React.FC<ITokenListModal> = ({
 		setAddedTokenAddress(value);
 	};
 
-	const handleClickToken = (tokenItem: TTokenListItem) => {
-		onSelectToken(tokenItem.token);
+	const handleClickToken = (token: TokenType) => {
+		onSelectToken(token);
 		handleOnClose();
 	};
 
@@ -157,17 +169,34 @@ const TokenListModal: React.FC<ITokenListModal> = ({
 				value={searchValue}
 				onChange={handleChangeSearchValue}
 			/>
-			<Text margin="20px 0">Common tokens</Text>
+			<Text
+				margin="20px 0"
+				alignItems="center"
+				justifyContent="space-between"
+			>
+				Common tokens
+				<ToggleButton
+					label={{ title: "Hide 0 Balances:" }}
+					onChange={(checked) => setHideZeroAssets(checked)}
+				/>
+			</Text>
 			<CommonTokensContainer>
 				{CommonTokens.map((tokenType: TokenType, index: number) => {
 					const tokenName = (
 						Object.keys(TokenType) as Array<keyof typeof TokenType>
 					).filter((key) => TokenType[key] === tokenType)[0];
 					return (
-						<CommonTokenItem key={index} title={TokenFullName[tokenType]}>
+						<CommonTokenItem
+							key={index}
+							title={TokenFullName[tokenType]}
+							onClick={() => handleClickToken(tokenType)}
+						>
 							<TokenImage
 								alt=""
-								src={`/coin-images/${tokenType.replace(/\//g, "")}.png`}
+								src={`/coin-images/${tokenType.replace(
+									/\//g,
+									""
+								)}.png`}
 							/>
 							<Text bold>{tokenName}</Text>
 						</CommonTokenItem>
@@ -185,9 +214,14 @@ const TokenListModal: React.FC<ITokenListModal> = ({
 					tokenList.map((tokenItem) => (
 						<>
 							<TokensTableTokenNameContainer
-								onClick={() => handleClickToken(tokenItem)}
+								onClick={() =>
+									handleClickToken(tokenItem.token)
+								}
 							>
-								<TokensTableTokenName imgUrl={tokenItem.imageUrl} bold>
+								<TokensTableTokenName
+									imgUrl={tokenItem.imageUrl}
+									bold
+								>
 									{tokenItem.name}
 								</TokensTableTokenName>
 							</TokensTableTokenNameContainer>
@@ -244,14 +278,21 @@ const TokenListModal: React.FC<ITokenListModal> = ({
 					<>
 						<AddedTokenStatusItem>
 							<Text alignItems="center" gap="30px">
-								{`Token "${addedTokenStatus.name}"`} <CheckIcon />
+								{`Token "${addedTokenStatus.name}"`}{" "}
+								<CheckIcon />
 							</Text>
 							<AddTokenButton>Add Token</AddTokenButton>
 						</AddedTokenStatusItem>
 						<AddedTokenStatusItem>
 							<Text alignItems="center" gap="30px">
-								{`Pool "${addedTokenStatus.pool || "Not Found"}"`}{" "}
-								{addedTokenStatus.pool ? <CheckIcon /> : <CancelIcon />}
+								{`Pool "${
+									addedTokenStatus.pool || "Not Found"
+								}"`}{" "}
+								{addedTokenStatus.pool ? (
+									<CheckIcon />
+								) : (
+									<CancelIcon />
+								)}
 							</Text>
 							<AddTokenButton>Create a Pool +</AddTokenButton>
 						</AddedTokenStatusItem>

@@ -1,6 +1,7 @@
 import styled, { css, keyframes } from "styled-components";
 import Button from "../../components/Button";
 import Text from "../../components/Text";
+import Flex from "../../components/Flex";
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -48,6 +49,20 @@ export const SwapAreaBody = styled.div`
 	flex-direction: column;
 	align-items: center;
 	padding: 20px;
+`;
+
+export const SwapAreaFooter = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 5px 20px;
+	box-sizing: border-box;
+	background-color: rgba(2, 226, 150, 0.12);
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	font-weight: bold;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
 `;
 
 const collapseAnimation = keyframes`
@@ -120,9 +135,10 @@ export const SwapItem = styled.div`
 	}
 `;
 
-export const AmountInputer = styled.div`
+export const AmountInputer = styled.div<{ hasError?: boolean }>`
 	position: relative;
 	margin: 10px 0;
+
 	& > input {
 		width: 100%;
 		height: 70px;
@@ -136,16 +152,27 @@ export const AmountInputer = styled.div`
 		font-size: 20px;
 		padding: 10px 20px 40px 20px;
 		box-sizing: border-box;
+		${({ hasError }) =>
+			hasError &&
+			css`
+				border-color: #e20202;
+				border-width: 2px;
+			`}
 	}
 `;
 
-export const SelectMaxButton = styled(Text)`
+export const AutoInputButtonContainer = styled(Flex)`
+	gap: 10px;
+	align-items: center;
 	position: absolute;
-	color: #787878;
+	right: 20px;
+	top: -25px;
+`;
+
+export const SelectMaxButton = styled(Text)`
 	text-decoration: underline;
 	cursor: pointer;
-	bottom: 10px;
-	right: 20px;
+	font-weight: bold;
 `;
 
 export const SwapButton = styled(Button)`

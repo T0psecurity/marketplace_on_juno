@@ -19,9 +19,9 @@ import Updater from "./context/Updater";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Main from "./pages/Main";
-import { useAppDispatch } from "./app/hooks";
+// import { useAppDispatch } from "./app/hooks";
 
-import { fetchTokenPrices } from "./features/tokenPrices/tokenPricesSlice";
+// import { fetchTokenPrices } from "./features/tokenPrices/tokenPricesSlice";
 import { PopoutContextProvider } from "./context/PopoutContext";
 import { ThemeContextProvider } from "./context/ThemeContext";
 
@@ -78,15 +78,15 @@ const ScrollToTopOnRouting = () => {
 };
 
 function App() {
-	const dispatch = useAppDispatch();
-	useEffect(() => {
-		dispatch(fetchTokenPrices());
-		const fetchTokenPriceInterval = setInterval(() => {
-			dispatch(fetchTokenPrices());
-		}, 1000 * 60 * 60);
-		return clearInterval(fetchTokenPriceInterval);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	// const dispatch = useAppDispatch();
+	// useEffect(() => {
+	// 	dispatch(fetchTokenPrices());
+	// 	const fetchTokenPriceInterval = setInterval(() => {
+	// 		dispatch(fetchTokenPrices());
+	// 	}, 1000 * 60 * 60);
+	// 	return clearInterval(fetchTokenPriceInterval);
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, []);
 
 	const { isXs, isSm } = useMatchBreakpoints();
 	const isMobile = isXs || isSm;
@@ -99,7 +99,7 @@ function App() {
 					content="http://hopers.io/ 🍀 an avenue for the evolution of #DeFi & #NFTs on $JUNO living in the #Cosmos ⚛️"
 				/>
 
-				<meta itemProp="name" content="-- Hopers.io Marketplace --" />
+				<meta itemProp="name" content="-- Hopers | Protocol --" />
 				<meta
 					itemProp="description"
 					content="http://hopers.io/ 🍀 an avenue for the evolution of #DeFi & #NFTs on $JUNO living in the #Cosmos ⚛️"
@@ -108,7 +108,7 @@ function App() {
 
 				<meta property="og:url" content="https://hopers.io" />
 				<meta property="og:type" content="website" />
-				<meta property="og:title" content="-- Hopers.io Marketplace --" />
+				<meta property="og:title" content="-- Hopers | Protocol --" />
 				<meta
 					property="og:description"
 					content="http://hopers.io/ 🍀 an avenue for the evolution of #DeFi & #NFTs on $JUNO living in the #Cosmos ⚛️"
@@ -116,7 +116,7 @@ function App() {
 				<meta property="og:image" content="http://hopers.io/SEO.png" />
 
 				<meta name="twitter:card" content="summary_large_image" />
-				<meta name="twitter:title" content="-- Hopers.io Marketplace --" />
+				<meta name="twitter:title" content="-- Hopers | Protocol --" />
 				<meta
 					name="twitter:description"
 					content="http://hopers.io/ 🍀 an avenue for the evolution of #DeFi & #NFTs on $JUNO living in the #Cosmos ⚛️"

@@ -234,7 +234,7 @@ export const TokenAmountInputerWrapper = styled.div`
 	padding: 10px;
 `;
 
-export const TokenAmountInput = styled(Flex)`
+export const TokenAmountInput = styled(Flex)<{ hasError: boolean }>`
 	width: 100%;
 	height: 70px;
 	align-items: center;
@@ -245,6 +245,12 @@ export const TokenAmountInput = styled(Flex)`
 	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 	border-radius: 15px;
 	box-sizing: border-box;
+	${({ hasError }) =>
+		hasError &&
+		css`
+			border-color: #e20202;
+			border-width: 2px;
+		`}
 
 	& > input {
 		width: 50%;
@@ -252,6 +258,8 @@ export const TokenAmountInput = styled(Flex)`
 		border: none;
 		background: transparent;
 		text-align: right;
+		/* padding-bottom: 15px;
+		box-sizing: border-box; */
 	}
 `;
 
@@ -284,7 +292,8 @@ export const SelectRemovePoolContainer = styled.div`
 export const SelectRemovePoolItem = styled.div<{ checked?: boolean }>`
 	display: flex;
 	flex-direction: column;
-	padding: 10px 0;
+	align-items: center;
+	padding: 10px;
 	${({ checked }) =>
 		checked &&
 		css`
@@ -319,4 +328,33 @@ export const RemoveAmountAutoInput = styled(Text)<{ checked: boolean }>`
 	color: ${({ checked }) => (checked ? "white" : "#787878")};
 	background-color: ${({ checked }) =>
 		checked ? "#02e296" : "rgba(2, 226, 150, 0.15)"};
+`;
+
+export const DetailRowBlock = styled.div`
+	border: 1px solid #02e296;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 10px;
+	padding: 20px;
+	height: 100%;
+`;
+
+export const StyledButton = styled(Button)<{ order: number }>`
+	position: relative;
+	width: 165px;
+	height: 40px;
+	background-color: rgba(2, 226, 150, 0.12);
+	border: 1px solid #787878;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 10px;
+	color: black;
+	margin: auto;
+	font-size: 16px;
+	text-align: center;
+	&:before {
+		content: "${({ order }) => order})";
+		position: absolute;
+		left: 5px;
+		top: 50%:
+		transform: translateY(-50%);
+	}
 `;

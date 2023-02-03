@@ -45,7 +45,7 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
 
 	const Logo = () => (
 		<TokenLogoContainer>
-			<TokenLogo src={`/token-logos/${idoInfo.id}.png`} alt="" />
+			<TokenLogo src={`/token-logos/${idoInfo.image}`} alt="" />
 			<Button
 				color="white"
 				onClick={() => history.push(`/ido/detail?id=${idoInfo.id}`)}
@@ -101,13 +101,13 @@ const IDOItem: React.FC<IDOItemProps> = ({ idoInfo }) => {
 							{/* <Text bold>{`${idoStatus.total} ${idoInfo.symbol}`}</Text> */}
 							<Text bold>{`${idoStatus.total} ${idoInfo.symbol}`}</Text>
 						</TokenSoldStatusItem>
-						<TokenSoldStatusItem>
+						{!idoInfo.visibleOption?.hideSoldAmount && <TokenSoldStatusItem>
 							<Text>Percentage Sold</Text>
 							<TokenPercentageSoldValue
 								bold
 								percentage={idoStatus.percentageSold}
 							>{`${idoStatus.percentageSold}%`}</TokenPercentageSoldValue>
-						</TokenSoldStatusItem>
+						</TokenSoldStatusItem>}
 					</TokenSoldStatus>
 					<SwapAmountInput idoInfo={idoInfo} isMobile={isMobile} />
 				</TokenOperationPanel>

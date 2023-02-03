@@ -32,13 +32,15 @@ import {
 } from "../../components/SvgIcons";
 import { addSuffix } from "../../util/string";
 import PoolImage from "../../components/PoolImage";
-import { TPool } from "../../types/pools";
+import { TPool, TPoolConfig } from "../../types/pools";
 import Table, { ColumnTypes, TColumns } from "../../components/Table";
 import PoolName from "../../components/PoolName";
 import AddLiquidity from "./AddLiquidity";
 import { ModalType, PoolType } from "./type";
 import CreateLiquidity from "./CreateLiquidity";
 import RemoveLiquidity from "./RemoveLiquidity";
+import LiquidityTableDetailRow from "./LiquidityTableDetailRow";
+import Flex from "../../components/Flex";
 
 const Liquidity: React.FC = () => {
 	// const [showTokenListModal, setShowTokenListModal] = useState(false);
@@ -48,6 +50,7 @@ const Liquidity: React.FC = () => {
 	const [addingPool, setAddingPool] = useState<TPool | undefined>();
 
 	const [modalType, setModalType] = useState<ModalType>(ModalType.ADD);
+	const [selectedTab, setSelectedTab] = useState<string>(PoolType.ALL);
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
 	const liquidities = useAppSelector((state) => state.liquidities);
 	// const { connect: connectWithCosmodal } = useCosmodal();
@@ -97,7 +100,57 @@ const Liquidity: React.FC = () => {
 			render: (value, data) => (value ? <VerifiedBadge /> : <CancelIcon />),
 		},
 		{ name: "volume", title: "Volume", type: ColumnTypes.NUMBER, sort: true },
-		{ name: "apr", title: "APR Rewards", sort: true },
+		{
+			name: "apr",
+			title: "APR Rewards",
+			render: (value, data) => {
+				const apr = data.apr;
+				if (typeof apr === "string") {
+					const rewardToken = (data.config as TPoolConfig)?.rewardToken;
+					return (
+						<Text gap="10px" color="black" alignItems="center">
+							{rewardToken && (
+								<img
+									width={25}
+									alt=""
+									src={`/coin-images/${rewardToken.replace(/\//g, "")}.png`}
+								/>
+							)}
+							{apr}
+						</Text>
+					);
+				} else {
+					return (
+						<Flex alignItems="center" gap="20px">
+							{apr.map((item, index) => {
+								const rewardToken = (data.config as TPoolConfig[])?.[index]
+									?.rewardToken;
+								return (
+									<Text
+										key={index}
+										gap="10px"
+										color="black"
+										alignItems="center"
+									>
+										{rewardToken && (
+											<img
+												width={25}
+												alt=""
+												src={`/coin-images/${rewardToken.replace(
+													/\//g,
+													""
+												)}.png`}
+											/>
+										)}
+										{item}
+									</Text>
+								);
+							})}
+						</Flex>
+					);
+				}
+			},
+		},
 		{
 			name: "pool",
 			title: "Liquidity Pool",
@@ -221,14 +274,26 @@ const Liquidity: React.FC = () => {
 						All Pools
 					</Text>
 					<Table<TPool>
-						data={liquidities}
+						data={liquidities.filter(
+							(liquidity) =>
+								selectedTab === PoolType.ALL || !!liquidity.stakingAddress
+						)}
 						columns={Columns}
+						defaultExpanded={(rowData) => rowData.id === 1}
+						renderDetailRow={(rowData) => (
+							<LiquidityTableDetailRow
+								rowData={rowData}
+								onClickAddLiquidity={handleClickPlusButton}
+							/>
+						)}
 						option={{
 							emptyString: "No Liquidities",
 							tab: {
+								defaultSelected: PoolType.ALL as string,
 								tabs: (
 									Object.keys(PoolType) as Array<keyof typeof PoolType>
 								).map((key) => PoolType[key]),
+								onClick: (tab) => setSelectedTab(tab),
 							},
 							search: {
 								onChange: (searchValue, liquidities) =>

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { PresaleState, AvailableTokens } from "./type";
 import { getIDOById, IDOIds } from "../../constants/IDOs";
-import useContract from "../../hook/useContract";
+import getQuery, { BACKEND_URL } from "../../util/useAxios";
 
 // const tempIdoContractInfo = {
 // 	admin: "",
@@ -23,18 +23,20 @@ const useIDOStatus = (id: IDOIds) => {
 		stateInfo: {},
 		saleInfo: {},
 	});
-	const { runQuery } = useContract();
 
 	useEffect(() => {
 		(async () => {
 			const idoInfo = getIDOById(id);
 			const contractAddress = idoInfo.contract;
-			const stateQueryResult = await runQuery(contractAddress, {
-				get_state_info: {},
+			const data = await getQuery({
+				url: `${BACKEND_URL}/cache?fields=idoStateInfo,idoSaleInfo`,
 			});
-			const saleQueryResult = await runQuery(contractAddress, {
-				get_sale_info: {},
-			});
+			const stateQueryResult = data?.idoStateInfo?.find(
+				(item: any) => item.contractAddress === contractAddress
+			);
+			const saleQueryResult = data?.idoSaleInfo?.find(
+				(item: any) => item.contractAddress === contractAddress
+			);
 			setFetchResult({
 				stateInfo: stateQueryResult || {},
 				// stateInfo: tempIdoContractInfo || {},
@@ -42,7 +44,7 @@ const useIDOStatus = (id: IDOIds) => {
 				// saleInfo: {},
 			});
 		})();
-	}, [id, runQuery]);
+	}, [id]);
 
 	const idoStatus = useMemo(() => {
 		const totalAmount = Number(fetchResult.stateInfo.total_supply || 0) / 1e6;

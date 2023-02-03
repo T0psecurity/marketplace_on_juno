@@ -4,21 +4,14 @@ import { useAppSelector } from "../../app/hooks";
 import Flex from "../../components/Flex";
 import Text from "../../components/Text";
 import { addSuffix } from "../../util/string";
-import { getTokenName, TokenType } from "../../types/tokens";
+import { getTokenName, TokenStatus, TokenType } from "../../types/tokens";
 import {
 	TokenAmountInput,
 	TokenAmountInputerWrapper,
 	TokenImage,
 } from "./styled";
 import { DropDownIcon } from "../../components/SvgIcons";
-
-interface TTokenAmountInputer {
-	token?: TokenType;
-	hasSelect?: boolean;
-	amount?: any;
-	onSelectToken?: (token: TokenType) => void;
-	onAmountChange?: (amount: string) => void;
-}
+import { TTokenAmountInputer } from "./type";
 
 const AutoInputers = [25, 50, 75, 100];
 
@@ -54,19 +47,30 @@ const TokenAmountInputer: React.FC<TTokenAmountInputer> = ({
 	const balances = useAppSelector((state) => state.balances);
 	const tokenPrices = useAppSelector((state) => state.tokenPrices);
 
-	const { tokenPriceInUsd, balance } = useMemo(() => {
-		const balanceInRaw = token ? (balances[token]?.amount || 0) / 1e6 : 0;
+	const { tokenPriceInUsd, balance, balanceRaw } = useMemo(() => {
+		const balanceInRaw = token
+			? (balances[token]?.amount || 0) /
+			  Math.pow(10, TokenStatus[token].decimal || 6)
+			: 0;
 		const tokenPriceInRaw = token
 			? tokenPrices[token]?.market_data?.current_price?.usd || 0
 			: 0;
 		return {
 			tokenPriceInUsd: addSuffix(balanceInRaw * tokenPriceInRaw),
 			balance: addSuffix(balanceInRaw),
+			balanceRaw: balanceInRaw,
 		};
 	}, [balances, token, tokenPrices]);
 
 	const handleChangeToken = (item: any) => {
 		if (onSelectToken) onSelectToken(item);
+	};
+
+	const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { value } = e.target;
+		if (onAmountChange) {
+			onAmountChange(value);
+		}
 	};
 
 	const CustomMenuList = (props: any) => {
@@ -82,8 +86,11 @@ const TokenAmountInputer: React.FC<TTokenAmountInputer> = ({
 	};
 
 	const CustomControl = ({ children, ...props }: ControlProps<any, false>) => {
+		const {
+			innerProps: { onMouseDown, onTouchEnd },
+		} = props;
 		return (
-			<Flex>
+			<Flex onMouseDown={onMouseDown} onTouchEnd={onTouchEnd}>
 				<TokenImageItem token={token} />
 				{children}
 			</Flex>
@@ -99,12 +106,13 @@ const TokenAmountInputer: React.FC<TTokenAmountInputer> = ({
 						color="#787878"
 						cursor="pointer"
 						onClick={() =>
-							onAmountChange && onAmountChange(`${(+balance * inputer) / 100}`)
+							onAmountChange &&
+							onAmountChange(`${(+balanceRaw * inputer) / 100}`)
 						}
 					>{`${inputer}%`}</Text>
 				))}
 			</Flex>
-			<TokenAmountInput>
+			<TokenAmountInput hasError={Number(amount) > (balanceRaw || 0)}>
 				{hasSelect ? (
 					<ReactSelect
 						value={token ? { value: token, title: token } : undefined}
@@ -153,7 +161,7 @@ const TokenAmountInputer: React.FC<TTokenAmountInputer> = ({
 							  })
 							: ""
 					}
-					onChange={(e) => onAmountChange && onAmountChange(e.target.value)}
+					onChange={handleChangeAmount}
 				/>
 			</TokenAmountInput>
 			<Flex alignItems="center" justifyContent="space-between" width="100%">

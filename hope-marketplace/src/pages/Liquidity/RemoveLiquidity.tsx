@@ -118,8 +118,11 @@ const RemoveLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 	};
 
 	const CustomPoolItem = ({ children, ...props }: ControlProps<any, false>) => {
+		const {
+			innerProps: { onMouseDown, onTouchEnd },
+		} = props;
 		return (
-			<SelectPoolContainer>
+			<SelectPoolContainer onMouseDown={onMouseDown} onTouchEnd={onTouchEnd}>
 				<CustomPoolSelectItem option={pool} />
 				{children}
 			</SelectPoolContainer>
@@ -164,7 +167,8 @@ const RemoveLiquidity: React.FC<IBasicModal> = ({ onChangeModalType }) => {
 									border: "1px solid black",
 									borderRadius: "15px",
 									boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-									overflow: "hidden",
+									overflow: "auto",
+									maxHeight: "40vh",
 									zIndex: 10,
 								}),
 							}}

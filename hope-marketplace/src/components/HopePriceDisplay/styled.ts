@@ -3,6 +3,8 @@ import styled, { css } from "styled-components";
 export const Wrapper = styled.div`
 	display: flex;
 	align-items: center;
+	align-self: center;
+	margin: 10px;
 	gap: 10px;
 	color: ${({ theme }) => theme.colors.fontColor};
 `;

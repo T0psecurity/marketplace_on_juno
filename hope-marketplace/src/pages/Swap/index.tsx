@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { coins } from "@cosmjs/proto-signing";
 import { useAppSelector } from "../../app/hooks";
 import ExploreHeader from "../../components/ExploreHeader";
@@ -6,6 +6,7 @@ import PageWrapper from "../../components/PageWrapper";
 import {
 	DropDownIcon,
 	GearIcon,
+	HopersIcon,
 	SwapTokenIcon,
 } from "../../components/SvgIcons";
 import Text from "../../components/Text";
@@ -13,6 +14,7 @@ import TokenListModal from "../../components/TokenListModal";
 import { TokenStatus, TokenType } from "../../types/tokens";
 import {
 	AmountInputer,
+	AutoInputButtonContainer,
 	// ChartArea,
 	MainPart,
 	SelectMaxButton,
@@ -21,6 +23,7 @@ import {
 	SlippageSelector,
 	SwapArea,
 	SwapAreaBody,
+	SwapAreaFooter,
 	SwapAreaHeader,
 	SwapButton,
 	SwapItem,
@@ -31,6 +34,10 @@ import { useValidPool } from "./hook";
 import useContract from "../../hook/useContract";
 import { toMicroAmount } from "../../util/coins";
 import { ChainConfigs } from "../../constants/ChainTypes";
+import { addSuffix } from "../../util/string";
+import useDexStatus from "../../hook/useDexStatus";
+import Flex from "../../components/Flex";
+import { ThemeContext } from "../../context/ThemeContext";
 
 type TSwapInfo = {
 	from: {
@@ -60,18 +67,25 @@ const Swap: React.FC = () => {
 			amount: 0,
 		},
 		to: {
-			token: TokenType.HOPE,
+			token: TokenType.HOPERS,
 			amount: 0,
 		},
 	});
 	const [slippage, setSlippage] = useState<typeof AvailableSlippage[number]>(2);
 	const validPair = useValidPool(swapInfo.from.token, swapInfo.to.token);
+	const { isDark } = useContext(ThemeContext);
 
 	const balances = useAppSelector((state) => state.balances);
 	const tokenPrices = useAppSelector((state) => state.tokenPrices);
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
+	const hopersPriceState = useAppSelector(
+		(state) => state.tokenPrices[TokenType.HOPERS]
+	);
+
+	const hopersPrice = hopersPriceState?.market_data?.current_price?.usd || 0;
 
 	const { runQuery, createExecuteMessage, getExecuteClient } = useContract();
+	const dexStatus = useDexStatus();
 
 	const displaySwapInfo = useMemo(() => {
 		const fromToken = swapInfo.from.token;
@@ -84,7 +98,9 @@ const Swap: React.FC = () => {
 			Object.keys(TokenType) as Array<keyof typeof TokenType>
 		).filter((key) => TokenType[key] === toToken)[0];
 
-		const fromBalance = (balances[fromToken]?.amount || 0) / 1e6;
+		const fromBalance =
+			(balances[fromToken]?.amount || 0) /
+			Math.pow(10, TokenStatus[fromToken].decimal || 6);
 		const fromTokenPrice =
 			tokenPrices[fromToken]?.market_data?.current_price?.usd || 0;
 		const fromPrice = (Number(fromBalance) * fromTokenPrice).toLocaleString(
@@ -94,7 +110,9 @@ const Swap: React.FC = () => {
 			}
 		);
 
-		const toBalance = (balances[toToken]?.amount || 0) / 1e6;
+		const toBalance =
+			(balances[toToken]?.amount || 0) /
+			Math.pow(10, TokenStatus[toToken].decimal || 6);
 		const toTokenPrice =
 			tokenPrices[toToken]?.market_data?.current_price?.usd || 0;
 		const toPrice = (Number(toBalance) * toTokenPrice).toLocaleString("en-US", {
@@ -107,9 +125,7 @@ const Swap: React.FC = () => {
 				amount: swapInfo.from.amount,
 				icon: `/coin-images/${fromToken.replace(/\//g, "")}.png`,
 				rawBalance: fromBalance,
-				balance: fromBalance.toLocaleString("en-US", {
-					maximumFractionDigits: 2,
-				}),
+				balance: addSuffix(fromBalance),
 				tokenPrice: fromTokenPrice,
 				price: fromPrice,
 			},
@@ -118,9 +134,7 @@ const Swap: React.FC = () => {
 				amount: swapInfo.to.amount,
 				icon: `/coin-images/${toToken.replace(/\//g, "")}.png`,
 				rawBalance: toBalance,
-				balance: toBalance.toLocaleString("en-US", {
-					maximumFractionDigits: 2,
-				}),
+				balance: addSuffix(toBalance),
 				tokenPrice: toTokenPrice,
 				price: toPrice,
 			},
@@ -145,13 +159,19 @@ const Swap: React.FC = () => {
 						? "token2_for_token1_price"
 						: "token1_for_token2_price"]: {
 						[validPair.reverse ? "token2_amount" : "token1_amount"]:
-							"" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
+							"" +
+							Math.ceil(
+								Number(swapInfo.from.amount) *
+									Math.pow(10, TokenStatus[swapInfo.from.token].decimal || 6)
+							),
 					},
 				});
 				let amount = Number(
 					queryResult[validPair.reverse ? "token1_amount" : "token2_amount"]
 				);
-				amount = isNaN(amount) ? 0 : amount / 1e6;
+				amount = isNaN(amount)
+					? 0
+					: amount / Math.pow(10, TokenStatus[swapInfo.to.token].decimal || 6);
 				setSwapInfo((prev) => ({
 					...prev,
 					to: {
@@ -170,7 +190,11 @@ const Swap: React.FC = () => {
 						? "token2_for_token1_price"
 						: "token1_for_token2_price"]: {
 						[firstPool.reverse ? "token2_amount" : "token1_amount"]:
-							"" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
+							"" +
+							Math.ceil(
+								Number(swapInfo.from.amount) *
+									Math.pow(10, TokenStatus[swapInfo.from.token].decimal || 6)
+							),
 					},
 				});
 				const middleAmount = Number(
@@ -188,7 +212,9 @@ const Swap: React.FC = () => {
 				let amount = Number(
 					queryResult2[secondPool.reverse ? "token1_amount" : "token2_amount"]
 				);
-				amount = isNaN(amount) ? 0 : amount / 1e6;
+				amount = isNaN(amount)
+					? 0
+					: amount / Math.pow(10, TokenStatus[swapInfo.to.token].decimal || 6);
 				setSwapInfo((prev) => ({
 					...prev,
 					to: {
@@ -198,7 +224,13 @@ const Swap: React.FC = () => {
 				}));
 			}, 500);
 		}
-	}, [swapInfo.from, validPair, runQuery]);
+	}, [
+		validPair,
+		runQuery,
+		swapInfo.from.amount,
+		swapInfo.from.token,
+		swapInfo.to.token,
+	]);
 
 	const handleClickTokenSelect = (type: "from" | "to") => {
 		setSelectedTokenType(type);
@@ -261,10 +293,14 @@ const Swap: React.FC = () => {
 			toast.error("Invalid Pair!");
 			return;
 		}
+		if (Number(swapInfo.from.amount) > displaySwapInfo.from.rawBalance) {
+			toast.error("Invalid Amount");
+			return;
+		}
 		setIsPending(true);
 		let transactions = [],
 			funds: any[] = [];
-		if (!TokenStatus[swapInfo.from.token].isNativeCoin) {
+		if (!TokenStatus[swapInfo.from.token].isIBCCoin && !TokenStatus[swapInfo.from.token].isNativeCoin) {
 			transactions.push(
 				createExecuteMessage({
 					senderAddress: account.address,
@@ -273,7 +309,10 @@ const Swap: React.FC = () => {
 					message: {
 						increase_allowance: {
 							spender: validPair.pool.contractAddress,
-							amount: `${Math.ceil(Number(swapInfo.from.amount) * 1e6)}`,
+							amount: `${Math.ceil(
+								Number(swapInfo.from.amount) *
+									Math.pow(10, TokenStatus[swapInfo.from.token].decimal || 6)
+							)}`,
 						},
 					},
 				})
@@ -294,23 +333,38 @@ const Swap: React.FC = () => {
 						output_amm_address: secondPool?.pool.contractAddress,
 						input_token: firstPool?.reverse ? "Token2" : "Token1",
 						input_token_amount:
-							"" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
-						output_min_token:
 							"" +
 							Math.ceil(
-								(Number(swapInfo.to.amount) * 1e6 * (100 - slippage)) / 1e2
+								Number(swapInfo.from.amount) *
+									Math.pow(10, TokenStatus[swapInfo.from.token].decimal || 6)
 							),
+						output_min_token: "0",
+						// "" +
+						// Math.ceil(
+						// 	(Number(swapInfo.to.amount) *
+						// 		Math.pow(10, TokenStatus[swapInfo.to.token].decimal || 6) *
+						// 		(100 - slippage)) /
+						// 		1e2
+						// ),
 					},
 			  }
 			: {
 					swap: {
 						input_token: validPair.reverse ? "Token2" : "Token1",
-						input_amount: "" + Math.ceil(Number(swapInfo.from.amount) * 1e6),
-						min_output:
+						input_amount:
 							"" +
 							Math.ceil(
-								(Number(swapInfo.to.amount) * 1e6 * (100 - slippage)) / 1e2
+								Number(swapInfo.from.amount) *
+									Math.pow(10, TokenStatus[swapInfo.from.token].decimal || 6)
 							),
+						min_output: "0",
+						// "" +
+						// Math.ceil(
+						// 	(Number(swapInfo.to.amount) *
+						// 		Math.pow(10, TokenStatus[swapInfo.to.token].decimal || 6) *
+						// 		(100 - slippage)) /
+						// 		1e2
+						// ),
 					},
 			  };
 
@@ -383,18 +437,34 @@ const Swap: React.FC = () => {
 										onClick={() => handleClickTokenSelect("from")}
 									/>
 								</Text>
-								<AmountInputer>
+								<AmountInputer
+									hasError={
+										Number(swapInfo.from.amount) >
+										displaySwapInfo.from.rawBalance
+									}
+								>
 									<input
 										value={displaySwapInfo.from.amount}
 										onChange={handleChangeSwapAmount}
 									/>
-									<SelectMaxButton
-										onClick={() =>
-											changeSwapAmountLogic(displaySwapInfo.from.rawBalance)
-										}
-									>
-										Select Max
-									</SelectMaxButton>
+									<AutoInputButtonContainer>
+										<SelectMaxButton
+											onClick={() =>
+												changeSwapAmountLogic(displaySwapInfo.from.rawBalance)
+											}
+										>
+											MAX
+										</SelectMaxButton>
+										<SelectMaxButton
+											onClick={() =>
+												changeSwapAmountLogic(
+													displaySwapInfo.from.rawBalance / 2
+												)
+											}
+										>
+											HALF
+										</SelectMaxButton>
+									</AutoInputButtonContainer>
 								</AmountInputer>
 								<Text
 									color="#787878"
@@ -438,6 +508,24 @@ const Swap: React.FC = () => {
 								isPending ? "Swapping" : "Swap"
 							}`}</SwapButton>
 						</SwapAreaBody>
+						<SwapAreaFooter>
+							<Flex gap="10px" alignItems="center">
+								<HopersIcon />
+								<Text>HOPERS Burned</Text>
+							</Flex>
+							<Flex gap="5px" alignItems="center">
+								<Text flexDirection="column" alignItems="flex-end">
+									<Text>{addSuffix(dexStatus.burningVolume)}</Text>
+									<Text>{`(${addSuffix(
+										dexStatus.burningVolume * hopersPrice
+									)}$)`}</Text>
+								</Text>
+								<img
+									alt="flame_image"
+									src={`/others/flame_${isDark ? "black" : "white"}.png`}
+								/>
+							</Flex>
+						</SwapAreaFooter>
 					</SwapArea>
 				</MainPart>
 				{/* <ChartArea /> */}

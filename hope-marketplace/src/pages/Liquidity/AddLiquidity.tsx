@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import ReactSelect, { ControlProps, components } from "react-select";
 import { coins } from "@cosmjs/proto-signing";
 import { useAppSelector } from "../../app/hooks";
@@ -21,7 +21,7 @@ import {
 	SelectPoolContainer,
 } from "./styled";
 import TokenAmountInputer from "./TokenAmountInputer";
-import { IBasicModal, ModalType, TAddAmount } from "./type";
+import { IBasicModal, ModalType, TAddAmount, THasError } from "./type";
 import { TokenStatus } from "../../types/tokens";
 import useContract from "../../hook/useContract";
 import { toMicroAmount } from "../../util/coins";
@@ -35,12 +35,21 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 }) => {
 	const account = useAppSelector((state) => state.accounts.keplrAccount);
 	const liquidities = useAppSelector((state) => state.liquidities);
+	const balances = useAppSelector((state) => state.balances);
 	const [isPending, setIsPending] = useState(false);
 	const [pool, setPool] = useState<TPool>(liquidities[0]);
 	const [addAmount, setAddAmount] = useState<TAddAmount>({} as TAddAmount);
+	const [hasAmountError, setHasAmountError] = useState<THasError>(
+		{} as THasError
+	);
 	const { createExecuteMessage, getExecuteClient } = useContract();
+	const history = useHistory();
 	const { search } = useLocation();
 	const poolId = new URLSearchParams(search).get("poolId");
+
+	useEffect(() => {
+		if (!pool) history.push("/");
+	}, [history, pool]);
 
 	useEffect(() => {
 		const targetPool = liquidities.find((pool) => pool.id === Number(poolId));
@@ -70,13 +79,27 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 	const handleChangeAddAmount = (value: string, type: keyof TAddAmount) => {
 		const slippage = 0.99;
 		if (!isNaN(Number(value))) {
+			const oppositeType = type === "token1" ? "token2" : "token1";
+			const oppositeValue =
+				type === "token1"
+					? (Number(value) * pool.ratio) / slippage
+					: (Number(value) * slippage) / pool.ratio;
+
+			const balance =
+				(balances[pool[type]]?.amount || 0) /
+				Math.pow(10, TokenStatus[pool[type]].decimal || 6);
+			const oppositeBalance =
+				(balances[pool[oppositeType]]?.amount || 0) /
+				Math.pow(10, TokenStatus[pool[oppositeType]].decimal || 6);
+
 			setAddAmount({
 				[type]: value,
-				[type === "token1" ? "token2" : "token1"]:
-					type === "token1"
-						? (Number(value) * pool.ratio) / slippage
-						: (Number(value) * slippage) / pool.ratio,
+				[oppositeType]: oppositeValue,
 			} as TAddAmount);
+			setHasAmountError({
+				[type]: Number(value) > balance,
+				[oppositeType]: Number(oppositeValue) > oppositeBalance,
+			} as THasError);
 		}
 	};
 
@@ -89,11 +112,15 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 		token2Amount = isNaN(token2Amount) ? 0 : token2Amount;
 
 		if (!token1Amount || !token2Amount) return;
+		if (hasAmountError.token1 || hasAmountError.token2) {
+			toast.error("Invalid Amount");
+			return;
+		}
 		setIsPending(true);
 
 		let funds: any[] = [];
 
-		if (!TokenStatus[pool.token1].isNativeCoin) {
+		if (!TokenStatus[pool.token1].isIBCCoin && !TokenStatus[pool.token1].isNativeCoin) {
 			transactions.push(
 				createExecuteMessage({
 					senderAddress: account.address,
@@ -101,7 +128,10 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 					message: {
 						increase_allowance: {
 							spender: pool.contract,
-							amount: `${Math.ceil(token1Amount * 1e6)}`,
+							amount: `${Math.ceil(
+								token1Amount *
+									Math.pow(10, TokenStatus[pool.token1].decimal || 6)
+							)}`,
 						},
 					},
 				})
@@ -118,7 +148,7 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 				),
 			];
 		}
-		if (!TokenStatus[pool.token2].isNativeCoin) {
+		if (!TokenStatus[pool.token2].isIBCCoin && !TokenStatus[pool.token2].isNativeCoin) {
 			transactions.push(
 				createExecuteMessage({
 					senderAddress: account.address,
@@ -126,7 +156,10 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 					message: {
 						increase_allowance: {
 							spender: pool.contract,
-							amount: `${Math.ceil(token2Amount * 1e6)}`,
+							amount: `${Math.ceil(
+								token2Amount *
+									Math.pow(10, TokenStatus[pool.token2].decimal || 6)
+							)}`,
 						},
 					},
 				})
@@ -150,9 +183,19 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 				contractAddress: pool.contract,
 				message: {
 					add_liquidity: {
-						token1_amount: "" + Math.ceil(token1Amount * 1e6),
+						token1_amount:
+							"" +
+							Math.ceil(
+								token1Amount *
+									Math.pow(10, TokenStatus[pool.token1].decimal || 6)
+							),
 						min_liquidity: "0",
-						max_token2: "" + Math.ceil(token2Amount * 1e6),
+						max_token2:
+							"" +
+							Math.ceil(
+								token2Amount *
+									Math.pow(10, TokenStatus[pool.token2].decimal || 6)
+							),
 					},
 				},
 				funds,
@@ -200,8 +243,11 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 	};
 
 	const CustomPoolItem = ({ children, ...props }: ControlProps<any, false>) => {
+		const {
+			innerProps: { onMouseDown, onTouchEnd },
+		} = props;
 		return (
-			<SelectPoolContainer>
+			<SelectPoolContainer onMouseDown={onMouseDown} onTouchEnd={onTouchEnd}>
 				<CustomPoolSelectItem option={pool} />
 				{children}
 			</SelectPoolContainer>
@@ -242,6 +288,7 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 								...provided,
 								margin: "5px 10px",
 								minWidth: 100,
+								width: "100%",
 								border: "1px solid black",
 								borderRadius: "15px",
 								background: "rgba(2, 226, 150, 0.15)",
@@ -257,7 +304,8 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 								border: "1px solid black",
 								borderRadius: "15px",
 								boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-								overflow: "hidden",
+								overflow: "auto",
+								maxHeight: "40vh",
 								zIndex: 10,
 							}),
 						}}
@@ -274,14 +322,14 @@ const AddLiquidity: React.FC<IBasicModal> = ({
 					/>
 					<Flex alignItems="center" gap="10px">
 						<TokenAmountInputer
-							token={pool.token1}
+							token={pool?.token1}
 							amount={addAmount.token1}
 							onAmountChange={(amount) =>
 								handleChangeAddAmount(amount, "token1")
 							}
 						/>
 						<TokenAmountInputer
-							token={pool.token2}
+							token={pool?.token2}
 							amount={addAmount.token2}
 							onAmountChange={(amount) =>
 								handleChangeAddAmount(amount, "token2")

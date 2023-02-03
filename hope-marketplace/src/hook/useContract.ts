@@ -1,5 +1,4 @@
 import {
-	CosmWasmClient,
 	SigningCosmWasmClient,
 	MsgExecuteContractEncodeObject,
 } from "@cosmjs/cosmwasm-stargate";
@@ -39,28 +38,14 @@ type CreateExecuteMessageArgs = {
 	funds?: Array<Coin>;
 };
 
-const getQueryClient = async (
-	config: {
-		[key: string]: string;
-	},
-	forceRefresh = false
-): Promise<CosmWasmClient> => {
-	const rpcEndpoint: string = config["rpcEndpoint"];
-	const queryingClientConnection = {
-		client: await CosmWasmClient.connect(rpcEndpoint),
-		rpcEndpoint,
-	};
-
-	return queryingClientConnection.client;
-};
-
 export const getOfflineSigner = async (chainId: string) => {
 	if (window.keplr) {
 		await window.keplr.enable(chainId);
-		const signer: any = await window.keplr.getOfflineSignerAuto(chainId);
-		const signer1 = await window.keplr.getOfflineSignerOnlyAmino(chainId);
-		const signer2 = await window.keplr.getOfflineSignerAuto(chainId);
-		return signer || signer1 || signer2;
+		let signer: any = await window.keplr.getOfflineSignerAuto(chainId);
+		if (!signer)
+			signer = await window.keplr.getOfflineSignerOnlyAmino(chainId);
+		if (!signer) signer = await window.keplr.getOfflineSignerAuto(chainId);
+		return signer;
 	}
 };
 
@@ -72,17 +57,19 @@ const useContract = () => {
 	const { offlineSigner: keplrOfflineSigner } = useWallet(
 		ChainConfigs[ChainTypes.JUNO].chainId
 	);
-	const { offlineSigner: cosmostationOfflineSigner } = useContext(
-		CosmostationWalletContext
-	);
+	const { offlineSigner: cosmostationOfflineSigner, getJunoQueryClient } =
+		useContext(CosmostationWalletContext);
 
 	const runQuery = useCallback(
 		async (contractAddress: string, queryMsg: any) => {
-			const client = await getQueryClient(ChainConfigs[ChainTypes.JUNO]);
-			const result = await client.queryContractSmart(contractAddress, queryMsg);
+			const client = await getJunoQueryClient();
+			const result = await client.queryContractSmart(
+				contractAddress,
+				queryMsg
+			);
 			return result;
 		},
-		[]
+		[getJunoQueryClient]
 	);
 
 	const getExecuteClient = useCallback(async () => {
@@ -119,6 +106,7 @@ const useContract = () => {
 			const config = ChainConfigs[ChainTypes.JUNO];
 			let signer = keplrOfflineSigner || cosmostationOfflineSigner;
 			if (!signer) {
+				console.log("debug run execute don't have signer");
 				signer = await getOfflineSigner(config.chainId);
 			}
 			if (!signer) {
@@ -169,7 +157,8 @@ const useContract = () => {
 								executeFunds,
 								ChainConfigs[ChainTypes.JUNO]["coinDecimals"]
 							),
-							executeDenom || ChainConfigs[ChainTypes.JUNO]["microDenom"]
+							executeDenom ||
+								ChainConfigs[ChainTypes.JUNO]["microDenom"]
 					  )
 					: undefined
 			);
@@ -192,14 +181,17 @@ const useContract = () => {
 				),
 			}
 		);
-		const denoms: { denom: TokenType; isNativeCoin: boolean }[] = [];
+		const denoms: { denom: TokenType; field: "balance" | "amount" }[] = [];
 		const queries = (
 			Object.keys(TokenType) as Array<keyof typeof TokenType>
 		).map((key) => {
 			const tokenStatus = TokenStatus[TokenType[key]];
 			denoms.push({
 				denom: TokenType[key],
-				isNativeCoin: tokenStatus.isNativeCoin,
+				field:
+					!tokenStatus.isNativeCoin && tokenStatus.contractAddress
+						? "balance"
+						: "amount",
 			});
 			return !tokenStatus.isNativeCoin && tokenStatus.contractAddress
 				? runQuery(tokenStatus.contractAddress, {
@@ -212,20 +204,13 @@ const useContract = () => {
 				let returnValue: { [key in TokenType]: any } = {} as {
 					[key in TokenType]: any;
 				};
-				denoms.forEach(
-					(
-						denom: { denom: TokenType; isNativeCoin: boolean },
-						index: number
-					) => {
-						const crrResult = results[index];
-						returnValue[denom.denom] = {
-							denom: denom.denom,
-							amount: Number(
-								denom.isNativeCoin ? crrResult.amount : crrResult.balance
-							),
-						};
-					}
-				);
+				denoms.forEach((denom, index: number) => {
+					const crrResult = results[index];
+					returnValue[denom.denom] = {
+						denom: denom.denom,
+						amount: Number(crrResult[denom.field]),
+					};
+				});
 				return returnValue;
 			})
 			.catch((err: any) => {

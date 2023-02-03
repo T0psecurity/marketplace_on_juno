@@ -125,7 +125,9 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
 
 	const TokenBalanceItem = ({ token }: { token: keyof typeof TokenType }) => {
 		const denom = TokenType[token];
-		const tokenBalance = (balances?.[denom]?.amount || 0) / 1e6;
+		const tokenBalance =
+			(balances?.[denom]?.amount || 0) /
+			Math.pow(10, TokenStatus[denom].decimal || 6);
 		const tokenPrice = tokenPrices[denom]?.market_data.current_price?.usd || 0;
 		return (
 			<TokenTypeItem
@@ -159,8 +161,14 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
 		children,
 		...props
 	}: ControlProps<any, false>) => {
+		const {
+			innerProps: { onMouseDown, onTouchEnd },
+		} = props;
 		return (
-			<CustomExpirationControl>
+			<CustomExpirationControl
+				onMouseDown={onMouseDown}
+				onTouchEnd={onTouchEnd}
+			>
 				<CalendarIcon width={20} />
 				{children}
 			</CustomExpirationControl>
@@ -191,7 +199,12 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
 									""
 								)}.png`}
 							/>
-							<Text bold margin="0 20px 0 0">
+							<Text
+								bold
+								margin="0 20px 0 0"
+								cursor="pointer"
+								onClick={() => setIsOpenTokenTypes((prev) => !prev)}
+							>
 								{selectedTokenType.title}
 							</Text>
 							<DropdownIndicator
@@ -226,7 +239,11 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
 						<PriceInputer
 							hasError={
 								Number(offerPrice) >
-								(balances?.[selectedTokenType.denom]?.amount || 0) / 1e6
+								(balances?.[selectedTokenType.denom]?.amount || 0) /
+									Math.pow(
+										10,
+										TokenStatus[selectedTokenType.denom].decimal || 6
+									)
 							}
 							value={offerPrice}
 							onChange={handleChangeOfferPrice}
@@ -234,7 +251,11 @@ const MakeOfferTooltip: React.FC<MakeOfferTooltipProps> = ({
 						<Text
 							onClick={() =>
 								setOfferPrice(
-									(balances?.[selectedTokenType.denom]?.amount || 0) / 1e6
+									(balances?.[selectedTokenType.denom]?.amount || 0) /
+										Math.pow(
+											10,
+											TokenStatus[selectedTokenType.denom].decimal || 6
+										)
 								)
 							}
 							style={{

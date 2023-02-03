@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import { TableTab, TableTabContainer } from "./styled";
 import { ITableTab } from "./type";
 
-const TableTabs: React.FC<ITableTab> = ({ tabs }) => {
-	const [selectedTab, setSelectedTab] = useState<string>(tabs[0] || "");
+const TableTabs: React.FC<ITableTab> = ({ defaultSelected, tabs, onClick }) => {
+	const [selectedTab, setSelectedTab] = useState<string>(
+		defaultSelected || tabs[0] || ""
+	);
 	const [highLightElementInfo, setHighLightElementInfo] = useState({
 		width: 0,
 		left: 0,
 	});
+
+	useEffect(() => {
+		if (defaultSelected) setSelectedTab(defaultSelected);
+	}, [defaultSelected]);
 
 	useEffect(() => {
 		const selectedTabElement = document.getElementById(
@@ -19,6 +25,11 @@ const TableTabs: React.FC<ITableTab> = ({ tabs }) => {
 		});
 	}, [selectedTab]);
 
+	const handleClickTab = (tab: string) => {
+		setSelectedTab(tab);
+		if (onClick) onClick(tab);
+	};
+
 	return (
 		<TableTabContainer
 			left={highLightElementInfo.left}
@@ -29,7 +40,7 @@ const TableTabs: React.FC<ITableTab> = ({ tabs }) => {
 					id={`table-tab-${tab}`}
 					key={index}
 					checked={selectedTab === tab}
-					onClick={() => setSelectedTab(tab)}
+					onClick={() => handleClickTab(tab)}
 				>
 					{tab}
 				</TableTab>

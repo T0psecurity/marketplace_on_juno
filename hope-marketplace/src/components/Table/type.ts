@@ -1,9 +1,7 @@
 import { BasicProps } from "../../constants/BasicTypes";
 type TTableOption<T extends object> = {
 	emptyString?: string;
-	tab?: {
-		tabs: string[];
-	};
+	tab?: ITableTab;
 	search?: {
 		placeholder?: string;
 		onChange: (searchValue: string, data: T[]) => T[];
@@ -54,5 +52,7 @@ export enum ColumnTypes {
 }
 
 export interface ITableTab extends BasicProps {
+	defaultSelected?: string;
 	tabs: string[];
+	onClick?: (selectedTab: string) => void;
 }

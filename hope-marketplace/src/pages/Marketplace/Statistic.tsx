@@ -15,23 +15,23 @@ import { TokenType } from "../../types/tokens";
 import useStatistic from "./hook/useStatistic";
 
 import {
-  OperationWrapper as Wrapper,
-  StatisticWrapper,
-  StatisticItem,
-  StatisticValue,
-  StatisticName,
-  StatisticIcon,
-  SelectItem,
-  SelectItemTitle,
-  SelectItemContent,
-  CustomControl,
-  MakeOfferButton,
-  ButtonText,
+	OperationWrapper as Wrapper,
+	StatisticWrapper,
+	StatisticItem,
+	StatisticValue,
+	StatisticName,
+	StatisticIcon,
+	SelectItem,
+	SelectItemTitle,
+	SelectItemContent,
+	CustomControl,
+	MakeOfferButton,
+	ButtonText,
 } from "./styled";
 
 interface StatisticProps {
-  items: any[];
-  collectionId: string;
+	items: any[];
+	collectionId: string;
 }
 
 // type StatisticItemType = {
@@ -95,168 +95,171 @@ interface StatisticProps {
 // ];
 
 const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
-  const SelectOptions = (
-    Object.keys(TokenType) as Array<keyof typeof TokenType>
-  ).map((key) => {
-    return {
-      value: TokenType[key],
-      text: key,
-    };
-  });
+	const SelectOptions = (
+		Object.keys(TokenType) as Array<keyof typeof TokenType>
+	).map((key) => {
+		return {
+			value: TokenType[key],
+			text: key,
+		};
+	});
 
-  const [selectValue, setSelectValue] = useState(SelectOptions[0]);
-  const { isDark } = useContext(ThemeContext);
-  // const { isXs, isSm } = useMatchBreakpoints();
-  // const isMobile = isXs || isSm;
+	const [selectValue, setSelectValue] = useState(SelectOptions[0]);
+	const { isDark } = useContext(ThemeContext);
+	// const { isXs, isSm } = useMatchBreakpoints();
+	// const isMobile = isXs || isSm;
 
-  const targetCollection = getCollectionById(collectionId);
-  const statistics: any = useStatistic(collectionId);
-  // const targetCollection: MarketplaceInfo = getCollectionById(
-  //   collectionId || ""
-  // );
+	const targetCollection = getCollectionById(collectionId);
+	const statistics: any = useStatistic(collectionId);
+	// const targetCollection: MarketplaceInfo = getCollectionById(
+	//   collectionId || ""
+	// );
 
-  // if (isMobile) {
-  //   const orderedStatisticParams = STATISTIC_PARAMS.sort(
-  //     (param1: StatisticItemType, param2: StatisticItemType) => {
-  //       return param1.mobileRenderOrder - param2.mobileRenderOrder;
-  //     }
-  //   );
-  //   let firstItems: any[] = [];
-  //   let secondItems: any[] = [];
-  //   let rendered: number = 0;
-  //   orderedStatisticParams.forEach(
-  //     (statisticItem: StatisticItemType, index: number) => {
-  //       if (
-  //         !targetCollection.statisticOption ||
-  //         !targetCollection.statisticOption[statisticItem.key]
-  //       ) {
-  //         if (rendered < 3) {
-  //           firstItems.push(
-  //             <StatisticItem key={index} isMobile>
-  //               <StatisticValue>
-  //                 {statisticItem.icon && (
-  //                   <StatisticIcon alt="" src={statisticItem.icon} />
-  //                 )}
-  //                 {statistics[statisticItem.key] || "X"}
-  //               </StatisticValue>
-  //               <StatisticName>{statisticItem.name}</StatisticName>
-  //             </StatisticItem>
-  //           );
-  //         } else {
-  //           secondItems.push(
-  //             <StatisticItem key={index} isMobile>
-  //               <StatisticValue>
-  //                 {statisticItem.icon && (
-  //                   <StatisticIcon alt="" src={statisticItem.icon} />
-  //                 )}
-  //                 {statistics[statisticItem.key] || "X"}
-  //               </StatisticValue>
-  //               <StatisticName>{statisticItem.name}</StatisticName>
-  //             </StatisticItem>
-  //           );
-  //         }
-  //         rendered++;
-  //       }
-  //     }
-  //   );
-  //   return (
-  //     <>
-  //       <Wrapper>{firstItems}</Wrapper>
-  //       <Wrapper>{secondItems}</Wrapper>
-  //     </>
-  //   );
-  // }
+	// if (isMobile) {
+	//   const orderedStatisticParams = STATISTIC_PARAMS.sort(
+	//     (param1: StatisticItemType, param2: StatisticItemType) => {
+	//       return param1.mobileRenderOrder - param2.mobileRenderOrder;
+	//     }
+	//   );
+	//   let firstItems: any[] = [];
+	//   let secondItems: any[] = [];
+	//   let rendered: number = 0;
+	//   orderedStatisticParams.forEach(
+	//     (statisticItem: StatisticItemType, index: number) => {
+	//       if (
+	//         !targetCollection.statisticOption ||
+	//         !targetCollection.statisticOption[statisticItem.key]
+	//       ) {
+	//         if (rendered < 3) {
+	//           firstItems.push(
+	//             <StatisticItem key={index} isMobile>
+	//               <StatisticValue>
+	//                 {statisticItem.icon && (
+	//                   <StatisticIcon alt="" src={statisticItem.icon} />
+	//                 )}
+	//                 {statistics[statisticItem.key] || "X"}
+	//               </StatisticValue>
+	//               <StatisticName>{statisticItem.name}</StatisticName>
+	//             </StatisticItem>
+	//           );
+	//         } else {
+	//           secondItems.push(
+	//             <StatisticItem key={index} isMobile>
+	//               <StatisticValue>
+	//                 {statisticItem.icon && (
+	//                   <StatisticIcon alt="" src={statisticItem.icon} />
+	//                 )}
+	//                 {statistics[statisticItem.key] || "X"}
+	//               </StatisticValue>
+	//               <StatisticName>{statisticItem.name}</StatisticName>
+	//             </StatisticItem>
+	//           );
+	//         }
+	//         rendered++;
+	//       }
+	//     }
+	//   );
+	//   return (
+	//     <>
+	//       <Wrapper>{firstItems}</Wrapper>
+	//       <Wrapper>{secondItems}</Wrapper>
+	//     </>
+	//   );
+	// }
 
-  const CustomSelectItem = ({ ...props }) => {
-    const { selectOption, option } = props;
-    return (
-      <SelectItem
-        onClick={() => {
-          if (selectOption) selectOption(option);
-        }}
-        checked={option.value === selectValue.value}
-      >
-        <StatisticIcon
-          alt=""
-          src={`/coin-images/${option.value.replace(/\//g, "")}.png`}
-        />
-        <SelectItemTitle>
-          <SelectItemContent>{option.text}</SelectItemContent>
-          <SelectItemContent>Floor Price</SelectItemContent>
-        </SelectItemTitle>
-        <StatisticValue>
-          {statistics[`${option.value}FloorPrice`] || "X"}
-        </StatisticValue>
-      </SelectItem>
-    );
-  };
+	const CustomSelectItem = ({ ...props }) => {
+		const { selectOption, option } = props;
+		return (
+			<SelectItem
+				onClick={() => {
+					if (selectOption) selectOption(option);
+				}}
+				checked={option.value === selectValue.value}
+			>
+				<StatisticIcon
+					alt=""
+					src={`/coin-images/${option.value.replace(/\//g, "")}.png`}
+				/>
+				<SelectItemTitle>
+					<SelectItemContent>{option.text}</SelectItemContent>
+					<SelectItemContent>Floor Price</SelectItemContent>
+				</SelectItemTitle>
+				<StatisticValue>
+					{statistics[`${option.value}FloorPrice`] || "X"}
+				</StatisticValue>
+			</SelectItem>
+		);
+	};
 
-  const CustomMenuList = (props: any) => {
-    const { options, selectOption } = props;
-    return options.map((option: any, index: number) => (
-      <CustomSelectItem
-        key={index}
-        selectOption={selectOption}
-        option={option}
-      />
-    ));
-  };
+	const CustomMenuList = (props: any) => {
+		const { options, selectOption } = props;
+		return options.map((option: any, index: number) => (
+			<CustomSelectItem
+				key={index}
+				selectOption={selectOption}
+				option={option}
+			/>
+		));
+	};
 
-  const CustomControlItem = ({
-    children,
-    ...props
-  }: ControlProps<any, false>) => {
-    return (
-      <CustomControl>
-        <CustomSelectItem option={selectValue} />
-        {children}
-      </CustomControl>
-    );
-  };
+	const CustomControlItem = ({
+		children,
+		...props
+	}: ControlProps<any, false>) => {
+		const {
+			innerProps: { onMouseDown, onTouchEnd },
+		} = props;
+		return (
+			<CustomControl onMouseDown={onMouseDown} onTouchEnd={onTouchEnd}>
+				<CustomSelectItem option={selectValue} />
+				{children}
+			</CustomControl>
+		);
+	};
 
-  return (
-    <Wrapper>
-      <StatisticWrapper>
-        <StatisticItem>
-          <StatisticValue>{statistics.total || "X"}</StatisticValue>
-          <StatisticName>Items</StatisticName>
-        </StatisticItem>
-        <StatisticItem>
-          <StatisticValue>{statistics.itemsOnSale || "X"}</StatisticValue>
-          <StatisticName>Items On Sale</StatisticName>
-        </StatisticItem>
-        <StatisticItem>
-          <StatisticValue>
-            <StatisticIcon alt="" src={"/coin-images/ujuno.png"} />
-            {statistics.totalVolumeInJuno || "X"}
-          </StatisticValue>
-          <StatisticName>Total Volume</StatisticName>
-        </StatisticItem>
-        <ReactSelect
-          value={selectValue}
-          onChange={(value: any) => setSelectValue(value)}
-          options={SelectOptions}
-          styles={{
-            container: (provided, state) => ({
-              ...provided,
-              margin: "5px 10px",
-              minWidth: 100,
-              border: "1px solid black",
-              borderRadius: "5px",
-            }),
-            dropdownIndicator: (provided, state) => ({
-              ...provided,
-              color: "black",
-            }),
-            menu: (provided, state) => ({
-              ...provided,
-              backgroundColor: isDark ? "#838383" : "white",
-              zIndex: 10,
-            }),
-          }}
-          components={{ MenuList: CustomMenuList, Control: CustomControlItem }}
-        />
-        {/* {STATISTIC_PARAMS.map(
+	return (
+		<Wrapper>
+			<StatisticWrapper>
+				<StatisticItem>
+					<StatisticValue>{statistics.total || "X"}</StatisticValue>
+					<StatisticName>Items</StatisticName>
+				</StatisticItem>
+				<StatisticItem>
+					<StatisticValue>{statistics.itemsOnSale || "X"}</StatisticValue>
+					<StatisticName>Items On Sale</StatisticName>
+				</StatisticItem>
+				<StatisticItem>
+					<StatisticValue>
+						<StatisticIcon alt="" src={"/coin-images/ujuno.png"} />
+						{statistics.totalVolumeInJuno || "X"}
+					</StatisticValue>
+					<StatisticName>Total Volume</StatisticName>
+				</StatisticItem>
+				<ReactSelect
+					value={selectValue}
+					onChange={(value: any) => setSelectValue(value)}
+					options={SelectOptions}
+					styles={{
+						container: (provided, state) => ({
+							...provided,
+							margin: "5px 10px",
+							minWidth: 100,
+							border: "1px solid black",
+							borderRadius: "5px",
+						}),
+						dropdownIndicator: (provided, state) => ({
+							...provided,
+							color: "black",
+						}),
+						menu: (provided, state) => ({
+							...provided,
+							backgroundColor: isDark ? "#838383" : "white",
+							zIndex: 10,
+						}),
+					}}
+					components={{ MenuList: CustomMenuList, Control: CustomControlItem }}
+				/>
+				{/* {STATISTIC_PARAMS.map(
         (statisticItem: StatisticItemType, index: number) => {
           if (
             targetCollection.statisticOption &&
@@ -277,25 +280,25 @@ const Statistic: React.FC<StatisticProps> = ({ items, collectionId }) => {
           );
         }
       )} */}
-      </StatisticWrapper>
-      <MakeOfferButton
-        data-for="makeOfferTooltip"
-        data-tip
-        data-event="click focus"
-      >
-        <OfferIcon width={40} />
-        <ButtonText>
-          <Text color="white" bold>
-            Make offer
-          </Text>
-          <Text color="white" style={{ fontSize: "0.7em" }}>
-            to the collection
-          </Text>
-        </ButtonText>
-      </MakeOfferButton>
-      <MakeOfferTooltip id="makeOfferTooltip" collection={targetCollection} />
-    </Wrapper>
-  );
+			</StatisticWrapper>
+			<MakeOfferButton
+				data-for="makeOfferTooltip"
+				data-tip
+				data-event="click focus"
+			>
+				<OfferIcon width={40} />
+				<ButtonText>
+					<Text color="white" bold>
+						Make offer
+					</Text>
+					<Text color="white" style={{ fontSize: "0.7em" }}>
+						to the collection
+					</Text>
+				</ButtonText>
+			</MakeOfferButton>
+			<MakeOfferTooltip id="makeOfferTooltip" collection={targetCollection} />
+		</Wrapper>
+	);
 };
 
 export default Statistic;

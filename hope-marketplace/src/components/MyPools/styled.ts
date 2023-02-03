@@ -39,6 +39,12 @@ export const MyPoolItemRow = styled.div`
 	gap: 20px;
 `;
 
+export const MyPoolContentRow = styled.div`
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 20px;
+`;
+
 export const MyPoolsContainer = styled.div`
 	width: 100%;
 	display: flex;

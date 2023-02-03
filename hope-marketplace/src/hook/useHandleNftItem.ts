@@ -67,7 +67,10 @@ const useHandleNftItem = () => {
 						JSON.stringify({
 							list_price: {
 								denom: tokenType,
-								amount: `${price * 1e6}`,
+								amount: `${
+									price *
+									Math.pow(10, TokenStatus[tokenType as TokenType].decimal || 6)
+								}`,
 							},
 							expire: `${(Number(new Date()) + 180 * 24 * 3600 * 1000) * 1e6}`,
 							...(!tokenStatus.isNativeCoin && {
@@ -154,7 +157,10 @@ const useHandleNftItem = () => {
 				: {
 						send: {
 							contract: item.contractAddress,
-							amount: `${price * 1e6}`,
+							amount: `${
+								price *
+								Math.pow(10, TokenStatus[tokenType as TokenType].decimal || 6)
+							}`,
 							msg: btoa(
 								JSON.stringify({
 									sale_type: "auction",
@@ -222,7 +228,10 @@ const useHandleNftItem = () => {
 				: {
 						send: {
 							contract: MarketplaceContracts[0],
-							amount: `${price * 1e6}`,
+							amount: `${
+								price *
+								Math.pow(10, TokenStatus[tokenType as TokenType].decimal || 6)
+							}`,
 							msg: btoa(
 								JSON.stringify({
 									sale_type: "collection_bid",
@@ -375,7 +384,8 @@ const useHandleNftItem = () => {
 					.filter((x) => TokenType[x] === price.denom)[0]
 					?.toUpperCase();
 				const insufficientAmount =
-					(Number(price.amount) - (myBalance?.amount || 0)) / 1e6;
+					(Number(price.amount) - (myBalance?.amount || 0)) /
+					Math.pow(10, tokenStatus.decimal || 6);
 				showInsufficientToast(
 					myBalance?.amount || 0,
 					tokenName,
@@ -385,7 +395,8 @@ const useHandleNftItem = () => {
 								item,
 								price.denom as TokenType,
 								insufficientAmount
-							))
+							)),
+					tokenStatus.decimal || 6
 				);
 				return;
 			}
